@@ -14,17 +14,17 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Database\Driver;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Database\Driver;
 use PDO;
 /**
  * Binary type converter.
  *
  * Use to convert binary data between PHP and the database types.
  */
-class BinaryType extends \Cake\Database\Type\BaseType
+class BinaryType extends BaseType
 {
     /**
      * Convert binary data into the database format.

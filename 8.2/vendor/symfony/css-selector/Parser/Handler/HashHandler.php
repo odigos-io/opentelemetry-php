@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Parser\Handler;
+namespace Odigos\Symfony\Component\CssSelector\Parser\Handler;
 
-use Symfony\Component\CssSelector\Parser\Reader;
-use Symfony\Component\CssSelector\Parser\Token;
-use Symfony\Component\CssSelector\Parser\Tokenizer\TokenizerEscaping;
-use Symfony\Component\CssSelector\Parser\Tokenizer\TokenizerPatterns;
-use Symfony\Component\CssSelector\Parser\TokenStream;
+use Odigos\Symfony\Component\CssSelector\Parser\Reader;
+use Odigos\Symfony\Component\CssSelector\Parser\Token;
+use Odigos\Symfony\Component\CssSelector\Parser\Tokenizer\TokenizerEscaping;
+use Odigos\Symfony\Component\CssSelector\Parser\Tokenizer\TokenizerPatterns;
+use Odigos\Symfony\Component\CssSelector\Parser\TokenStream;
 /**
  * CSS selector comment handler.
  *
@@ -25,7 +25,7 @@ use Symfony\Component\CssSelector\Parser\TokenStream;
  *
  * @internal
  */
-class HashHandler implements \Symfony\Component\CssSelector\Parser\Handler\HandlerInterface
+class HashHandler implements HandlerInterface
 {
     public function __construct(private TokenizerPatterns $patterns, private TokenizerEscaping $escaping)
     {

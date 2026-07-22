@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         2.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Validation;
+namespace Odigos\Cake\Validation;
 
 use ArrayAccess;
 use ArrayIterator;
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 use Countable;
 use IteratorAggregate;
 use Traversable;
@@ -96,7 +96,7 @@ class ValidationSet implements ArrayAccess, IteratorAggregate, Countable
      * @param string $name The name under which the rule is set.
      * @return \Cake\Validation\ValidationRule|null
      */
-    public function rule(string $name): ?\Cake\Validation\ValidationRule
+    public function rule(string $name): ?ValidationRule
     {
         if (empty($this->_rules[$name])) {
             return null;
@@ -138,10 +138,10 @@ class ValidationSet implements ArrayAccess, IteratorAggregate, Countable
      * @return $this
      * @throws \Cake\Core\Exception\CakeException If a rule with the same name already exists
      */
-    public function add(string $name, \Cake\Validation\ValidationRule|array $rule)
+    public function add(string $name, ValidationRule|array $rule)
     {
-        if (!$rule instanceof \Cake\Validation\ValidationRule) {
-            $rule = new \Cake\Validation\ValidationRule($rule);
+        if (!$rule instanceof ValidationRule) {
+            $rule = new ValidationRule($rule);
         }
         if (array_key_exists($name, $this->_rules)) {
             throw new CakeException("A validation rule with the name `{$name}` already exists");
@@ -184,7 +184,7 @@ class ValidationSet implements ArrayAccess, IteratorAggregate, Countable
      * @param string $index name of the rule
      * @return \Cake\Validation\ValidationRule
      */
-    public function offsetGet(mixed $index): \Cake\Validation\ValidationRule
+    public function offsetGet(mixed $index): ValidationRule
     {
         return $this->_rules[$index];
     }

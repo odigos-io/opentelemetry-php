@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Testing\Enums;
+namespace Odigos\OpenAI\Testing\Enums;
 
 enum OverrideStrategy : string
 {

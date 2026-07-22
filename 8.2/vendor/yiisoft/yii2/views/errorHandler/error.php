@@ -7,7 +7,7 @@ namespace Odigos;
  * @var \Throwable $exception
  * @var \yii\web\ErrorHandler $handler
  */
-if ($exception instanceof \yii\web\HttpException) {
+if ($exception instanceof \Odigos\yii\web\HttpException) {
     $code = $exception->statusCode;
 } else {
     $code = $exception->getCode();
@@ -19,7 +19,7 @@ if ($name === null) {
 if ($code) {
     $name .= " (#{$code})";
 }
-if ($exception instanceof \yii\base\UserException) {
+if ($exception instanceof \Odigos\yii\base\UserException) {
     $message = $exception->getMessage();
 } else {
     $message = 'An internal server error occurred.';

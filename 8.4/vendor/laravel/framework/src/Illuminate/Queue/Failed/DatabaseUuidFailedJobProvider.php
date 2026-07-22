@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Queue\Failed;
+namespace Odigos\Illuminate\Queue\Failed;
 
 use DateTimeInterface;
-use Illuminate\Database\ConnectionResolverInterface;
-use Illuminate\Support\Facades\Date;
-class DatabaseUuidFailedJobProvider implements \Illuminate\Queue\Failed\CountableFailedJobProvider, \Illuminate\Queue\Failed\FailedJobProviderInterface, \Illuminate\Queue\Failed\PrunableFailedJobProvider
+use Odigos\Illuminate\Database\ConnectionResolverInterface;
+use Odigos\Illuminate\Support\Facades\Date;
+class DatabaseUuidFailedJobProvider implements CountableFailedJobProvider, FailedJobProviderInterface, PrunableFailedJobProvider
 {
     /**
      * The connection resolver implementation.

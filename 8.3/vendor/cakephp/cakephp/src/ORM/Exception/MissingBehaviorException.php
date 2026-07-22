@@ -12,9 +12,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Exception;
+namespace Odigos\Cake\ORM\Exception;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 /**
  * Used when a behavior cannot be found.
  */

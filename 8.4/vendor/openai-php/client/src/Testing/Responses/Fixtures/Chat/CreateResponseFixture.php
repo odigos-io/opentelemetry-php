@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\Chat;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\Chat;
 
 final class CreateResponseFixture
 {

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\SQL\Parser;
+namespace Odigos\Doctrine\DBAL\SQL\Parser;
 
 /**
  * SQL parser visitor

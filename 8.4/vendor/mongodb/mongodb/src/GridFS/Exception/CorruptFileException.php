@@ -15,9 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\GridFS\Exception;
+namespace Odigos\MongoDB\GridFS\Exception;
 
-use MongoDB\Exception\RuntimeException;
+use Odigos\MongoDB\Exception\RuntimeException;
 use function sprintf;
 class CorruptFileException extends RuntimeException
 {

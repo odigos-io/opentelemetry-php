@@ -13,10 +13,10 @@ declare (strict_types=1);
  * @since         2.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Utility;
+namespace Odigos\Cake\Utility;
 
 use ArrayAccess;
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 use InvalidArgumentException;
 use const SORT_ASC;
 use const SORT_DESC;
@@ -129,7 +129,7 @@ class Hash
         if (!str_contains($path, '[')) {
             $tokens = explode('.', $path);
         } else {
-            $tokens = \Cake\Utility\Text::tokenize($path, '.', '[', ']');
+            $tokens = Text::tokenize($path, '.', '[', ']');
         }
         $_key = '__set_item__';
         $context = [$_key => [$data]];
@@ -263,7 +263,7 @@ class Hash
         if ($noTokens) {
             $tokens = explode('.', $path);
         } else {
-            $tokens = \Cake\Utility\Text::tokenize($path, '.', '[', ']');
+            $tokens = Text::tokenize($path, '.', '[', ']');
         }
         if ($noTokens && !str_contains($path, '{')) {
             return static::_simpleOp('insert', $data, $tokens, $values);
@@ -342,7 +342,7 @@ class Hash
             unset($data[$path]);
             return $data;
         }
-        $tokens = $noTokens ? explode('.', $path) : \Cake\Utility\Text::tokenize($path, '.', '[', ']');
+        $tokens = $noTokens ? explode('.', $path) : Text::tokenize($path, '.', '[', ']');
         if ($noExpansion && $noTokens) {
             return static::_simpleOp('remove', $data, $tokens);
         }

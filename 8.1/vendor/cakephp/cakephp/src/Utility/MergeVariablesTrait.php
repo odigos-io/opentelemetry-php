@@ -13,7 +13,7 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Utility;
+namespace Odigos\Cake\Utility;
 
 /**
  * Provides features for merging object properties recursively with
@@ -72,7 +72,7 @@ trait MergeVariablesTrait
             $isAssoc = \true;
         }
         if ($isAssoc) {
-            $thisValue = \Cake\Utility\Hash::normalize($thisValue);
+            $thisValue = Hash::normalize($thisValue);
         }
         foreach ($parentClasses as $class) {
             $parentProperties = get_class_vars($class);
@@ -100,7 +100,7 @@ trait MergeVariablesTrait
         if (!$isAssoc) {
             return array_merge($parent, $current);
         }
-        $parent = \Cake\Utility\Hash::normalize($parent);
+        $parent = Hash::normalize($parent);
         foreach ($parent as $key => $value) {
             $current[$key] ??= $value;
         }

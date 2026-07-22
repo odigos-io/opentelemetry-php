@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Foundation\Providers;
+namespace Odigos\Illuminate\Foundation\Providers;
 
-use Illuminate\Contracts\Validation\ValidatesWhenResolved;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Routing\Redirector;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Validation\ValidatesWhenResolved;
+use Odigos\Illuminate\Foundation\Http\FormRequest;
+use Odigos\Illuminate\Routing\Redirector;
+use Odigos\Illuminate\Support\ServiceProvider;
 class FormRequestServiceProvider extends ServiceProvider
 {
     /**

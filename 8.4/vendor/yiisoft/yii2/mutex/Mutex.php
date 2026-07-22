@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\mutex;
+namespace Odigos\yii\mutex;
 
-use yii\base\Component;
+use Odigos\yii\base\Component;
 /**
  * The Mutex component allows mutual execution of concurrent processes in order to prevent "race conditions".
  *

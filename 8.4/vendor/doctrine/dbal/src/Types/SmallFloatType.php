@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-class SmallFloatType extends \Doctrine\DBAL\Types\Type
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+class SmallFloatType extends Type
 {
     /**
      * {@inheritDoc}

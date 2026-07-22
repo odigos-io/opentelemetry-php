@@ -5,16 +5,16 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console;
+namespace Odigos\yii\console;
 
-use yii\console\controllers\HelpController;
+use Odigos\yii\console\controllers\HelpController;
 /**
  * UnknownCommandException represents an exception caused by incorrect usage of a console command.
  *
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0.11
  */
-class UnknownCommandException extends \yii\console\Exception
+class UnknownCommandException extends Exception
 {
     /**
      * @var string the name of the command that could not be recognized.

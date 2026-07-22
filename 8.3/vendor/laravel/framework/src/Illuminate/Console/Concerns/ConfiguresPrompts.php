@@ -1,21 +1,21 @@
 <?php
 
-namespace Illuminate\Console\Concerns;
+namespace Odigos\Illuminate\Console\Concerns;
 
-use Illuminate\Console\PromptValidationException;
-use Laravel\Prompts\ConfirmPrompt;
-use Laravel\Prompts\MultiSearchPrompt;
-use Laravel\Prompts\MultiSelectPrompt;
-use Laravel\Prompts\PasswordPrompt;
-use Laravel\Prompts\PausePrompt;
-use Laravel\Prompts\Prompt;
-use Laravel\Prompts\SearchPrompt;
-use Laravel\Prompts\SelectPrompt;
-use Laravel\Prompts\SuggestPrompt;
-use Laravel\Prompts\TextareaPrompt;
-use Laravel\Prompts\TextPrompt;
+use Odigos\Illuminate\Console\PromptValidationException;
+use Odigos\Laravel\Prompts\ConfirmPrompt;
+use Odigos\Laravel\Prompts\MultiSearchPrompt;
+use Odigos\Laravel\Prompts\MultiSelectPrompt;
+use Odigos\Laravel\Prompts\PasswordPrompt;
+use Odigos\Laravel\Prompts\PausePrompt;
+use Odigos\Laravel\Prompts\Prompt;
+use Odigos\Laravel\Prompts\SearchPrompt;
+use Odigos\Laravel\Prompts\SelectPrompt;
+use Odigos\Laravel\Prompts\SuggestPrompt;
+use Odigos\Laravel\Prompts\TextareaPrompt;
+use Odigos\Laravel\Prompts\TextPrompt;
 use stdClass;
-use Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
 trait ConfiguresPrompts
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static bool has(string $key)
@@ -23,7 +23,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Config\Repository
  */
-class Config extends \Illuminate\Support\Facades\Facade
+class Config extends Facade
 {
     /**
      * Get the registered name of the component.

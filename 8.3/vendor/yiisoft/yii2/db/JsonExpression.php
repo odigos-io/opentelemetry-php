@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * Class JsonExpression represents data that should be encoded to JSON.
  *
@@ -20,7 +20,7 @@ use yii\base\InvalidConfigException;
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.14
  */
-class JsonExpression implements \yii\db\ExpressionInterface, \JsonSerializable
+class JsonExpression implements ExpressionInterface, \JsonSerializable
 {
     public const TYPE_JSON = 'json';
     public const TYPE_JSONB = 'jsonb';
@@ -82,7 +82,7 @@ class JsonExpression implements \yii\db\ExpressionInterface, \JsonSerializable
     public function jsonSerialize()
     {
         $value = $this->getValue();
-        if ($value instanceof \yii\db\QueryInterface) {
+        if ($value instanceof QueryInterface) {
             throw new InvalidConfigException('The JsonExpression class can not be serialized to JSON when the value is a QueryInterface object');
         }
         return $value;

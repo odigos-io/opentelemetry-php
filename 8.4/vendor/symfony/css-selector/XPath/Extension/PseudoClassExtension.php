@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\XPath\Extension;
+namespace Odigos\Symfony\Component\CssSelector\XPath\Extension;
 
-use Symfony\Component\CssSelector\Exception\ExpressionErrorException;
-use Symfony\Component\CssSelector\XPath\XPathExpr;
+use Odigos\Symfony\Component\CssSelector\Exception\ExpressionErrorException;
+use Odigos\Symfony\Component\CssSelector\XPath\XPathExpr;
 /**
  * XPath expression translator pseudo-class extension.
  *
@@ -22,7 +22,7 @@ use Symfony\Component\CssSelector\XPath\XPathExpr;
  *
  * @internal
  */
-class PseudoClassExtension extends \Symfony\Component\CssSelector\XPath\Extension\AbstractExtension
+class PseudoClassExtension extends AbstractExtension
 {
     public function getPseudoClassTranslators(): array
     {

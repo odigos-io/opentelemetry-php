@@ -8,20 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\ErrorHandler\Command;
+namespace Odigos\Symfony\Component\ErrorHandler\Command;
 
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\ErrorHandler\ErrorRenderer\ErrorRendererInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Style\SymfonyStyle;
+use Odigos\Symfony\Component\ErrorHandler\ErrorRenderer\ErrorRendererInterface;
+use Odigos\Symfony\Component\Filesystem\Filesystem;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpKernel\Exception\HttpException;
+use Odigos\Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 /**
  * Dump error pages to plain HTML files that can be directly served by a web server.
  *

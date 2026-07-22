@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Relations\Concerns;
 
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\JoinClause;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Database\Eloquent\Builder;
+use Odigos\Illuminate\Database\Query\JoinClause;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 use InvalidArgumentException;
 trait CanBeOneOfMany
 {

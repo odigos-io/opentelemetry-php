@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
 use ArrayIterator;
 use Countable;
@@ -58,10 +58,10 @@ class CommandCollection implements IteratorAggregate, Countable
      * @return $this
      * @throws \InvalidArgumentException
      */
-    public function add(string $name, \Cake\Console\CommandInterface|string $command)
+    public function add(string $name, CommandInterface|string $command)
     {
         if (is_string($command)) {
-            assert(is_subclass_of($command, \Cake\Console\CommandInterface::class), sprintf('Cannot use `%s` for command `%s`. ' . 'It is not a subclass of `%s`.', $command, $name, \Cake\Console\CommandInterface::class));
+            assert(is_subclass_of($command, CommandInterface::class), sprintf('Cannot use `%s` for command `%s`. ' . 'It is not a subclass of `%s`.', $command, $name, CommandInterface::class));
         }
         if (!preg_match('/^[^\s]+(?:(?: [^\s]+){1,2})?$/ui', $name)) {
             throw new InvalidArgumentException("The command name `{$name}` is invalid. Names can only be a maximum of three words.");
@@ -103,7 +103,7 @@ class CommandCollection implements IteratorAggregate, Countable
      * Can be a FQCN or CommandInterface instance.
      * @return $this
      */
-    public function replace(string $oldName, string $newName, \Cake\Console\CommandInterface|string $command)
+    public function replace(string $oldName, string $newName, CommandInterface|string $command)
     {
         $this->remove($oldName);
         $this->add($newName, $command);
@@ -126,7 +126,7 @@ class CommandCollection implements IteratorAggregate, Countable
      * @return \Cake\Console\CommandInterface|class-string<\Cake\Console\CommandInterface> Either the command class or an instance.
      * @throws \InvalidArgumentException when unknown commands are fetched.
      */
-    public function get(string $name): \Cake\Console\CommandInterface|string
+    public function get(string $name): CommandInterface|string
     {
         if (!$this->has($name)) {
             throw new InvalidArgumentException(sprintf('The `%s` is not a known command name.', $name));
@@ -167,7 +167,7 @@ class CommandCollection implements IteratorAggregate, Countable
      */
     public function discoverPlugin(string $plugin): array
     {
-        $scanner = new \Cake\Console\CommandScanner();
+        $scanner = new CommandScanner();
         $shells = $scanner->scanPlugin($plugin);
         return $this->resolveNames($shells);
     }
@@ -214,7 +214,7 @@ class CommandCollection implements IteratorAggregate, Countable
      */
     public function autoDiscover(): array
     {
-        $scanner = new \Cake\Console\CommandScanner();
+        $scanner = new CommandScanner();
         $core = $this->resolveNames($scanner->scanCore());
         $app = $this->resolveNames($scanner->scanApp());
         return $app + $core;

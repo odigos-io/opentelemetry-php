@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Session;
+namespace Odigos\Illuminate\Session;
 
-use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
+use Odigos\Illuminate\Contracts\Encryption\DecryptException;
+use Odigos\Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
 use SessionHandlerInterface;
-class EncryptedStore extends \Illuminate\Session\Store
+class EncryptedStore extends Store
 {
     /**
      * The encrypter instance.

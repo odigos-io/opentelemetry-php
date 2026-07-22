@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\SQL\Parser;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\SQL\Parser;
 /** @internal */
 final class ParseError extends \Exception implements Exception
 {

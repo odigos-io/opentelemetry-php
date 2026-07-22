@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Chat;
+namespace Odigos\OpenAI\Responses\Chat;
 
 final class CreateStreamedResponseChoice
 {
-    private function __construct(public readonly int $index, public readonly \OpenAI\Responses\Chat\CreateStreamedResponseDelta $delta, public readonly ?string $finishReason)
+    private function __construct(public readonly int $index, public readonly CreateStreamedResponseDelta $delta, public readonly ?string $finishReason)
     {
     }
     /**
@@ -13,7 +13,7 @@ final class CreateStreamedResponseChoice
      */
     public static function from(array $attributes): self
     {
-        return new self($attributes['index'], \OpenAI\Responses\Chat\CreateStreamedResponseDelta::from($attributes['delta'] ?? []), $attributes['finish_reason'] ?? null);
+        return new self($attributes['index'], CreateStreamedResponseDelta::from($attributes['delta'] ?? []), $attributes['finish_reason'] ?? null);
     }
     /**
      * @return array{index: int, delta: array{role?: string, content?: string}|array{role?: string, content: null, function_call: array{name?: string, arguments?: string}}, finish_reason: string|null}

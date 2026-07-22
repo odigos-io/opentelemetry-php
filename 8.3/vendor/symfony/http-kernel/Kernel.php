@@ -8,35 +8,35 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel;
+namespace Odigos\Symfony\Component\HttpKernel;
 
-use Symfony\Component\Config\Builder\ConfigBuilderGenerator;
-use Symfony\Component\Config\ConfigCache;
-use Symfony\Component\Config\Loader\DelegatingLoader;
-use Symfony\Component\Config\Loader\LoaderResolver;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Compiler\PassConfig;
-use Symfony\Component\DependencyInjection\Compiler\RemoveBuildParametersPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
-use Symfony\Component\DependencyInjection\Dumper\Preloader;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
-use Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
-use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
-use Symfony\Component\DependencyInjection\Loader\IniFileLoader;
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\ErrorHandler\DebugClassLoader;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
-use Symfony\Component\HttpKernel\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass;
+use Odigos\Symfony\Component\Config\Builder\ConfigBuilderGenerator;
+use Odigos\Symfony\Component\Config\ConfigCache;
+use Odigos\Symfony\Component\Config\Loader\DelegatingLoader;
+use Odigos\Symfony\Component\Config\Loader\LoaderResolver;
+use Odigos\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Odigos\Symfony\Component\DependencyInjection\Compiler\PassConfig;
+use Odigos\Symfony\Component\DependencyInjection\Compiler\RemoveBuildParametersPass;
+use Odigos\Symfony\Component\DependencyInjection\ContainerBuilder;
+use Odigos\Symfony\Component\DependencyInjection\ContainerInterface;
+use Odigos\Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Odigos\Symfony\Component\DependencyInjection\Dumper\Preloader;
+use Odigos\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use Odigos\Symfony\Component\DependencyInjection\Loader\ClosureLoader;
+use Odigos\Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
+use Odigos\Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
+use Odigos\Symfony\Component\DependencyInjection\Loader\IniFileLoader;
+use Odigos\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Odigos\Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Odigos\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Odigos\Symfony\Component\ErrorHandler\DebugClassLoader;
+use Odigos\Symfony\Component\Filesystem\Filesystem;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Odigos\Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
+use Odigos\Symfony\Component\HttpKernel\Config\FileLocator;
+use Odigos\Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass;
 // Help opcache.preload discover always-needed symbols
 class_exists(ConfigCache::class);
 /**
@@ -49,7 +49,7 @@ class_exists(ConfigCache::class);
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Kernel implements \Symfony\Component\HttpKernel\KernelInterface, \Symfony\Component\HttpKernel\RebootableInterface, \Symfony\Component\HttpKernel\TerminableInterface
+abstract class Kernel implements KernelInterface, RebootableInterface, TerminableInterface
 {
     /**
      * @var array<string, BundleInterface>
@@ -123,7 +123,7 @@ abstract class Kernel implements \Symfony\Component\HttpKernel\KernelInterface, 
         if (!$this->booted) {
             return;
         }
-        if ($this->getHttpKernel() instanceof \Symfony\Component\HttpKernel\TerminableInterface) {
+        if ($this->getHttpKernel() instanceof TerminableInterface) {
             $this->getHttpKernel()->terminate($request, $response);
         }
     }
@@ -141,12 +141,12 @@ abstract class Kernel implements \Symfony\Component\HttpKernel\KernelInterface, 
         $this->requestStackSize = 0;
         $this->resetServices = \false;
     }
-    public function handle(Request $request, int $type = \Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST, bool $catch = \true): Response
+    public function handle(Request $request, int $type = HttpKernelInterface::MAIN_REQUEST, bool $catch = \true): Response
     {
         if (!$this->container) {
             $this->preBoot();
         }
-        if (\Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST === $type && !$this->handlingHttpCache && $this->container->has('http_cache')) {
+        if (HttpKernelInterface::MAIN_REQUEST === $type && !$this->handlingHttpCache && $this->container->has('http_cache')) {
             $this->handlingHttpCache = \true;
             try {
                 return $this->container->get('http_cache')->handle($request, $type, $catch);
@@ -169,7 +169,7 @@ abstract class Kernel implements \Symfony\Component\HttpKernel\KernelInterface, 
     /**
      * Gets an HTTP kernel from the container.
      */
-    protected function getHttpKernel(): \Symfony\Component\HttpKernel\HttpKernelInterface
+    protected function getHttpKernel(): HttpKernelInterface
     {
         return $this->container->get('http_kernel');
     }

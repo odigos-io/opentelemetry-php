@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\VectorStores\Search;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\VectorStores\Search;
 
 final class VectorStoreSearchResponseContentFixture
 {

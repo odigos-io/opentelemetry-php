@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console;
+namespace Odigos\yii\console;
 
 /**
  * The console Request represents the environment information for a console application.
@@ -18,7 +18,7 @@ namespace yii\console;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Request extends \yii\base\Request
+class Request extends \Odigos\yii\base\Request
 {
     private $_params;
     /**
@@ -73,9 +73,9 @@ class Request extends \yii\base\Request
             } elseif (preg_match('/^--([\w-]+)(?:=(.*))?$/', $param, $matches)) {
                 $name = $matches[1];
                 if (is_numeric(substr($name, 0, 1))) {
-                    throw new \yii\console\Exception('Parameter "' . $name . '" is not valid');
+                    throw new Exception('Parameter "' . $name . '" is not valid');
                 }
-                if ($name !== \yii\console\Application::OPTION_APPCONFIG) {
+                if ($name !== Application::OPTION_APPCONFIG) {
                     $params[$name] = isset($matches[2]) ? $matches[2] : \true;
                     $prevOption =& $params[$name];
                 }

@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console;
+namespace Odigos\yii\console;
 
 use Odigos\cebe\markdown\block\FencedCodeTrait;
 use Odigos\cebe\markdown\inline\CodeTrait;
 use Odigos\cebe\markdown\inline\EmphStrongTrait;
 use Odigos\cebe\markdown\inline\StrikeoutTrait;
-use yii\helpers\Console;
+use Odigos\yii\helpers\Console;
 /**
  * A Markdown parser that enhances markdown for reading in console environments.
  *

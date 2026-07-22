@@ -16,8 +16,8 @@ namespace Odigos;
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  * @var string $plugin
  */
-use Cake\Core\Configure;
-use function Cake\Core\h;
+use Odigos\Cake\Core\Configure;
+use function Odigos\Cake\Core\h;
 $this->layout = 'dev_error';
 $pluginPath = Configure::read('App.paths.plugins.0');
 $this->assign('title', 'Missing Plugin');

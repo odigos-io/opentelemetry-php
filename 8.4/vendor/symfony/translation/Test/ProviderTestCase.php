@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Test;
+namespace Odigos\Symfony\Component\Translation\Test;
 
 use Odigos\PHPUnit\Framework\Attributes\DataProvider;
 use Odigos\PHPUnit\Framework\MockObject\MockObject;
 use Odigos\PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\Translation\Dumper\XliffFileDumper;
-use Symfony\Component\Translation\Loader\ArrayLoader;
-use Symfony\Component\Translation\Loader\LoaderInterface;
-use Symfony\Component\Translation\Provider\ProviderInterface;
-use Symfony\Component\Translation\TranslatorBag;
-use Symfony\Component\Translation\TranslatorBagInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Odigos\Symfony\Component\HttpClient\MockHttpClient;
+use Odigos\Symfony\Component\Translation\Dumper\XliffFileDumper;
+use Odigos\Symfony\Component\Translation\Loader\ArrayLoader;
+use Odigos\Symfony\Component\Translation\Loader\LoaderInterface;
+use Odigos\Symfony\Component\Translation\Provider\ProviderInterface;
+use Odigos\Symfony\Component\Translation\TranslatorBag;
+use Odigos\Symfony\Component\Translation\TranslatorBagInterface;
+use Odigos\Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * A test case to ease testing a translation provider.
  *

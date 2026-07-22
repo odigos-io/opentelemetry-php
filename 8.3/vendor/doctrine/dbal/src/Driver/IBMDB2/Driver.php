@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\IBMDB2;
+namespace Odigos\Doctrine\DBAL\Driver\IBMDB2;
 
-use Doctrine\DBAL\Driver\AbstractDB2Driver;
-use Doctrine\DBAL\Driver\IBMDB2\Exception\ConnectionFailed;
+use Odigos\Doctrine\DBAL\Driver\AbstractDB2Driver;
+use Odigos\Doctrine\DBAL\Driver\IBMDB2\Exception\ConnectionFailed;
 use SensitiveParameter;
 use function db2_connect;
 use function db2_pconnect;
@@ -16,9 +16,9 @@ final class Driver extends AbstractDB2Driver
     public function connect(
         #[SensitiveParameter]
         array $params
-    ): \Doctrine\DBAL\Driver\IBMDB2\Connection
+    ): Connection
     {
-        $dataSourceName = \Doctrine\DBAL\Driver\IBMDB2\DataSourceName::fromConnectionParameters($params)->toString();
+        $dataSourceName = DataSourceName::fromConnectionParameters($params)->toString();
         $username = $params['user'] ?? '';
         $password = $params['password'] ?? '';
         $driverOptions = $params['driverOptions'] ?? [];
@@ -30,6 +30,6 @@ final class Driver extends AbstractDB2Driver
         if ($connection === \false) {
             throw ConnectionFailed::new();
         }
-        return new \Doctrine\DBAL\Driver\IBMDB2\Connection($connection);
+        return new Connection($connection);
     }
 }

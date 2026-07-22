@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
 use DateInterval;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Exception\InvalidFormat;
-use Doctrine\DBAL\Types\Exception\InvalidType;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Types\Exception\InvalidFormat;
+use Odigos\Doctrine\DBAL\Types\Exception\InvalidType;
 use Throwable;
 use function substr;
 /**
  * Type that maps interval string to a PHP DateInterval Object.
  */
-class DateIntervalType extends \Doctrine\DBAL\Types\Type
+class DateIntervalType extends Type
 {
     final public const FORMAT = '%RP%YY%MM%DDT%HH%IM%SS';
     /**

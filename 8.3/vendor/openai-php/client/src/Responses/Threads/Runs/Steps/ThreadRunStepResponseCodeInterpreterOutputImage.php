@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Threads\Runs\Steps;
+namespace Odigos\OpenAI\Responses\Threads\Runs\Steps;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{type: 'image', image: array{file_id: string}}>
  */
@@ -19,7 +19,7 @@ final class ThreadRunStepResponseCodeInterpreterOutputImage implements ResponseC
     /**
      * @param  'image'  $type
      */
-    private function __construct(public string $type, public \OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeInterpreterOutputImageImage $image)
+    private function __construct(public string $type, public ThreadRunStepResponseCodeInterpreterOutputImageImage $image)
     {
     }
     /**
@@ -29,7 +29,7 @@ final class ThreadRunStepResponseCodeInterpreterOutputImage implements ResponseC
      */
     public static function from(array $attributes): self
     {
-        return new self($attributes['type'], \OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeInterpreterOutputImageImage::from($attributes['image']));
+        return new self($attributes['type'], ThreadRunStepResponseCodeInterpreterOutputImageImage::from($attributes['image']));
     }
     /**
      * {@inheritDoc}

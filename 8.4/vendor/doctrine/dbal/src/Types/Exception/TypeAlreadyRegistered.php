@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types\Exception;
+namespace Odigos\Doctrine\DBAL\Types\Exception;
 
-use Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\DBAL\Types\Type;
 use Exception;
 use function get_debug_type;
 use function spl_object_hash;
 use function sprintf;
-final class TypeAlreadyRegistered extends Exception implements \Doctrine\DBAL\Types\Exception\TypesException
+final class TypeAlreadyRegistered extends Exception implements TypesException
 {
     public static function new(Type $type): self
     {

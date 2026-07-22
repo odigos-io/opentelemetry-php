@@ -12,13 +12,13 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Exception;
+namespace Odigos\Cake\Http\Exception;
 
 use Throwable;
 /**
  * Represents an HTTP 403 error caused by an invalid CSRF token
  */
-class InvalidCsrfTokenException extends \Cake\Http\Exception\HttpException
+class InvalidCsrfTokenException extends HttpException
 {
     /**
      * @inheritDoc

@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Odigos\Illuminate\Database\Eloquent\Relations;
 
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
  * @extends \Illuminate\Database\Eloquent\Relations\HasOneOrMany<TRelatedModel, TDeclaringModel, \Illuminate\Database\Eloquent\Collection<int, TRelatedModel>>
  */
-class HasMany extends \Illuminate\Database\Eloquent\Relations\HasOneOrMany
+class HasMany extends HasOneOrMany
 {
     /**
      * Convert the relationship to a "has one" relationship.
@@ -18,7 +18,7 @@ class HasMany extends \Illuminate\Database\Eloquent\Relations\HasOneOrMany
      */
     public function one()
     {
-        return \Illuminate\Database\Eloquent\Relations\HasOne::noConstraints(fn() => tap(new \Illuminate\Database\Eloquent\Relations\HasOne($this->getQuery(), $this->parent, $this->foreignKey, $this->localKey), function ($hasOne) {
+        return HasOne::noConstraints(fn() => tap(new HasOne($this->getQuery(), $this->parent, $this->foreignKey, $this->localKey), function ($hasOne) {
             if ($inverse = $this->getInverseRelationship()) {
                 $hasOne->inverse($inverse);
             }

@@ -14,20 +14,20 @@ declare (strict_types=1);
  * @since         4.2.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Middleware;
+namespace Odigos\Cake\Http\Middleware;
 
 use ArrayAccess;
-use Cake\Core\Exception\CakeException;
-use Cake\Http\Exception\InvalidCsrfTokenException;
-use Cake\Http\ServerRequest;
-use Cake\Http\Session;
-use Cake\Utility\Hash;
-use Cake\Utility\Security;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Http\Exception\InvalidCsrfTokenException;
+use Odigos\Cake\Http\ServerRequest;
+use Odigos\Cake\Http\Session;
+use Odigos\Cake\Utility\Hash;
+use Odigos\Cake\Utility\Security;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use function Cake\I18n\__d;
+use function Odigos\Cake\I18n\__d;
 /**
  * Provides CSRF protection via session based tokens.
  *
@@ -244,7 +244,7 @@ class SessionCsrfProtectionMiddleware implements MiddlewareInterface
      */
     public static function replaceToken(ServerRequest $request, string $key = 'csrfToken'): ServerRequest
     {
-        $middleware = new \Cake\Http\Middleware\SessionCsrfProtectionMiddleware(['key' => $key]);
+        $middleware = new SessionCsrfProtectionMiddleware(['key' => $key]);
         $token = $middleware->createToken();
         $request->getSession()->write($key, $token);
         return $request->withAttribute($key, $middleware->saltToken($token));

@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Provider;
+namespace Odigos\Symfony\Component\Translation\Provider;
 
-use Symfony\Component\Translation\TranslatorBag;
-use Symfony\Component\Translation\TranslatorBagInterface;
+use Odigos\Symfony\Component\Translation\TranslatorBag;
+use Odigos\Symfony\Component\Translation\TranslatorBagInterface;
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
  */
-class NullProvider implements \Symfony\Component\Translation\Provider\ProviderInterface
+class NullProvider implements ProviderInterface
 {
     public function __toString(): string
     {

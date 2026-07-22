@@ -2,7 +2,7 @@
 
 namespace Odigos\Egulias\EmailValidator\Parser;
 
-use Doctrine\Common\Lexer\Token;
+use Odigos\Doctrine\Common\Lexer\Token;
 use Odigos\Egulias\EmailValidator\EmailLexer;
 use Odigos\Egulias\EmailValidator\Warning\TLD;
 use Odigos\Egulias\EmailValidator\Result\Result;

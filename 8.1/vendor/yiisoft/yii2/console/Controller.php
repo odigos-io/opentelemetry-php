@@ -5,16 +5,16 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console;
+namespace Odigos\yii\console;
 
 use Odigos\Yii;
-use yii\base\Action;
-use yii\base\InlineAction;
-use yii\base\InvalidRouteException;
-use yii\helpers\Console;
-use yii\helpers\Inflector;
-use yii\base\Controller as BaseController;
-use yii\base\Module;
+use Odigos\yii\base\Action;
+use Odigos\yii\base\InlineAction;
+use Odigos\yii\base\InvalidRouteException;
+use Odigos\yii\helpers\Console;
+use Odigos\yii\helpers\Inflector;
+use Odigos\yii\base\Controller as BaseController;
+use Odigos\yii\base\Module;
 /**
  * Controller is the base class of console command classes.
  *
@@ -129,7 +129,7 @@ class Controller extends BaseController
                             }
                             $message .= '. ' . Yii::t('yii', 'Aliases available: {aliases}', ['aliases' => implode(', ', $aliasesAvailable)]);
                         }
-                        throw new \yii\console\Exception($message);
+                        throw new Exception($message);
                     }
                 }
                 unset($params['_aliases']);
@@ -163,7 +163,7 @@ class Controller extends BaseController
                     if (!empty($options)) {
                         $message .= '. ' . Yii::t('yii', 'Options available: {options}', ['options' => '--' . implode(', --', $options)]);
                     }
-                    throw new \yii\console\Exception($message);
+                    throw new Exception($message);
                 }
             }
         }
@@ -231,8 +231,8 @@ class Controller extends BaseController
             } elseif (\PHP_VERSION_ID >= 70100 && ($type = $param->getType()) !== null && $type instanceof \ReflectionNamedType && !$type->isBuiltin()) {
                 try {
                     $this->bindInjectedParams($type, $name, $args, $requestedParams);
-                } catch (\yii\base\Exception $e) {
-                    throw new \yii\console\Exception($e->getMessage());
+                } catch (\Odigos\yii\base\Exception $e) {
+                    throw new Exception($e->getMessage());
                 }
             } elseif ($param->isDefaultValueAvailable()) {
                 $args[] = $actionParams[$i] = $param->getDefaultValue();
@@ -241,7 +241,7 @@ class Controller extends BaseController
             }
         }
         if (!empty($missing)) {
-            throw new \yii\console\Exception(Yii::t('yii', 'Missing required arguments: {params}', ['params' => implode(', ', $missing)]));
+            throw new Exception(Yii::t('yii', 'Missing required arguments: {params}', ['params' => implode(', ', $missing)]));
         }
         // We use a different array here, specifically one that doesn't contain service instances but descriptions instead.
         if (\Odigos\Yii::$app->requestedParams === null) {

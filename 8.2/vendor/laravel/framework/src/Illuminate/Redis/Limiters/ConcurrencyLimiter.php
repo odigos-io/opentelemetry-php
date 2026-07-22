@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Redis\Limiters;
+namespace Odigos\Illuminate\Redis\Limiters;
 
-use Illuminate\Contracts\Redis\LimiterTimeoutException;
-use Illuminate\Support\Sleep;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Redis\LimiterTimeoutException;
+use Odigos\Illuminate\Support\Sleep;
+use Odigos\Illuminate\Support\Str;
 use Throwable;
 class ConcurrencyLimiter
 {

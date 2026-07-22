@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\View;
+namespace Odigos\Illuminate\View;
 
 use Stringable;
 class AppendableAttributeValue implements Stringable

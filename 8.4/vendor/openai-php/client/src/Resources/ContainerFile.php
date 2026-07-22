@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\ContainerFileContract;
-use OpenAI\Responses\Containers\Files\ContainerFileDeleteResponse;
-use OpenAI\Responses\Containers\Files\ContainerFileListResponse;
-use OpenAI\Responses\Containers\Files\ContainerFileResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\ContainerFileContract;
+use Odigos\OpenAI\Responses\Containers\Files\ContainerFileDeleteResponse;
+use Odigos\OpenAI\Responses\Containers\Files\ContainerFileListResponse;
+use Odigos\OpenAI\Responses\Containers\Files\ContainerFileResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 /**
  * @phpstan-import-type ContainerFileType from ContainerFileResponse
  * @phpstan-import-type ContainerFileListType from ContainerFileListResponse
@@ -16,7 +16,7 @@ use OpenAI\ValueObjects\Transporter\Response;
  */
 final class ContainerFile implements ContainerFileContract
 {
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Transportable;
     /**
      * Create a container file
      *

@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\conditions;
+namespace Odigos\yii\db\conditions;
 
-use yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidArgumentException;
 /**
  * Condition that inverts passed [[condition]].
  *
@@ -15,7 +15,7 @@ use yii\base\InvalidArgumentException;
  * @since 2.0.14
  * @phpcs:disable Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore
  */
-class NotCondition implements \yii\db\conditions\ConditionInterface
+class NotCondition implements ConditionInterface
 {
     /**
      * @var mixed the condition to be negated

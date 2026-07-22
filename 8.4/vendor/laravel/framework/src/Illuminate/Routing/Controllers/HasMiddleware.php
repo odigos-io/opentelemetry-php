@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Routing\Controllers;
+namespace Odigos\Illuminate\Routing\Controllers;
 
 interface HasMiddleware
 {

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
-use Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * Casts DOM related classes to array representation.
  *
@@ -26,9 +26,9 @@ class DOMCaster
     private const NODE_TYPES = [\XML_ELEMENT_NODE => 'XML_ELEMENT_NODE', \XML_ATTRIBUTE_NODE => 'XML_ATTRIBUTE_NODE', \XML_TEXT_NODE => 'XML_TEXT_NODE', \XML_CDATA_SECTION_NODE => 'XML_CDATA_SECTION_NODE', \XML_ENTITY_REF_NODE => 'XML_ENTITY_REF_NODE', \XML_ENTITY_NODE => 'XML_ENTITY_NODE', \XML_PI_NODE => 'XML_PI_NODE', \XML_COMMENT_NODE => 'XML_COMMENT_NODE', \XML_DOCUMENT_NODE => 'XML_DOCUMENT_NODE', \XML_DOCUMENT_TYPE_NODE => 'XML_DOCUMENT_TYPE_NODE', \XML_DOCUMENT_FRAG_NODE => 'XML_DOCUMENT_FRAG_NODE', \XML_NOTATION_NODE => 'XML_NOTATION_NODE', \XML_HTML_DOCUMENT_NODE => 'XML_HTML_DOCUMENT_NODE', \XML_DTD_NODE => 'XML_DTD_NODE', \XML_ELEMENT_DECL_NODE => 'XML_ELEMENT_DECL_NODE', \XML_ATTRIBUTE_DECL_NODE => 'XML_ATTRIBUTE_DECL_NODE', \XML_ENTITY_DECL_NODE => 'XML_ENTITY_DECL_NODE', \XML_NAMESPACE_DECL_NODE => 'XML_NAMESPACE_DECL_NODE'];
     public static function castException(\DOMException|\Odigos\Dom\Exception $e, array $a, Stub $stub, bool $isNested): array
     {
-        $k = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'code';
+        $k = Caster::PREFIX_PROTECTED . 'code';
         if (isset($a[$k], self::ERROR_CODES[$a[$k]])) {
-            $a[$k] = new \Symfony\Component\VarDumper\Caster\ConstStub(self::ERROR_CODES[$a[$k]], $a[$k]);
+            $a[$k] = new ConstStub(self::ERROR_CODES[$a[$k]], $a[$k]);
         }
         return $a;
     }
@@ -38,7 +38,7 @@ class DOMCaster
     }
     public static function castImplementation(\DOMImplementation|\Dom\Implementation $dom, array $a, Stub $stub, bool $isNested): array
     {
-        $a += [\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'Core' => '1.0', \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'XML' => '2.0'];
+        $a += [Caster::PREFIX_VIRTUAL . 'Core' => '1.0', Caster::PREFIX_VIRTUAL . 'XML' => '2.0'];
         return $a;
     }
     public static function castNode(\DOMNode|\Dom\Node $dom, array $a, Stub $stub, bool $isNested): array
@@ -51,28 +51,28 @@ class DOMCaster
     }
     public static function castDocument(\DOMDocument $dom, array $a, Stub $stub, bool $isNested, int $filter = 0): array
     {
-        if (!($filter & \Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE)) {
+        if (!($filter & Caster::EXCLUDE_VERBOSE)) {
             $formatOutput = $dom->formatOutput;
             $dom->formatOutput = \true;
-            $a += [\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'xml' => $dom->saveXML()];
+            $a += [Caster::PREFIX_VIRTUAL . 'xml' => $dom->saveXML()];
             $dom->formatOutput = $formatOutput;
         }
         return $a;
     }
     public static function castXMLDocument(\Dom\XMLDocument $dom, array $a, Stub $stub, bool $isNested, int $filter = 0): array
     {
-        if (!($filter & \Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE)) {
+        if (!($filter & Caster::EXCLUDE_VERBOSE)) {
             $formatOutput = $dom->formatOutput;
             $dom->formatOutput = \true;
-            $a += [\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'xml' => $dom->saveXML()];
+            $a += [Caster::PREFIX_VIRTUAL . 'xml' => $dom->saveXML()];
             $dom->formatOutput = $formatOutput;
         }
         return $a;
     }
     public static function castHTMLDocument(\Dom\HTMLDocument $dom, array $a, Stub $stub, bool $isNested, int $filter = 0): array
     {
-        if (!($filter & \Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE)) {
-            $a += [\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'html' => $dom->saveHTML()];
+        if (!($filter & Caster::EXCLUDE_VERBOSE)) {
+            $a += [Caster::PREFIX_VIRTUAL . 'html' => $dom->saveHTML()];
         }
         return $a;
     }
@@ -121,15 +121,15 @@ class DOMCaster
             }
             $v = $dom->{$k};
             $a[$k] = match (\true) {
-                $v instanceof \DOMNode || $v instanceof \Dom\Node => new \Symfony\Component\VarDumper\Caster\CutStub($v),
-                'nodeType' === $k => new \Symfony\Component\VarDumper\Caster\ConstStub(self::NODE_TYPES[$v], $v),
-                'baseURI' === $k && $v, 'documentURI' === $k && $v => new \Symfony\Component\VarDumper\Caster\LinkStub($v),
+                $v instanceof \DOMNode || $v instanceof \Dom\Node => new CutStub($v),
+                'nodeType' === $k => new ConstStub(self::NODE_TYPES[$v], $v),
+                'baseURI' === $k && $v, 'documentURI' === $k && $v => new LinkStub($v),
                 default => $v,
             };
         }
         if ($dom instanceof \IteratorAggregate) {
             foreach ($dom as $k => $v) {
-                $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . $k] = $v;
+                $a[Caster::PREFIX_VIRTUAL . $k] = $v;
             }
         }
         return $a;

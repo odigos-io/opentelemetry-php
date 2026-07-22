@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Test\Constraint;
+namespace Odigos\Symfony\Component\Mailer\Test\Constraint;
 
 use Odigos\PHPUnit\Framework\Constraint\Constraint;
-use Symfony\Component\Mailer\Event\MessageEvent;
+use Odigos\Symfony\Component\Mailer\Event\MessageEvent;
 final class EmailIsQueued extends Constraint
 {
     public function toString(): string

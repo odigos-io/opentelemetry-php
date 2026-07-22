@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Symfony;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Symfony;
 
 use function assert;
 use OpenTelemetry\Context\Propagation\PropagationSetterInterface;
-use Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpFoundation\Response;
 /**
  * @internal
  */
@@ -21,13 +21,13 @@ final class ResponsePropagationSetter implements PropagationSetterInterface
      */
     public function keys($carrier): array
     {
-        assert($carrier instanceof Response);
+        assert(is_a($carrier, 'Symfony\\Component\\HttpFoundation\\Response'));
         /** @psalm-suppress InvalidReturnStatement */
         return $carrier->headers->keys();
     }
     public function set(&$carrier, string $key, string $value): void
     {
-        assert($carrier instanceof Response);
+        assert(is_a($carrier, 'Symfony\\Component\\HttpFoundation\\Response'));
         $carrier->headers->set($key, $value);
     }
 }

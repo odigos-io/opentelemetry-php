@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Database\Console\Migrations\FreshCommand;
-use Illuminate\Database\Console\Migrations\RefreshCommand;
-use Illuminate\Database\Console\Migrations\ResetCommand;
-use Illuminate\Database\Console\Migrations\RollbackCommand;
-use Illuminate\Database\Console\WipeCommand;
+use Odigos\Illuminate\Database\Console\Migrations\FreshCommand;
+use Odigos\Illuminate\Database\Console\Migrations\RefreshCommand;
+use Odigos\Illuminate\Database\Console\Migrations\ResetCommand;
+use Odigos\Illuminate\Database\Console\Migrations\RollbackCommand;
+use Odigos\Illuminate\Database\Console\WipeCommand;
 /**
  * @method static \Illuminate\Database\Connection connection(\UnitEnum|string|null $name = null)
  * @method static \Illuminate\Database\ConnectionInterface build(array $config)
@@ -118,7 +118,7 @@ use Illuminate\Database\Console\WipeCommand;
  *
  * @see \Illuminate\Database\DatabaseManager
  */
-class DB extends \Illuminate\Support\Facades\Facade
+class DB extends Facade
 {
     /**
      * Indicate if destructive Artisan commands should be prohibited.

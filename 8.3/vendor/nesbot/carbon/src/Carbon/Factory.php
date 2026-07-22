@@ -19,7 +19,7 @@ use DateTimeZone;
 use InvalidArgumentException;
 use ReflectionMethod;
 use RuntimeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 /**
  * A factory to generate Carbon instances with common settings.

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\SQLite3;
+namespace Odigos\Doctrine\DBAL\Driver\SQLite3;
 
-use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
-use Doctrine\DBAL\Driver\Exception\NoIdentityValue;
+use Odigos\Doctrine\DBAL\Driver\Connection as ConnectionInterface;
+use Odigos\Doctrine\DBAL\Driver\Exception\NoIdentityValue;
 use SQLite3;
 use function assert;
 use function sprintf;
@@ -14,25 +14,25 @@ final class Connection implements ConnectionInterface
     public function __construct(private readonly SQLite3 $connection)
     {
     }
-    public function prepare(string $sql): \Doctrine\DBAL\Driver\SQLite3\Statement
+    public function prepare(string $sql): Statement
     {
         try {
             $statement = $this->connection->prepare($sql);
         } catch (\Exception $e) {
-            throw \Doctrine\DBAL\Driver\SQLite3\Exception::new($e);
+            throw Exception::new($e);
         }
         assert($statement !== \false);
-        return new \Doctrine\DBAL\Driver\SQLite3\Statement($this->connection, $statement);
+        return new Statement($this->connection, $statement);
     }
-    public function query(string $sql): \Doctrine\DBAL\Driver\SQLite3\Result
+    public function query(string $sql): Result
     {
         try {
             $result = $this->connection->query($sql);
         } catch (\Exception $e) {
-            throw \Doctrine\DBAL\Driver\SQLite3\Exception::new($e);
+            throw Exception::new($e);
         }
         assert($result !== \false);
-        return new \Doctrine\DBAL\Driver\SQLite3\Result($result, $this->connection->changes());
+        return new Result($result, $this->connection->changes());
     }
     public function quote(string $value): string
     {
@@ -43,7 +43,7 @@ final class Connection implements ConnectionInterface
         try {
             $this->connection->exec($sql);
         } catch (\Exception $e) {
-            throw \Doctrine\DBAL\Driver\SQLite3\Exception::new($e);
+            throw Exception::new($e);
         }
         return $this->connection->changes();
     }
@@ -60,7 +60,7 @@ final class Connection implements ConnectionInterface
         try {
             $this->connection->exec('BEGIN');
         } catch (\Exception $e) {
-            throw \Doctrine\DBAL\Driver\SQLite3\Exception::new($e);
+            throw Exception::new($e);
         }
     }
     public function commit(): void
@@ -68,7 +68,7 @@ final class Connection implements ConnectionInterface
         try {
             $this->connection->exec('COMMIT');
         } catch (\Exception $e) {
-            throw \Doctrine\DBAL\Driver\SQLite3\Exception::new($e);
+            throw Exception::new($e);
         }
     }
     public function rollBack(): void
@@ -76,7 +76,7 @@ final class Connection implements ConnectionInterface
         try {
             $this->connection->exec('ROLLBACK');
         } catch (\Exception $e) {
-            throw \Doctrine\DBAL\Driver\SQLite3\Exception::new($e);
+            throw Exception::new($e);
         }
     }
     public function getNativeConnection(): SQLite3

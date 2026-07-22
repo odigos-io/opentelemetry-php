@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace GuzzleHttp\Promise;
+namespace Odigos\GuzzleHttp\Promise;
 
 /**
  * A promise that has been fulfilled.
@@ -11,7 +11,7 @@ namespace GuzzleHttp\Promise;
  *
  * @final
  */
-class FulfilledPromise implements \GuzzleHttp\Promise\PromiseInterface
+class FulfilledPromise implements PromiseInterface
 {
     private $value;
     /**
@@ -24,17 +24,17 @@ class FulfilledPromise implements \GuzzleHttp\Promise\PromiseInterface
         }
         $this->value = $value;
     }
-    public function then(?callable $onFulfilled = null, ?callable $onRejected = null): \GuzzleHttp\Promise\PromiseInterface
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null): PromiseInterface
     {
         // Return itself if there is no onFulfilled function.
         if (!$onFulfilled) {
             return $this;
         }
-        $queue = \GuzzleHttp\Promise\Utils::queue();
-        $p = new \GuzzleHttp\Promise\Promise([$queue, 'run']);
+        $queue = Utils::queue();
+        $p = new Promise([$queue, 'run']);
         $value = $this->value;
         $queue->add(static function () use ($p, $value, $onFulfilled): void {
-            if (\GuzzleHttp\Promise\Is::pending($p)) {
+            if (Is::pending($p)) {
                 try {
                     $p->resolve($onFulfilled($value));
                 } catch (\Throwable $e) {
@@ -44,7 +44,7 @@ class FulfilledPromise implements \GuzzleHttp\Promise\PromiseInterface
         });
         return $p;
     }
-    public function otherwise(callable $onRejected): \GuzzleHttp\Promise\PromiseInterface
+    public function otherwise(callable $onRejected): PromiseInterface
     {
         return $this->then(null, $onRejected);
     }

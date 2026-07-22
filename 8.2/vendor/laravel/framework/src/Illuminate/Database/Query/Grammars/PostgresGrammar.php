@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Database\Query\Grammars;
+namespace Odigos\Illuminate\Database\Query\Grammars;
 
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\JoinLateralClause;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-class PostgresGrammar extends \Illuminate\Database\Query\Grammars\Grammar
+use Odigos\Illuminate\Database\Query\Builder;
+use Odigos\Illuminate\Database\Query\JoinLateralClause;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+class PostgresGrammar extends Grammar
 {
     /**
      * All of the available clause operators.

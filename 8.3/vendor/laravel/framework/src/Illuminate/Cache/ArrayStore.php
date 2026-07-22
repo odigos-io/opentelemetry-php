@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Contracts\Cache\LockProvider;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\InteractsWithTime;
-class ArrayStore extends \Illuminate\Cache\TaggableStore implements LockProvider
+use Odigos\Illuminate\Contracts\Cache\LockProvider;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\InteractsWithTime;
+class ArrayStore extends TaggableStore implements LockProvider
 {
-    use InteractsWithTime, \Illuminate\Cache\RetrievesMultipleKeys;
+    use InteractsWithTime, RetrievesMultipleKeys;
     /**
      * The array of stored values.
      *
@@ -195,7 +195,7 @@ class ArrayStore extends \Illuminate\Cache\TaggableStore implements LockProvider
      */
     public function lock($name, $seconds = 0, $owner = null)
     {
-        return new \Illuminate\Cache\ArrayLock($this, $name, $seconds, $owner);
+        return new ArrayLock($this, $name, $seconds, $owner);
     }
     /**
      * Restore a lock instance using the owner identifier.

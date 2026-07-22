@@ -12,9 +12,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Network\Exception;
+namespace Odigos\Cake\Network\Exception;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 /**
  * Exception class for Socket. This exception will be thrown from Socket, Email, HttpSocket
  * SmtpTransport, MailTransport and HttpResponse when it encounters an error.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Foundation\Http\Events;
+namespace Odigos\Illuminate\Foundation\Http\Events;
 
 class RequestHandled
 {

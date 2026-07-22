@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
-use Illuminate\Support\ConfigurationUrlParser as BaseConfigurationUrlParser;
+use Odigos\Illuminate\Support\ConfigurationUrlParser as BaseConfigurationUrlParser;
 class ConfigurationUrlParser extends BaseConfigurationUrlParser
 {
     //

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\View\Engines;
+namespace Odigos\Illuminate\View\Engines;
 
-use Illuminate\Contracts\View\Engine;
-use Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Contracts\View\Engine;
+use Odigos\Illuminate\Filesystem\Filesystem;
 class FileEngine implements Engine
 {
     /**

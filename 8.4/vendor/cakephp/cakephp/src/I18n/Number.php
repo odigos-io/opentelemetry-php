@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         0.10.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\I18n;
+namespace Odigos\Cake\I18n;
 
 use NumberFormatter;
 /**

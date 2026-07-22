@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Cache\Console;
+namespace Odigos\Illuminate\Cache\Console;
 
-use Illuminate\Cache\CacheManager;
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputArgument;
+use Odigos\Illuminate\Cache\CacheManager;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
 #[AsCommand(name: 'cache:prune-stale-tags')]
 class PruneStaleTagsCommand extends Command
 {

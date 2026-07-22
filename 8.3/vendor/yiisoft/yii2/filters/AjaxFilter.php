@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters;
+namespace Odigos\yii\filters;
 
 use Odigos\Yii;
-use yii\base\ActionFilter;
-use yii\base\Component;
-use yii\web\BadRequestHttpException;
-use yii\web\Request;
+use Odigos\yii\base\ActionFilter;
+use Odigos\yii\base\Component;
+use Odigos\yii\web\BadRequestHttpException;
+use Odigos\yii\web\Request;
 /**
  * AjaxFilter allow to limit access only for ajax requests.
  *

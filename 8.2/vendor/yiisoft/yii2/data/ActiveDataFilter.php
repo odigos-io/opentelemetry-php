@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\data;
+namespace Odigos\yii\data;
 
 /**
  * ActiveDataFilter allows composing a filtering condition in a format suitable for [[\yii\db\QueryInterface::where()]].
@@ -15,7 +15,7 @@ namespace yii\data;
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 2.0.13
  */
-class ActiveDataFilter extends \yii\data\DataFilter
+class ActiveDataFilter extends DataFilter
 {
     /**
      * @var array maps filtering condition keywords to build methods.

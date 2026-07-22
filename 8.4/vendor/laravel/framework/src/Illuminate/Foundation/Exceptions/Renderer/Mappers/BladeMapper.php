@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Foundation\Exceptions\Renderer\Mappers;
+namespace Odigos\Illuminate\Foundation\Exceptions\Renderer\Mappers;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\View\Compilers\BladeCompiler;
-use Illuminate\View\ViewException;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Contracts\View\Factory;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\View\Compilers\BladeCompiler;
+use Odigos\Illuminate\View\ViewException;
 use ReflectionClass;
 use ReflectionProperty;
-use Symfony\Component\ErrorHandler\Exception\FlattenException;
+use Odigos\Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Throwable;
 /*
  * This file contains parts of https://github.com/spatie/laravel-ignition.

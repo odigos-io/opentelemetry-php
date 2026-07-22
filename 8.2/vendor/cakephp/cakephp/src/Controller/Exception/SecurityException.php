@@ -12,11 +12,11 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Controller\Exception;
+namespace Odigos\Cake\Controller\Exception;
 
-use Cake\Http\Exception\BadRequestException;
+use Odigos\Cake\Http\Exception\BadRequestException;
 use Throwable;
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * Security exception - used when SecurityComponent detects any issue with the current request
  *

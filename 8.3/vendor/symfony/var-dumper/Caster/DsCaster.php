@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
 use Ds\Collection;
 use Ds\Map;
 use Ds\Pair;
-use Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * Casts Ds extension classes to array representation.
  *
@@ -25,8 +25,8 @@ class DsCaster
 {
     public static function castCollection(Collection $c, array $a, Stub $stub, bool $isNested): array
     {
-        $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'count'] = $c->count();
-        $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'capacity'] = $c->capacity();
+        $a[Caster::PREFIX_VIRTUAL . 'count'] = $c->count();
+        $a[Caster::PREFIX_VIRTUAL . 'capacity'] = $c->capacity();
         if (!$c instanceof Map) {
             $a += $c->toArray();
         }
@@ -35,18 +35,18 @@ class DsCaster
     public static function castMap(Map $c, array $a, Stub $stub, bool $isNested): array
     {
         foreach ($c as $k => $v) {
-            $a[] = new \Symfony\Component\VarDumper\Caster\DsPairStub($k, $v);
+            $a[] = new DsPairStub($k, $v);
         }
         return $a;
     }
     public static function castPair(Pair $c, array $a, Stub $stub, bool $isNested): array
     {
         foreach ($c->toArray() as $k => $v) {
-            $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . $k] = $v;
+            $a[Caster::PREFIX_VIRTUAL . $k] = $v;
         }
         return $a;
     }
-    public static function castPairStub(\Symfony\Component\VarDumper\Caster\DsPairStub $c, array $a, Stub $stub, bool $isNested): array
+    public static function castPairStub(DsPairStub $c, array $a, Stub $stub, bool $isNested): array
     {
         if ($isNested) {
             $stub->class = Pair::class;

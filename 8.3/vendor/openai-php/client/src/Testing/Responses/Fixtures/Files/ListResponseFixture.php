@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\Files;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\Files;
 
 final class ListResponseFixture
 {

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder\Type;
+namespace Odigos\MongoDB\Builder\Type;
 
 /**
  * Window Operators can be used for $setWindowFields stage partition.

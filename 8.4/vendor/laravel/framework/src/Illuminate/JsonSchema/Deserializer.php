@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\JsonSchema;
+namespace Odigos\Illuminate\JsonSchema;
 
 use InvalidArgumentException;
 class Deserializer
@@ -27,7 +27,7 @@ class Deserializer
      *
      * @throws \InvalidArgumentException
      */
-    public static function deserialize(array $schema): \Illuminate\JsonSchema\Types\Type
+    public static function deserialize(array $schema): Types\Type
     {
         return (new static($schema))->build($schema);
     }
@@ -39,14 +39,14 @@ class Deserializer
      *
      * @throws \InvalidArgumentException
      */
-    protected function build(array $schema, array $refs = []): \Illuminate\JsonSchema\Types\Type
+    protected function build(array $schema, array $refs = []): Types\Type
     {
         [$schema, $refs] = $this->resolveRef($schema, $refs);
         [$schema, $nullableFromUnion, $refs] = $this->normalizeUnions($schema, $refs);
         [$name, $nullableFromType] = $this->resolveType($schema);
         if (is_array($name)) {
             $this->ensureUnionConstraintsAreSupported($schema);
-            $type = new \Illuminate\JsonSchema\Types\UnionType($name);
+            $type = new Types\UnionType($name);
         } else {
             $type = match ($name) {
                 'object' => $this->buildObject($schema, $refs),
@@ -54,7 +54,7 @@ class Deserializer
                 'string' => $this->buildString($schema),
                 'integer' => $this->buildInteger($schema),
                 'number' => $this->buildNumber($schema),
-                'boolean' => new \Illuminate\JsonSchema\Types\BooleanType(),
+                'boolean' => new Types\BooleanType(),
                 default => throw new InvalidArgumentException("Unsupported JSON Schema type [{$name}]."),
             };
         }
@@ -72,7 +72,7 @@ class Deserializer
      *
      * @throws \InvalidArgumentException
      */
-    protected function buildObject(array $schema, array $refs = []): \Illuminate\JsonSchema\Types\ObjectType
+    protected function buildObject(array $schema, array $refs = []): Types\ObjectType
     {
         $properties = [];
         if (isset($schema['properties']) && is_array($schema['properties'])) {
@@ -88,7 +88,7 @@ class Deserializer
                 $properties[$key] = $property;
             }
         }
-        $type = new \Illuminate\JsonSchema\Types\ObjectType($properties);
+        $type = new Types\ObjectType($properties);
         if (($schema['additionalProperties'] ?? null) === \false) {
             $type->withoutAdditionalProperties();
         }
@@ -102,9 +102,9 @@ class Deserializer
      *
      * @throws \InvalidArgumentException
      */
-    protected function buildArray(array $schema, array $refs = []): \Illuminate\JsonSchema\Types\ArrayType
+    protected function buildArray(array $schema, array $refs = []): Types\ArrayType
     {
-        $type = new \Illuminate\JsonSchema\Types\ArrayType();
+        $type = new Types\ArrayType();
         if (isset($schema['items']) && $schema['items'] !== []) {
             if (!is_array($schema['items']) || array_is_list($schema['items'])) {
                 throw new InvalidArgumentException('Tuple and boolean JSON Schema "items" are not supported.');
@@ -127,9 +127,9 @@ class Deserializer
      *
      * @param  array<string, mixed>  $schema
      */
-    protected function buildString(array $schema): \Illuminate\JsonSchema\Types\StringType
+    protected function buildString(array $schema): Types\StringType
     {
-        $type = new \Illuminate\JsonSchema\Types\StringType();
+        $type = new Types\StringType();
         if (isset($schema['minLength'])) {
             $type->min((int) $schema['minLength']);
         }
@@ -149,18 +149,18 @@ class Deserializer
      *
      * @param  array<string, mixed>  $schema
      */
-    protected function buildInteger(array $schema): \Illuminate\JsonSchema\Types\IntegerType
+    protected function buildInteger(array $schema): Types\IntegerType
     {
-        return $this->applyNumericBounds(new \Illuminate\JsonSchema\Types\IntegerType(), $schema, $this->toInteger(...));
+        return $this->applyNumericBounds(new Types\IntegerType(), $schema, $this->toInteger(...));
     }
     /**
      * Build a number type from the given schema fragment.
      *
      * @param  array<string, mixed>  $schema
      */
-    protected function buildNumber(array $schema): \Illuminate\JsonSchema\Types\NumberType
+    protected function buildNumber(array $schema): Types\NumberType
     {
-        return $this->applyNumericBounds(new \Illuminate\JsonSchema\Types\NumberType(), $schema);
+        return $this->applyNumericBounds(new Types\NumberType(), $schema);
     }
     /**
      * Apply the numeric bound keywords to the given integer or number type.
@@ -174,7 +174,7 @@ class Deserializer
      *
      * @throws \InvalidArgumentException
      */
-    protected function applyNumericBounds(\Illuminate\JsonSchema\Types\IntegerType|\Illuminate\JsonSchema\Types\NumberType $type, array $schema, ?callable $cast = null)
+    protected function applyNumericBounds(Types\IntegerType|Types\NumberType $type, array $schema, ?callable $cast = null)
     {
         $cast ??= static fn(int|float $value) => $value;
         foreach (['minimum' => 'min', 'maximum' => 'max', 'multipleOf' => 'multipleOf'] as $keyword => $method) {
@@ -195,7 +195,7 @@ class Deserializer
      *
      * @throws \InvalidArgumentException
      */
-    protected function applyCommon(\Illuminate\JsonSchema\Types\Type $type, array $schema): void
+    protected function applyCommon(Types\Type $type, array $schema): void
     {
         if (isset($schema['title'])) {
             $type->title((string) $schema['title']);

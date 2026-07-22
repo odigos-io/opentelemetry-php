@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Closure;
-use Illuminate\Contracts\Support\HasOnceHash;
-use Laravel\SerializableClosure\Support\ReflectionClosure;
+use Odigos\Illuminate\Contracts\Support\HasOnceHash;
+use Odigos\Laravel\SerializableClosure\Support\ReflectionClosure;
 class Onceable
 {
     /**

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\View\Concerns;
+namespace Odigos\Illuminate\View\Concerns;
 
 use Closure;
-use Illuminate\Contracts\View\View as ViewContract;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\View\View as ViewContract;
+use Odigos\Illuminate\Support\Str;
 trait ManagesEvents
 {
     /**

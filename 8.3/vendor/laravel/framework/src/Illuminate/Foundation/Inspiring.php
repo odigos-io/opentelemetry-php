@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation;
+namespace Odigos\Illuminate\Foundation;
 
-use Illuminate\Support\Collection;
-use Illuminate\Support\Stringable;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Stringable;
 /*
                                                   .~))>>
                                                  .~)>>

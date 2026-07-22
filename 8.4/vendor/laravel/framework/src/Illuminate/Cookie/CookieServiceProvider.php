@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cookie;
+namespace Odigos\Illuminate\Cookie;
 
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Support\ServiceProvider;
 class CookieServiceProvider extends ServiceProvider
 {
     /**
@@ -14,7 +14,7 @@ class CookieServiceProvider extends ServiceProvider
     {
         $this->app->singleton('cookie', function ($app) {
             $config = $app->make('config')->get('session');
-            return (new \Illuminate\Cookie\CookieJar())->setDefaultPathAndDomain($config['path'], $config['domain'], $config['secure'], $config['same_site'] ?? null);
+            return (new CookieJar())->setDefaultPathAndDomain($config['path'], $config['domain'], $config['secure'], $config['same_site'] ?? null);
         });
     }
 }

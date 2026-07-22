@@ -16,7 +16,7 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Schema;
+namespace Odigos\Cake\Database\Schema;
 
 use RuntimeException;
 /**

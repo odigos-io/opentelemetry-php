@@ -6,7 +6,7 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim;
+namespace Odigos\Slim;
 
 use Closure;
 use Psr\Container\ContainerInterface;
@@ -15,9 +15,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use RuntimeException;
-use Slim\Interfaces\AdvancedCallableResolverInterface;
-use Slim\Interfaces\CallableResolverInterface;
-use Slim\Interfaces\MiddlewareDispatcherInterface;
+use Odigos\Slim\Interfaces\AdvancedCallableResolverInterface;
+use Odigos\Slim\Interfaces\CallableResolverInterface;
+use Odigos\Slim\Interfaces\MiddlewareDispatcherInterface;
 use function class_exists;
 use function function_exists;
 use function is_callable;
@@ -154,7 +154,7 @@ class MiddlewareDispatcher implements MiddlewareDispatcherInterface
                     $method = null;
                     /** @psalm-suppress ArgumentTypeCoercion */
                     // Check for Slim callable as `class:method`
-                    if (preg_match(\Slim\CallableResolver::$callablePattern, $resolved, $matches)) {
+                    if (preg_match(CallableResolver::$callablePattern, $resolved, $matches)) {
                         $resolved = $matches[1];
                         $method = $matches[2];
                     }

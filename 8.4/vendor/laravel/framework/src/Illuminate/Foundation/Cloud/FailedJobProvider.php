@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Foundation\Cloud;
+namespace Odigos\Illuminate\Foundation\Cloud;
 
 use Odigos\Carbon\CarbonImmutable;
 use DateTimeInterface;
-use Illuminate\Contracts\Encryption\StringEncrypter;
-use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Queue\Failed\CountableFailedJobProvider;
-use Illuminate\Queue\Failed\FailedJobProviderInterface;
-use Illuminate\Queue\Failed\PrunableFailedJobProvider;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Encryption\StringEncrypter;
+use Odigos\Illuminate\Http\Client\ConnectionException;
+use Odigos\Illuminate\Queue\Failed\CountableFailedJobProvider;
+use Odigos\Illuminate\Queue\Failed\FailedJobProviderInterface;
+use Odigos\Illuminate\Queue\Failed\PrunableFailedJobProvider;
+use Odigos\Illuminate\Support\Facades\Http;
+use Odigos\Illuminate\Support\Str;
 use RuntimeException;
 class FailedJobProvider implements FailedJobProviderInterface, CountableFailedJobProvider, PrunableFailedJobProvider
 {
@@ -29,7 +29,7 @@ class FailedJobProvider implements FailedJobProviderInterface, CountableFailedJo
     /**
      * Create a new instance.
      */
-    public function __construct(protected FailedJobProviderInterface $failer, protected \Illuminate\Foundation\Cloud\Events $events, protected StringEncrypter $encrypter)
+    public function __construct(protected FailedJobProviderInterface $failer, protected Events $events, protected StringEncrypter $encrypter)
     {
         //
     }

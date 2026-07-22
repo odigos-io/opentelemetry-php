@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Foundation\Testing;
+namespace Odigos\Illuminate\Foundation\Testing;
 
-use Illuminate\Contracts\Console\Kernel;
-use Illuminate\Database\ConnectionInterface;
-use Illuminate\Foundation\Testing\Traits\CanConfigureMigrationCommands;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Console\Kernel;
+use Odigos\Illuminate\Database\ConnectionInterface;
+use Odigos\Illuminate\Foundation\Testing\Traits\CanConfigureMigrationCommands;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 trait DatabaseTruncation
 {
     use CanConfigureMigrationCommands;
@@ -25,10 +25,10 @@ trait DatabaseTruncation
     {
         $this->beforeTruncatingDatabase();
         // Migrate and seed the database on first run...
-        if (!\Illuminate\Foundation\Testing\RefreshDatabaseState::$migrated) {
+        if (!RefreshDatabaseState::$migrated) {
             $this->artisan('migrate:fresh', $this->migrateFreshUsing());
             $this->app[Kernel::class]->setArtisan(null);
-            \Illuminate\Foundation\Testing\RefreshDatabaseState::$migrated = \true;
+            RefreshDatabaseState::$migrated = \true;
             return;
         }
         // Always clear any test data on subsequent runs...

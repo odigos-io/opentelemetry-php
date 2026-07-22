@@ -4,13 +4,13 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 use DateTimeInterface;
 use MongoDB\BSON\Type;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\ExpressionInterface;
-use MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\ExpressionInterface;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
 use stdClass;
 /**
  * Returns true if the first value is less than or equal to the second.
@@ -18,7 +18,7 @@ use stdClass;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/lte/
  * @internal
  */
-final class LteOperator implements \MongoDB\Builder\Expression\ResolvesToBool, OperatorInterface
+final class LteOperator implements ResolvesToBool, OperatorInterface
 {
     public const ENCODE = Encode::Array;
     public const NAME = '$lte';

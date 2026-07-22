@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         5.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
-use Cake\Collection\Collection;
-use Cake\Datasource\EntityInterface;
-use Cake\Datasource\ResultSetInterface;
-use Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\Collection\Collection;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Datasource\ResultSetInterface;
+use Odigos\Cake\ORM\Query\SelectQuery;
 use InvalidArgumentException;
 use SplFixedArray;
 /**
@@ -35,7 +35,7 @@ class ResultSetFactory
     /**
      * @var class-string<\Cake\Datasource\ResultSetInterface>
      */
-    protected string $resultSetClass = \Cake\ORM\ResultSet::class;
+    protected string $resultSetClass = ResultSet::class;
     /**
      * Create a result set instance.
      *
@@ -113,7 +113,7 @@ class ResultSetFactory
             $results['_matchingData'][$alias] = array_combine($keys, array_intersect_key($row, $keys));
             if ($data['hydrate'] && $data['dtoClass'] === null) {
                 $table = $matching['instance'];
-                assert($table instanceof \Cake\ORM\Table || $table instanceof \Cake\ORM\Association);
+                assert($table instanceof Table || $table instanceof Association);
                 $options['source'] = $table->getRegistryAlias();
                 $entity = new $matching['entityClass']($results['_matchingData'][$alias], $options);
                 assert($entity instanceof EntityInterface);
@@ -137,7 +137,7 @@ class ResultSetFactory
                 continue;
             }
             $instance = $assoc['instance'];
-            assert($instance instanceof \Cake\ORM\Association);
+            assert($instance instanceof Association);
             if (!$canBeJoined && !isset($row[$alias])) {
                 $results = $instance->defaultRowValue($results, $canBeJoined);
                 continue;
@@ -194,7 +194,7 @@ class ResultSetFactory
      *
      * @var \Cake\ORM\DtoMapper|null
      */
-    protected ?\Cake\ORM\DtoMapper $dtoMapper = null;
+    protected ?DtoMapper $dtoMapper = null;
     /**
      * Hydrate a row into a DTO.
      *
@@ -220,10 +220,10 @@ class ResultSetFactory
      *
      * @return \Cake\ORM\DtoMapper
      */
-    public function getDtoMapper(): \Cake\ORM\DtoMapper
+    public function getDtoMapper(): DtoMapper
     {
         if ($this->dtoMapper === null) {
-            $this->dtoMapper = new \Cake\ORM\DtoMapper();
+            $this->dtoMapper = new DtoMapper();
         }
         return $this->dtoMapper;
     }

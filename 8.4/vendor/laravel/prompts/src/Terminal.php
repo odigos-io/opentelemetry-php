@@ -1,10 +1,10 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use ReflectionClass;
 use RuntimeException;
-use Symfony\Component\Console\Terminal as SymfonyTerminal;
+use Odigos\Symfony\Component\Console\Terminal as SymfonyTerminal;
 class Terminal
 {
     /**

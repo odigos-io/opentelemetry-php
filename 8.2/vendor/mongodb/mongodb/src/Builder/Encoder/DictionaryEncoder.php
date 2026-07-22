@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder\Encoder;
+namespace Odigos\MongoDB\Builder\Encoder;
 
-use MongoDB\Builder\Type\DictionaryInterface;
-use MongoDB\Codec\EncodeIfSupported;
-use MongoDB\Codec\Encoder;
-use MongoDB\Exception\UnsupportedValueException;
+use Odigos\MongoDB\Builder\Type\DictionaryInterface;
+use Odigos\MongoDB\Codec\EncodeIfSupported;
+use Odigos\MongoDB\Codec\Encoder;
+use Odigos\MongoDB\Exception\UnsupportedValueException;
 use stdClass;
 /**
  * @template-implements Encoder<string|int|array|stdClass, DictionaryInterface>

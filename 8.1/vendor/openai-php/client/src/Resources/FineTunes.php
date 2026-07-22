@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\FineTunesContract;
-use OpenAI\Responses\FineTunes\ListEventsResponse;
-use OpenAI\Responses\FineTunes\ListResponse;
-use OpenAI\Responses\FineTunes\RetrieveResponse;
-use OpenAI\Responses\FineTunes\RetrieveStreamedResponseEvent;
-use OpenAI\Responses\StreamResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\FineTunesContract;
+use Odigos\OpenAI\Responses\FineTunes\ListEventsResponse;
+use Odigos\OpenAI\Responses\FineTunes\ListResponse;
+use Odigos\OpenAI\Responses\FineTunes\RetrieveResponse;
+use Odigos\OpenAI\Responses\FineTunes\RetrieveStreamedResponseEvent;
+use Odigos\OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 final class FineTunes implements FineTunesContract
 {
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Transportable;
     /**
      * Creates a job that fine-tunes a specified model from a given dataset.
      *

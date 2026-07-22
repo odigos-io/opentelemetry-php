@@ -13,9 +13,9 @@ declare (strict_types=1);
  * @link          https://cakephp.org CakePHP Project
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console\TestSuite;
+namespace Odigos\Cake\Console\TestSuite;
 
-use Cake\Console\ConsoleInput;
+use Odigos\Cake\Console\ConsoleInput;
 use NumberFormatter;
 /**
  * Stub class used by the console integration harness.
@@ -63,7 +63,7 @@ class StubConsoleInput extends ConsoleInput
             $nth = $formatter->format($this->currentIndex + 1);
             $replies = implode(', ', $this->replies);
             $message = "There are no more input replies available. This is the {$nth} read operation, " . "only {$total} replies were set.\nThe provided replies are: {$replies}";
-            throw new \Cake\Console\TestSuite\MissingConsoleInputException($message);
+            throw new MissingConsoleInputException($message);
         }
         return $this->replies[$this->currentIndex];
     }
@@ -79,5 +79,5 @@ class StubConsoleInput extends ConsoleInput
     }
 }
 // phpcs:disable
-class_alias('Cake\Console\TestSuite\StubConsoleInput', 'Cake\TestSuite\Stub\ConsoleInput');
+class_alias('Odigos\Cake\Console\TestSuite\StubConsoleInput', 'Odigos\Cake\TestSuite\Stub\ConsoleInput');
 // phpcs:enable

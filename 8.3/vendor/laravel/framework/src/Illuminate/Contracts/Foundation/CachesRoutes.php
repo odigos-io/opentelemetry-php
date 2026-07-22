@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Foundation;
+namespace Odigos\Illuminate\Contracts\Foundation;
 
 interface CachesRoutes
 {

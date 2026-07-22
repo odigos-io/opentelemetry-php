@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
-use yii\base\BaseObject;
-use yii\helpers\StringHelper;
+use Odigos\yii\base\BaseObject;
+use Odigos\yii\helpers\StringHelper;
 /**
  * ColumnSchemaBuilder helps to define database schema types using a PHP interface.
  *
@@ -80,7 +80,7 @@ class ColumnSchemaBuilder extends BaseObject
      * @var array mapping of abstract column types (keys) to type categories (values).
      * @since 2.0.43
      */
-    public static $typeCategoryMap = [\yii\db\Schema::TYPE_PK => self::CATEGORY_PK, \yii\db\Schema::TYPE_UPK => self::CATEGORY_PK, \yii\db\Schema::TYPE_BIGPK => self::CATEGORY_PK, \yii\db\Schema::TYPE_UBIGPK => self::CATEGORY_PK, \yii\db\Schema::TYPE_CHAR => self::CATEGORY_STRING, \yii\db\Schema::TYPE_STRING => self::CATEGORY_STRING, \yii\db\Schema::TYPE_TEXT => self::CATEGORY_STRING, \yii\db\Schema::TYPE_TINYINT => self::CATEGORY_NUMERIC, \yii\db\Schema::TYPE_SMALLINT => self::CATEGORY_NUMERIC, \yii\db\Schema::TYPE_INTEGER => self::CATEGORY_NUMERIC, \yii\db\Schema::TYPE_BIGINT => self::CATEGORY_NUMERIC, \yii\db\Schema::TYPE_FLOAT => self::CATEGORY_NUMERIC, \yii\db\Schema::TYPE_DOUBLE => self::CATEGORY_NUMERIC, \yii\db\Schema::TYPE_DECIMAL => self::CATEGORY_NUMERIC, \yii\db\Schema::TYPE_DATETIME => self::CATEGORY_TIME, \yii\db\Schema::TYPE_TIMESTAMP => self::CATEGORY_TIME, \yii\db\Schema::TYPE_TIME => self::CATEGORY_TIME, \yii\db\Schema::TYPE_DATE => self::CATEGORY_TIME, \yii\db\Schema::TYPE_BINARY => self::CATEGORY_OTHER, \yii\db\Schema::TYPE_BOOLEAN => self::CATEGORY_NUMERIC, \yii\db\Schema::TYPE_MONEY => self::CATEGORY_NUMERIC];
+    public static $typeCategoryMap = [Schema::TYPE_PK => self::CATEGORY_PK, Schema::TYPE_UPK => self::CATEGORY_PK, Schema::TYPE_BIGPK => self::CATEGORY_PK, Schema::TYPE_UBIGPK => self::CATEGORY_PK, Schema::TYPE_CHAR => self::CATEGORY_STRING, Schema::TYPE_STRING => self::CATEGORY_STRING, Schema::TYPE_TEXT => self::CATEGORY_STRING, Schema::TYPE_TINYINT => self::CATEGORY_NUMERIC, Schema::TYPE_SMALLINT => self::CATEGORY_NUMERIC, Schema::TYPE_INTEGER => self::CATEGORY_NUMERIC, Schema::TYPE_BIGINT => self::CATEGORY_NUMERIC, Schema::TYPE_FLOAT => self::CATEGORY_NUMERIC, Schema::TYPE_DOUBLE => self::CATEGORY_NUMERIC, Schema::TYPE_DECIMAL => self::CATEGORY_NUMERIC, Schema::TYPE_DATETIME => self::CATEGORY_TIME, Schema::TYPE_TIMESTAMP => self::CATEGORY_TIME, Schema::TYPE_TIME => self::CATEGORY_TIME, Schema::TYPE_DATE => self::CATEGORY_TIME, Schema::TYPE_BINARY => self::CATEGORY_OTHER, Schema::TYPE_BOOLEAN => self::CATEGORY_NUMERIC, Schema::TYPE_MONEY => self::CATEGORY_NUMERIC];
     /**
      * @var \yii\db\Connection the current database connection. It is used mainly to escape strings
      * safely when building the final column schema string.
@@ -177,11 +177,11 @@ class ColumnSchemaBuilder extends BaseObject
     public function unsigned()
     {
         switch ($this->type) {
-            case \yii\db\Schema::TYPE_PK:
-                $this->type = \yii\db\Schema::TYPE_UPK;
+            case Schema::TYPE_PK:
+                $this->type = Schema::TYPE_UPK;
                 break;
-            case \yii\db\Schema::TYPE_BIGPK:
-                $this->type = \yii\db\Schema::TYPE_UBIGPK;
+            case Schema::TYPE_BIGPK:
+                $this->type = Schema::TYPE_UBIGPK;
                 break;
         }
         $this->isUnsigned = \true;
@@ -218,7 +218,7 @@ class ColumnSchemaBuilder extends BaseObject
      */
     public function defaultExpression($default)
     {
-        $this->default = new \yii\db\Expression($default);
+        $this->default = new Expression($default);
         return $this;
     }
     /**

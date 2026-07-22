@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.0.10
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Event;
+namespace Odigos\Cake\Event;
 
 /**
  * Implements Cake\Event\EventDispatcherInterface.
@@ -29,13 +29,13 @@ trait EventDispatcherTrait
      *
      * @var \Cake\Event\EventManagerInterface
      */
-    protected \Cake\Event\EventManagerInterface $_eventManager;
+    protected EventManagerInterface $_eventManager;
     /**
      * Default class name for new event objects.
      *
      * @var string
      */
-    protected string $_eventClass = \Cake\Event\Event::class;
+    protected string $_eventClass = Event::class;
     /**
      * Returns the Cake\Event\EventManager manager instance for this object.
      *
@@ -44,9 +44,9 @@ trait EventDispatcherTrait
      *
      * @return \Cake\Event\EventManagerInterface
      */
-    public function getEventManager(): \Cake\Event\EventManagerInterface
+    public function getEventManager(): EventManagerInterface
     {
-        return $this->_eventManager ??= new \Cake\Event\EventManager();
+        return $this->_eventManager ??= new EventManager();
     }
     /**
      * Returns the Cake\Event\EventManagerInterface instance for this object.
@@ -57,7 +57,7 @@ trait EventDispatcherTrait
      * @param \Cake\Event\EventManagerInterface $eventManager the eventManager to set
      * @return $this
      */
-    public function setEventManager(\Cake\Event\EventManagerInterface $eventManager)
+    public function setEventManager(EventManagerInterface $eventManager)
     {
         $this->_eventManager = $eventManager;
         return $this;
@@ -74,7 +74,7 @@ trait EventDispatcherTrait
      * ($this by default).
      * @return \Cake\Event\EventInterface<TSubject>
      */
-    public function dispatchEvent(string $name, array $data = [], ?object $subject = null): \Cake\Event\EventInterface
+    public function dispatchEvent(string $name, array $data = [], ?object $subject = null): EventInterface
     {
         $subject ??= $this;
         /** @var \Cake\Event\EventInterface<TSubject> $event Coerce for psalm/phpstan */

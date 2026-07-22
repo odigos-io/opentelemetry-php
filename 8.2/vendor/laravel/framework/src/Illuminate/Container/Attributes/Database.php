@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Container\Attributes;
+namespace Odigos\Illuminate\Container\Attributes;
 
 use Attribute;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Container\ContextualAttribute;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Container\ContextualAttribute;
 use UnitEnum;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Database implements ContextualAttribute

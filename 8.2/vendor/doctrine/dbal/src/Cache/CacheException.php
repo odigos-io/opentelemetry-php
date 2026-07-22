@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Cache;
+namespace Odigos\Doctrine\DBAL\Cache;
 
-use Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Exception;
 class CacheException extends \Exception implements Exception
 {
 }

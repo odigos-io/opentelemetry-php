@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Generator\Dumper;
+namespace Odigos\Symfony\Component\Routing\Generator\Dumper;
 
-use Symfony\Component\Routing\Exception\RouteCircularReferenceException;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
+use Odigos\Symfony\Component\Routing\Exception\RouteCircularReferenceException;
+use Odigos\Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Odigos\Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
 /**
  * CompiledUrlGeneratorDumper creates a PHP array to be used with CompiledUrlGenerator.
  *
@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
  * @author Tobias Schultze <http://tobion.de>
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class CompiledUrlGeneratorDumper extends \Symfony\Component\Routing\Generator\Dumper\GeneratorDumper
+class CompiledUrlGeneratorDumper extends GeneratorDumper
 {
     public function getCompiledRoutes(): array
     {

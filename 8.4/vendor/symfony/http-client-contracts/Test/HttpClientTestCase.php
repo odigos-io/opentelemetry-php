@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Contracts\HttpClient\Test;
+namespace Odigos\Symfony\Contracts\HttpClient\Test;
 
 use Odigos\PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use Odigos\PHPUnit\Framework\Attributes\TestWith;
 use Odigos\PHPUnit\Framework\TestCase;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TimeoutExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Odigos\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Odigos\Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Odigos\Symfony\Contracts\HttpClient\Exception\TimeoutExceptionInterface;
+use Odigos\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Odigos\Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * A reference test suite for HttpClientInterface implementations.
  */
@@ -28,12 +28,12 @@ abstract class HttpClientTestCase extends TestCase
         if (!\function_exists('ob_gzhandler') && !\function_exists('Odigos\ob_gzhandler')) {
             static::markTestSkipped('The "ob_gzhandler" function is not available.');
         }
-        \Symfony\Contracts\HttpClient\Test\TestHttpServer::start();
+        TestHttpServer::start();
     }
     public static function tearDownAfterClass(): void
     {
-        \Symfony\Contracts\HttpClient\Test\TestHttpServer::stop(8067);
-        \Symfony\Contracts\HttpClient\Test\TestHttpServer::stop(8077);
+        TestHttpServer::stop(8067);
+        TestHttpServer::stop(8077);
     }
     abstract protected function getHttpClient(string $testCase): HttpClientInterface;
     public function testGetRequest()
@@ -505,7 +505,7 @@ abstract class HttpClientTestCase extends TestCase
     }
     public function testIPv6Resolve()
     {
-        \Symfony\Contracts\HttpClient\Test\TestHttpServer::start(-8087);
+        TestHttpServer::start(-8087);
         $client = $this->getHttpClient(__FUNCTION__);
         $response = $client->request('GET', 'http://symfony.com:8087/', ['resolve' => ['symfony.com' => '::1']]);
         $this->assertSame(200, $response->getStatusCode());
@@ -580,8 +580,8 @@ abstract class HttpClientTestCase extends TestCase
     }
     public function testTimeoutWithActiveConcurrentStream()
     {
-        $p1 = \Symfony\Contracts\HttpClient\Test\TestHttpServer::start(8067);
-        $p2 = \Symfony\Contracts\HttpClient\Test\TestHttpServer::start(8077);
+        $p1 = TestHttpServer::start(8067);
+        $p2 = TestHttpServer::start(8077);
         $client = $this->getHttpClient(__FUNCTION__);
         $streamingResponse = $client->request('GET', 'http://localhost:8067/max-duration');
         $blockingResponse = $client->request('GET', 'http://localhost:8077/timeout-body', ['timeout' => 0.25]);
@@ -597,8 +597,8 @@ abstract class HttpClientTestCase extends TestCase
     }
     public function testTimeoutOnInitialize()
     {
-        $p1 = \Symfony\Contracts\HttpClient\Test\TestHttpServer::start(8067);
-        $p2 = \Symfony\Contracts\HttpClient\Test\TestHttpServer::start(8077);
+        $p1 = TestHttpServer::start(8067);
+        $p2 = TestHttpServer::start(8077);
         $client = $this->getHttpClient(__FUNCTION__);
         $start = microtime(\true);
         $responses = [];
@@ -624,8 +624,8 @@ abstract class HttpClientTestCase extends TestCase
     }
     public function testTimeoutOnDestruct()
     {
-        $p1 = \Symfony\Contracts\HttpClient\Test\TestHttpServer::start(8067);
-        $p2 = \Symfony\Contracts\HttpClient\Test\TestHttpServer::start(8077);
+        $p1 = TestHttpServer::start(8067);
+        $p2 = TestHttpServer::start(8077);
         $client = $this->getHttpClient(__FUNCTION__);
         $start = microtime(\true);
         $responses = [];
@@ -853,7 +853,7 @@ abstract class HttpClientTestCase extends TestCase
     }
     public function testBindToPortV6()
     {
-        \Symfony\Contracts\HttpClient\Test\TestHttpServer::start(-8087);
+        TestHttpServer::start(-8087);
         $client = $this->getHttpClient(__FUNCTION__);
         $response = $client->request('GET', 'http://[::1]:8087', ['bindto' => '[::1]:9876']);
         $response->getStatusCode();

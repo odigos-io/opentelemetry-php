@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Process\Pipes;
+namespace Odigos\Symfony\Component\Process\Pipes;
 
-use Symfony\Component\Process\Exception\RuntimeException;
-use Symfony\Component\Process\Process;
+use Odigos\Symfony\Component\Process\Exception\RuntimeException;
+use Odigos\Symfony\Component\Process\Process;
 /**
  * WindowsPipes implementation uses temporary files as handles.
  *
@@ -22,7 +22,7 @@ use Symfony\Component\Process\Process;
  *
  * @internal
  */
-class WindowsPipes extends \Symfony\Component\Process\Pipes\AbstractPipes
+class WindowsPipes extends AbstractPipes
 {
     private array $files = [];
     private array $fileHandles = [];

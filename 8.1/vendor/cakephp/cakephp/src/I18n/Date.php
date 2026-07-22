@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\I18n;
+namespace Odigos\Cake\I18n;
 
-use Cake\Chronos\ChronosDate;
-use Cake\Chronos\DifferenceFormatterInterface;
+use Odigos\Cake\Chronos\ChronosDate;
+use Odigos\Cake\Chronos\DifferenceFormatterInterface;
 use Closure;
 use IntlDateFormatter;
 use InvalidArgumentException;
@@ -32,7 +32,7 @@ use Stringable;
  */
 class Date extends ChronosDate implements JsonSerializable, Stringable
 {
-    use \Cake\I18n\DateFormatTrait;
+    use DateFormatTrait;
     /**
      * The format to use when formatting a time using `Cake\I18n\Date::i18nFormat()`
      * and `__toString`.
@@ -159,16 +159,16 @@ class Date extends ChronosDate implements JsonSerializable, Stringable
      * @param \Cake\Chronos\DifferenceFormatterInterface|null $formatter Difference formatter
      * @return \Cake\I18n\RelativeTimeFormatter
      */
-    public static function diffFormatter(?DifferenceFormatterInterface $formatter = null): \Cake\I18n\RelativeTimeFormatter
+    public static function diffFormatter(?DifferenceFormatterInterface $formatter = null): RelativeTimeFormatter
     {
         if ($formatter) {
-            if (!$formatter instanceof \Cake\I18n\RelativeTimeFormatter) {
+            if (!$formatter instanceof RelativeTimeFormatter) {
                 throw new InvalidArgumentException('Formatter for I18n must extend RelativeTimeFormatter.');
             }
             return static::$diffFormatter = $formatter;
         }
         /** @var \Cake\I18n\RelativeTimeFormatter $formatter */
-        $formatter = static::$diffFormatter ??= new \Cake\I18n\RelativeTimeFormatter();
+        $formatter = static::$diffFormatter ??= new RelativeTimeFormatter();
         return $formatter;
     }
     /**
@@ -214,12 +214,12 @@ class Date extends ChronosDate implements JsonSerializable, Stringable
      */
     public function i18nFormat(string|int|null $format = null, ?string $locale = null): string|int
     {
-        if ($format === \Cake\I18n\DateTime::UNIX_TIMESTAMP_FORMAT) {
+        if ($format === DateTime::UNIX_TIMESTAMP_FORMAT) {
             throw new InvalidArgumentException('UNIT_TIMESTAMP_FORMAT is not supported for Date.');
         }
         $format ??= static::$_toStringFormat;
         $format = is_int($format) ? [$format, IntlDateFormatter::NONE] : $format;
-        $locale = $locale ?: \Cake\I18n\DateTime::getDefaultLocale();
+        $locale = $locale ?: DateTime::getDefaultLocale();
         return $this->_formatObject($this->native, $format, $locale);
     }
     /**
@@ -293,5 +293,5 @@ class Date extends ChronosDate implements JsonSerializable, Stringable
     }
 }
 // phpcs:disable
-class_alias('Cake\I18n\Date', 'Cake\I18n\FrozenDate');
+class_alias('Odigos\Cake\I18n\Date', 'Odigos\Cake\I18n\FrozenDate');
 // phpcs:enable

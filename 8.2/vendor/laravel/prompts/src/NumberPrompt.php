@@ -1,12 +1,12 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
 use RuntimeException;
-class NumberPrompt extends \Laravel\Prompts\Prompt
+class NumberPrompt extends Prompt
 {
-    use \Laravel\Prompts\Concerns\TypedValue;
+    use Concerns\TypedValue;
     /**
      * Create a new NumberPrompt instance.
      */
@@ -20,8 +20,8 @@ class NumberPrompt extends \Laravel\Prompts\Prompt
         $this->validate = $this->wrapValidation($this->validate);
         $this->on('key', function (string $key) {
             match ($key) {
-                \Laravel\Prompts\Key::UP, \Laravel\Prompts\Key::UP_ARROW => $this->increaseValue(),
-                \Laravel\Prompts\Key::DOWN, \Laravel\Prompts\Key::DOWN_ARROW => $this->decreaseValue(),
+                Key::UP, Key::UP_ARROW => $this->increaseValue(),
+                Key::DOWN, Key::DOWN_ARROW => $this->decreaseValue(),
                 default => null,
             };
         });

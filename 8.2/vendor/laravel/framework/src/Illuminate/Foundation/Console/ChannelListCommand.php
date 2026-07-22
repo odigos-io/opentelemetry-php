@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
 use Closure;
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Broadcasting\Broadcaster;
-use Illuminate\Support\Collection;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Terminal;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Contracts\Broadcasting\Broadcaster;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Terminal;
 #[AsCommand(name: 'channel:list')]
 class ChannelListCommand extends Command
 {

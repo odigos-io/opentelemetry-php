@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Requests;
+namespace Odigos\OpenAI\Testing\Requests;
 
 final class TestRequest
 {

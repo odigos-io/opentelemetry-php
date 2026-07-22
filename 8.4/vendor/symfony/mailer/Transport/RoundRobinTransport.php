@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport;
+namespace Odigos\Symfony\Component\Mailer\Transport;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Symfony\Component\Mailer\Envelope;
-use Symfony\Component\Mailer\Exception\TransportException;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\SentMessage;
-use Symfony\Component\Mime\RawMessage;
+use Odigos\Symfony\Component\Mailer\Envelope;
+use Odigos\Symfony\Component\Mailer\Exception\TransportException;
+use Odigos\Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Odigos\Symfony\Component\Mailer\SentMessage;
+use Odigos\Symfony\Component\Mime\RawMessage;
 /**
  * Uses several Transports using a round robin algorithm.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class RoundRobinTransport implements \Symfony\Component\Mailer\Transport\TransportInterface
+class RoundRobinTransport implements TransportInterface
 {
     /**
      * @var \SplObjectStorage<TransportInterface, float>
@@ -61,7 +61,7 @@ class RoundRobinTransport implements \Symfony\Component\Mailer\Transport\Transpo
     /**
      * Rotates the transport list around and returns the first instance.
      */
-    protected function getNextTransport(): ?\Symfony\Component\Mailer\Transport\TransportInterface
+    protected function getNextTransport(): ?TransportInterface
     {
         if (-1 === $this->cursor) {
             $this->cursor = $this->getInitialCursor();
@@ -83,7 +83,7 @@ class RoundRobinTransport implements \Symfony\Component\Mailer\Transport\Transpo
         $this->cursor = $this->moveCursor($cursor);
         return $transport;
     }
-    protected function isTransportDead(\Symfony\Component\Mailer\Transport\TransportInterface $transport): bool
+    protected function isTransportDead(TransportInterface $transport): bool
     {
         return $this->deadTransports->offsetExists($transport);
     }

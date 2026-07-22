@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Http\Resources;
+namespace Odigos\Illuminate\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Pagination\AbstractCursorPaginator;
-use Illuminate\Pagination\AbstractPaginator;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Http\Resources\Json\JsonResource;
+use Odigos\Illuminate\Pagination\AbstractCursorPaginator;
+use Odigos\Illuminate\Pagination\AbstractPaginator;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
 use LogicException;
 use ReflectionClass;
 use Traversable;
@@ -20,7 +20,7 @@ trait CollectsResources
      */
     protected function collectResource($resource)
     {
-        if ($resource instanceof \Illuminate\Http\Resources\MissingValue) {
+        if ($resource instanceof MissingValue) {
             return $resource;
         }
         if (is_array($resource)) {

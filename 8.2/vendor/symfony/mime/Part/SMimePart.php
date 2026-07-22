@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Part;
+namespace Odigos\Symfony\Component\Mime\Part;
 
-use Symfony\Component\Mime\Header\Headers;
+use Odigos\Symfony\Component\Mime\Header\Headers;
 /**
  * @author Sebastiaan Stok <s.stok@rollerscapes.net>
  */
-class SMimePart extends \Symfony\Component\Mime\Part\AbstractPart
+class SMimePart extends AbstractPart
 {
     /** @internal, to be removed in 8.0 */
     protected Headers $_headers;
@@ -150,7 +150,7 @@ class SMimePart extends \Symfony\Component\Mime\Part\AbstractPart
     public function __wakeup(): void
     {
         trigger_deprecation('symfony/mime', '7.4', 'Calling "%s::__wakeup()" is deprecated, use "__unserialize()" instead.', get_debug_type($this));
-        $r = new \ReflectionProperty(\Symfony\Component\Mime\Part\AbstractPart::class, 'headers');
+        $r = new \ReflectionProperty(AbstractPart::class, 'headers');
         $r->setValue($this, $this->_headers);
         unset($this->_headers);
     }

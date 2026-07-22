@@ -4,13 +4,13 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 use MongoDB\BSON\Decimal128;
 use MongoDB\BSON\Int64;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use function is_string;
 use function str_starts_with;
 /**
@@ -19,7 +19,7 @@ use function str_starts_with;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/cos/
  * @internal
  */
-final class CosOperator implements \MongoDB\Builder\Expression\ResolvesToDouble, \MongoDB\Builder\Expression\ResolvesToDecimal, OperatorInterface
+final class CosOperator implements ResolvesToDouble, ResolvesToDecimal, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$cos';
@@ -28,12 +28,12 @@ final class CosOperator implements \MongoDB\Builder\Expression\ResolvesToDouble,
      * @var Decimal128|Int64|ResolvesToNumber|float|int|string $expression $cos takes any valid expression that resolves to a number. If the expression returns a value in degrees, use the $degreesToRadians operator to convert the result to radians.
      * By default $cos returns values as a double. $cos can also return values as a 128-bit decimal as long as the <expression> resolves to a 128-bit decimal value.
      */
-    public readonly Decimal128|Int64|\MongoDB\Builder\Expression\ResolvesToNumber|float|int|string $expression;
+    public readonly Decimal128|Int64|ResolvesToNumber|float|int|string $expression;
     /**
      * @param Decimal128|Int64|ResolvesToNumber|float|int|string $expression $cos takes any valid expression that resolves to a number. If the expression returns a value in degrees, use the $degreesToRadians operator to convert the result to radians.
      * By default $cos returns values as a double. $cos can also return values as a 128-bit decimal as long as the <expression> resolves to a 128-bit decimal value.
      */
-    public function __construct(Decimal128|Int64|\MongoDB\Builder\Expression\ResolvesToNumber|float|int|string $expression)
+    public function __construct(Decimal128|Int64|ResolvesToNumber|float|int|string $expression)
     {
         if (is_string($expression) && !str_starts_with($expression, '$')) {
             throw new InvalidArgumentException('Argument $expression can be an expression, field paths and variable names must be prefixed by "$" or "$$".');

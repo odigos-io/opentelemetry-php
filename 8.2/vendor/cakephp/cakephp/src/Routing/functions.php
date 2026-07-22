@@ -15,7 +15,7 @@ declare (strict_types=1);
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 // phpcs:disable PSR1.Files.SideEffects
-namespace Cake\Routing;
+namespace Odigos\Cake\Routing;
 
 use Psr\Http\Message\UriInterface;
 /**
@@ -29,7 +29,7 @@ use Psr\Http\Message\UriInterface;
  */
 function urlArray(string $path, array $params = []): array
 {
-    $url = \Cake\Routing\Router::parseRoutePath($path);
+    $url = Router::parseRoutePath($path);
     $url += ['plugin' => \false, 'prefix' => \false];
     return $url + $params;
 }
@@ -49,5 +49,5 @@ function urlArray(string $path, array $params = []): array
  */
 function url(UriInterface|array|string|null $url = null, bool $full = \false): string
 {
-    return \Cake\Routing\Router::url($url, $full);
+    return Router::url($url, $full);
 }

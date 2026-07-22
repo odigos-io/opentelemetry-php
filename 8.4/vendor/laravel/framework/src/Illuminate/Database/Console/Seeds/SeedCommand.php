@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Database\Console\Seeds;
+namespace Odigos\Illuminate\Database\Console\Seeds;
 
-use Illuminate\Console\Command;
-use Illuminate\Console\ConfirmableTrait;
-use Illuminate\Console\Prohibitable;
-use Illuminate\Database\ConnectionResolverInterface as Resolver;
-use Illuminate\Database\Eloquent\Model;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Console\ConfirmableTrait;
+use Odigos\Illuminate\Console\Prohibitable;
+use Odigos\Illuminate\Database\ConnectionResolverInterface as Resolver;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'db:seed')]
 class SeedCommand extends Command
 {

@@ -10,8 +10,8 @@ namespace Odigos;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Symfony\Component\VarDumper\Caster\ScalarStub;
-use Symfony\Component\VarDumper\VarDumper;
+use Odigos\Symfony\Component\VarDumper\Caster\ScalarStub;
+use Odigos\Symfony\Component\VarDumper\VarDumper;
 if (!\function_exists('Odigos\dump')) {
     /**
      * @author Nicolas Grekas <p@tchwork.com>

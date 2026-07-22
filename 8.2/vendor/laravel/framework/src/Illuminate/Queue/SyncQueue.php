@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
-use Illuminate\Bus\UniqueLock;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Contracts\Queue\Job;
-use Illuminate\Contracts\Queue\Queue as QueueContract;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Queue\Events\JobAttempted;
-use Illuminate\Queue\Events\JobExceptionOccurred;
-use Illuminate\Queue\Events\JobProcessed;
-use Illuminate\Queue\Events\JobProcessing;
-use Illuminate\Queue\Jobs\SyncJob;
+use Odigos\Illuminate\Bus\UniqueLock;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Contracts\Queue\Job;
+use Odigos\Illuminate\Contracts\Queue\Queue as QueueContract;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeUnique;
+use Odigos\Illuminate\Queue\Events\JobAttempted;
+use Odigos\Illuminate\Queue\Events\JobExceptionOccurred;
+use Odigos\Illuminate\Queue\Events\JobProcessed;
+use Odigos\Illuminate\Queue\Events\JobProcessing;
+use Odigos\Illuminate\Queue\Jobs\SyncJob;
 use Throwable;
-class SyncQueue extends \Illuminate\Queue\Queue implements QueueContract
+class SyncQueue extends Queue implements QueueContract
 {
     /**
      * Create a new sync queue instance.

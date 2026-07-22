@@ -8,29 +8,29 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Command;
+namespace Odigos\Symfony\Component\Console\Command;
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Completion\CompletionInput;
-use Symfony\Component\Console\Completion\CompletionSuggestions;
-use Symfony\Component\Console\Completion\Suggestion;
-use Symfony\Component\Console\Exception\ExceptionInterface;
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Exception\LogicException;
-use Symfony\Component\Console\Helper\HelperInterface;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Application;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Completion\CompletionInput;
+use Odigos\Symfony\Component\Console\Completion\CompletionSuggestions;
+use Odigos\Symfony\Component\Console\Completion\Suggestion;
+use Odigos\Symfony\Component\Console\Exception\ExceptionInterface;
+use Odigos\Symfony\Component\Console\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Console\Exception\LogicException;
+use Odigos\Symfony\Component\Console\Helper\HelperInterface;
+use Odigos\Symfony\Component\Console\Helper\HelperSet;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputDefinition;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Base class for all commands.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Command implements \Symfony\Component\Console\Command\SignalableCommandInterface
+class Command implements SignalableCommandInterface
 {
     // see https://tldp.org/LDP/abs/html/exitcodes.html
     public const SUCCESS = 0;
@@ -46,7 +46,7 @@ class Command implements \Symfony\Component\Console\Command\SignalableCommandInt
     private string $description = '';
     private ?InputDefinition $fullDefinition = null;
     private bool $ignoreValidationErrors = \false;
-    private ?\Symfony\Component\Console\Command\InvokableCommand $code = null;
+    private ?InvokableCommand $code = null;
     private array $synopsis = [];
     private array $usages = [];
     private ?HelperSet $helperSet = null;
@@ -127,7 +127,7 @@ class Command implements \Symfony\Component\Console\Command\SignalableCommandInt
             $this->addUsage($usage);
         }
         if (!$code && \is_callable($this) && self::class === (new \ReflectionMethod($this, 'execute'))->getDeclaringClass()->name) {
-            $this->code = new \Symfony\Component\Console\Command\InvokableCommand($this, $this(...));
+            $this->code = new InvokableCommand($this, $this(...));
         }
         $this->configure();
     }
@@ -328,7 +328,7 @@ class Command implements \Symfony\Component\Console\Command\SignalableCommandInt
      */
     public function setCode(callable $code): static
     {
-        $this->code = new \Symfony\Component\Console\Command\InvokableCommand($this, $code);
+        $this->code = new InvokableCommand($this, $code);
         return $this;
     }
     /**

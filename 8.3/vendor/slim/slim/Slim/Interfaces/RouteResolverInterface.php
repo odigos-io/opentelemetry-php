@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Slim\Interfaces;
+namespace Odigos\Slim\Interfaces;
 
-use Slim\Routing\RoutingResults;
+use Odigos\Slim\Routing\RoutingResults;
 interface RouteResolverInterface
 {
     /**
      * @param string $uri Should be ServerRequestInterface::getUri()->getPath()
      */
     public function computeRoutingResults(string $uri, string $method): RoutingResults;
-    public function resolveRoute(string $identifier): \Slim\Interfaces\RouteInterface;
+    public function resolveRoute(string $identifier): RouteInterface;
 }

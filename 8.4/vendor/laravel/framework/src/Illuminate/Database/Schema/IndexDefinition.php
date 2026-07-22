@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Schema;
+namespace Odigos\Illuminate\Database\Schema;
 
-use Illuminate\Support\Fluent;
+use Odigos\Illuminate\Support\Fluent;
 /**
  * @method $this algorithm(string $algorithm) Specify an algorithm for the index (MySQL/PostgreSQL)
  * @method $this deferrable(bool $value = true) Specify that the unique index is deferrable (PostgreSQL)

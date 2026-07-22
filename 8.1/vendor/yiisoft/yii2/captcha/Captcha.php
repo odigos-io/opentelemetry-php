@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\captcha;
+namespace Odigos\yii\captcha;
 
-use yii\base\InvalidConfigException;
-use yii\helpers\Html;
-use yii\helpers\Json;
-use yii\helpers\Url;
-use yii\widgets\InputWidget;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\Html;
+use Odigos\yii\helpers\Json;
+use Odigos\yii\helpers\Url;
+use Odigos\yii\widgets\InputWidget;
 /**
  * Captcha renders a CAPTCHA image and an input field that takes user-entered verification code.
  *
@@ -116,7 +116,7 @@ class Captcha extends InputWidget
         $options = empty($options) ? '' : Json::htmlEncode($options);
         $id = $this->imageOptions['id'];
         $view = $this->getView();
-        \yii\captcha\CaptchaAsset::register($view);
+        CaptchaAsset::register($view);
         $view->registerJs("jQuery('#{$id}').yiiCaptcha({$options});");
     }
     /**
@@ -127,9 +127,9 @@ class Captcha extends InputWidget
     {
         $route = $this->captchaAction;
         if (is_array($route)) {
-            $route[\yii\captcha\CaptchaAction::REFRESH_GET_VAR] = 1;
+            $route[CaptchaAction::REFRESH_GET_VAR] = 1;
         } else {
-            $route = [$route, \yii\captcha\CaptchaAction::REFRESH_GET_VAR => 1];
+            $route = [$route, CaptchaAction::REFRESH_GET_VAR => 1];
         }
         $options = ['refreshUrl' => Url::toRoute($route), 'hashKey' => 'yiiCaptcha/' . trim($route[0], '/')];
         return $options;

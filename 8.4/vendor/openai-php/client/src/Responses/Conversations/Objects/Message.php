@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Conversations\Objects;
+namespace Odigos\OpenAI\Responses\Conversations\Objects;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Conversations\Objects\MessageTypes\ComputerScreenshotContent as ComputerScreenshot;
-use OpenAI\Responses\Conversations\Objects\MessageTypes\SummaryText;
-use OpenAI\Responses\Conversations\Objects\MessageTypes\TextContent as Text;
-use OpenAI\Responses\Responses\Input\InputMessageContentInputFile as InputFile;
-use OpenAI\Responses\Responses\Input\InputMessageContentInputImage as InputImage;
-use OpenAI\Responses\Responses\Input\InputMessageContentInputText as InputText;
-use OpenAI\Responses\Responses\Output\OutputMessageContentOutputText as OutputText;
-use OpenAI\Responses\Responses\Output\OutputMessageContentRefusal as Refusal;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Conversations\Objects\MessageTypes\ComputerScreenshotContent as ComputerScreenshot;
+use Odigos\OpenAI\Responses\Conversations\Objects\MessageTypes\SummaryText;
+use Odigos\OpenAI\Responses\Conversations\Objects\MessageTypes\TextContent as Text;
+use Odigos\OpenAI\Responses\Responses\Input\InputMessageContentInputFile as InputFile;
+use Odigos\OpenAI\Responses\Responses\Input\InputMessageContentInputImage as InputImage;
+use Odigos\OpenAI\Responses\Responses\Input\InputMessageContentInputText as InputText;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMessageContentOutputText as OutputText;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMessageContentRefusal as Refusal;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type ContentInputTextType from InputText as InputTextType
  * @phpstan-import-type ContentInputImageType from InputImage as InputImageType

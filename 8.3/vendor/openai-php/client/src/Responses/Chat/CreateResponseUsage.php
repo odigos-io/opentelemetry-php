@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Chat;
+namespace Odigos\OpenAI\Responses\Chat;
 
 final class CreateResponseUsage
 {
-    private function __construct(public readonly int $promptTokens, public readonly ?int $completionTokens, public readonly int $totalTokens, public readonly ?\OpenAI\Responses\Chat\CreateResponseUsagePromptTokensDetails $promptTokensDetails, public readonly ?\OpenAI\Responses\Chat\CreateResponseUsageCompletionTokensDetails $completionTokensDetails)
+    private function __construct(public readonly int $promptTokens, public readonly ?int $completionTokens, public readonly int $totalTokens, public readonly ?CreateResponseUsagePromptTokensDetails $promptTokensDetails, public readonly ?CreateResponseUsageCompletionTokensDetails $completionTokensDetails)
     {
     }
     /**
@@ -13,7 +13,7 @@ final class CreateResponseUsage
      */
     public static function from(array $attributes): self
     {
-        return new self($attributes['prompt_tokens'], $attributes['completion_tokens'] ?? null, $attributes['total_tokens'], isset($attributes['prompt_tokens_details']) ? \OpenAI\Responses\Chat\CreateResponseUsagePromptTokensDetails::from($attributes['prompt_tokens_details']) : null, isset($attributes['completion_tokens_details']) ? \OpenAI\Responses\Chat\CreateResponseUsageCompletionTokensDetails::from($attributes['completion_tokens_details']) : null);
+        return new self($attributes['prompt_tokens'], $attributes['completion_tokens'] ?? null, $attributes['total_tokens'], isset($attributes['prompt_tokens_details']) ? CreateResponseUsagePromptTokensDetails::from($attributes['prompt_tokens_details']) : null, isset($attributes['completion_tokens_details']) ? CreateResponseUsageCompletionTokensDetails::from($attributes['completion_tokens_details']) : null);
     }
     /**
      * @return array{prompt_tokens: int, completion_tokens: int|null, total_tokens: int, prompt_tokens_details?:array{cached_tokens:int}}

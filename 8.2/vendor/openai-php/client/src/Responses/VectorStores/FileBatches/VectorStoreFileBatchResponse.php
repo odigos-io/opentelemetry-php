@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\VectorStores\FileBatches;
+namespace Odigos\OpenAI\Responses\VectorStores\FileBatches;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Contracts\ResponseHasMetaInformationContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Concerns\HasMetaInformation;
-use OpenAI\Responses\Meta\MetaInformation;
-use OpenAI\Responses\VectorStores\VectorStoreResponseFileCounts;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Contracts\ResponseHasMetaInformationContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Concerns\HasMetaInformation;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Responses\VectorStores\VectorStoreResponseFileCounts;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{id: string, object: string, created_at: int, vector_store_id: string, status: string, file_counts: array{in_progress: int, completed: int, failed: int, cancelled: int, total: int}}>
  */

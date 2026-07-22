@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Auth;
+namespace Odigos\Illuminate\Auth;
 
 use Exception;
-use Illuminate\Http\Request;
+use Odigos\Illuminate\Http\Request;
 class AuthenticationException extends Exception
 {
     /**

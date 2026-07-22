@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Foundation\Http\Middleware;
+namespace Odigos\Illuminate\Foundation\Http\Middleware;
 
 use Closure;
 use ErrorException;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Foundation\Http\MaintenanceModeBypassCookie;
-use Illuminate\Foundation\Http\Middleware\Concerns\ExcludesPaths;
-use Illuminate\Support\Arr;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Foundation\Http\MaintenanceModeBypassCookie;
+use Odigos\Illuminate\Foundation\Http\Middleware\Concerns\ExcludesPaths;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Symfony\Component\HttpKernel\Exception\HttpException;
 class PreventRequestsDuringMaintenance
 {
     use ExcludesPaths;

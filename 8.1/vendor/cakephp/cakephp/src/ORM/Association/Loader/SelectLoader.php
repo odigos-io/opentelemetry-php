@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         3.4.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Association\Loader;
+namespace Odigos\Cake\ORM\Association\Loader;
 
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\Expression\IdentifierExpression;
-use Cake\Database\Expression\TupleComparison;
-use Cake\Database\ExpressionInterface;
-use Cake\Database\ValueBinder;
-use Cake\ORM\Association;
-use Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\Expression\IdentifierExpression;
+use Odigos\Cake\Database\Expression\TupleComparison;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\ValueBinder;
+use Odigos\Cake\ORM\Association;
+use Odigos\Cake\ORM\Query\SelectQuery;
 use Closure;
 use InvalidArgumentException;
 /**

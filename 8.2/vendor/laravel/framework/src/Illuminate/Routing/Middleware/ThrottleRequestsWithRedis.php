@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Routing\Middleware;
+namespace Odigos\Illuminate\Routing\Middleware;
 
 use Closure;
-use Illuminate\Cache\RateLimiter;
-use Illuminate\Contracts\Redis\Factory as Redis;
-use Illuminate\Redis\Limiters\DurationLimiter;
-class ThrottleRequestsWithRedis extends \Illuminate\Routing\Middleware\ThrottleRequests
+use Odigos\Illuminate\Cache\RateLimiter;
+use Odigos\Illuminate\Contracts\Redis\Factory as Redis;
+use Odigos\Illuminate\Redis\Limiters\DurationLimiter;
+class ThrottleRequestsWithRedis extends ThrottleRequests
 {
     /**
      * The Redis factory implementation.

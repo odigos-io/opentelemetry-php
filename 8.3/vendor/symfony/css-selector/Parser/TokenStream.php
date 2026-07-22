@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Parser;
+namespace Odigos\Symfony\Component\CssSelector\Parser;
 
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
-use Symfony\Component\CssSelector\Exception\SyntaxErrorException;
+use Odigos\Symfony\Component\CssSelector\Exception\InternalErrorException;
+use Odigos\Symfony\Component\CssSelector\Exception\SyntaxErrorException;
 /**
  * CSS selector token stream.
  *
@@ -33,14 +33,14 @@ class TokenStream
      */
     private array $used = [];
     private int $cursor = 0;
-    private ?\Symfony\Component\CssSelector\Parser\Token $peeked;
+    private ?Token $peeked;
     private bool $peeking = \false;
     /**
      * Pushes a token.
      *
      * @return $this
      */
-    public function push(\Symfony\Component\CssSelector\Parser\Token $token): static
+    public function push(Token $token): static
     {
         $this->tokens[] = $token;
         return $this;
@@ -59,7 +59,7 @@ class TokenStream
      *
      * @throws InternalErrorException If there is no more token
      */
-    public function getNext(): \Symfony\Component\CssSelector\Parser\Token
+    public function getNext(): Token
     {
         if ($this->peeking) {
             $this->peeking = \false;
@@ -74,7 +74,7 @@ class TokenStream
     /**
      * Returns peeked token.
      */
-    public function getPeek(): \Symfony\Component\CssSelector\Parser\Token
+    public function getPeek(): Token
     {
         if (!$this->peeking) {
             $this->peeked = $this->getNext();

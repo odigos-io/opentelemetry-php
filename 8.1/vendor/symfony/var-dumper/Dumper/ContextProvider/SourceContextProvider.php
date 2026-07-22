@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Dumper\ContextProvider;
+namespace Odigos\Symfony\Component\VarDumper\Dumper\ContextProvider;
 
-use Symfony\Component\ErrorHandler\ErrorRenderer\FileLinkFormatter;
-use Symfony\Component\HttpKernel\Debug\FileLinkFormatter as LegacyFileLinkFormatter;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Symfony\Component\VarDumper\Dumper\HtmlDumper;
-use Symfony\Component\VarDumper\VarDumper;
+use Odigos\Symfony\Component\ErrorHandler\ErrorRenderer\FileLinkFormatter;
+use Odigos\Symfony\Component\HttpKernel\Debug\FileLinkFormatter as LegacyFileLinkFormatter;
+use Odigos\Symfony\Component\VarDumper\Cloner\VarCloner;
+use Odigos\Symfony\Component\VarDumper\Dumper\HtmlDumper;
+use Odigos\Symfony\Component\VarDumper\VarDumper;
 use Odigos\Twig\Template;
 /**
  * Tries to provide context from sources (class name, file, line, code excerpt, ...).
@@ -22,7 +22,7 @@ use Odigos\Twig\Template;
  * @author Nicolas Grekas <p@tchwork.com>
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
  */
-final class SourceContextProvider implements \Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface
+final class SourceContextProvider implements ContextProviderInterface
 {
     private int $limit;
     private ?string $charset;

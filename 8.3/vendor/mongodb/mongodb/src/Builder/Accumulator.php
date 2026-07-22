@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder;
+namespace Odigos\MongoDB\Builder;
 
 use MongoDB\BSON\Document;
 use MongoDB\BSON\Serializable;
-use MongoDB\Builder\Type\Optional;
-use MongoDB\Builder\Type\OutputWindow;
-use MongoDB\Builder\Type\TimeUnit;
-use MongoDB\Builder\Type\WindowInterface;
+use Odigos\MongoDB\Builder\Type\Optional;
+use Odigos\MongoDB\Builder\Type\OutputWindow;
+use Odigos\MongoDB\Builder\Type\TimeUnit;
+use Odigos\MongoDB\Builder\Type\WindowInterface;
 use stdClass;
 /**
  * Factories for Aggregation Pipeline Accumulator and Window Operators
@@ -18,7 +18,7 @@ use stdClass;
  */
 final class Accumulator
 {
-    use \MongoDB\Builder\Accumulator\FactoryTrait;
+    use Accumulator\FactoryTrait;
     /**
      * @param Document|Serializable|WindowInterface|array<string, mixed>|stdClass $operator  Window operator to use in the $setWindowFields stage.
      * @param Optional|array{string|int,string|int}                               $documents A window where the lower and upper boundaries are specified relative to the position of the current document read from the collection.

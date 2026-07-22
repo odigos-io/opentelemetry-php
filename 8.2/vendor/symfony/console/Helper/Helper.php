@@ -8,23 +8,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Helper;
+namespace Odigos\Symfony\Component\Console\Helper;
 
-use Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use Symfony\Component\String\UnicodeString;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use Odigos\Symfony\Component\String\UnicodeString;
 /**
  * Helper is the base class for all helper classes.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Helper implements \Symfony\Component\Console\Helper\HelperInterface
+abstract class Helper implements HelperInterface
 {
-    protected ?\Symfony\Component\Console\Helper\HelperSet $helperSet = null;
-    public function setHelperSet(?\Symfony\Component\Console\Helper\HelperSet $helperSet): void
+    protected ?HelperSet $helperSet = null;
+    public function setHelperSet(?HelperSet $helperSet): void
     {
         $this->helperSet = $helperSet;
     }
-    public function getHelperSet(): ?\Symfony\Component\Console\Helper\HelperSet
+    public function getHelperSet(): ?HelperSet
     {
         return $this->helperSet;
     }

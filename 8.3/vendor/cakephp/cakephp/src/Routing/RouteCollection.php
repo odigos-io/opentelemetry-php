@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing;
+namespace Odigos\Cake\Routing;
 
-use Cake\Routing\Exception\DuplicateNamedRouteException;
-use Cake\Routing\Exception\MissingRouteException;
-use Cake\Routing\Route\Route;
+use Odigos\Cake\Routing\Exception\DuplicateNamedRouteException;
+use Odigos\Cake\Routing\Exception\MissingRouteException;
+use Odigos\Cake\Routing\Route\Route;
 use Closure;
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;

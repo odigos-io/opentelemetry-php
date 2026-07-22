@@ -14,18 +14,18 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Behavior\Translate;
+namespace Odigos\Cake\ORM\Behavior\Translate;
 
 use ArrayObject;
-use Cake\Collection\Collection;
-use Cake\Collection\CollectionInterface;
-use Cake\Core\InstanceConfigTrait;
-use Cake\Datasource\EntityInterface;
-use Cake\Event\EventInterface;
-use Cake\ORM\Locator\LocatorAwareTrait;
-use Cake\ORM\Query\SelectQuery;
-use Cake\ORM\Table;
-use Cake\Utility\Hash;
+use Odigos\Cake\Collection\Collection;
+use Odigos\Cake\Collection\CollectionInterface;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\ORM\Locator\LocatorAwareTrait;
+use Odigos\Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\ORM\Table;
+use Odigos\Cake\Utility\Hash;
 /**
  * This class provides a way to translate dynamic data by keeping translations
  * in a separate table linked to the original record from another one. Translated
@@ -39,11 +39,11 @@ use Cake\Utility\Hash;
  * you can use the custom `translations` finder of `TranslateBehavior` that is
  * exposed to the table.
  */
-class EavStrategy implements \Cake\ORM\Behavior\Translate\TranslateStrategyInterface
+class EavStrategy implements TranslateStrategyInterface
 {
     use InstanceConfigTrait;
     use LocatorAwareTrait;
-    use \Cake\ORM\Behavior\Translate\TranslateStrategyTrait;
+    use TranslateStrategyTrait;
     /**
      * Default config
      *

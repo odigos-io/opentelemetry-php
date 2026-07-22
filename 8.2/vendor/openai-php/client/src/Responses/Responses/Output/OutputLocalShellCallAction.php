@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses\Output;
+namespace Odigos\OpenAI\Responses\Responses\Output;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-type OutputLocalShellCallActionType array{command: array<int, string>, env: array<int, string>, type: 'exec', timeout_ms: ?int, user: ?string, working_directory: ?string}
  *

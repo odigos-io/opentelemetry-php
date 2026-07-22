@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\db\Connection;
-use yii\db\PdoValue;
-use yii\db\Query;
-use yii\di\Instance;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\db\Connection;
+use Odigos\yii\db\PdoValue;
+use Odigos\yii\db\Query;
+use Odigos\yii\di\Instance;
 /**
  * DbSession extends [[Session]] by using database as session data storage.
  *
@@ -36,7 +36,7 @@ use yii\di\Instance;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class DbSession extends \yii\web\MultiFieldSession
+class DbSession extends MultiFieldSession
 {
     /**
      * @var Connection|array|string the DB connection object or the application component ID of the DB connection.

@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Filesystem;
+namespace Odigos\Illuminate\Filesystem;
 
 use Odigos\Aws\S3\S3Client;
-use Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Conditionable;
 use Odigos\League\Flysystem\FilesystemAdapter as FlysystemAdapter;
 use Odigos\League\Flysystem\FilesystemOperator;
-class AwsS3V3Adapter extends \Illuminate\Filesystem\FilesystemAdapter
+class AwsS3V3Adapter extends FilesystemAdapter
 {
     use Conditionable;
     /**

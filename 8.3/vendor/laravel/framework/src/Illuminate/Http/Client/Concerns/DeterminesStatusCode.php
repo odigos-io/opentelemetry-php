@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Http\Client\Concerns;
+namespace Odigos\Illuminate\Http\Client\Concerns;
 
 trait DeterminesStatusCode
 {

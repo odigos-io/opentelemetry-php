@@ -12,9 +12,9 @@ declare (strict_types=1);
  * @since         3.2.13
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Exception;
+namespace Odigos\Cake\ORM\Exception;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 /**
  * Used when a transaction was rolled back from a callback event.
  */

@@ -1,9 +1,9 @@
 <?php
 
-namespace Http\Client\Promise;
+namespace Odigos\Http\Client\Promise;
 
-use Http\Client\Exception;
-use Http\Promise\Promise;
+use Odigos\Http\Client\Exception;
+use Odigos\Http\Promise\Promise;
 final class HttpRejectedPromise implements Promise
 {
     /**
@@ -24,7 +24,7 @@ final class HttpRejectedPromise implements Promise
             if ($result instanceof Promise) {
                 return $result;
             }
-            return new \Http\Client\Promise\HttpFulfilledPromise($result);
+            return new HttpFulfilledPromise($result);
         } catch (Exception $e) {
             return new self($e);
         }

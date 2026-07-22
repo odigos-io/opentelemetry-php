@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Helper;
+namespace Odigos\Symfony\Component\Console\Helper;
 
-use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Console\Exception\InvalidArgumentException;
 /**
  * HelperSet represents a set of helpers to be used with a command.
  *
@@ -31,7 +31,7 @@ class HelperSet implements \IteratorAggregate
             $this->set($helper, \is_int($alias) ? null : $alias);
         }
     }
-    public function set(\Symfony\Component\Console\Helper\HelperInterface $helper, ?string $alias = null): void
+    public function set(HelperInterface $helper, ?string $alias = null): void
     {
         $this->helpers[$helper->getName()] = $helper;
         if (null !== $alias) {
@@ -51,7 +51,7 @@ class HelperSet implements \IteratorAggregate
      *
      * @throws InvalidArgumentException if the helper is not defined
      */
-    public function get(string $name): \Symfony\Component\Console\Helper\HelperInterface
+    public function get(string $name): HelperInterface
     {
         if (!$this->has($name)) {
             throw new InvalidArgumentException(\sprintf('The helper "%s" is not defined.', $name));

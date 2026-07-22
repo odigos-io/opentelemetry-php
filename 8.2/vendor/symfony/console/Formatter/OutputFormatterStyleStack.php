@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Formatter;
+namespace Odigos\Symfony\Component\Console\Formatter;
 
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Contracts\Service\ResetInterface;
+use Odigos\Symfony\Component\Console\Exception\InvalidArgumentException;
+use Odigos\Symfony\Contracts\Service\ResetInterface;
 /**
  * @author Jean-François Simon <contact@jfsimon.fr>
  */
@@ -21,10 +21,10 @@ class OutputFormatterStyleStack implements ResetInterface
      * @var OutputFormatterStyleInterface[]
      */
     private array $styles = [];
-    private \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $emptyStyle;
-    public function __construct(?\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $emptyStyle = null)
+    private OutputFormatterStyleInterface $emptyStyle;
+    public function __construct(?OutputFormatterStyleInterface $emptyStyle = null)
     {
-        $this->emptyStyle = $emptyStyle ?? new \Symfony\Component\Console\Formatter\OutputFormatterStyle();
+        $this->emptyStyle = $emptyStyle ?? new OutputFormatterStyle();
         $this->reset();
     }
     /**
@@ -37,7 +37,7 @@ class OutputFormatterStyleStack implements ResetInterface
     /**
      * Pushes a style in the stack.
      */
-    public function push(\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style): void
+    public function push(OutputFormatterStyleInterface $style): void
     {
         $this->styles[] = $style;
     }
@@ -46,7 +46,7 @@ class OutputFormatterStyleStack implements ResetInterface
      *
      * @throws InvalidArgumentException When style tags incorrectly nested
      */
-    public function pop(?\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style = null): \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
+    public function pop(?OutputFormatterStyleInterface $style = null): OutputFormatterStyleInterface
     {
         if (!$this->styles) {
             return $this->emptyStyle;
@@ -65,7 +65,7 @@ class OutputFormatterStyleStack implements ResetInterface
     /**
      * Computes current style with stacks top codes.
      */
-    public function getCurrent(): \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
+    public function getCurrent(): OutputFormatterStyleInterface
     {
         if (!$this->styles) {
             return $this->emptyStyle;
@@ -75,12 +75,12 @@ class OutputFormatterStyleStack implements ResetInterface
     /**
      * @return $this
      */
-    public function setEmptyStyle(\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $emptyStyle): static
+    public function setEmptyStyle(OutputFormatterStyleInterface $emptyStyle): static
     {
         $this->emptyStyle = $emptyStyle;
         return $this;
     }
-    public function getEmptyStyle(): \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
+    public function getEmptyStyle(): OutputFormatterStyleInterface
     {
         return $this->emptyStyle;
     }

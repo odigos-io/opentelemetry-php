@@ -15,15 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\GridFS;
+namespace Odigos\MongoDB\GridFS;
 
 use ArrayIterator;
-use MongoDB\Collection;
+use Odigos\MongoDB\Collection;
 use MongoDB\Driver\CursorInterface;
 use MongoDB\Driver\Manager;
 use MongoDB\Driver\ReadPreference;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\UpdateResult;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\UpdateResult;
 use MultipleIterator;
 use function abs;
 use function assert;

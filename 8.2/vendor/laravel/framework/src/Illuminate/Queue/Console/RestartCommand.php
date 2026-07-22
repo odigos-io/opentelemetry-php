@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Queue\Console;
+namespace Odigos\Illuminate\Queue\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Support\InteractsWithTime;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Support\InteractsWithTime;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'queue:restart')]
 class RestartCommand extends Command
 {

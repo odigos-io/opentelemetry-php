@@ -12,14 +12,14 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Controller\Exception;
+namespace Odigos\Cake\Controller\Exception;
 
 /**
  * Auth Security exception - used when SecurityComponent detects any issue with the current request
  *
  * @deprecated 5.2.0 This exception is no longer used in the CakePHP core.
  */
-class AuthSecurityException extends \Cake\Controller\Exception\SecurityException
+class AuthSecurityException extends SecurityException
 {
     /**
      * Security Exception type

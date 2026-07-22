@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\SQLite3;
+namespace Odigos\Doctrine\DBAL\Driver\SQLite3;
 
-use Doctrine\DBAL\Driver\FetchUtils;
-use Doctrine\DBAL\Driver\Result as ResultInterface;
-use Doctrine\DBAL\Exception\InvalidColumnIndex;
+use Odigos\Doctrine\DBAL\Driver\FetchUtils;
+use Odigos\Doctrine\DBAL\Driver\Result as ResultInterface;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnIndex;
 use SQLite3Result;
 use const SQLITE3_ASSOC;
 use const SQLITE3_NUM;

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Metadata;
+namespace Odigos\Doctrine\DBAL\Schema\Metadata;
 
-use Doctrine\DBAL\Schema\Column;
+use Odigos\Doctrine\DBAL\Schema\Column;
 /**
  * A row of metadata describing a table column.
  *

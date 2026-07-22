@@ -5,16 +5,16 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 use Odigos\Yii;
-use yii\base\BaseObject;
-use yii\base\InvalidCallException;
-use yii\base\InvalidConfigException;
-use yii\base\NotSupportedException;
-use yii\caching\Cache;
-use yii\caching\CacheInterface;
-use yii\caching\TagDependency;
+use Odigos\yii\base\BaseObject;
+use Odigos\yii\base\InvalidCallException;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\NotSupportedException;
+use Odigos\yii\caching\Cache;
+use Odigos\yii\caching\CacheInterface;
+use Odigos\yii\caching\TagDependency;
 /**
  * Schema is the base class for concrete DBMS-specific schema classes.
  *
@@ -81,12 +81,12 @@ abstract class Schema extends BaseObject
      * @var array map of DB errors and corresponding exceptions
      * If left part is found in DB error message exception class from the right part is used.
      */
-    public $exceptionMap = ['SQLSTATE[23' => 'yii\db\IntegrityException'];
+    public $exceptionMap = ['SQLSTATE[23' => 'Odigos\yii\db\IntegrityException'];
     /**
      * @var class-string<T>|array{class?: class-string<T>, __class?: class-string<T>, ...} column schema class or class config
      * @since 2.0.11
      */
-    public $columnSchemaClass = 'yii\db\ColumnSchema';
+    public $columnSchemaClass = 'Odigos\yii\db\ColumnSchema';
     /**
      * @var string|string[] character used to quote schema, table, etc. names.
      * An array of 2 characters can be used in case starting and ending characters are different.
@@ -290,7 +290,7 @@ abstract class Schema extends BaseObject
      */
     public function createQueryBuilder()
     {
-        return Yii::createObject(\yii\db\QueryBuilder::className(), [$this->db]);
+        return Yii::createObject(QueryBuilder::className(), [$this->db]);
     }
     /**
      * Create a column schema builder instance giving the type and value precision.
@@ -304,7 +304,7 @@ abstract class Schema extends BaseObject
      */
     public function createColumnSchemaBuilder($type, $length = null)
     {
-        return Yii::createObject(\yii\db\ColumnSchemaBuilder::className(), [$type, $length]);
+        return Yii::createObject(ColumnSchemaBuilder::className(), [$type, $length]);
     }
     /**
      * Returns all unique indexes for the given table.
@@ -607,10 +607,10 @@ abstract class Schema extends BaseObject
      */
     public function convertException(\Exception $e, $rawSql)
     {
-        if ($e instanceof \yii\db\Exception) {
+        if ($e instanceof Exception) {
             return $e;
         }
-        $exceptionClass = '\yii\db\Exception';
+        $exceptionClass = 'Odigos\yii\db\Exception';
         foreach ($this->exceptionMap as $error => $class) {
             if (strpos($e->getMessage(), $error) !== \false) {
                 $exceptionClass = $class;

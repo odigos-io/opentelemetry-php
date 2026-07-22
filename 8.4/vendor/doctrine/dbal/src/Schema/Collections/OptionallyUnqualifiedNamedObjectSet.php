@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Collections;
+namespace Odigos\Doctrine\DBAL\Schema\Collections;
 
-use Doctrine\DBAL\Schema\Collections\Exception\ObjectAlreadyExists;
-use Doctrine\DBAL\Schema\Collections\Exception\ObjectDoesNotExist;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\DBAL\Schema\OptionallyNamedObject;
+use Odigos\Doctrine\DBAL\Schema\Collections\Exception\ObjectAlreadyExists;
+use Odigos\Doctrine\DBAL\Schema\Collections\Exception\ObjectDoesNotExist;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\OptionallyNamedObject;
 use Traversable;
 use function array_splice;
 use function count;
@@ -24,7 +24,7 @@ use function strtolower;
  * @template E of OptionallyNamedObject<UnqualifiedName>
  * @template-implements ObjectSet<E>
  */
-final class OptionallyUnqualifiedNamedObjectSet implements \Doctrine\DBAL\Schema\Collections\ObjectSet
+final class OptionallyUnqualifiedNamedObjectSet implements ObjectSet
 {
     /** @var list<E> */
     private array $elements = [];

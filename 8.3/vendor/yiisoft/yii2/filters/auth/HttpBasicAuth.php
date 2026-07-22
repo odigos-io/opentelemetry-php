@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters\auth;
+namespace Odigos\yii\filters\auth;
 
-use yii\base\Component;
+use Odigos\yii\base\Component;
 /**
  * HttpBasicAuth is an action filter that supports the HTTP Basic authentication method.
  *
@@ -61,7 +61,7 @@ use yii\base\Component;
  * @template T of Component = Component
  * @extends AuthMethod<T>
  */
-class HttpBasicAuth extends \yii\filters\auth\AuthMethod
+class HttpBasicAuth extends AuthMethod
 {
     /**
      * @var string the HTTP authentication realm

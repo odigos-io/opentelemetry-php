@@ -14,20 +14,20 @@ declare (strict_types=1);
  * @since         2.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\BaseCommand;
-use Cake\Console\CommandCollection;
-use Cake\Console\CommandCollectionAwareInterface;
-use Cake\Console\CommandHiddenInterface;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\BaseCommand;
+use Odigos\Cake\Console\CommandCollection;
+use Odigos\Cake\Console\CommandCollectionAwareInterface;
+use Odigos\Cake\Console\CommandHiddenInterface;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOptionParser;
 use ReflectionClass;
 /**
  * Provide command completion shells such as bash.
  */
-class CompletionCommand extends \Cake\Command\Command implements CommandCollectionAwareInterface
+class CompletionCommand extends Command implements CommandCollectionAwareInterface
 {
     /**
      * @var \Cake\Console\CommandCollection

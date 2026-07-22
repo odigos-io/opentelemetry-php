@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Testing\Concerns;
+namespace Odigos\Illuminate\Testing\Concerns;
 
-use Illuminate\Database\QueryException;
-use Illuminate\Foundation\Testing;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\ParallelTesting;
-use Illuminate\Support\Facades\Schema;
+use Odigos\Illuminate\Database\QueryException;
+use Odigos\Illuminate\Foundation\Testing;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Facades\Artisan;
+use Odigos\Illuminate\Support\Facades\DB;
+use Odigos\Illuminate\Support\Facades\ParallelTesting;
+use Odigos\Illuminate\Support\Facades\Schema;
 trait TestDatabases
 {
     /**

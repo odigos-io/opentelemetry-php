@@ -1,36 +1,36 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
 use ArrayObject;
 use Closure;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Routing\BindingRegistrar;
-use Illuminate\Contracts\Routing\Registrar as RegistrarContract;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Events\PreparingResponse;
-use Illuminate\Routing\Events\ResponsePrepared;
-use Illuminate\Routing\Events\RouteMatched;
-use Illuminate\Routing\Events\Routing;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Stringable;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Traits\Tappable;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Contracts\Routing\BindingRegistrar;
+use Odigos\Illuminate\Contracts\Routing\Registrar as RegistrarContract;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Jsonable;
+use Odigos\Illuminate\Contracts\Support\Responsable;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Http\JsonResponse;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Http\Response;
+use Odigos\Illuminate\Routing\Events\PreparingResponse;
+use Odigos\Illuminate\Routing\Events\ResponsePrepared;
+use Odigos\Illuminate\Routing\Events\RouteMatched;
+use Odigos\Illuminate\Routing\Events\Routing;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Stringable;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\Tappable;
 use JsonSerializable;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use ReflectionClass;
 use stdClass;
-use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Odigos\Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
+use Odigos\Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 /**
  * @mixin \Illuminate\Routing\RouteRegistrar
  */
@@ -129,7 +129,7 @@ class Router implements BindingRegistrar, RegistrarContract
     public function __construct(Dispatcher $events, ?Container $container = null)
     {
         $this->events = $events;
-        $this->routes = new \Illuminate\Routing\RouteCollection();
+        $this->routes = new RouteCollection();
         $this->container = $container ?: new Container();
     }
     /**
@@ -230,7 +230,7 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function redirect($uri, $destination, $status = 302)
     {
-        return $this->any($uri, '\Illuminate\Routing\RedirectController')->defaults('destination', $destination)->defaults('status', $status);
+        return $this->any($uri, 'Odigos\Illuminate\Routing\RedirectController')->defaults('destination', $destination)->defaults('status', $status);
     }
     /**
      * Create a permanent redirect from one URI to another.
@@ -255,7 +255,7 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function view($uri, $view, $data = [], $status = 200, array $headers = [])
     {
-        return $this->match(['GET', 'HEAD'], $uri, '\Illuminate\Routing\ViewController')->setDefaults(['view' => $view, 'data' => $data, 'status' => is_array($status) ? 200 : $status, 'headers' => is_array($status) ? $status : $headers]);
+        return $this->match(['GET', 'HEAD'], $uri, 'Odigos\Illuminate\Routing\ViewController')->setDefaults(['view' => $view, 'data' => $data, 'status' => is_array($status) ? 200 : $status, 'headers' => is_array($status) ? $status : $headers]);
     }
     /**
      * Register a new route with the given verbs.
@@ -305,12 +305,12 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function resource($name, $controller, array $options = [])
     {
-        if ($this->container && $this->container->bound(\Illuminate\Routing\ResourceRegistrar::class)) {
-            $registrar = $this->container->make(\Illuminate\Routing\ResourceRegistrar::class);
+        if ($this->container && $this->container->bound(ResourceRegistrar::class)) {
+            $registrar = $this->container->make(ResourceRegistrar::class);
         } else {
-            $registrar = new \Illuminate\Routing\ResourceRegistrar($this);
+            $registrar = new ResourceRegistrar($this);
         }
-        return new \Illuminate\Routing\PendingResourceRegistration($registrar, $name, $controller, $options);
+        return new PendingResourceRegistration($registrar, $name, $controller, $options);
     }
     /**
      * Register an array of API resource controllers.
@@ -364,12 +364,12 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function singleton($name, $controller, array $options = [])
     {
-        if ($this->container && $this->container->bound(\Illuminate\Routing\ResourceRegistrar::class)) {
-            $registrar = $this->container->make(\Illuminate\Routing\ResourceRegistrar::class);
+        if ($this->container && $this->container->bound(ResourceRegistrar::class)) {
+            $registrar = $this->container->make(ResourceRegistrar::class);
         } else {
-            $registrar = new \Illuminate\Routing\ResourceRegistrar($this);
+            $registrar = new ResourceRegistrar($this);
         }
-        return new \Illuminate\Routing\PendingSingletonResourceRegistration($registrar, $name, $controller, $options);
+        return new PendingSingletonResourceRegistration($registrar, $name, $controller, $options);
     }
     /**
      * Register an array of API singleton resource controllers.
@@ -441,7 +441,7 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function mergeWithLastGroup($new, $prependExistingPrefix = \true)
     {
-        return \Illuminate\Routing\RouteGroup::merge($new, array_last($this->groupStack), $prependExistingPrefix);
+        return RouteGroup::merge($new, array_last($this->groupStack), $prependExistingPrefix);
     }
     /**
      * Load the provided routes.
@@ -454,7 +454,7 @@ class Router implements BindingRegistrar, RegistrarContract
         if ($routes instanceof Closure) {
             $routes($this);
         } else {
-            (new \Illuminate\Routing\RouteFileRegistrar($this))->register($routes);
+            (new RouteFileRegistrar($this))->register($routes);
         }
     }
     /**
@@ -586,7 +586,7 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function newRoute($methods, $uri, $action)
     {
-        return (new \Illuminate\Routing\Route($methods, $uri, $action))->setRouter($this)->setContainer($this->container);
+        return (new Route($methods, $uri, $action))->setRouter($this)->setContainer($this->container);
     }
     /**
      * Prefix the given URI with the last prefix.
@@ -662,7 +662,7 @@ class Router implements BindingRegistrar, RegistrarContract
         $this->events->dispatch(new Routing($request));
         $this->current = $route = $this->routes->match($request);
         $route->setContainer($this->container);
-        $this->container->instance(\Illuminate\Routing\Route::class, $route);
+        $this->container->instance(Route::class, $route);
         return $route;
     }
     /**
@@ -672,7 +672,7 @@ class Router implements BindingRegistrar, RegistrarContract
      * @param  \Illuminate\Routing\Route  $route
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function runRoute(Request $request, \Illuminate\Routing\Route $route)
+    protected function runRoute(Request $request, Route $route)
     {
         $request->setRouteResolver(fn() => $route);
         $this->events->dispatch(new RouteMatched($route, $request));
@@ -685,11 +685,11 @@ class Router implements BindingRegistrar, RegistrarContract
      * @param  \Illuminate\Http\Request  $request
      * @return mixed
      */
-    protected function runRouteWithinStack(\Illuminate\Routing\Route $route, Request $request)
+    protected function runRouteWithinStack(Route $route, Request $request)
     {
         $shouldSkipMiddleware = $this->container->bound('middleware.disable') && $this->container->make('middleware.disable') === \true;
         $middleware = $shouldSkipMiddleware ? [] : $this->gatherRouteMiddleware($route);
-        return (new \Illuminate\Routing\Pipeline($this->container))->send($request)->through($middleware)->then(fn($request) => $this->prepareResponse($request, $route->run()));
+        return (new Pipeline($this->container))->send($request)->through($middleware)->then(fn($request) => $this->prepareResponse($request, $route->run()));
     }
     /**
      * Gather the middleware for the given route with resolved class names.
@@ -697,7 +697,7 @@ class Router implements BindingRegistrar, RegistrarContract
      * @param  \Illuminate\Routing\Route  $route
      * @return array
      */
-    public function gatherRouteMiddleware(\Illuminate\Routing\Route $route)
+    public function gatherRouteMiddleware(Route $route)
     {
         return $this->resolveMiddleware($route->gatherMiddleware(), $route->excludedMiddleware());
     }
@@ -710,8 +710,8 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function resolveMiddleware(array $middleware, array $excluded = [])
     {
-        $excluded = $excluded === [] ? $excluded : (new Collection($excluded))->map(fn($name) => (array) \Illuminate\Routing\MiddlewareNameResolver::resolve($name, $this->middleware, $this->middlewareGroups))->flatten()->values()->all();
-        $middleware = (new Collection($middleware))->map(fn($name) => (array) \Illuminate\Routing\MiddlewareNameResolver::resolve($name, $this->middleware, $this->middlewareGroups))->flatten()->when(!empty($excluded), fn($collection) => $collection->reject(function ($name) use ($excluded) {
+        $excluded = $excluded === [] ? $excluded : (new Collection($excluded))->map(fn($name) => (array) MiddlewareNameResolver::resolve($name, $this->middleware, $this->middlewareGroups))->flatten()->values()->all();
+        $middleware = (new Collection($middleware))->map(fn($name) => (array) MiddlewareNameResolver::resolve($name, $this->middleware, $this->middlewareGroups))->flatten()->when(!empty($excluded), fn($collection) => $collection->reject(function ($name) use ($excluded) {
             if ($name instanceof Closure) {
                 return \false;
             }
@@ -734,7 +734,7 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     protected function sortMiddleware(Collection $middlewares)
     {
-        return (new \Illuminate\Routing\SortedMiddleware($this->middlewarePriority, $middlewares))->all();
+        return (new SortedMiddleware($this->middlewarePriority, $middlewares))->all();
     }
     /**
      * Create a response instance from the given value.
@@ -807,7 +807,7 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function substituteImplicitBindings($route)
     {
-        $default = fn() => \Illuminate\Routing\ImplicitRouteBinding::resolveForRoute($this->container, $route);
+        $default = fn() => ImplicitRouteBinding::resolveForRoute($this->container, $route);
         return call_user_func($this->implicitBindingCallback ?? $default, $this->container, $route, $default);
     }
     /**
@@ -843,7 +843,7 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function matched($callback)
     {
-        $this->events->listen(\Illuminate\Routing\Events\RouteMatched::class, $callback);
+        $this->events->listen(Events\RouteMatched::class, $callback);
     }
     /**
      * Get all of the defined middleware short-hand names.
@@ -971,7 +971,7 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function bind($key, $binder)
     {
-        $this->binders[str_replace('-', '_', $key)] = \Illuminate\Routing\RouteBinding::forCallback($this->container, $binder);
+        $this->binders[str_replace('-', '_', $key)] = RouteBinding::forCallback($this->container, $binder);
     }
     /**
      * Register a model binder for a wildcard.
@@ -983,7 +983,7 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function model($key, $class, ?Closure $callback = null)
     {
-        $this->bind($key, \Illuminate\Routing\RouteBinding::forModel($this->container, $class, $callback));
+        $this->bind($key, RouteBinding::forModel($this->container, $class, $callback));
     }
     /**
      * Get the binding callback for a given binding.
@@ -1174,7 +1174,7 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function singularResourceParameters($singular = \true)
     {
-        \Illuminate\Routing\ResourceRegistrar::singularParameters($singular);
+        ResourceRegistrar::singularParameters($singular);
     }
     /**
      * Set the global resource parameter mapping.
@@ -1184,7 +1184,7 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function resourceParameters(array $parameters = [])
     {
-        \Illuminate\Routing\ResourceRegistrar::setParameters($parameters);
+        ResourceRegistrar::setParameters($parameters);
     }
     /**
      * Get or set the verbs used in the resource URIs.
@@ -1194,7 +1194,7 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function resourceVerbs(array $verbs = [])
     {
-        return \Illuminate\Routing\ResourceRegistrar::verbs($verbs);
+        return ResourceRegistrar::verbs($verbs);
     }
     /**
      * Get the underlying route collection.
@@ -1211,7 +1211,7 @@ class Router implements BindingRegistrar, RegistrarContract
      * @param  \Illuminate\Routing\RouteCollection  $routes
      * @return void
      */
-    public function setRoutes(\Illuminate\Routing\RouteCollection $routes)
+    public function setRoutes(RouteCollection $routes)
     {
         foreach ($routes as $route) {
             $route->setRouter($this)->setContainer($this->container);
@@ -1227,7 +1227,7 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function setCompiledRoutes(array $routes)
     {
-        $this->routes = (new \Illuminate\Routing\CompiledRouteCollection($routes['compiled'], $routes['attributes']))->setRouter($this)->setContainer($this->container);
+        $this->routes = (new CompiledRouteCollection($routes['compiled'], $routes['attributes']))->setRouter($this)->setContainer($this->container);
         $this->container->instance('routes', $this->routes);
     }
     /**
@@ -1273,14 +1273,14 @@ class Router implements BindingRegistrar, RegistrarContract
             return $this->macroCall($method, $parameters);
         }
         if ($method === 'middleware') {
-            return (new \Illuminate\Routing\RouteRegistrar($this))->attribute($method, is_array($parameters[0]) ? $parameters[0] : $parameters);
+            return (new RouteRegistrar($this))->attribute($method, is_array($parameters[0]) ? $parameters[0] : $parameters);
         }
         if ($method === 'can') {
-            return (new \Illuminate\Routing\RouteRegistrar($this))->attribute($method, [$parameters]);
+            return (new RouteRegistrar($this))->attribute($method, [$parameters]);
         }
         if ($method !== 'where' && Str::startsWith($method, 'where')) {
-            return (new \Illuminate\Routing\RouteRegistrar($this))->{$method}(...$parameters);
+            return (new RouteRegistrar($this))->{$method}(...$parameters);
         }
-        return (new \Illuminate\Routing\RouteRegistrar($this))->attribute($method, array_key_exists(0, $parameters) ? $parameters[0] : \true);
+        return (new RouteRegistrar($this))->attribute($method, array_key_exists(0, $parameters) ? $parameters[0] : \true);
     }
 }

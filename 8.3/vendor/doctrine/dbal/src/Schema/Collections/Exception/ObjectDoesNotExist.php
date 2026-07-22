@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Collections\Exception;
+namespace Odigos\Doctrine\DBAL\Schema\Collections\Exception;
 
-use Doctrine\DBAL\Schema\Collections\Exception;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Collections\Exception;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
 use LogicException;
 use function sprintf;
 /** @internal */

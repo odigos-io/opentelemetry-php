@@ -1,8 +1,8 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL;
+namespace Odigos\Doctrine\DBAL;
 
-class ConnectionException extends \Exception implements \Doctrine\DBAL\Exception
+class ConnectionException extends \Exception implements Exception
 {
 }

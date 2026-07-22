@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder;
+namespace Odigos\MongoDB\Builder;
 
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\Type;
-use MongoDB\Builder\Query\RegexOperator;
-use MongoDB\Builder\Type\CombinedFieldQuery;
-use MongoDB\Builder\Type\FieldQueryInterface;
-use MongoDB\Builder\Type\QueryInterface;
-use MongoDB\Builder\Type\QueryObject;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Query\RegexOperator;
+use Odigos\MongoDB\Builder\Type\CombinedFieldQuery;
+use Odigos\MongoDB\Builder\Type\FieldQueryInterface;
+use Odigos\MongoDB\Builder\Type\QueryInterface;
+use Odigos\MongoDB\Builder\Type\QueryObject;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function is_string;
 /**
@@ -20,7 +20,7 @@ use function is_string;
  */
 final class Query
 {
-    use \MongoDB\Builder\Query\FactoryTrait {
+    use Query\FactoryTrait {
         regex as private generatedRegex;
     }
     /**

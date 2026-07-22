@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer;
+namespace Odigos\Symfony\Component\Mailer;
 
-use Symfony\Component\Mime\Message;
-use Symfony\Component\Mime\RawMessage;
+use Odigos\Symfony\Component\Mime\Message;
+use Odigos\Symfony\Component\Mime\RawMessage;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -24,7 +24,7 @@ class SentMessage
     /**
      * @internal
      */
-    public function __construct(RawMessage $message, private \Symfony\Component\Mailer\Envelope $envelope)
+    public function __construct(RawMessage $message, private Envelope $envelope)
     {
         $message->ensureValidity();
         $this->original = $message;
@@ -48,7 +48,7 @@ class SentMessage
     {
         return $this->original;
     }
-    public function getEnvelope(): \Symfony\Component\Mailer\Envelope
+    public function getEnvelope(): Envelope
     {
         return $this->envelope;
     }

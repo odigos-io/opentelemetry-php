@@ -14,52 +14,52 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
 use ArrayObject;
 use BadMethodCallException;
-use Cake\Collection\CollectionInterface;
-use Cake\Core\App;
-use Cake\Core\Configure;
-use Cake\Core\Exception\CakeException;
-use Cake\Database\Connection;
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Database\Schema\TableSchemaInterface;
-use Cake\Database\TypeFactory;
-use Cake\Datasource\ConnectionManager;
-use Cake\Datasource\EntityInterface;
-use Cake\Datasource\Exception\InvalidPrimaryKeyException;
-use Cake\Datasource\RepositoryInterface;
-use Cake\Datasource\RulesAwareTrait;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
-use Cake\Event\EventListenerInterface;
-use Cake\Event\EventManager;
-use Cake\ORM\Association\BelongsTo;
-use Cake\ORM\Association\BelongsToMany;
-use Cake\ORM\Association\HasMany;
-use Cake\ORM\Association\HasOne;
-use Cake\ORM\Exception\MissingEntityException;
-use Cake\ORM\Exception\PersistenceFailedException;
-use Cake\ORM\Exception\RolledbackTransactionException;
-use Cake\ORM\Query\DeleteQuery;
-use Cake\ORM\Query\InsertQuery;
-use Cake\ORM\Query\QueryFactory;
-use Cake\ORM\Query\SelectQuery;
-use Cake\ORM\Query\UpdateQuery;
-use Cake\ORM\Rule\IsUnique;
-use Cake\Utility\Inflector;
-use Cake\Validation\ValidatorAwareInterface;
-use Cake\Validation\ValidatorAwareTrait;
+use Odigos\Cake\Collection\CollectionInterface;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Database\Connection;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\Expression\QueryExpression;
+use Odigos\Cake\Database\Schema\TableSchemaInterface;
+use Odigos\Cake\Database\TypeFactory;
+use Odigos\Cake\Datasource\ConnectionManager;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Datasource\Exception\InvalidPrimaryKeyException;
+use Odigos\Cake\Datasource\RepositoryInterface;
+use Odigos\Cake\Datasource\RulesAwareTrait;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Event\EventListenerInterface;
+use Odigos\Cake\Event\EventManager;
+use Odigos\Cake\ORM\Association\BelongsTo;
+use Odigos\Cake\ORM\Association\BelongsToMany;
+use Odigos\Cake\ORM\Association\HasMany;
+use Odigos\Cake\ORM\Association\HasOne;
+use Odigos\Cake\ORM\Exception\MissingEntityException;
+use Odigos\Cake\ORM\Exception\PersistenceFailedException;
+use Odigos\Cake\ORM\Exception\RolledbackTransactionException;
+use Odigos\Cake\ORM\Query\DeleteQuery;
+use Odigos\Cake\ORM\Query\InsertQuery;
+use Odigos\Cake\ORM\Query\QueryFactory;
+use Odigos\Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\ORM\Query\UpdateQuery;
+use Odigos\Cake\ORM\Rule\IsUnique;
+use Odigos\Cake\Utility\Inflector;
+use Odigos\Cake\Validation\ValidatorAwareInterface;
+use Odigos\Cake\Validation\ValidatorAwareTrait;
 use Closure;
 use Exception;
 use InvalidArgumentException;
 use Psr\SimpleCache\CacheInterface;
 use ReflectionFunction;
 use ReflectionNamedType;
-use function Cake\Core\deprecationWarning;
-use function Cake\Core\namespaceSplit;
+use function Odigos\Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\namespaceSplit;
 /**
  * Represents a single database table.
  *
@@ -188,7 +188,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
      *
      * @var class-string<\Cake\ORM\RulesChecker>
      */
-    public const RULES_CLASS = \Cake\ORM\RulesChecker::class;
+    public const RULES_CLASS = RulesChecker::class;
     /**
      * The IsUnique class name that is used.
      *
@@ -237,13 +237,13 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
      *
      * @var \Cake\ORM\AssociationCollection
      */
-    protected \Cake\ORM\AssociationCollection $_associations;
+    protected AssociationCollection $_associations;
     /**
      * BehaviorRegistry for this table
      *
      * @var \Cake\ORM\BehaviorRegistry
      */
-    protected \Cake\ORM\BehaviorRegistry $_behaviors;
+    protected BehaviorRegistry $_behaviors;
     /**
      * The name of the class that represent a single row for this table
      *
@@ -297,9 +297,9 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
             }
         }
         $this->_eventManager = $config['eventManager'] ?? new EventManager();
-        $this->_behaviors = $config['behaviors'] ?? new \Cake\ORM\BehaviorRegistry();
+        $this->_behaviors = $config['behaviors'] ?? new BehaviorRegistry();
         $this->_behaviors->setTable($this);
-        $this->_associations = $config['associations'] ?? new \Cake\ORM\AssociationCollection();
+        $this->_associations = $config['associations'] ?? new AssociationCollection();
         $this->queryFactory = $config['queryFactory'] ?? new QueryFactory();
         $this->initialize($config);
         $this->getEventManager()->on($this);
@@ -611,7 +611,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
     public function getEntityClass(): string
     {
         if (!$this->_entityClass) {
-            $default = \Cake\ORM\Entity::class;
+            $default = Entity::class;
             $self = static::class;
             $parts = explode('\\', $self);
             if ($self === self::class || count($parts) < 3) {
@@ -729,7 +729,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
      *
      * @return \Cake\ORM\BehaviorRegistry The BehaviorRegistry instance.
      */
-    public function behaviors(): \Cake\ORM\BehaviorRegistry
+    public function behaviors(): BehaviorRegistry
     {
         return $this->_behaviors;
     }
@@ -743,7 +743,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
      * @phpstan-return (TName is key-of<TBehaviors> ? TBehaviors[TName] : \Cake\ORM\Behavior)
      * @throws \InvalidArgumentException If the behavior does not exist.
      */
-    public function getBehavior(string $name): \Cake\ORM\Behavior
+    public function getBehavior(string $name): Behavior
     {
         if (!$this->_behaviors->has($name)) {
             throw new InvalidArgumentException(sprintf('The `%s` behavior is not defined on `%s`.', $name, static::class));
@@ -778,7 +778,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
      * @return \Cake\ORM\Association The association.
      * @throws \InvalidArgumentException
      */
-    public function getAssociation(string $name): \Cake\ORM\Association
+    public function getAssociation(string $name): Association
     {
         $association = $this->findAssociation($name);
         if (!$association) {
@@ -819,7 +819,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
      * @param string $name The alias used for the association.
      * @return \Cake\ORM\Association|null Either the association or null.
      */
-    protected function findAssociation(string $name): ?\Cake\ORM\Association
+    protected function findAssociation(string $name): ?Association
     {
         if (!str_contains($name, '.')) {
             return $this->_associations->get($name);
@@ -839,7 +839,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
      *
      * @return \Cake\ORM\AssociationCollection The collection of association objects.
      */
-    public function associations(): \Cake\ORM\AssociationCollection
+    public function associations(): AssociationCollection
     {
         return $this->_associations;
     }
@@ -1747,7 +1747,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
             }
             $entity->setNew(!$this->exists($conditions));
         }
-        $mode = $entity->isNew() ? \Cake\ORM\RulesChecker::CREATE : \Cake\ORM\RulesChecker::UPDATE;
+        $mode = $entity->isNew() ? RulesChecker::CREATE : RulesChecker::UPDATE;
         if ($options['checkRules'] && !$this->checkRules($entity, $mode, $options)) {
             return \false;
         }
@@ -2179,7 +2179,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
             $msg = 'Deleting requires all primary key values.';
             throw new InvalidArgumentException($msg);
         }
-        if ($options['checkRules'] && !$this->checkRules($entity, \Cake\ORM\RulesChecker::DELETE, $options)) {
+        if ($options['checkRules'] && !$this->checkRules($entity, RulesChecker::DELETE, $options)) {
             return \false;
         }
         $event = $this->dispatchEvent('Model.beforeDelete', ['entity' => $entity, 'options' => $options]);
@@ -2380,7 +2380,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
      * @return \Cake\ORM\Association
      * @throws \Cake\Database\Exception\DatabaseException if no association with such name exists
      */
-    public function __get(string $property): \Cake\ORM\Association
+    public function __get(string $property): Association
     {
         $association = $this->_associations->get($property);
         if (!$association) {
@@ -2408,9 +2408,9 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
      * @return \Cake\ORM\Marshaller
      * @see \Cake\ORM\Marshaller
      */
-    public function marshaller(): \Cake\ORM\Marshaller
+    public function marshaller(): Marshaller
     {
-        return new \Cake\ORM\Marshaller($this);
+        return new Marshaller($this);
     }
     /**
      * {@inheritDoc}
@@ -2712,7 +2712,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
      * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
      * @return \Cake\ORM\RulesChecker
      */
-    public function buildRules(\Cake\ORM\RulesChecker $rules): \Cake\ORM\RulesChecker
+    public function buildRules(RulesChecker $rules): RulesChecker
     {
         return $rules;
     }
@@ -2748,7 +2748,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
      */
     public function loadInto(EntityInterface|array $entities, array $contain): EntityInterface|array
     {
-        return (new \Cake\ORM\LazyEagerLoader())->loadInto($entities, $contain, $this);
+        return (new LazyEagerLoader())->loadInto($entities, $contain, $this);
     }
     /**
      * @inheritDoc

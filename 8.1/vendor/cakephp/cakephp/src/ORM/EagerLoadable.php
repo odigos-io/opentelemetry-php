@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
-use Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\Exception\DatabaseException;
 /**
  * Represents a single level in the associations tree to be eagerly loaded
  * for a specific query. This contains all the information required to
@@ -44,7 +44,7 @@ class EagerLoadable
      *
      * @var \Cake\ORM\Association|null
      */
-    protected ?\Cake\ORM\Association $_instance = null;
+    protected ?Association $_instance = null;
     /**
      * A list of options to pass to the association object for loading
      * the records.
@@ -137,7 +137,7 @@ class EagerLoadable
      * @param \Cake\ORM\EagerLoadable $association The association to load.
      * @return void
      */
-    public function addAssociation(string $name, \Cake\ORM\EagerLoadable $association): void
+    public function addAssociation(string $name, EagerLoadable $association): void
     {
         $this->_associations[$name] = $association;
     }
@@ -156,7 +156,7 @@ class EagerLoadable
      * @return \Cake\ORM\Association
      * @throws \Cake\Database\Exception\DatabaseException
      */
-    public function instance(): \Cake\ORM\Association
+    public function instance(): Association
     {
         if ($this->_instance === null) {
             throw new DatabaseException('No instance set.');

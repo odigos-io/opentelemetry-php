@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Broadcasting;
+namespace Odigos\Illuminate\Broadcasting;
 
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Foundation\Events\Dispatchable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 class AnonymousEvent implements ShouldBroadcast
 {
-    use Dispatchable, \Illuminate\Broadcasting\InteractsWithBroadcasting, \Illuminate\Broadcasting\InteractsWithSockets;
+    use Dispatchable, InteractsWithBroadcasting, InteractsWithSockets;
     /**
      * The connection the event should be broadcast on.
      */
@@ -33,7 +33,7 @@ class AnonymousEvent implements ShouldBroadcast
     /**
      * Create a new anonymous broadcastable event instance.
      */
-    public function __construct(protected \Illuminate\Broadcasting\Channel|array|string $channels)
+    public function __construct(protected Channel|array|string $channels)
     {
         $this->channels = Arr::wrap($channels);
     }
@@ -108,7 +108,7 @@ class AnonymousEvent implements ShouldBroadcast
      *
      * @return \Illuminate\Broadcasting\Channel|\Illuminate\Broadcasting\Channel[]|string[]|string
      */
-    public function broadcastOn(): \Illuminate\Broadcasting\Channel|array
+    public function broadcastOn(): Channel|array
     {
         return $this->channels;
     }

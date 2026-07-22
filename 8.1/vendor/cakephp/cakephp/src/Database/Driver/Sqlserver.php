@@ -14,24 +14,24 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Driver;
+namespace Odigos\Cake\Database\Driver;
 
-use Cake\Database\Driver;
-use Cake\Database\DriverFeatureEnum;
-use Cake\Database\Expression\FunctionExpression;
-use Cake\Database\Expression\OrderByExpression;
-use Cake\Database\Expression\OrderClauseExpression;
-use Cake\Database\Expression\TupleComparison;
-use Cake\Database\Expression\UnaryExpression;
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Query;
-use Cake\Database\Query\SelectQuery;
-use Cake\Database\QueryCompiler;
-use Cake\Database\Schema\SchemaDialect;
-use Cake\Database\Schema\SqlserverSchemaDialect;
-use Cake\Database\SqlserverCompiler;
-use Cake\Database\Statement\SqlserverStatement;
-use Cake\Database\StatementInterface;
+use Odigos\Cake\Database\Driver;
+use Odigos\Cake\Database\DriverFeatureEnum;
+use Odigos\Cake\Database\Expression\FunctionExpression;
+use Odigos\Cake\Database\Expression\OrderByExpression;
+use Odigos\Cake\Database\Expression\OrderClauseExpression;
+use Odigos\Cake\Database\Expression\TupleComparison;
+use Odigos\Cake\Database\Expression\UnaryExpression;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\Query;
+use Odigos\Cake\Database\Query\SelectQuery;
+use Odigos\Cake\Database\QueryCompiler;
+use Odigos\Cake\Database\Schema\SchemaDialect;
+use Odigos\Cake\Database\Schema\SqlserverSchemaDialect;
+use Odigos\Cake\Database\SqlserverCompiler;
+use Odigos\Cake\Database\Statement\SqlserverStatement;
+use Odigos\Cake\Database\StatementInterface;
 use InvalidArgumentException;
 use PDO;
 /**
@@ -39,7 +39,7 @@ use PDO;
  */
 class Sqlserver extends Driver
 {
-    use \Cake\Database\Driver\TupleComparisonTranslatorTrait;
+    use TupleComparisonTranslatorTrait;
     /**
      * @inheritDoc
      */

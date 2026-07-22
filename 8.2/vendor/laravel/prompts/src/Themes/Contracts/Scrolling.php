@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Contracts;
+namespace Odigos\Laravel\Prompts\Themes\Contracts;
 
 interface Scrolling
 {

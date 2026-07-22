@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Translation;
+namespace Odigos\Illuminate\Translation;
 
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 class MessageSelector
 {
     /**

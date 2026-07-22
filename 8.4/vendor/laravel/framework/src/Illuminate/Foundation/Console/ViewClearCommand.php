@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Filesystem\Filesystem;
 use RuntimeException;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'view:clear')]
 class ViewClearCommand extends Command
 {

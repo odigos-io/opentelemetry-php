@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Validation\Rules;
+namespace Odigos\Illuminate\Validation\Rules;
 
-use Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Conditionable;
 use Stringable;
 class Dimensions implements Stringable
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Support\Reflector;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Reflector;
+use Odigos\Illuminate\Support\Str;
 use ReflectionFunction;
 use ReflectionMethod;
 class RouteSignatureParameters
@@ -17,7 +17,7 @@ class RouteSignatureParameters
      */
     public static function fromAction(array $action, $conditions = [])
     {
-        $callback = \Illuminate\Routing\RouteAction::containsSerializedClosure($action) ? unserialize($action['uses'])->getClosure() : $action['uses'];
+        $callback = RouteAction::containsSerializedClosure($action) ? unserialize($action['uses'])->getClosure() : $action['uses'];
         $parameters = is_string($callback) ? static::fromClassMethodString($callback) : (new ReflectionFunction($callback))->getParameters();
         return match (\true) {
             !empty($conditions['subClass']) => array_filter($parameters, fn($p) => Reflector::isParameterSubclassOf($p, $conditions['subClass'])),

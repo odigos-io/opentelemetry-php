@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Session;
+namespace Odigos\Illuminate\Session;
 
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Support\InteractsWithTime;
 use SessionHandlerInterface;
 class ArraySessionHandler implements SessionHandlerInterface
 {

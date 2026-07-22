@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default\Concerns;
+namespace Odigos\Laravel\Prompts\Themes\Default\Concerns;
 
 trait InteractsWithStrings
 {

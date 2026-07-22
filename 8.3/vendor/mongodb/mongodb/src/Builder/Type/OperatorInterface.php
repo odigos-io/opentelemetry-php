@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder\Type;
+namespace Odigos\MongoDB\Builder\Type;
 
 /**
  * Marker interface for MongoDB operators.
@@ -9,7 +9,7 @@ namespace MongoDB\Builder\Type;
 interface OperatorInterface
 {
     /** @var Encode */
-    public const ENCODE = \MongoDB\Builder\Type\Encode::Undefined;
+    public const ENCODE = Encode::Undefined;
     /** @var array<string, string|null> */
     public const PROPERTIES = [];
     /** @var string|null */

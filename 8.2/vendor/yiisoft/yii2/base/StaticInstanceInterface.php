@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 /**
  * StaticInstanceInterface is the interface for providing static instances to classes,

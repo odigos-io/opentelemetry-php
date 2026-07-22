@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Auth\Notifications;
+namespace Odigos\Illuminate\Auth\Notifications;
 
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Lang;
+use Odigos\Illuminate\Notifications\Messages\MailMessage;
+use Odigos\Illuminate\Notifications\Notification;
+use Odigos\Illuminate\Support\Facades\Lang;
 class ResetPassword extends Notification
 {
     /**

@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Foundation\Testing\Concerns;
+namespace Odigos\Illuminate\Foundation\Testing\Concerns;
 
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Testing\Constraints\CountInDatabase;
-use Illuminate\Testing\Constraints\HasInDatabase;
-use Illuminate\Testing\Constraints\NotSoftDeletedInDatabase;
-use Illuminate\Testing\Constraints\SoftDeletedInDatabase;
+use Odigos\Illuminate\Contracts\Support\Jsonable;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Events\QueryExecuted;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Facades\DB;
+use Odigos\Illuminate\Testing\Constraints\CountInDatabase;
+use Odigos\Illuminate\Testing\Constraints\HasInDatabase;
+use Odigos\Illuminate\Testing\Constraints\NotSoftDeletedInDatabase;
+use Odigos\Illuminate\Testing\Constraints\SoftDeletedInDatabase;
 use Odigos\PHPUnit\Framework\Constraint\LogicalNot as ReverseConstraint;
 trait InteractsWithDatabase
 {

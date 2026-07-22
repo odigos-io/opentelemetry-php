@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel;
+namespace Odigos\Symfony\Component\HttpKernel;
 
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\Mime\Part\AbstractPart;
-use Symfony\Component\Mime\Part\DataPart;
-use Symfony\Component\Mime\Part\Multipart\FormDataPart;
-use Symfony\Component\Mime\Part\TextPart;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Odigos\Symfony\Component\HttpClient\HttpClient;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Odigos\Symfony\Component\Mime\Part\AbstractPart;
+use Odigos\Symfony\Component\Mime\Part\DataPart;
+use Odigos\Symfony\Component\Mime\Part\Multipart\FormDataPart;
+use Odigos\Symfony\Component\Mime\Part\TextPart;
+use Odigos\Symfony\Contracts\HttpClient\HttpClientInterface;
 // Help opcache.preload discover always-needed symbols
 class_exists(ResponseHeaderBag::class);
 /**
@@ -26,7 +26,7 @@ class_exists(ResponseHeaderBag::class);
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-final class HttpClientKernel implements \Symfony\Component\HttpKernel\HttpKernelInterface
+final class HttpClientKernel implements HttpKernelInterface
 {
     private HttpClientInterface $client;
     public function __construct(?HttpClientInterface $client = null)
@@ -36,7 +36,7 @@ final class HttpClientKernel implements \Symfony\Component\HttpKernel\HttpKernel
         }
         $this->client = $client ?? HttpClient::create();
     }
-    public function handle(Request $request, int $type = \Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST, bool $catch = \true): Response
+    public function handle(Request $request, int $type = HttpKernelInterface::MAIN_REQUEST, bool $catch = \true): Response
     {
         $headers = $this->getHeaders($request);
         $body = '';

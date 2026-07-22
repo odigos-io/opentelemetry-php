@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Broadcasting;
+namespace Odigos\Illuminate\Broadcasting;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Broadcast;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Routing\Controller;
+use Odigos\Illuminate\Support\Facades\Broadcast;
+use Odigos\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 class BroadcastController extends Controller
 {
     /**

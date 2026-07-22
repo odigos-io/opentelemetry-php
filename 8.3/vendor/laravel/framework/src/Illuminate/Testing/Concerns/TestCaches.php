@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Testing\Concerns;
+namespace Odigos\Illuminate\Testing\Concerns;
 
-use Illuminate\Support\Facades\ParallelTesting;
+use Odigos\Illuminate\Support\Facades\ParallelTesting;
 trait TestCaches
 {
     /**

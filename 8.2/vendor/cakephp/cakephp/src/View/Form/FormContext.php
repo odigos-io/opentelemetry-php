@@ -14,17 +14,17 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Form;
+namespace Odigos\Cake\View\Form;
 
-use Cake\Form\Form;
-use Cake\Utility\Hash;
+use Odigos\Cake\Form\Form;
+use Odigos\Cake\Utility\Hash;
 /**
  * Provides a context provider for {@link \Cake\Form\Form} instances.
  *
  * This context provider simply fulfils the interface requirements
  * that FormHelper has and allows access to the form data.
  */
-class FormContext implements \Cake\View\Form\ContextInterface
+class FormContext implements ContextInterface
 {
     /**
      * The form object.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
 use BadMethodCallException;
 abstract class Controller
@@ -23,7 +23,7 @@ abstract class Controller
         foreach ((array) $middleware as $m) {
             $this->middleware[] = ['middleware' => $m, 'options' => &$options];
         }
-        return new \Illuminate\Routing\ControllerMiddlewareOptions($options);
+        return new ControllerMiddlewareOptions($options);
     }
     /**
      * Get the middleware assigned to the controller.

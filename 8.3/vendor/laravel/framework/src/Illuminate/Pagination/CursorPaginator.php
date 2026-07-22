@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Pagination;
+namespace Odigos\Illuminate\Pagination;
 
 use ArrayAccess;
 use Countable;
-use Illuminate\Contracts\Pagination\CursorPaginator as PaginatorContract;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Pagination\CursorPaginator as PaginatorContract;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Jsonable;
+use Odigos\Illuminate\Support\Collection;
 use IteratorAggregate;
 use JsonSerializable;
 /**
@@ -22,7 +22,7 @@ use JsonSerializable;
  * @implements IteratorAggregate<TKey, TValue>
  * @implements PaginatorContract<TKey, TValue>
  */
-class CursorPaginator extends \Illuminate\Pagination\AbstractCursorPaginator implements Arrayable, ArrayAccess, Countable, IteratorAggregate, Jsonable, JsonSerializable, PaginatorContract
+class CursorPaginator extends AbstractCursorPaginator implements Arrayable, ArrayAccess, Countable, IteratorAggregate, Jsonable, JsonSerializable, PaginatorContract
 {
     /**
      * Indicates whether there are more items in the data source.
@@ -84,7 +84,7 @@ class CursorPaginator extends \Illuminate\Pagination\AbstractCursorPaginator imp
      */
     public function render($view = null, $data = [])
     {
-        return static::viewFactory()->make($view ?: \Illuminate\Pagination\Paginator::$defaultSimpleView, array_merge($data, ['paginator' => $this]));
+        return static::viewFactory()->make($view ?: Paginator::$defaultSimpleView, array_merge($data, ['paginator' => $this]));
     }
     /**
      * Determine if there are more items in the data source.

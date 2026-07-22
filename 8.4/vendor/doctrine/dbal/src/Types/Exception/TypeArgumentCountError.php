@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types\Exception;
+namespace Odigos\Doctrine\DBAL\Types\Exception;
 
 use ArgumentCountError;
 use Exception;
 use function sprintf;
-final class TypeArgumentCountError extends Exception implements \Doctrine\DBAL\Types\Exception\TypesException
+final class TypeArgumentCountError extends Exception implements TypesException
 {
     public static function new(string $name, ArgumentCountError $previous): self
     {

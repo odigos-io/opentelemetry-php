@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Query;
-use Cake\Database\TypeMap;
-use Cake\Database\TypeMapTrait;
-use Cake\Database\ValueBinder;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\Query;
+use Odigos\Cake\Database\TypeMap;
+use Odigos\Cake\Database\TypeMapTrait;
+use Odigos\Cake\Database\ValueBinder;
 use Closure;
 use Countable;
 use InvalidArgumentException;
@@ -131,7 +131,7 @@ class QueryExpression implements ExpressionInterface, Countable
     public function eq(ExpressionInterface|string $field, mixed $value, ?string $type = null)
     {
         $type ??= $this->_calculateType($field);
-        return $this->add(new \Cake\Database\Expression\ComparisonExpression($field, $value, $type, '='));
+        return $this->add(new ComparisonExpression($field, $value, $type, '='));
     }
     /**
      * Adds a new condition to the expression object in the form "field != value".
@@ -146,7 +146,7 @@ class QueryExpression implements ExpressionInterface, Countable
     public function notEq(ExpressionInterface|string $field, mixed $value, ?string $type = null)
     {
         $type ??= $this->_calculateType($field);
-        return $this->add(new \Cake\Database\Expression\ComparisonExpression($field, $value, $type, '!='));
+        return $this->add(new ComparisonExpression($field, $value, $type, '!='));
     }
     /**
      * Adds a new condition to the expression object in the form "field > value".
@@ -159,7 +159,7 @@ class QueryExpression implements ExpressionInterface, Countable
     public function gt(ExpressionInterface|string $field, mixed $value, ?string $type = null)
     {
         $type ??= $this->_calculateType($field);
-        return $this->add(new \Cake\Database\Expression\ComparisonExpression($field, $value, $type, '>'));
+        return $this->add(new ComparisonExpression($field, $value, $type, '>'));
     }
     /**
      * Adds a new condition to the expression object in the form "field < value".
@@ -172,7 +172,7 @@ class QueryExpression implements ExpressionInterface, Countable
     public function lt(ExpressionInterface|string $field, mixed $value, ?string $type = null)
     {
         $type ??= $this->_calculateType($field);
-        return $this->add(new \Cake\Database\Expression\ComparisonExpression($field, $value, $type, '<'));
+        return $this->add(new ComparisonExpression($field, $value, $type, '<'));
     }
     /**
      * Adds a new condition to the expression object in the form "field >= value".
@@ -185,7 +185,7 @@ class QueryExpression implements ExpressionInterface, Countable
     public function gte(ExpressionInterface|string $field, mixed $value, ?string $type = null)
     {
         $type ??= $this->_calculateType($field);
-        return $this->add(new \Cake\Database\Expression\ComparisonExpression($field, $value, $type, '>='));
+        return $this->add(new ComparisonExpression($field, $value, $type, '>='));
     }
     /**
      * Adds a new condition to the expression object in the form "field <= value".
@@ -198,7 +198,7 @@ class QueryExpression implements ExpressionInterface, Countable
     public function lte(ExpressionInterface|string $field, mixed $value, ?string $type = null)
     {
         $type ??= $this->_calculateType($field);
-        return $this->add(new \Cake\Database\Expression\ComparisonExpression($field, $value, $type, '<='));
+        return $this->add(new ComparisonExpression($field, $value, $type, '<='));
     }
     /**
      * Adds a new condition to the expression object in the form "field IS NULL".
@@ -210,9 +210,9 @@ class QueryExpression implements ExpressionInterface, Countable
     public function isNull(ExpressionInterface|string $field)
     {
         if (!$field instanceof ExpressionInterface) {
-            $field = new \Cake\Database\Expression\IdentifierExpression($field);
+            $field = new IdentifierExpression($field);
         }
-        return $this->add(new \Cake\Database\Expression\UnaryExpression('IS NULL', $field, \Cake\Database\Expression\UnaryExpression::POSTFIX));
+        return $this->add(new UnaryExpression('IS NULL', $field, UnaryExpression::POSTFIX));
     }
     /**
      * Adds a new condition to the expression object in the form "field IS NOT NULL".
@@ -224,9 +224,9 @@ class QueryExpression implements ExpressionInterface, Countable
     public function isNotNull(ExpressionInterface|string $field)
     {
         if (!$field instanceof ExpressionInterface) {
-            $field = new \Cake\Database\Expression\IdentifierExpression($field);
+            $field = new IdentifierExpression($field);
         }
-        return $this->add(new \Cake\Database\Expression\UnaryExpression('IS NOT NULL', $field, \Cake\Database\Expression\UnaryExpression::POSTFIX));
+        return $this->add(new UnaryExpression('IS NOT NULL', $field, UnaryExpression::POSTFIX));
     }
     /**
      * Adds a new condition to the expression object in the form "field LIKE value".
@@ -239,7 +239,7 @@ class QueryExpression implements ExpressionInterface, Countable
     public function like(ExpressionInterface|string $field, mixed $value, ?string $type = null)
     {
         $type ??= $this->_calculateType($field);
-        return $this->add(new \Cake\Database\Expression\ComparisonExpression($field, $value, $type, 'LIKE'));
+        return $this->add(new ComparisonExpression($field, $value, $type, 'LIKE'));
     }
     /**
      * Adds a new condition to the expression object in the form "field NOT LIKE value".
@@ -252,7 +252,7 @@ class QueryExpression implements ExpressionInterface, Countable
     public function notLike(ExpressionInterface|string $field, mixed $value, ?string $type = null)
     {
         $type ??= $this->_calculateType($field);
-        return $this->add(new \Cake\Database\Expression\ComparisonExpression($field, $value, $type, 'NOT LIKE'));
+        return $this->add(new ComparisonExpression($field, $value, $type, 'NOT LIKE'));
     }
     /**
      * Adds a new condition to the expression object in the form
@@ -269,7 +269,7 @@ class QueryExpression implements ExpressionInterface, Countable
         $type = $type ?: 'string';
         $type .= '[]';
         $values = $values instanceof ExpressionInterface ? $values : (array) $values;
-        return $this->add(new \Cake\Database\Expression\ComparisonExpression($field, $values, $type, 'IN'));
+        return $this->add(new ComparisonExpression($field, $values, $type, 'IN'));
     }
     /**
      * Returns a new case expression object.
@@ -292,12 +292,12 @@ class QueryExpression implements ExpressionInterface, Countable
      *  from the value.
      * @return \Cake\Database\Expression\CaseStatementExpression
      */
-    public function case(mixed $value = null, ?string $type = null): \Cake\Database\Expression\CaseStatementExpression
+    public function case(mixed $value = null, ?string $type = null): CaseStatementExpression
     {
         if (func_num_args() > 0) {
-            $expression = new \Cake\Database\Expression\CaseStatementExpression($value, $type);
+            $expression = new CaseStatementExpression($value, $type);
         } else {
-            $expression = new \Cake\Database\Expression\CaseStatementExpression();
+            $expression = new CaseStatementExpression();
         }
         return $expression->setTypeMap($this->getTypeMap());
     }
@@ -316,7 +316,7 @@ class QueryExpression implements ExpressionInterface, Countable
         $type = $type ?: 'string';
         $type .= '[]';
         $values = $values instanceof ExpressionInterface ? $values : (array) $values;
-        return $this->add(new \Cake\Database\Expression\ComparisonExpression($field, $values, $type, 'NOT IN'));
+        return $this->add(new ComparisonExpression($field, $values, $type, 'NOT IN'));
     }
     /**
      * Adds a new condition to the expression object in the form
@@ -341,7 +341,7 @@ class QueryExpression implements ExpressionInterface, Countable
      */
     public function exists(ExpressionInterface $expression)
     {
-        return $this->add(new \Cake\Database\Expression\UnaryExpression('EXISTS', $expression, \Cake\Database\Expression\UnaryExpression::PREFIX));
+        return $this->add(new UnaryExpression('EXISTS', $expression, UnaryExpression::PREFIX));
     }
     /**
      * Adds a new condition to the expression object in the form "NOT EXISTS (...)".
@@ -351,7 +351,7 @@ class QueryExpression implements ExpressionInterface, Countable
      */
     public function notExists(ExpressionInterface $expression)
     {
-        return $this->add(new \Cake\Database\Expression\UnaryExpression('NOT EXISTS', $expression, \Cake\Database\Expression\UnaryExpression::PREFIX));
+        return $this->add(new UnaryExpression('NOT EXISTS', $expression, UnaryExpression::PREFIX));
     }
     /**
      * Adds a new condition to the expression object in the form
@@ -366,7 +366,7 @@ class QueryExpression implements ExpressionInterface, Countable
     public function between(ExpressionInterface|string $field, mixed $from, mixed $to, ?string $type = null)
     {
         $type ??= $this->_calculateType($field);
-        return $this->add(new \Cake\Database\Expression\BetweenExpression($field, $from, $to, $type));
+        return $this->add(new BetweenExpression($field, $from, $to, $type));
     }
     /**
      * Returns a new QueryExpression object containing all the conditions passed
@@ -439,7 +439,7 @@ class QueryExpression implements ExpressionInterface, Countable
             if ($field instanceof ExpressionInterface) {
                 return $field;
             }
-            return new \Cake\Database\Expression\IdentifierExpression($field);
+            return new IdentifierExpression($field);
         };
         return $this->eq($wrapIdentifier($leftField), $wrapIdentifier($rightField));
     }
@@ -570,7 +570,7 @@ class QueryExpression implements ExpressionInterface, Countable
                 continue;
             }
             if ($isNot) {
-                $this->_conditions[] = new \Cake\Database\Expression\UnaryExpression('NOT', new static($c, $typeMap));
+                $this->_conditions[] = new UnaryExpression('NOT', new static($c, $typeMap));
                 continue;
             }
             if (!$numericKey) {
@@ -629,10 +629,10 @@ class QueryExpression implements ExpressionInterface, Countable
             $value = $value instanceof ExpressionInterface ? $value : (array) $value;
         }
         if ($operator === 'IS' && $value === null) {
-            return new \Cake\Database\Expression\UnaryExpression('IS NULL', new \Cake\Database\Expression\IdentifierExpression($expression), \Cake\Database\Expression\UnaryExpression::POSTFIX);
+            return new UnaryExpression('IS NULL', new IdentifierExpression($expression), UnaryExpression::POSTFIX);
         }
         if ($operator === 'IS NOT' && $value === null) {
-            return new \Cake\Database\Expression\UnaryExpression('IS NOT NULL', new \Cake\Database\Expression\IdentifierExpression($expression), \Cake\Database\Expression\UnaryExpression::POSTFIX);
+            return new UnaryExpression('IS NOT NULL', new IdentifierExpression($expression), UnaryExpression::POSTFIX);
         }
         if ($operator === 'IS' && $value !== null) {
             $operator = '=';
@@ -643,7 +643,7 @@ class QueryExpression implements ExpressionInterface, Countable
         if ($value === null && $this->_conjunction !== ',') {
             throw new InvalidArgumentException(sprintf('Expression `%s` has invalid `null` value.' . ' If `null` is a valid value, operator (IS, IS NOT) is missing.', $expression));
         }
-        return new \Cake\Database\Expression\ComparisonExpression($expression, $value, $type, $operator);
+        return new ComparisonExpression($expression, $value, $type, $operator);
     }
     /**
      * Returns the type name for the passed field if it was stored in the typeMap
@@ -653,7 +653,7 @@ class QueryExpression implements ExpressionInterface, Countable
      */
     protected function _calculateType(ExpressionInterface|string $field): ?string
     {
-        $field = $field instanceof \Cake\Database\Expression\IdentifierExpression ? $field->getIdentifier() : $field;
+        $field = $field instanceof IdentifierExpression ? $field->getIdentifier() : $field;
         if (!is_string($field)) {
             return null;
         }

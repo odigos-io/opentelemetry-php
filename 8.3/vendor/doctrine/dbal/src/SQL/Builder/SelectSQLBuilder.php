@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\SQL\Builder;
+namespace Odigos\Doctrine\DBAL\SQL\Builder;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Query\SelectQuery;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Query\SelectQuery;
 interface SelectSQLBuilder
 {
     /** @throws Exception */

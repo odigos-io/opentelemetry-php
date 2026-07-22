@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Header;
+namespace Odigos\Symfony\Component\Mime\Header;
 
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Exception\RfcComplianceException;
+use Odigos\Symfony\Component\Mime\Address;
+use Odigos\Symfony\Component\Mime\Exception\RfcComplianceException;
 /**
  * A Mailbox list MIME Header for something like From, To, Cc, and Bcc (one or more named addresses).
  *
  * @author Chris Corbyn
  */
-final class MailboxListHeader extends \Symfony\Component\Mime\Header\AbstractHeader
+final class MailboxListHeader extends AbstractHeader
 {
     private array $addresses = [];
     /**

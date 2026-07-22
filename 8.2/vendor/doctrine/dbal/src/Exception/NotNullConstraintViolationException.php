@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
 /**
  * Exception for a NOT NULL constraint violation detected in the driver.
  */
-class NotNullConstraintViolationException extends \Doctrine\DBAL\Exception\ConstraintViolationException
+class NotNullConstraintViolationException extends ConstraintViolationException
 {
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
-use Illuminate\Contracts\Queue\QueueableCollection;
-use Illuminate\Contracts\Queue\QueueableEntity;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection as BaseCollection;
+use Odigos\Illuminate\Contracts\Queue\QueueableCollection;
+use Odigos\Illuminate\Contracts\Queue\QueueableEntity;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection as BaseCollection;
 use LogicException;
 /**
  * @template TKey of array-key
@@ -29,7 +29,7 @@ class Collection extends BaseCollection implements QueueableCollection
      */
     public function find($key, $default = null)
     {
-        if ($key instanceof \Illuminate\Database\Eloquent\Model) {
+        if ($key instanceof Model) {
             $key = $key->getKey();
         }
         if ($key instanceof Arrayable) {
@@ -59,7 +59,7 @@ class Collection extends BaseCollection implements QueueableCollection
         } elseif (!is_array($key) && !is_null($result)) {
             return $result;
         }
-        $exception = new \Illuminate\Database\Eloquent\ModelNotFoundException();
+        $exception = new ModelNotFoundException();
         if (!$model = head($this->items)) {
             throw $exception;
         }
@@ -281,7 +281,7 @@ class Collection extends BaseCollection implements QueueableCollection
         if (func_num_args() > 1 || $this->useAsCallable($key)) {
             return parent::contains(...func_get_args());
         }
-        if ($key instanceof \Illuminate\Database\Eloquent\Model) {
+        if ($key instanceof Model) {
             return parent::contains(fn($model) => $model->is($key));
         }
         return parent::contains(fn($model) => $model->getKey() == $key);
@@ -335,7 +335,7 @@ class Collection extends BaseCollection implements QueueableCollection
     public function map(callable $callback)
     {
         $result = parent::map($callback);
-        return $result->contains(fn($item) => !$item instanceof \Illuminate\Database\Eloquent\Model) ? $result->toBase() : $result;
+        return $result->contains(fn($item) => !$item instanceof Model) ? $result->toBase() : $result;
     }
     /**
      * Run an associative map over each of the items.
@@ -351,7 +351,7 @@ class Collection extends BaseCollection implements QueueableCollection
     public function mapWithKeys(callable $callback)
     {
         $result = parent::mapWithKeys($callback);
-        return $result->contains(fn($item) => !$item instanceof \Illuminate\Database\Eloquent\Model) ? $result->toBase() : $result;
+        return $result->contains(fn($item) => !$item instanceof Model) ? $result->toBase() : $result;
     }
     /**
      * Reload a fresh model instance from the database for all the entities.

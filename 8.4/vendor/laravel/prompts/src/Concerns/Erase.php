@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Prompts\Concerns;
+namespace Odigos\Laravel\Prompts\Concerns;
 
 trait Erase
 {

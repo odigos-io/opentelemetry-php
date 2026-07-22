@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Contracts\Routing\UrlRoutable;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Routing\Exceptions\BackedEnumCaseNotFoundException;
-use Illuminate\Support\Reflector;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Routing\UrlRoutable;
+use Odigos\Illuminate\Database\Eloquent\ModelNotFoundException;
+use Odigos\Illuminate\Routing\Exceptions\BackedEnumCaseNotFoundException;
+use Odigos\Illuminate\Support\Reflector;
+use Odigos\Illuminate\Support\Str;
 class ImplicitRouteBinding
 {
     /**

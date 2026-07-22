@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache\Events;
+namespace Odigos\Illuminate\Cache\Events;
 
-class RetrievingKey extends \Illuminate\Cache\Events\CacheEvent
+class RetrievingKey extends CacheEvent
 {
     //
 }

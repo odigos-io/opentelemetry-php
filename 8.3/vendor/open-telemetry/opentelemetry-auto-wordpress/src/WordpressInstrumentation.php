@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Wordpress;
 
-use Nyholm\Psr7\Factory\Psr17Factory;
-use Nyholm\Psr7Server\ServerRequestCreator;
+use Odigos\Nyholm\Psr7\Factory\Psr17Factory;
+use Odigos\Nyholm\Psr7Server\ServerRequestCreator;
 use OpenTelemetry\API\Globals;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Trace\Span;

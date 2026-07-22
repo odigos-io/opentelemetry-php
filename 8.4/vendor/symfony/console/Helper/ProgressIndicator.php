@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Helper;
+namespace Odigos\Symfony\Component\Console\Helper;
 
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Exception\LogicException;
-use Symfony\Component\Console\Output\ConsoleSectionOutput;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Console\Exception\LogicException;
+use Odigos\Symfony\Component\Console\Output\ConsoleSectionOutput;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
@@ -188,6 +188,6 @@ class ProgressIndicator
      */
     private static function initPlaceholderFormatters(): array
     {
-        return ['indicator' => static fn(self $indicator) => $indicator->finished ? $indicator->finishedIndicatorValue : $indicator->indicatorValues[$indicator->indicatorCurrent % \count($indicator->indicatorValues)], 'message' => static fn(self $indicator) => $indicator->message, 'elapsed' => static fn(self $indicator) => \Symfony\Component\Console\Helper\Helper::formatTime(time() - $indicator->startTime, 2), 'memory' => static fn() => \Symfony\Component\Console\Helper\Helper::formatMemory(memory_get_usage(\true))];
+        return ['indicator' => static fn(self $indicator) => $indicator->finished ? $indicator->finishedIndicatorValue : $indicator->indicatorValues[$indicator->indicatorCurrent % \count($indicator->indicatorValues)], 'message' => static fn(self $indicator) => $indicator->message, 'elapsed' => static fn(self $indicator) => Helper::formatTime(time() - $indicator->startTime, 2), 'memory' => static fn() => Helper::formatMemory(memory_get_usage(\true))];
     }
 }

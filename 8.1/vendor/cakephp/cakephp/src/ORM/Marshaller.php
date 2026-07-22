@@ -14,17 +14,17 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
 use ArrayObject;
-use Cake\Collection\Collection;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Database\Expression\TupleComparison;
-use Cake\Database\TypeFactory;
-use Cake\Datasource\EntityInterface;
-use Cake\Datasource\InvalidPropertyInterface;
-use Cake\ORM\Association\BelongsToMany;
-use Cake\Utility\Hash;
+use Odigos\Cake\Collection\Collection;
+use Odigos\Cake\Database\Expression\QueryExpression;
+use Odigos\Cake\Database\Expression\TupleComparison;
+use Odigos\Cake\Database\TypeFactory;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Datasource\InvalidPropertyInterface;
+use Odigos\Cake\ORM\Association\BelongsToMany;
+use Odigos\Cake\Utility\Hash;
 use InvalidArgumentException;
 /**
  * Contains logic to convert array data into entities.
@@ -38,19 +38,19 @@ use InvalidArgumentException;
  */
 class Marshaller
 {
-    use \Cake\ORM\AssociationsNormalizerTrait;
+    use AssociationsNormalizerTrait;
     /**
      * The table instance this marshaller is for.
      *
      * @var \Cake\ORM\Table
      */
-    protected \Cake\ORM\Table $_table;
+    protected Table $_table;
     /**
      * Constructor.
      *
      * @param \Cake\ORM\Table $table The table this marshaller is for.
      */
-    public function __construct(\Cake\ORM\Table $table)
+    public function __construct(Table $table)
     {
         $this->_table = $table;
     }
@@ -112,7 +112,7 @@ class Marshaller
         $behaviors = $this->_table->behaviors();
         foreach ($behaviors->loaded() as $name) {
             $behavior = $behaviors->get($name);
-            if ($behavior instanceof \Cake\ORM\PropertyMarshalInterface) {
+            if ($behavior instanceof PropertyMarshalInterface) {
                 $map += $behavior->buildMarshalMap($this, $map, $options);
             }
         }
@@ -270,19 +270,19 @@ class Marshaller
      * @param array<string, mixed> $options List of options.
      * @return \Cake\Datasource\EntityInterface|array<\Cake\Datasource\EntityInterface>|null
      */
-    protected function _marshalAssociation(\Cake\ORM\Association $assoc, mixed $value, array $options): EntityInterface|array|null
+    protected function _marshalAssociation(Association $assoc, mixed $value, array $options): EntityInterface|array|null
     {
         if (!is_array($value)) {
             return null;
         }
         $targetTable = $assoc->getTarget();
         $marshaller = $targetTable->marshaller();
-        $types = [\Cake\ORM\Association::ONE_TO_ONE, \Cake\ORM\Association::MANY_TO_ONE];
+        $types = [Association::ONE_TO_ONE, Association::MANY_TO_ONE];
         $type = $assoc->type();
         if (in_array($type, $types, \true)) {
             return $marshaller->one($value, $options);
         }
-        if ($type === \Cake\ORM\Association::ONE_TO_MANY || $type === \Cake\ORM\Association::MANY_TO_MANY) {
+        if ($type === Association::ONE_TO_MANY || $type === Association::MANY_TO_MANY) {
             $hasIds = array_key_exists('_ids', $value);
             $onlyIds = array_key_exists('onlyIds', $options) && $options['onlyIds'];
             if ($hasIds && is_array($value['_ids'])) {
@@ -292,7 +292,7 @@ class Marshaller
                 return [];
             }
         }
-        if ($type === \Cake\ORM\Association::MANY_TO_MANY) {
+        if ($type === Association::MANY_TO_MANY) {
             assert($assoc instanceof BelongsToMany);
             return $marshaller->_belongsToMany($assoc, $value, $options);
         }
@@ -420,7 +420,7 @@ class Marshaller
      * @param array $ids The list of ids to load.
      * @return array<\Cake\Datasource\EntityInterface> An array of entities.
      */
-    protected function _loadAssociatedByIds(\Cake\ORM\Association $assoc, array $ids): array
+    protected function _loadAssociatedByIds(Association $assoc, array $ids): array
     {
         if (!$ids) {
             return [];
@@ -647,7 +647,7 @@ class Marshaller
      * @param array<string, mixed> $options List of options.
      * @return \Cake\Datasource\EntityInterface|array<\Cake\Datasource\EntityInterface>|null
      */
-    protected function _mergeAssociation(EntityInterface|array|null $original, \Cake\ORM\Association $assoc, mixed $value, array $options): EntityInterface|array|null
+    protected function _mergeAssociation(EntityInterface|array|null $original, Association $assoc, mixed $value, array $options): EntityInterface|array|null
     {
         if (!$original) {
             return $this->_marshalAssociation($assoc, $value, $options);
@@ -657,17 +657,17 @@ class Marshaller
         }
         $targetTable = $assoc->getTarget();
         $marshaller = $targetTable->marshaller();
-        $types = [\Cake\ORM\Association::ONE_TO_ONE, \Cake\ORM\Association::MANY_TO_ONE];
+        $types = [Association::ONE_TO_ONE, Association::MANY_TO_ONE];
         $type = $assoc->type();
         if (in_array($type, $types, \true)) {
             /** @var \Cake\Datasource\EntityInterface $original */
             return $marshaller->merge($original, $value, $options);
         }
-        if ($type === \Cake\ORM\Association::MANY_TO_MANY && is_array($original)) {
+        if ($type === Association::MANY_TO_MANY && is_array($original)) {
             assert($assoc instanceof BelongsToMany);
             return $marshaller->_mergeBelongsToMany($original, $assoc, $value, $options);
         }
-        if ($type === \Cake\ORM\Association::ONE_TO_MANY) {
+        if ($type === Association::ONE_TO_MANY) {
             $hasIds = array_key_exists('_ids', $value);
             $onlyIds = array_key_exists('onlyIds', $options) && $options['onlyIds'];
             if ($hasIds && is_array($value['_ids'])) {

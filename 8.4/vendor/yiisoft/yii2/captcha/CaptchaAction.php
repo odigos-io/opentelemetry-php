@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\captcha;
+namespace Odigos\yii\captcha;
 
 use Odigos\Yii;
-use yii\base\Action;
-use yii\base\InvalidConfigException;
-use yii\helpers\Url;
-use yii\web\Controller;
-use yii\web\Response;
+use Odigos\yii\base\Action;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\Url;
+use Odigos\yii\web\Controller;
+use Odigos\yii\web\Response;
 /**
  * CaptchaAction renders a CAPTCHA image.
  *
@@ -235,7 +235,7 @@ class CaptchaAction extends Action
         if (isset($this->imageLibrary)) {
             $imageLibrary = $this->imageLibrary;
         } else {
-            $imageLibrary = \yii\captcha\Captcha::checkRequirements();
+            $imageLibrary = Captcha::checkRequirements();
         }
         if ($imageLibrary === 'gd') {
             return $this->renderImageByGD($code);

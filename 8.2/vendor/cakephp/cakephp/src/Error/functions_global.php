@@ -16,8 +16,8 @@ namespace Odigos;
  * @since         4.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-use Cake\Core\Configure;
-use Cake\Error\Debugger;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Error\Debugger;
 if (!\function_exists('Odigos\debug')) {
     /**
      * Prints out debug information about given variable and returns the

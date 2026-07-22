@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Hashing;
+namespace Odigos\Illuminate\Hashing;
 
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Support\DeferrableProvider;
+use Odigos\Illuminate\Support\ServiceProvider;
 class HashServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
@@ -14,7 +14,7 @@ class HashServiceProvider extends ServiceProvider implements DeferrableProvider
     public function register()
     {
         $this->app->singleton('hash', function ($app) {
-            return new \Illuminate\Hashing\HashManager($app);
+            return new HashManager($app);
         });
         $this->app->singleton('hash.driver', function ($app) {
             return $app['hash']->driver();

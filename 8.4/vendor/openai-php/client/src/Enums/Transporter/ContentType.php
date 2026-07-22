@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Enums\Transporter;
+namespace Odigos\OpenAI\Enums\Transporter;
 
 /**
  * @internal

@@ -2,7 +2,7 @@
 
 namespace Odigos\TijsVerkoyen\CssToInlineStyles\Css\Rule;
 
-use Symfony\Component\CssSelector\Node\Specificity;
+use Odigos\Symfony\Component\CssSelector\Node\Specificity;
 use Odigos\TijsVerkoyen\CssToInlineStyles\Css\Property\Property;
 final class Rule
 {

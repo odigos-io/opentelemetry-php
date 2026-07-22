@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Retry;
+namespace Odigos\Cake\Database\Retry;
 
-use Cake\Core\Retry\RetryStrategyInterface;
-use Cake\Database\Connection;
+use Odigos\Cake\Core\Retry\RetryStrategyInterface;
+use Odigos\Cake\Database\Connection;
 use Exception;
 /**
  * Makes sure the connection to the database is alive before authorizing

@@ -1,23 +1,23 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Factories;
+namespace Odigos\Illuminate\Database\Eloquent\Factories;
 
 use Closure;
 use Odigos\Faker\Generator;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Enumerable;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\ForwardsCalls;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Enumerable;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use Throwable;
 use UnitEnum;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 /**
  * @template TModel of \Illuminate\Database\Eloquent\Model
  *
@@ -466,7 +466,7 @@ abstract class Factory
      */
     protected function parentResolvers()
     {
-        return $this->for->map(fn(\Illuminate\Database\Eloquent\Factories\BelongsToRelationship $for) => $for->recycle($this->recycle)->attributesFor($this->newModel()))->collapse()->all();
+        return $this->for->map(fn(BelongsToRelationship $for) => $for->recycle($this->recycle)->attributesFor($this->newModel()))->collapse()->all();
     }
     /**
      * Expand all attributes to their underlying values.
@@ -535,7 +535,7 @@ abstract class Factory
      */
     public function sequence(...$sequence)
     {
-        return $this->state(new \Illuminate\Database\Eloquent\Factories\Sequence(...$sequence));
+        return $this->state(new Sequence(...$sequence));
     }
     /**
      * Add a new sequenced state transformation to the model definition and update the pending creation count to the size of the sequence.
@@ -545,7 +545,7 @@ abstract class Factory
      */
     public function forEachSequence(...$sequence)
     {
-        return $this->state(new \Illuminate\Database\Eloquent\Factories\Sequence(...$sequence))->count(count($sequence));
+        return $this->state(new Sequence(...$sequence))->count(count($sequence));
     }
     /**
      * Add a new cross joined sequenced state transformation to the model definition.
@@ -555,7 +555,7 @@ abstract class Factory
      */
     public function crossJoinSequence(...$sequence)
     {
-        return $this->state(new \Illuminate\Database\Eloquent\Factories\CrossJoinSequence(...$sequence));
+        return $this->state(new CrossJoinSequence(...$sequence));
     }
     /**
      * Define a child relationship for the model.
@@ -566,7 +566,7 @@ abstract class Factory
      */
     public function has(self $factory, $relationship = null)
     {
-        return $this->newInstance(['has' => $this->has->concat([new \Illuminate\Database\Eloquent\Factories\Relationship($factory, $relationship ?? $this->guessRelationship($factory->modelName()))])]);
+        return $this->newInstance(['has' => $this->has->concat([new Relationship($factory, $relationship ?? $this->guessRelationship($factory->modelName()))])]);
     }
     /**
      * Attempt to guess the relationship name for a "has" relationship.
@@ -589,7 +589,7 @@ abstract class Factory
      */
     public function hasAttached($factory, $pivot = [], $relationship = null)
     {
-        return $this->newInstance(['has' => $this->has->concat([new \Illuminate\Database\Eloquent\Factories\BelongsToManyRelationship($factory, $pivot, $relationship ?? Str::camel(Str::plural(class_basename($factory instanceof \Illuminate\Database\Eloquent\Factories\Factory ? $factory->modelName() : Collection::wrap($factory)->first()))))])]);
+        return $this->newInstance(['has' => $this->has->concat([new BelongsToManyRelationship($factory, $pivot, $relationship ?? Str::camel(Str::plural(class_basename($factory instanceof Factory ? $factory->modelName() : Collection::wrap($factory)->first()))))])]);
     }
     /**
      * Define a parent relationship for the model.
@@ -600,7 +600,7 @@ abstract class Factory
      */
     public function for($factory, $relationship = null)
     {
-        return $this->newInstance(['for' => $this->for->concat([new \Illuminate\Database\Eloquent\Factories\BelongsToRelationship($factory, $relationship ?? Str::camel(class_basename($factory instanceof \Illuminate\Database\Eloquent\Factories\Factory ? $factory->modelName() : $factory)))])]);
+        return $this->newInstance(['for' => $this->for->concat([new BelongsToRelationship($factory, $relationship ?? Str::camel(class_basename($factory instanceof Factory ? $factory->modelName() : $factory)))])]);
     }
     /**
      * Provide model instances to use instead of any nested factory calls when creating relationships.

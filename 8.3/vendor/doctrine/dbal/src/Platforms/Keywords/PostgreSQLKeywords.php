@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\Keywords;
+namespace Odigos\Doctrine\DBAL\Platforms\Keywords;
 
 /**
  * Reserved keywords list corresponding to the PostgreSQL database platform of the oldest supported version.
  *
  * @deprecated
  */
-class PostgreSQLKeywords extends \Doctrine\DBAL\Platforms\Keywords\KeywordList
+class PostgreSQLKeywords extends KeywordList
 {
     /**
      * {@inheritDoc}

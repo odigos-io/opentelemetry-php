@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Nyholm\Psr7;
+namespace Odigos\Nyholm\Psr7;
 
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
@@ -114,7 +114,7 @@ trait MessageTrait
     public function getBody(): StreamInterface
     {
         if (null === $this->stream) {
-            $this->stream = \Nyholm\Psr7\Stream::create('');
+            $this->stream = Stream::create('');
         }
         return $this->stream;
     }

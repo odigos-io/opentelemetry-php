@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         0.2.9
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Utility;
+namespace Odigos\Cake\Utility;
 
 /**
  * Pluralize and singularize English words.

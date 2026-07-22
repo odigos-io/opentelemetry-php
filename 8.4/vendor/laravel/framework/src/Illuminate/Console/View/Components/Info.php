@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Console\View\Components;
+namespace Odigos\Illuminate\Console\View\Components;
 
-use Symfony\Component\Console\Output\OutputInterface;
-class Info extends \Illuminate\Console\View\Components\Component
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+class Info extends Component
 {
     /**
      * Renders the component using the given arguments.
@@ -14,6 +14,6 @@ class Info extends \Illuminate\Console\View\Components\Component
      */
     public function render($string, $verbosity = OutputInterface::VERBOSITY_NORMAL)
     {
-        (new \Illuminate\Console\View\Components\Line($this->output))->render('info', $string, $verbosity);
+        (new Line($this->output))->render('info', $string, $verbosity);
     }
 }

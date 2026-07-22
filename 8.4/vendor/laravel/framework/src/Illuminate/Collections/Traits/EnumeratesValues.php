@@ -1,21 +1,21 @@
 <?php
 
-namespace Illuminate\Support\Traits;
+namespace Odigos\Illuminate\Support\Traits;
 
 use BackedEnum;
 use CachingIterator;
 use Closure;
 use Exception;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Enumerable;
-use Illuminate\Support\HigherOrderCollectionProxy;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Jsonable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Enumerable;
+use Odigos\Illuminate\Support\HigherOrderCollectionProxy;
 use JsonSerializable;
 use UnexpectedValueException;
 use UnitEnum;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 /**
  * @template TKey of array-key
  *
@@ -56,7 +56,7 @@ use function Illuminate\Support\enum_value;
  */
 trait EnumeratesValues
 {
-    use \Illuminate\Support\Traits\Conditionable;
+    use Conditionable;
     /**
      * Indicates that the object's string representation should be escaped when __toString is invoked.
      *

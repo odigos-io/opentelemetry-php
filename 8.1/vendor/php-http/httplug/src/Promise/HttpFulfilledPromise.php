@@ -1,9 +1,9 @@
 <?php
 
-namespace Http\Client\Promise;
+namespace Odigos\Http\Client\Promise;
 
-use Http\Client\Exception;
-use Http\Promise\Promise;
+use Odigos\Http\Client\Exception;
+use Odigos\Http\Promise\Promise;
 use Psr\Http\Message\ResponseInterface;
 final class HttpFulfilledPromise implements Promise
 {
@@ -23,7 +23,7 @@ final class HttpFulfilledPromise implements Promise
         try {
             return new self($onFulfilled($this->response));
         } catch (Exception $e) {
-            return new \Http\Client\Promise\HttpRejectedPromise($e);
+            return new HttpRejectedPromise($e);
         }
     }
     public function getState()

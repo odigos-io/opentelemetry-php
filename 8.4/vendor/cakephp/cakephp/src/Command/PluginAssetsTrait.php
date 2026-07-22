@@ -14,14 +14,14 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use Cake\Utility\Filesystem;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Utility\Filesystem;
+use Odigos\Cake\Utility\Inflector;
 use InvalidArgumentException;
 /**
  * Trait for symlinking / copying plugin assets to app's webroot.

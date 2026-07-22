@@ -15,18 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB;
+namespace Odigos\MongoDB;
 
 use Iterator;
 use MongoDB\BSON\Document;
 use MongoDB\BSON\Int64;
-use MongoDB\Codec\DocumentCodec;
+use Odigos\MongoDB\Codec\DocumentCodec;
 use MongoDB\Driver\Exception\ConnectionException;
 use MongoDB\Driver\Exception\RuntimeException;
 use MongoDB\Driver\Exception\ServerException;
-use MongoDB\Exception\BadMethodCallException;
-use MongoDB\Exception\ResumeTokenException;
-use MongoDB\Model\ChangeStreamIterator;
+use Odigos\MongoDB\Exception\BadMethodCallException;
+use Odigos\MongoDB\Exception\ResumeTokenException;
+use Odigos\MongoDB\Model\ChangeStreamIterator;
 use function assert;
 use function call_user_func;
 use function in_array;

@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
-use Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\ExpressionInterface;
 /**
  * An interface used by Type objects to signal whether the value should
  * be converted to an ExpressionInterface instead of a string when sent

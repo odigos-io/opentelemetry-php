@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-class NoLock extends \Illuminate\Cache\Lock
+class NoLock extends Lock
 {
     /**
      * Attempt to acquire the lock.

@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Validation\Rules;
+namespace Odigos\Illuminate\Validation\Rules;
 
 use ArrayIterator;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Validation\DataAwareRule;
-use Illuminate\Contracts\Validation\ImplicitRule;
-use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Contracts\Validation\UncompromisedVerifier;
-use Illuminate\Contracts\Validation\ValidatorAwareRule;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Validation\DataAwareRule;
+use Odigos\Illuminate\Contracts\Validation\ImplicitRule;
+use Odigos\Illuminate\Contracts\Validation\Rule;
+use Odigos\Illuminate\Contracts\Validation\UncompromisedVerifier;
+use Odigos\Illuminate\Contracts\Validation\ValidatorAwareRule;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Facades\Validator;
+use Odigos\Illuminate\Support\Traits\Conditionable;
 use InvalidArgumentException;
 use IteratorAggregate;
 use Traversable;

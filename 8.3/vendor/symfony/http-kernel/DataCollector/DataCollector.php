@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\DataCollector;
+namespace Odigos\Symfony\Component\HttpKernel\DataCollector;
 
-use Symfony\Component\VarDumper\Caster\CutStub;
-use Symfony\Component\VarDumper\Caster\ReflectionCaster;
-use Symfony\Component\VarDumper\Cloner\ClonerInterface;
-use Symfony\Component\VarDumper\Cloner\Data;
-use Symfony\Component\VarDumper\Cloner\Stub;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Odigos\Symfony\Component\VarDumper\Caster\CutStub;
+use Odigos\Symfony\Component\VarDumper\Caster\ReflectionCaster;
+use Odigos\Symfony\Component\VarDumper\Cloner\ClonerInterface;
+use Odigos\Symfony\Component\VarDumper\Cloner\Data;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Cloner\VarCloner;
 /**
  * DataCollector.
  *
@@ -24,7 +24,7 @@ use Symfony\Component\VarDumper\Cloner\VarCloner;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Bernhard Schussek <bschussek@symfony.com>
  */
-abstract class DataCollector implements \Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface
+abstract class DataCollector implements DataCollectorInterface
 {
     protected array|Data $data = [];
     private ClonerInterface $cloner;

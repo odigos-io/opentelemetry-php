@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Odigos\Illuminate\Database\Eloquent\Relations;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
+use Odigos\Illuminate\Database\Eloquent\Builder;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TIntermediateModel of \Illuminate\Database\Eloquent\Model
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
  *
  * @extends \Illuminate\Database\Eloquent\Relations\HasOneOrManyThrough<TRelatedModel, TIntermediateModel, TDeclaringModel, \Illuminate\Database\Eloquent\Collection<int, TRelatedModel>>
  */
-class HasManyThrough extends \Illuminate\Database\Eloquent\Relations\HasOneOrManyThrough
+class HasManyThrough extends HasOneOrManyThrough
 {
     use InteractsWithDictionary;
     /**
@@ -22,7 +22,7 @@ class HasManyThrough extends \Illuminate\Database\Eloquent\Relations\HasOneOrMan
      */
     public function one()
     {
-        return \Illuminate\Database\Eloquent\Relations\HasOneThrough::noConstraints(fn() => new \Illuminate\Database\Eloquent\Relations\HasOneThrough(tap($this->getQuery(), fn(Builder $query) => $query->getQuery()->joins = []), $this->farParent, $this->throughParent, $this->getFirstKeyName(), $this->getForeignKeyName(), $this->getLocalKeyName(), $this->getSecondLocalKeyName()));
+        return HasOneThrough::noConstraints(fn() => new HasOneThrough(tap($this->getQuery(), fn(Builder $query) => $query->getQuery()->joins = []), $this->farParent, $this->throughParent, $this->getFirstKeyName(), $this->getForeignKeyName(), $this->getLocalKeyName(), $this->getSecondLocalKeyName()));
     }
     /** @inheritDoc */
     public function initRelation(array $models, $relation)

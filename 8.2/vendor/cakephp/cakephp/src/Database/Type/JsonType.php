@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
-use Cake\Database\Driver;
+use Odigos\Cake\Database\Driver;
 use InvalidArgumentException;
 use PDO;
 /**
@@ -24,7 +24,7 @@ use PDO;
  *
  * Used to convert JSON data between PHP and the database types.
  */
-class JsonType extends \Cake\Database\Type\BaseType implements \Cake\Database\Type\BatchCastingInterface
+class JsonType extends BaseType implements BatchCastingInterface
 {
     /**
      * @var int

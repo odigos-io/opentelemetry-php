@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
-use Illuminate\Contracts\Database\LostConnectionDetector as LostConnectionDetectorContract;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Database\LostConnectionDetector as LostConnectionDetectorContract;
+use Odigos\Illuminate\Support\Str;
 use Throwable;
 class LostConnectionDetector implements LostConnectionDetectorContract
 {

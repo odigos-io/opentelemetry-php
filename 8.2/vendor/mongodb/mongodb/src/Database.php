@@ -15,14 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB;
+namespace Odigos\MongoDB;
 
 use Iterator;
 use MongoDB\BSON\Document;
 use MongoDB\BSON\PackedArray;
-use MongoDB\Builder\BuilderEncoder;
-use MongoDB\Builder\Pipeline;
-use MongoDB\Codec\Encoder;
+use Odigos\MongoDB\Builder\BuilderEncoder;
+use Odigos\MongoDB\Builder\Pipeline;
+use Odigos\MongoDB\Codec\Encoder;
 use MongoDB\Driver\ClientEncryption;
 use MongoDB\Driver\CursorInterface;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
@@ -30,26 +30,26 @@ use MongoDB\Driver\Manager;
 use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\WriteConcern;
-use MongoDB\Exception\CreateEncryptedCollectionException;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnexpectedValueException;
-use MongoDB\Exception\UnsupportedException;
-use MongoDB\GridFS\Bucket;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
-use MongoDB\Model\CollectionInfo;
-use MongoDB\Operation\Aggregate;
-use MongoDB\Operation\CreateCollection;
-use MongoDB\Operation\CreateEncryptedCollection;
-use MongoDB\Operation\DatabaseCommand;
-use MongoDB\Operation\DropCollection;
-use MongoDB\Operation\DropDatabase;
-use MongoDB\Operation\DropEncryptedCollection;
-use MongoDB\Operation\ListCollectionNames;
-use MongoDB\Operation\ListCollections;
-use MongoDB\Operation\ModifyCollection;
-use MongoDB\Operation\RenameCollection;
-use MongoDB\Operation\Watch;
+use Odigos\MongoDB\Exception\CreateEncryptedCollectionException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnexpectedValueException;
+use Odigos\MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\GridFS\Bucket;
+use Odigos\MongoDB\Model\BSONArray;
+use Odigos\MongoDB\Model\BSONDocument;
+use Odigos\MongoDB\Model\CollectionInfo;
+use Odigos\MongoDB\Operation\Aggregate;
+use Odigos\MongoDB\Operation\CreateCollection;
+use Odigos\MongoDB\Operation\CreateEncryptedCollection;
+use Odigos\MongoDB\Operation\DatabaseCommand;
+use Odigos\MongoDB\Operation\DropCollection;
+use Odigos\MongoDB\Operation\DropDatabase;
+use Odigos\MongoDB\Operation\DropEncryptedCollection;
+use Odigos\MongoDB\Operation\ListCollectionNames;
+use Odigos\MongoDB\Operation\ListCollections;
+use Odigos\MongoDB\Operation\ModifyCollection;
+use Odigos\MongoDB\Operation\RenameCollection;
+use Odigos\MongoDB\Operation\Watch;
 use stdClass;
 use Throwable;
 use function is_array;
@@ -146,7 +146,7 @@ class Database
      * @see https://php.net/types.string#language.types.string.parsing.complex
      * @param string $collectionName Name of the collection to select
      */
-    public function __get(string $collectionName): \MongoDB\Collection
+    public function __get(string $collectionName): Collection
     {
         return $this->getCollection($collectionName);
     }
@@ -326,10 +326,10 @@ class Database
      * @see Collection::__construct() for supported options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function getCollection(string $collectionName, array $options = []): \MongoDB\Collection
+    public function getCollection(string $collectionName, array $options = []): Collection
     {
         $options += ['builderEncoder' => $this->builderEncoder, 'readConcern' => $this->readConcern, 'readPreference' => $this->readPreference, 'typeMap' => $this->typeMap, 'writeConcern' => $this->writeConcern, 'autoEncryptionEnabled' => $this->autoEncryptionEnabled];
-        return new \MongoDB\Collection($this->manager, $this->databaseName, $collectionName, $options);
+        return new Collection($this->manager, $this->databaseName, $collectionName, $options);
     }
     /**
      * Returns the database name.
@@ -459,7 +459,7 @@ class Database
      * @param array  $options        Collection constructor options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function selectCollection(string $collectionName, array $options = []): \MongoDB\Collection
+    public function selectCollection(string $collectionName, array $options = []): Collection
     {
         return $this->getCollection($collectionName, $options);
     }
@@ -483,7 +483,7 @@ class Database
      * @param array          $options  Command options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function watch(array|Pipeline $pipeline = [], array $options = []): \MongoDB\ChangeStream
+    public function watch(array|Pipeline $pipeline = [], array $options = []): ChangeStream
     {
         if (is_array($pipeline) && is_builder_pipeline($pipeline)) {
             $pipeline = new Pipeline(...$pipeline);
@@ -509,9 +509,9 @@ class Database
      * @param array $options Database constructor options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function withOptions(array $options = []): \MongoDB\Database
+    public function withOptions(array $options = []): Database
     {
         $options += ['autoEncryptionEnabled' => $this->autoEncryptionEnabled, 'builderEncoder' => $this->builderEncoder, 'readConcern' => $this->readConcern, 'readPreference' => $this->readPreference, 'typeMap' => $this->typeMap, 'writeConcern' => $this->writeConcern];
-        return new \MongoDB\Database($this->manager, $this->databaseName, $options);
+        return new Database($this->manager, $this->databaseName, $options);
     }
 }

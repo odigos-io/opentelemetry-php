@@ -11,7 +11,7 @@ namespace Odigos;
  * file that was distributed with this source code.
  */
 if (\PHP_VERSION_ID < 80200) {
-    final class SensitiveParameterValue extends \Symfony\Polyfill\Php82\SensitiveParameterValue
+    final class SensitiveParameterValue extends Symfony\Polyfill\Php82\SensitiveParameterValue
     {
     }
     \class_alias('Odigos\SensitiveParameterValue', 'SensitiveParameterValue', \false);

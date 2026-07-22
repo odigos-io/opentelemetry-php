@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Schema\Grammars;
+namespace Odigos\Illuminate\Database\Schema\Grammars;
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Fluent;
-class MariaDbGrammar extends \Illuminate\Database\Schema\Grammars\MySqlGrammar
+use Odigos\Illuminate\Database\Schema\Blueprint;
+use Odigos\Illuminate\Support\Fluent;
+class MariaDbGrammar extends MySqlGrammar
 {
     /** @inheritDoc */
     public function compileRenameColumn(Blueprint $blueprint, Fluent $command)

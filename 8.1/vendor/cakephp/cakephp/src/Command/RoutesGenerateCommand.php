@@ -14,17 +14,17 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
-use Cake\Routing\Exception\MissingRouteException;
-use Cake\Routing\Router;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOptionParser;
+use Odigos\Cake\Routing\Exception\MissingRouteException;
+use Odigos\Cake\Routing\Router;
 /**
  * Provides interactive CLI tools for URL generation
  */
-class RoutesGenerateCommand extends \Cake\Command\Command
+class RoutesGenerateCommand extends Command
 {
     /**
      * @inheritDoc

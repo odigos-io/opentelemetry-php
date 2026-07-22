@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Dumper;
+namespace Odigos\Symfony\Component\Translation\Dumper;
 
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
-use Symfony\Component\Translation\Exception\RuntimeException;
-use Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Translation\Exception\RuntimeException;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
 /**
  * FileDumper is an implementation of DumperInterface that dump a message catalogue to file(s).
  *
@@ -21,7 +21,7 @@ use Symfony\Component\Translation\MessageCatalogue;
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-abstract class FileDumper implements \Symfony\Component\Translation\Dumper\DumperInterface
+abstract class FileDumper implements DumperInterface
 {
     /**
      * A template for the relative paths to files.

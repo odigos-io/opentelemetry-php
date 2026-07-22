@@ -1,13 +1,13 @@
 <?php
 
-namespace Http\Promise;
+namespace Odigos\Http\Promise;
 
 /**
  * A promise already fulfilled.
  *
  * @author Joel Wurtz <joel.wurtz@gmail.com>
  */
-final class FulfilledPromise implements \Http\Promise\Promise
+final class FulfilledPromise implements Promise
 {
     /**
      * @var mixed
@@ -28,12 +28,12 @@ final class FulfilledPromise implements \Http\Promise\Promise
         try {
             return new self($onFulfilled($this->result));
         } catch (\Exception $e) {
-            return new \Http\Promise\RejectedPromise($e);
+            return new RejectedPromise($e);
         }
     }
     public function getState()
     {
-        return \Http\Promise\Promise::FULFILLED;
+        return Promise::FULFILLED;
     }
     public function wait($unwrap = \true)
     {

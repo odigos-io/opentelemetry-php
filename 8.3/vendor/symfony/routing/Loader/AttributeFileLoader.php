@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Loader;
+namespace Odigos\Symfony\Component\Routing\Loader;
 
-use Symfony\Component\Config\FileLocatorInterface;
-use Symfony\Component\Config\Loader\FileLoader;
-use Symfony\Component\Config\Resource\ReflectionClassResource;
-use Symfony\Component\Routing\RouteCollection;
+use Odigos\Symfony\Component\Config\FileLocatorInterface;
+use Odigos\Symfony\Component\Config\Loader\FileLoader;
+use Odigos\Symfony\Component\Config\Resource\ReflectionClassResource;
+use Odigos\Symfony\Component\Routing\RouteCollection;
 /**
  * AttributeFileLoader loads routing information from attributes set
  * on a PHP class and its methods.
@@ -23,7 +23,7 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class AttributeFileLoader extends FileLoader
 {
-    public function __construct(FileLocatorInterface $locator, protected \Symfony\Component\Routing\Loader\AttributeClassLoader $loader)
+    public function __construct(FileLocatorInterface $locator, protected AttributeClassLoader $loader)
     {
         if (!\function_exists('token_get_all') && !\function_exists('Odigos\token_get_all')) {
             throw new \LogicException('The Tokenizer extension is required for the routing attribute loader.');

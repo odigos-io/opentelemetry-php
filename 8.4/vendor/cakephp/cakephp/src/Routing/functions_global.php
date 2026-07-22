@@ -18,8 +18,8 @@ namespace Odigos;
  */
 // phpcs:disable PSR1.Files.SideEffects
 use Psr\Http\Message\UriInterface;
-use function Cake\Routing\url as cakeUrl;
-use function Cake\Routing\urlArray as cakeUrlArray;
+use function Odigos\Cake\Routing\url as cakeUrl;
+use function Odigos\Cake\Routing\urlArray as cakeUrlArray;
 if (!\function_exists('Odigos\url')) {
     /**
      * Convenience wrapper for Router::url().

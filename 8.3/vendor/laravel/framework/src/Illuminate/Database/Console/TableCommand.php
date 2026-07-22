@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Database\Console;
+namespace Odigos\Illuminate\Database\Console;
 
-use Illuminate\Database\ConnectionResolverInterface;
-use Illuminate\Database\Schema\Builder;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Number;
-use Symfony\Component\Console\Attribute\AsCommand;
-use function Laravel\Prompts\search;
+use Odigos\Illuminate\Database\ConnectionResolverInterface;
+use Odigos\Illuminate\Database\Schema\Builder;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Number;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use function Odigos\Laravel\Prompts\search;
 #[AsCommand(name: 'db:table')]
-class TableCommand extends \Illuminate\Database\Console\DatabaseInspectionCommand
+class TableCommand extends DatabaseInspectionCommand
 {
     /**
      * The name and signature of the console command.

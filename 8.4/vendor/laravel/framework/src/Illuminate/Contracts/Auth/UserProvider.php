@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Auth;
+namespace Odigos\Illuminate\Contracts\Auth;
 
 interface UserProvider
 {
@@ -31,7 +31,7 @@ interface UserProvider
      * @return void
      */
     public function updateRememberToken(
-        \Illuminate\Contracts\Auth\Authenticatable $user,
+        Authenticatable $user,
         #[\SensitiveParameter]
         $token
     );
@@ -53,7 +53,7 @@ interface UserProvider
      * @return bool
      */
     public function validateCredentials(
-        \Illuminate\Contracts\Auth\Authenticatable $user,
+        Authenticatable $user,
         #[\SensitiveParameter]
         array $credentials
     );
@@ -66,7 +66,7 @@ interface UserProvider
      * @return void
      */
     public function rehashPasswordIfRequired(
-        \Illuminate\Contracts\Auth\Authenticatable $user,
+        Authenticatable $user,
         #[\SensitiveParameter]
         array $credentials,
         bool $force = \false

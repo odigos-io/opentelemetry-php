@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Symfony;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Symfony;
 
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Trace\Span;
@@ -11,9 +11,9 @@ use OpenTelemetry\Context\Context;
 use function OpenTelemetry\Instrumentation\hook;
 use OpenTelemetry\SemConv\TraceAttributes;
 use OpenTelemetry\SemConv\Version;
-use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Messenger\Transport\Sender\SenderInterface;
+use Odigos\Symfony\Component\Messenger\Envelope;
+use Odigos\Symfony\Component\Messenger\MessageBusInterface;
+use Odigos\Symfony\Component\Messenger\Transport\Sender\SenderInterface;
 /**
  * The messenger instrumentation will create an internal span for each message dispatched.
  *
@@ -39,8 +39,8 @@ final class MessengerInstrumentation
          *
          * @psalm-suppress UnusedFunctionCall
          */
-        hook(MessageBusInterface::class, 'dispatch', pre: static function (MessageBusInterface $bus, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation): array {
-            /** @var object|Envelope $message */
+        hook('Symfony\\Component\\Messenger\\MessageBusInterface', 'dispatch', pre: static function (object $bus, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation): array {
+            /** @var object|object $message */
             $message = $params[0];
             $messageClass = \get_class($message);
             /** @psalm-suppress ArgumentTypeCoercion */
@@ -50,7 +50,7 @@ final class MessengerInstrumentation
             $context = $span->storeInContext($parent);
             Context::storage()->attach($context);
             return $params;
-        }, post: static function (MessageBusInterface $bus, array $params, ?Envelope $result, ?\Throwable $exception): void {
+        }, post: static function (object $bus, array $params, ?object $result, ?\Throwable $exception): void {
             $scope = Context::storage()->scope();
             if (null === $scope) {
                 return;
@@ -68,8 +68,8 @@ final class MessengerInstrumentation
          *
          * @psalm-suppress UnusedFunctionCall
          */
-        hook(SenderInterface::class, 'send', pre: static function (SenderInterface $bus, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation): array {
-            /** @var Envelope $envelope */
+        hook('Symfony\\Component\\Messenger\\Transport\\Sender\\SenderInterface', 'send', pre: static function (object $bus, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation): array {
+            /** @var object $envelope */
             $envelope = $params[0];
             $messageClass = \get_class($envelope->getMessage());
             /** @psalm-suppress ArgumentTypeCoercion */
@@ -79,7 +79,7 @@ final class MessengerInstrumentation
             $context = $span->storeInContext($parent);
             Context::storage()->attach($context);
             return $params;
-        }, post: static function (SenderInterface $sender, array $params, ?Envelope $result, ?\Throwable $exception): void {
+        }, post: static function (object $sender, array $params, ?object $result, ?\Throwable $exception): void {
             $scope = Context::storage()->scope();
             if (null === $scope) {
                 return;

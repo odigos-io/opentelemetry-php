@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console;
+namespace Odigos\yii\console;
 
 use Odigos\Yii;
-use yii\base\InvalidRouteException;
-use yii\base\Module;
+use Odigos\yii\base\InvalidRouteException;
+use Odigos\yii\base\Module;
 // define STDIN, STDOUT and STDERR if the PHP SAPI did not define them (e.g. creating console application in web env)
 // https://www.php.net/manual/en/features.commandline.io-streams.php
 defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
@@ -56,7 +56,7 @@ defined('STDERR') or define('STDERR', fopen('php://stderr', 'w'));
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Application extends \yii\base\Application
+class Application extends \Odigos\yii\base\Application
 {
     /**
      * The option name for specifying the application configuration file path.
@@ -123,7 +123,7 @@ class Application extends \yii\base\Application
         }
         // ensure we have the 'help' command so that we can list the available commands
         if (!isset($this->controllerMap['help'])) {
-            $this->controllerMap['help'] = 'yii\console\controllers\HelpController';
+            $this->controllerMap['help'] = 'Odigos\yii\console\controllers\HelpController';
         }
     }
     /**
@@ -136,7 +136,7 @@ class Application extends \yii\base\Application
         list($route, $params) = $request->resolve();
         $this->requestedRoute = $route;
         $result = $this->runAction($route, $params);
-        if ($result instanceof \yii\console\Response) {
+        if ($result instanceof Response) {
             return $result;
         }
         $response = $this->getResponse();
@@ -168,7 +168,7 @@ class Application extends \yii\base\Application
             $res = parent::runAction($route, $params);
             return is_object($res) ? $res : (int) $res;
         } catch (InvalidRouteException $e) {
-            throw new \yii\console\UnknownCommandException($route, $this, 0, $e);
+            throw new UnknownCommandException($route, $this, 0, $e);
         }
     }
     /**
@@ -177,7 +177,7 @@ class Application extends \yii\base\Application
      */
     public function coreCommands()
     {
-        return ['asset' => 'yii\console\controllers\AssetController', 'cache' => 'yii\console\controllers\CacheController', 'fixture' => 'yii\console\controllers\FixtureController', 'help' => 'yii\console\controllers\HelpController', 'message' => 'yii\console\controllers\MessageController', 'migrate' => 'yii\console\controllers\MigrateController', 'serve' => 'yii\console\controllers\ServeController'];
+        return ['asset' => 'Odigos\yii\console\controllers\AssetController', 'cache' => 'Odigos\yii\console\controllers\CacheController', 'fixture' => 'Odigos\yii\console\controllers\FixtureController', 'help' => 'Odigos\yii\console\controllers\HelpController', 'message' => 'Odigos\yii\console\controllers\MessageController', 'migrate' => 'Odigos\yii\console\controllers\MigrateController', 'serve' => 'Odigos\yii\console\controllers\ServeController'];
     }
     /**
      * Returns the error handler component.
@@ -208,6 +208,6 @@ class Application extends \yii\base\Application
      */
     public function coreComponents()
     {
-        return array_merge(parent::coreComponents(), ['request' => ['class' => 'yii\console\Request'], 'response' => ['class' => 'yii\console\Response'], 'errorHandler' => ['class' => 'yii\console\ErrorHandler']]);
+        return array_merge(parent::coreComponents(), ['request' => ['class' => 'Odigos\yii\console\Request'], 'response' => ['class' => 'Odigos\yii\console\Response'], 'errorHandler' => ['class' => 'Odigos\yii\console\ErrorHandler']]);
     }
 }

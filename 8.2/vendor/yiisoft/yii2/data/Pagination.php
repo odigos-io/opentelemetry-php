@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\data;
+namespace Odigos\yii\data;
 
 use Odigos\Yii;
-use yii\base\BaseObject;
-use yii\web\Link;
-use yii\web\Linkable;
-use yii\web\Request;
+use Odigos\yii\base\BaseObject;
+use Odigos\yii\web\Link;
+use Odigos\yii\web\Linkable;
+use Odigos\yii\web\Request;
 /**
  * Pagination represents information relevant to pagination of data items.
  *

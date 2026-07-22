@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Exception;
+namespace Odigos\Symfony\Component\Console\Exception;
 
-use Symfony\Component\Console\Messenger\RunCommandContext;
+use Odigos\Symfony\Component\Console\Messenger\RunCommandContext;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class RunCommandFailedException extends \Symfony\Component\Console\Exception\RuntimeException
+final class RunCommandFailedException extends RuntimeException
 {
     public function __construct(\Throwable|string $exception, public readonly RunCommandContext $context)
     {

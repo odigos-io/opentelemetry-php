@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Psr3;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Psr3;
 
 use JsonSerializable;
 use OpenTelemetry\API\Behavior\LogsMessagesTrait;

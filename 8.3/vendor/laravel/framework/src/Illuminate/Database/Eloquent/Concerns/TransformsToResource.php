@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Concerns;
 
-use Illuminate\Database\Eloquent\Attributes\UseResource;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Database\Eloquent\Attributes\UseResource;
+use Odigos\Illuminate\Http\Resources\Json\JsonResource;
+use Odigos\Illuminate\Support\Str;
 use LogicException;
 use ReflectionClass;
 trait TransformsToResource

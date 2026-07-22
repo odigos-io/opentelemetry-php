@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Debug;
+namespace Odigos\Illuminate\Contracts\Debug;
 
 use Throwable;
 interface ExceptionHandler

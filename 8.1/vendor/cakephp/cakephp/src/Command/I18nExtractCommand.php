@@ -14,22 +14,22 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
-use Cake\Command\Helper\ProgressHelper;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
-use Cake\Core\App;
-use Cake\Core\Configure;
-use Cake\Core\Exception\CakeException;
-use Cake\Core\Plugin;
-use Cake\Utility\Filesystem;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Command\Helper\ProgressHelper;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOptionParser;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Utility\Filesystem;
+use Odigos\Cake\Utility\Inflector;
 /**
  * Language string extractor
  */
-class I18nExtractCommand extends \Cake\Command\Command
+class I18nExtractCommand extends Command
 {
     /**
      * Paths to use when looking for strings

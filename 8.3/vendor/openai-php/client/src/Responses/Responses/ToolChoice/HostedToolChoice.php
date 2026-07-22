@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses\ToolChoice;
+namespace Odigos\OpenAI\Responses\Responses\ToolChoice;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-type HostedToolChoiceType array{type: 'file_search'|'web_search'|'web_search_preview'|'computer_use_preview'}
  *

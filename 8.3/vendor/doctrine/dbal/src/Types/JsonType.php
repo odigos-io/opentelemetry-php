@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
 /**
  * Type generating json objects values
  */
-class JsonType extends \Doctrine\DBAL\Types\Type
+class JsonType extends Type
 {
-    use \Doctrine\DBAL\Types\JsonTypeConvert;
+    use JsonTypeConvert;
     /**
      * {@inheritDoc}
      */

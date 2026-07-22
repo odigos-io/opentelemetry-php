@@ -8,27 +8,27 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation;
+namespace Odigos\Symfony\Component\Translation;
 
-use Symfony\Component\Config\ConfigCacheFactory;
-use Symfony\Component\Config\ConfigCacheFactoryInterface;
-use Symfony\Component\Config\ConfigCacheInterface;
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
-use Symfony\Component\Translation\Exception\NotFoundResourceException;
-use Symfony\Component\Translation\Exception\RuntimeException;
-use Symfony\Component\Translation\Formatter\IntlFormatterInterface;
-use Symfony\Component\Translation\Formatter\MessageFormatter;
-use Symfony\Component\Translation\Formatter\MessageFormatterInterface;
-use Symfony\Component\Translation\Loader\LoaderInterface;
-use Symfony\Contracts\Translation\LocaleAwareInterface;
-use Symfony\Contracts\Translation\TranslatableInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Component\Config\ConfigCacheFactory;
+use Odigos\Symfony\Component\Config\ConfigCacheFactoryInterface;
+use Odigos\Symfony\Component\Config\ConfigCacheInterface;
+use Odigos\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Translation\Exception\NotFoundResourceException;
+use Odigos\Symfony\Component\Translation\Exception\RuntimeException;
+use Odigos\Symfony\Component\Translation\Formatter\IntlFormatterInterface;
+use Odigos\Symfony\Component\Translation\Formatter\MessageFormatter;
+use Odigos\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
+use Odigos\Symfony\Component\Translation\Loader\LoaderInterface;
+use Odigos\Symfony\Contracts\Translation\LocaleAwareInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatableInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
 // Help opcache.preload discover always-needed symbols
-class_exists(\Symfony\Component\Translation\MessageCatalogue::class);
+class_exists(MessageCatalogue::class);
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Translator implements TranslatorInterface, \Symfony\Component\Translation\TranslatorBagInterface, LocaleAwareInterface
+class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
 {
     /**
      * @var MessageCatalogueInterface[]
@@ -47,7 +47,7 @@ class Translator implements TranslatorInterface, \Symfony\Component\Translation\
     private MessageFormatterInterface $formatter;
     private ?ConfigCacheFactoryInterface $configCacheFactory;
     private bool $hasIntlFormatter;
-    private \Symfony\Component\Translation\LocaleFallbackProvider $localeFallbackProvider;
+    private LocaleFallbackProvider $localeFallbackProvider;
     /**
      * @var array<string, string|int|float|TranslatableInterface>
      */
@@ -64,7 +64,7 @@ class Translator implements TranslatorInterface, \Symfony\Component\Translation\
         $this->setLocale($locale);
         $this->formatter = $formatter ??= new MessageFormatter();
         $this->hasIntlFormatter = $formatter instanceof IntlFormatterInterface;
-        $this->localeFallbackProvider = new \Symfony\Component\Translation\LocaleFallbackProvider();
+        $this->localeFallbackProvider = new LocaleFallbackProvider();
     }
     public function setConfigCacheFactory(ConfigCacheFactoryInterface $configCacheFactory): void
     {
@@ -120,7 +120,7 @@ class Translator implements TranslatorInterface, \Symfony\Component\Translation\
         if ($this->fallbackLocales === $locales) {
             return;
         }
-        $this->localeFallbackProvider = new \Symfony\Component\Translation\LocaleFallbackProvider($locales);
+        $this->localeFallbackProvider = new LocaleFallbackProvider($locales);
         $this->fallbackLocales = $this->cacheVary['fallback_locales'] = $locales;
         $this->catalogues = [];
     }
@@ -172,13 +172,13 @@ class Translator implements TranslatorInterface, \Symfony\Component\Translation\
         if ($globalParameters) {
             $parameters += $globalParameters;
         }
-        $len = \strlen(\Symfony\Component\Translation\MessageCatalogue::INTL_DOMAIN_SUFFIX);
-        if ($this->hasIntlFormatter && ($catalogue->defines($id, $domain . \Symfony\Component\Translation\MessageCatalogue::INTL_DOMAIN_SUFFIX) || \strlen($domain) > $len && 0 === substr_compare($domain, \Symfony\Component\Translation\MessageCatalogue::INTL_DOMAIN_SUFFIX, -$len, $len))) {
+        $len = \strlen(MessageCatalogue::INTL_DOMAIN_SUFFIX);
+        if ($this->hasIntlFormatter && ($catalogue->defines($id, $domain . MessageCatalogue::INTL_DOMAIN_SUFFIX) || \strlen($domain) > $len && 0 === substr_compare($domain, MessageCatalogue::INTL_DOMAIN_SUFFIX, -$len, $len))) {
             return $this->formatter->formatIntl($catalogue->get($id, $domain), $locale, $parameters);
         }
         return $this->formatter->format($catalogue->get($id, $domain), $locale, $parameters);
     }
-    public function getCatalogue(?string $locale = null): \Symfony\Component\Translation\MessageCatalogueInterface
+    public function getCatalogue(?string $locale = null): MessageCatalogueInterface
     {
         if (!$locale) {
             $locale = $this->getLocale();
@@ -258,7 +258,7 @@ EOF
 , $locale, var_export($this->getAllMessages($this->catalogues[$locale]), \true), $fallbackContent);
         $cache->write($content, $this->catalogues[$locale]->getResources());
     }
-    private function getFallbackContent(\Symfony\Component\Translation\MessageCatalogue $catalogue): string
+    private function getFallbackContent(MessageCatalogue $catalogue): string
     {
         $fallbackContent = '';
         $current = '';
@@ -288,7 +288,7 @@ EOF
      */
     protected function doLoadCatalogue(string $locale): void
     {
-        $this->catalogues[$locale] = new \Symfony\Component\Translation\MessageCatalogue($locale);
+        $this->catalogues[$locale] = new MessageCatalogue($locale);
         if (isset($this->resources[$locale])) {
             foreach ($this->resources[$locale] as $resource) {
                 if (!isset($this->loaders[$resource[0]])) {
@@ -308,7 +308,7 @@ EOF
             if (!isset($this->catalogues[$fallback])) {
                 $this->initializeCatalogue($fallback);
             }
-            $fallbackCatalogue = new \Symfony\Component\Translation\MessageCatalogue($fallback, $this->getAllMessages($this->catalogues[$fallback]));
+            $fallbackCatalogue = new MessageCatalogue($fallback, $this->getAllMessages($this->catalogues[$fallback]));
             foreach ($this->catalogues[$fallback]->getResources() as $resource) {
                 $fallbackCatalogue->addResource($resource);
             }
@@ -327,7 +327,7 @@ EOF
      */
     protected function assertValidLocale(string $locale): void
     {
-        \Symfony\Component\Translation\LocaleFallbackProvider::validateLocale($locale);
+        LocaleFallbackProvider::validateLocale($locale);
     }
     /**
      * Provides the ConfigCache factory implementation, falling back to a
@@ -338,12 +338,12 @@ EOF
         $this->configCacheFactory ??= new ConfigCacheFactory($this->debug);
         return $this->configCacheFactory;
     }
-    private function getAllMessages(\Symfony\Component\Translation\MessageCatalogueInterface $catalogue): array
+    private function getAllMessages(MessageCatalogueInterface $catalogue): array
     {
         $allMessages = [];
         foreach ($catalogue->all() as $domain => $messages) {
-            if ($intlMessages = $catalogue->all($domain . \Symfony\Component\Translation\MessageCatalogue::INTL_DOMAIN_SUFFIX)) {
-                $allMessages[$domain . \Symfony\Component\Translation\MessageCatalogue::INTL_DOMAIN_SUFFIX] = $intlMessages;
+            if ($intlMessages = $catalogue->all($domain . MessageCatalogue::INTL_DOMAIN_SUFFIX)) {
+                $allMessages[$domain . MessageCatalogue::INTL_DOMAIN_SUFFIX] = $intlMessages;
                 $messages = array_diff_key($messages, $intlMessages);
             }
             if ($messages) {

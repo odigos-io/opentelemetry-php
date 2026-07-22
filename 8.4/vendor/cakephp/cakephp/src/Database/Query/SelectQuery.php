@@ -14,22 +14,22 @@ declare (strict_types=1);
  * @since         4.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Query;
+namespace Odigos\Cake\Database\Query;
 
 use ArrayIterator;
-use Cake\Core\Exception\CakeException;
-use Cake\Database\Connection;
-use Cake\Database\Expression\IdentifierExpression;
-use Cake\Database\Expression\WindowExpression;
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Query;
-use Cake\Database\StatementInterface;
-use Cake\Database\TypeMap;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Database\Connection;
+use Odigos\Cake\Database\Expression\IdentifierExpression;
+use Odigos\Cake\Database\Expression\WindowExpression;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\Query;
+use Odigos\Cake\Database\StatementInterface;
+use Odigos\Cake\Database\TypeMap;
 use Closure;
 use InvalidArgumentException;
 use IteratorAggregate;
 use Traversable;
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * This class is used to generate SELECT queries for the relational database.
  *

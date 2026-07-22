@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * GroupUrlRule represents a collection of URL rules sharing the same prefix in their patterns and routes.
  *
@@ -44,7 +44,7 @@ use yii\base\InvalidConfigException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class GroupUrlRule extends \yii\web\CompositeUrlRule
+class GroupUrlRule extends CompositeUrlRule
 {
     /**
      * @var UrlRuleInterface[]|array[]|string[] the rules contained within this composite rule. Please refer to [[UrlManager::rules]]
@@ -68,7 +68,7 @@ class GroupUrlRule extends \yii\web\CompositeUrlRule
      * @var array the default configuration of URL rules. Individual rule configurations
      * specified via [[rules]] will take precedence when the same property of the rule is configured.
      */
-    public $ruleConfig = ['class' => 'yii\web\UrlRule'];
+    public $ruleConfig = ['class' => 'Odigos\yii\web\UrlRule'];
     /**
      * {@inheritdoc}
      */
@@ -98,7 +98,7 @@ class GroupUrlRule extends \yii\web\CompositeUrlRule
                 $rule['route'] = ltrim($this->routePrefix . '/' . $rule['route'], '/');
             }
             $rule = Yii::createObject(array_merge($this->ruleConfig, $rule));
-            if (!$rule instanceof \yii\web\UrlRuleInterface) {
+            if (!$rule instanceof UrlRuleInterface) {
                 throw new InvalidConfigException('URL rule class must implement UrlRuleInterface.');
             }
             $rules[] = $rule;
@@ -124,7 +124,7 @@ class GroupUrlRule extends \yii\web\CompositeUrlRule
         if ($this->routePrefix === '' || strpos($route, $this->routePrefix . '/') === 0) {
             return parent::createUrl($manager, $route, $params);
         }
-        $this->createStatus = \yii\web\UrlRule::CREATE_STATUS_ROUTE_MISMATCH;
+        $this->createStatus = UrlRule::CREATE_STATUS_ROUTE_MISMATCH;
         return \false;
     }
 }

@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii;
+namespace Odigos\yii;
 
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidConfigException;
-use yii\base\UnknownClassException;
-use yii\di\Container;
-use yii\log\Logger;
-use yii\web\IdentityInterface;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\UnknownClassException;
+use Odigos\yii\di\Container;
+use Odigos\yii\log\Logger;
+use Odigos\yii\web\IdentityInterface;
 /**
  * Gets the application start timestamp.
  */
@@ -353,7 +353,7 @@ class BaseYii
         if (self::$_logger !== null) {
             return self::$_logger;
         }
-        return self::$_logger = static::createObject('yii\log\Logger');
+        return self::$_logger = static::createObject('Odigos\yii\log\Logger');
     }
     /**
      * Sets the logger object.

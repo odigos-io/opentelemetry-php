@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
-class DeferredQueue extends \Illuminate\Queue\SyncQueue
+class DeferredQueue extends SyncQueue
 {
     /**
      * Push a new job onto the queue.
@@ -16,6 +16,6 @@ class DeferredQueue extends \Illuminate\Queue\SyncQueue
      */
     public function push($job, $data = '', $queue = null)
     {
-        return \Illuminate\Support\defer(fn() => parent::push($job, $data, $queue));
+        return \Odigos\Illuminate\Support\defer(fn() => parent::push($job, $data, $queue));
     }
 }

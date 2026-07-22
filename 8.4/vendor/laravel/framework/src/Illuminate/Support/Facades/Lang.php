@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static bool hasForLocale(string $key, string|null $locale = null)
@@ -34,7 +34,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Translation\Translator
  */
-class Lang extends \Illuminate\Support\Facades\Facade
+class Lang extends Facade
 {
     /**
      * Get the registered name of the component.

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Tester\Constraint;
+namespace Odigos\Symfony\Component\Console\Tester\Constraint;
 
 use Odigos\PHPUnit\Framework\Constraint\Constraint;
-use Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Command\Command;
 final class CommandIsSuccessful extends Constraint
 {
     public function toString(): string

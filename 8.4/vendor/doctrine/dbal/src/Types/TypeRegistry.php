@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Types\Exception\TypeAlreadyRegistered;
-use Doctrine\DBAL\Types\Exception\TypeNotFound;
-use Doctrine\DBAL\Types\Exception\TypeNotRegistered;
-use Doctrine\DBAL\Types\Exception\TypesAlreadyExists;
-use Doctrine\DBAL\Types\Exception\TypesException;
-use Doctrine\DBAL\Types\Exception\UnknownColumnType;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Types\Exception\TypeAlreadyRegistered;
+use Odigos\Doctrine\DBAL\Types\Exception\TypeNotFound;
+use Odigos\Doctrine\DBAL\Types\Exception\TypeNotRegistered;
+use Odigos\Doctrine\DBAL\Types\Exception\TypesAlreadyExists;
+use Odigos\Doctrine\DBAL\Types\Exception\TypesException;
+use Odigos\Doctrine\DBAL\Types\Exception\UnknownColumnType;
 use function spl_object_id;
 /**
  * The type registry is responsible for holding a map of all known DBAL types.
@@ -38,7 +38,7 @@ final class TypeRegistry
      *
      * @throws TypesException
      */
-    public function get(string $name): \Doctrine\DBAL\Types\Type
+    public function get(string $name): Type
     {
         $type = $this->instances[$name] ?? null;
         if ($type === null) {
@@ -51,7 +51,7 @@ final class TypeRegistry
      *
      * @throws TypesException
      */
-    public function lookupName(\Doctrine\DBAL\Types\Type $type): string
+    public function lookupName(Type $type): string
     {
         $name = $this->findTypeName($type);
         if ($name === null) {
@@ -71,7 +71,7 @@ final class TypeRegistry
      *
      * @throws TypesException
      */
-    public function register(string $name, \Doctrine\DBAL\Types\Type $type): void
+    public function register(string $name, Type $type): void
     {
         if (isset($this->instances[$name])) {
             throw TypesAlreadyExists::new($name);
@@ -87,7 +87,7 @@ final class TypeRegistry
      *
      * @throws Exception
      */
-    public function override(string $name, \Doctrine\DBAL\Types\Type $type): void
+    public function override(string $name, Type $type): void
     {
         $origType = $this->instances[$name] ?? null;
         if ($origType === null) {
@@ -111,7 +111,7 @@ final class TypeRegistry
     {
         return $this->instances;
     }
-    private function findTypeName(\Doctrine\DBAL\Types\Type $type): ?string
+    private function findTypeName(Type $type): ?string
     {
         return $this->instancesReverseIndex[spl_object_id($type)] ?? null;
     }

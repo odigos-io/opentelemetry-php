@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
-use Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * Casts Amqp related classes to array representation.
  *
@@ -26,7 +26,7 @@ class AmqpCaster
     private const EXCHANGE_TYPES = [\AMQP_EX_TYPE_DIRECT => 'AMQP_EX_TYPE_DIRECT', \AMQP_EX_TYPE_FANOUT => 'AMQP_EX_TYPE_FANOUT', \AMQP_EX_TYPE_TOPIC => 'AMQP_EX_TYPE_TOPIC', \AMQP_EX_TYPE_HEADERS => 'AMQP_EX_TYPE_HEADERS'];
     public static function castConnection(\AMQPConnection $c, array $a, Stub $stub, bool $isNested): array
     {
-        $prefix = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL;
+        $prefix = Caster::PREFIX_VIRTUAL;
         $a += [$prefix . 'is_connected' => $c->isConnected()];
         // Recent version of the extension already expose private properties
         if (isset($a["\x00AMQPConnection\x00login"])) {
@@ -43,7 +43,7 @@ class AmqpCaster
     }
     public static function castChannel(\AMQPChannel $c, array $a, Stub $stub, bool $isNested): array
     {
-        $prefix = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL;
+        $prefix = Caster::PREFIX_VIRTUAL;
         $a += [$prefix . 'is_connected' => $c->isConnected(), $prefix . 'channel_id' => $c->getChannelId()];
         // Recent version of the extension already expose private properties
         if (isset($a["\x00AMQPChannel\x00connection"])) {
@@ -54,7 +54,7 @@ class AmqpCaster
     }
     public static function castQueue(\AMQPQueue $c, array $a, Stub $stub, bool $isNested): array
     {
-        $prefix = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL;
+        $prefix = Caster::PREFIX_VIRTUAL;
         $a += [$prefix . 'flags' => self::extractFlags($c->getFlags())];
         // Recent version of the extension already expose private properties
         if (isset($a["\x00AMQPQueue\x00name"])) {
@@ -65,9 +65,9 @@ class AmqpCaster
     }
     public static function castExchange(\AMQPExchange $c, array $a, Stub $stub, bool $isNested): array
     {
-        $prefix = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL;
+        $prefix = Caster::PREFIX_VIRTUAL;
         $a += [$prefix . 'flags' => self::extractFlags($c->getFlags())];
-        $type = isset(self::EXCHANGE_TYPES[$c->getType()]) ? new \Symfony\Component\VarDumper\Caster\ConstStub(self::EXCHANGE_TYPES[$c->getType()], $c->getType()) : $c->getType();
+        $type = isset(self::EXCHANGE_TYPES[$c->getType()]) ? new ConstStub(self::EXCHANGE_TYPES[$c->getType()], $c->getType()) : $c->getType();
         // Recent version of the extension already expose private properties
         if (isset($a["\x00AMQPExchange\x00name"])) {
             $a["\x00AMQPExchange\x00type"] = $type;
@@ -78,20 +78,20 @@ class AmqpCaster
     }
     public static function castEnvelope(\AMQPEnvelope $c, array $a, Stub $stub, bool $isNested, int $filter = 0): array
     {
-        $prefix = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL;
-        $deliveryMode = new \Symfony\Component\VarDumper\Caster\ConstStub($c->getDeliveryMode() . (2 === $c->getDeliveryMode() ? ' (persistent)' : ' (non-persistent)'), $c->getDeliveryMode());
+        $prefix = Caster::PREFIX_VIRTUAL;
+        $deliveryMode = new ConstStub($c->getDeliveryMode() . (2 === $c->getDeliveryMode() ? ' (persistent)' : ' (non-persistent)'), $c->getDeliveryMode());
         // Recent version of the extension already expose private properties
         if (isset($a["\x00AMQPEnvelope\x00body"])) {
             $a["\x00AMQPEnvelope\x00delivery_mode"] = $deliveryMode;
             return $a;
         }
-        if (!($filter & \Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE)) {
+        if (!($filter & Caster::EXCLUDE_VERBOSE)) {
             $a += [$prefix . 'body' => $c->getBody()];
         }
         $a += [$prefix . 'delivery_tag' => $c->getDeliveryTag(), $prefix . 'is_redelivery' => $c->isRedelivery(), $prefix . 'exchange_name' => $c->getExchangeName(), $prefix . 'routing_key' => $c->getRoutingKey(), $prefix . 'content_type' => $c->getContentType(), $prefix . 'content_encoding' => $c->getContentEncoding(), $prefix . 'headers' => $c->getHeaders(), $prefix . 'delivery_mode' => $deliveryMode, $prefix . 'priority' => $c->getPriority(), $prefix . 'correlation_id' => $c->getCorrelationId(), $prefix . 'reply_to' => $c->getReplyTo(), $prefix . 'expiration' => $c->getExpiration(), $prefix . 'message_id' => $c->getMessageId(), $prefix . 'timestamp' => $c->getTimeStamp(), $prefix . 'type' => $c->getType(), $prefix . 'user_id' => $c->getUserId(), $prefix . 'app_id' => $c->getAppId()];
         return $a;
     }
-    private static function extractFlags(int $flags): \Symfony\Component\VarDumper\Caster\ConstStub
+    private static function extractFlags(int $flags): ConstStub
     {
         $flagsArray = [];
         foreach (self::FLAGS as $value => $name) {
@@ -102,6 +102,6 @@ class AmqpCaster
         if (!$flagsArray) {
             $flagsArray = ['AMQP_NOPARAM'];
         }
-        return new \Symfony\Component\VarDumper\Caster\ConstStub(implode('|', $flagsArray), $flags);
+        return new ConstStub(implode('|', $flagsArray), $flags);
     }
 }

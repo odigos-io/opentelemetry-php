@@ -1,16 +1,16 @@
 <?php
 
-namespace OpenAI\Responses\Threads\Runs;
+namespace Odigos\OpenAI\Responses\Threads\Runs;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Exceptions\UnknownEventException;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Threads\Messages\Delta\ThreadMessageDeltaResponse;
-use OpenAI\Responses\Threads\Messages\ThreadMessageResponse;
-use OpenAI\Responses\Threads\Runs\Steps\Delta\ThreadRunStepDeltaResponse;
-use OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponse;
-use OpenAI\Responses\Threads\ThreadResponse;
-use OpenAI\Testing\Responses\Concerns\FakeableForStreamedResponse;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Exceptions\UnknownEventException;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Threads\Messages\Delta\ThreadMessageDeltaResponse;
+use Odigos\OpenAI\Responses\Threads\Messages\ThreadMessageResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\Steps\Delta\ThreadRunStepDeltaResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponse;
+use Odigos\OpenAI\Responses\Threads\ThreadResponse;
+use Odigos\OpenAI\Testing\Responses\Concerns\FakeableForStreamedResponse;
 /**
  * @implements ResponseContract<array{event: string, data: array<string, mixed>}>
  */
@@ -21,7 +21,7 @@ class ThreadRunStreamResponse implements ResponseContract
      */
     use ArrayAccessible;
     use FakeableForStreamedResponse;
-    private function __construct(public readonly string $event, public readonly ThreadResponse|\OpenAI\Responses\Threads\Runs\ThreadRunResponse|ThreadRunStepResponse|ThreadRunStepDeltaResponse|ThreadMessageResponse|ThreadMessageDeltaResponse $response)
+    private function __construct(public readonly string $event, public readonly ThreadResponse|ThreadRunResponse|ThreadRunStepResponse|ThreadRunStepDeltaResponse|ThreadMessageResponse|ThreadMessageDeltaResponse $response)
     {
     }
     /**
@@ -41,7 +41,7 @@ class ThreadRunStreamResponse implements ResponseContract
         $response = match ($event) {
             'thread.created' => ThreadResponse::from($attributes, $meta),
             // @phpstan-ignore-line
-            'thread.run.created', 'thread.run.queued', 'thread.run.in_progress', 'thread.run.requires_action', 'thread.run.completed', 'thread.run.incomplete', 'thread.run.failed', 'thread.run.cancelling', 'thread.run.cancelled', 'thread.run.expired' => \OpenAI\Responses\Threads\Runs\ThreadRunResponse::from($attributes, $meta),
+            'thread.run.created', 'thread.run.queued', 'thread.run.in_progress', 'thread.run.requires_action', 'thread.run.completed', 'thread.run.incomplete', 'thread.run.failed', 'thread.run.cancelling', 'thread.run.cancelled', 'thread.run.expired' => ThreadRunResponse::from($attributes, $meta),
             // @phpstan-ignore-line
             'thread.run.step.created', 'thread.run.step.in_progress', 'thread.run.step.completed', 'thread.run.step.failed', 'thread.run.step.cancelled', 'thread.run.step.expired' => ThreadRunStepResponse::from($attributes, $meta),
             // @phpstan-ignore-line

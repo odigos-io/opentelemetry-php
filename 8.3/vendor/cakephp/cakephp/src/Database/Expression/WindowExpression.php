@@ -14,21 +14,21 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Database\ExpressionInterface;
-use Cake\Database\ValueBinder;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\ValueBinder;
 use Closure;
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * This represents a SQL window expression used by aggregate and window functions.
  */
-class WindowExpression implements ExpressionInterface, \Cake\Database\Expression\WindowInterface
+class WindowExpression implements ExpressionInterface, WindowInterface
 {
     /**
      * @var \Cake\Database\Expression\IdentifierExpression
      */
-    protected \Cake\Database\Expression\IdentifierExpression $name;
+    protected IdentifierExpression $name;
     /**
      * @var array<\Cake\Database\ExpressionInterface>
      */
@@ -36,7 +36,7 @@ class WindowExpression implements ExpressionInterface, \Cake\Database\Expression
     /**
      * @var \Cake\Database\Expression\OrderByExpression|null
      */
-    protected ?\Cake\Database\Expression\OrderByExpression $order = null;
+    protected ?OrderByExpression $order = null;
     /**
      * @var array|null
      */
@@ -50,7 +50,7 @@ class WindowExpression implements ExpressionInterface, \Cake\Database\Expression
      */
     public function __construct(string $name = '')
     {
-        $this->name = new \Cake\Database\Expression\IdentifierExpression($name);
+        $this->name = new IdentifierExpression($name);
     }
     /**
      * Return whether is only a named window expression.
@@ -72,7 +72,7 @@ class WindowExpression implements ExpressionInterface, \Cake\Database\Expression
      */
     public function name(string $name)
     {
-        $this->name = new \Cake\Database\Expression\IdentifierExpression($name);
+        $this->name = new IdentifierExpression($name);
         return $this;
     }
     /**
@@ -84,14 +84,14 @@ class WindowExpression implements ExpressionInterface, \Cake\Database\Expression
             return $this;
         }
         if ($partitions instanceof Closure) {
-            $partitions = $partitions(new \Cake\Database\Expression\QueryExpression([], [], ''));
+            $partitions = $partitions(new QueryExpression([], [], ''));
         }
         if (!is_array($partitions)) {
             $partitions = [$partitions];
         }
         foreach ($partitions as &$partition) {
             if (is_string($partition)) {
-                $partition = new \Cake\Database\Expression\IdentifierExpression($partition);
+                $partition = new IdentifierExpression($partition);
             }
         }
         $this->partitions = array_merge($this->partitions, $partitions);
@@ -113,9 +113,9 @@ class WindowExpression implements ExpressionInterface, \Cake\Database\Expression
         if (!$fields) {
             return $this;
         }
-        $this->order ??= new \Cake\Database\Expression\OrderByExpression();
+        $this->order ??= new OrderByExpression();
         if ($fields instanceof Closure) {
-            $fields = $fields(new \Cake\Database\Expression\QueryExpression([], [], ''));
+            $fields = $fields(new QueryExpression([], [], ''));
         }
         $this->order->add($fields);
         return $this;

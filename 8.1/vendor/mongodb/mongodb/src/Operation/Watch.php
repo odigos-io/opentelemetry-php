@@ -15,11 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use MongoDB\BSON\TimestampInterface;
-use MongoDB\ChangeStream;
-use MongoDB\Codec\DocumentCodec;
+use Odigos\MongoDB\ChangeStream;
+use Odigos\MongoDB\Codec\DocumentCodec;
 use MongoDB\Driver\CursorInterface;
 use MongoDB\Driver\Exception\RuntimeException;
 use MongoDB\Driver\Manager;
@@ -29,10 +29,10 @@ use MongoDB\Driver\Monitoring\CommandSubscriber;
 use MongoDB\Driver\Monitoring\CommandSucceededEvent;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnexpectedValueException;
-use MongoDB\Exception\UnsupportedException;
-use MongoDB\Model\ChangeStreamIterator;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnexpectedValueException;
+use Odigos\MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Model\ChangeStreamIterator;
 use function array_intersect_key;
 use function array_key_exists;
 use function array_unshift;
@@ -43,8 +43,8 @@ use function is_object;
 use function is_string;
 use function MongoDB\Driver\Monitoring\addSubscriber;
 use function MongoDB\Driver\Monitoring\removeSubscriber;
-use function MongoDB\is_document;
-use function MongoDB\select_server;
+use function Odigos\MongoDB\is_document;
+use function Odigos\MongoDB\select_server;
 /**
  * Operation for creating a change stream with the aggregate command.
  *
@@ -62,7 +62,7 @@ final class Watch implements CommandSubscriber
     public const FULL_DOCUMENT_BEFORE_CHANGE_OFF = 'off';
     public const FULL_DOCUMENT_BEFORE_CHANGE_WHEN_AVAILABLE = 'whenAvailable';
     public const FULL_DOCUMENT_BEFORE_CHANGE_REQUIRED = 'required';
-    private \MongoDB\Operation\Aggregate $aggregate;
+    private Aggregate $aggregate;
     private array $aggregateOptions;
     private array $changeStreamOptions;
     private string $databaseName;
@@ -275,11 +275,11 @@ final class Watch implements CommandSubscriber
      *
      * This method is also used to recreate the aggregate command when resuming.
      */
-    private function createAggregate(): \MongoDB\Operation\Aggregate
+    private function createAggregate(): Aggregate
     {
         $pipeline = $this->pipeline;
         array_unshift($pipeline, ['$changeStream' => (object) $this->changeStreamOptions]);
-        return new \MongoDB\Operation\Aggregate($this->databaseName, $this->collectionName, $pipeline, $this->aggregateOptions);
+        return new Aggregate($this->databaseName, $this->collectionName, $pipeline, $this->aggregateOptions);
     }
     /**
      * Create a ChangeStreamIterator by executing the aggregate command.

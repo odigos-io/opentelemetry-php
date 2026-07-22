@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Casts;
+namespace Odigos\Illuminate\Database\Eloquent\Casts;
 
-use Illuminate\Contracts\Database\Eloquent\Castable;
-use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Support\Facades\Crypt;
+use Odigos\Illuminate\Contracts\Database\Eloquent\Castable;
+use Odigos\Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use Odigos\Illuminate\Support\Facades\Crypt;
 class AsEncryptedArrayObject implements Castable
 {
     /**
@@ -20,14 +20,14 @@ class AsEncryptedArrayObject implements Castable
             public function get($model, $key, $value, $attributes)
             {
                 if (isset($attributes[$key])) {
-                    return new \Illuminate\Database\Eloquent\Casts\ArrayObject(\Illuminate\Database\Eloquent\Casts\Json::decode(Crypt::decryptString($attributes[$key])), \Illuminate\Database\Eloquent\Casts\ArrayObject::ARRAY_AS_PROPS);
+                    return new ArrayObject(Json::decode(Crypt::decryptString($attributes[$key])), ArrayObject::ARRAY_AS_PROPS);
                 }
                 return null;
             }
             public function set($model, $key, $value, $attributes)
             {
                 if (!is_null($value)) {
-                    return [$key => Crypt::encryptString(\Illuminate\Database\Eloquent\Casts\Json::encode($value))];
+                    return [$key => Crypt::encryptString(Json::encode($value))];
                 }
                 return null;
             }

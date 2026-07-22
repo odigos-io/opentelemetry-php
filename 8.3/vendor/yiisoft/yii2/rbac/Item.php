@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rbac;
+namespace Odigos\yii\rbac;
 
-use yii\base\BaseObject;
+use Odigos\yii\base\BaseObject;
 /**
  * For more details and usage information on Item, see the [guide article on security authorization](guide:security-authorization).
  *

@@ -8,22 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Helper;
+namespace Odigos\Symfony\Component\Console\Helper;
 
-use Symfony\Component\Console\Descriptor\DescriptorInterface;
-use Symfony\Component\Console\Descriptor\JsonDescriptor;
-use Symfony\Component\Console\Descriptor\MarkdownDescriptor;
-use Symfony\Component\Console\Descriptor\ReStructuredTextDescriptor;
-use Symfony\Component\Console\Descriptor\TextDescriptor;
-use Symfony\Component\Console\Descriptor\XmlDescriptor;
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Descriptor\DescriptorInterface;
+use Odigos\Symfony\Component\Console\Descriptor\JsonDescriptor;
+use Odigos\Symfony\Component\Console\Descriptor\MarkdownDescriptor;
+use Odigos\Symfony\Component\Console\Descriptor\ReStructuredTextDescriptor;
+use Odigos\Symfony\Component\Console\Descriptor\TextDescriptor;
+use Odigos\Symfony\Component\Console\Descriptor\XmlDescriptor;
+use Odigos\Symfony\Component\Console\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 /**
  * This class adds helper method to describe objects in various formats.
  *
  * @author Jean-François Simon <contact@jfsimon.fr>
  */
-class DescriptorHelper extends \Symfony\Component\Console\Helper\Helper
+class DescriptorHelper extends Helper
 {
     /**
      * @var DescriptorInterface[]

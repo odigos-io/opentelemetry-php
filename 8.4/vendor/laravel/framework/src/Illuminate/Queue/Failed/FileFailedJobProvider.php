@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Queue\Failed;
+namespace Odigos\Illuminate\Queue\Failed;
 
 use Closure;
 use DateTimeInterface;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Date;
-class FileFailedJobProvider implements \Illuminate\Queue\Failed\CountableFailedJobProvider, \Illuminate\Queue\Failed\FailedJobProviderInterface, \Illuminate\Queue\Failed\PrunableFailedJobProvider
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Facades\Date;
+class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProviderInterface, PrunableFailedJobProvider
 {
     /**
      * The file path where the failed job file should be stored.

@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console\widgets;
+namespace Odigos\yii\console\widgets;
 
 use Odigos\Yii;
-use yii\base\Widget;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Console;
+use Odigos\yii\base\Widget;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\Console;
 /**
  * Table class displays a table in console.
  *
@@ -290,10 +290,10 @@ class Table extends Widget
         foreach ($columns as $column) {
             $columnWidth = max(array_map(function ($val) {
                 if (is_array($val)) {
-                    return max(array_map('yii\helpers\Console::ansiStrwidth', $val)) + Console::ansiStrwidth($this->listPrefix);
+                    return max(array_map('Odigos\yii\helpers\Console::ansiStrwidth', $val)) + Console::ansiStrwidth($this->listPrefix);
                 }
                 if (is_string($val)) {
-                    return max(array_map('yii\helpers\Console::ansiStrwidth', explode(\PHP_EOL, $val)));
+                    return max(array_map('Odigos\yii\helpers\Console::ansiStrwidth', explode(\PHP_EOL, $val)));
                 }
                 return Console::ansiStrwidth($val);
             }, $column)) + 2;
@@ -339,10 +339,10 @@ class Table extends Widget
             return $size == 2 || $columnWidth == 0 ? 0 : ceil($columnWidth / ($size - 2));
         }, $this->columnWidths, array_map(function ($val) {
             if (is_array($val)) {
-                return array_map('yii\helpers\Console::ansiStrwidth', $val);
+                return array_map('Odigos\yii\helpers\Console::ansiStrwidth', $val);
             }
             if (is_string($val)) {
-                return array_map('yii\helpers\Console::ansiStrwidth', explode(\PHP_EOL, $val));
+                return array_map('Odigos\yii\helpers\Console::ansiStrwidth', explode(\PHP_EOL, $val));
             }
             return Console::ansiStrwidth($val);
         }, $row));

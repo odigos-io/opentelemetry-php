@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         0.10.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource;
+namespace Odigos\Cake\Datasource;
 
-use Cake\Core\StaticConfigTrait;
-use Cake\Database\Connection;
-use Cake\Database\Driver\Mysql;
-use Cake\Database\Driver\Postgres;
-use Cake\Database\Driver\Sqlite;
-use Cake\Database\Driver\Sqlserver;
-use Cake\Datasource\Exception\MissingDatasourceConfigException;
+use Odigos\Cake\Core\StaticConfigTrait;
+use Odigos\Cake\Database\Connection;
+use Odigos\Cake\Database\Driver\Mysql;
+use Odigos\Cake\Database\Driver\Postgres;
+use Odigos\Cake\Database\Driver\Sqlite;
+use Odigos\Cake\Database\Driver\Sqlserver;
+use Odigos\Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Closure;
 /**
  * Manages and loads instances of Connection
@@ -57,7 +57,7 @@ class ConnectionManager
      *
      * @var \Cake\Datasource\ConnectionRegistry
      */
-    protected static \Cake\Datasource\ConnectionRegistry $_registry;
+    protected static ConnectionRegistry $_registry;
     /**
      * Configure a new connection object.
      *
@@ -69,7 +69,7 @@ class ConnectionManager
      * @throws \Cake\Core\Exception\CakeException When trying to modify an existing config.
      * @see \Cake\Core\StaticConfigTrait::config()
      */
-    public static function setConfig(array|string $key, \Cake\Datasource\ConnectionInterface|Closure|array|null $config = null): void
+    public static function setConfig(array|string $key, ConnectionInterface|Closure|array|null $config = null): void
     {
         if (is_array($config)) {
             $config['name'] = $key;
@@ -178,7 +178,7 @@ class ConnectionManager
      * @throws \Cake\Datasource\Exception\MissingDatasourceConfigException When config
      * data is missing.
      */
-    public static function get(string $name, bool $useAliases = \true): \Cake\Datasource\ConnectionInterface
+    public static function get(string $name, bool $useAliases = \true): ConnectionInterface
     {
         if ($useAliases && isset(static::$_aliasMap[$name])) {
             $name = static::$_aliasMap[$name];
@@ -186,7 +186,7 @@ class ConnectionManager
         if (!isset(static::$_config[$name])) {
             throw new MissingDatasourceConfigException(['name' => $name]);
         }
-        static::$_registry ??= new \Cake\Datasource\ConnectionRegistry();
+        static::$_registry ??= new ConnectionRegistry();
         return static::$_registry->{$name} ?? static::$_registry->load($name, static::$_config[$name]);
     }
 }

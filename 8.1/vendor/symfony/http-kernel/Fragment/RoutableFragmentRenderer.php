@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Fragment;
+namespace Odigos\Symfony\Component\HttpKernel\Fragment;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ControllerReference;
-use Symfony\Component\HttpKernel\EventListener\FragmentListener;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Odigos\Symfony\Component\HttpKernel\EventListener\FragmentListener;
 /**
  * Adds the possibility to generate a fragment URI for a given Controller.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class RoutableFragmentRenderer implements \Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface
+abstract class RoutableFragmentRenderer implements FragmentRendererInterface
 {
     /**
      * @internal
@@ -43,6 +43,6 @@ abstract class RoutableFragmentRenderer implements \Symfony\Component\HttpKernel
      */
     protected function generateFragmentUri(ControllerReference $reference, Request $request, bool $absolute = \false, bool $strict = \true): string
     {
-        return (new \Symfony\Component\HttpKernel\Fragment\FragmentUriGenerator($this->fragmentPath))->generate($reference, $request, $absolute, $strict, \false);
+        return (new FragmentUriGenerator($this->fragmentPath))->generate($reference, $request, $absolute, $strict, \false);
     }
 }

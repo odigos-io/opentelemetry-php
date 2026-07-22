@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime;
+namespace Odigos\Symfony\Component\Mime;
 
-use Symfony\Component\Mime\Exception\RuntimeException;
-use Symfony\Component\Mime\Part\DataPart;
-use Symfony\Component\Mime\Part\Multipart\AlternativePart;
-use Symfony\Component\Mime\Part\Multipart\MixedPart;
-use Symfony\Component\Mime\Part\Multipart\RelatedPart;
-use Symfony\Component\Mime\Part\TextPart;
+use Odigos\Symfony\Component\Mime\Exception\RuntimeException;
+use Odigos\Symfony\Component\Mime\Part\DataPart;
+use Odigos\Symfony\Component\Mime\Part\Multipart\AlternativePart;
+use Odigos\Symfony\Component\Mime\Part\Multipart\MixedPart;
+use Odigos\Symfony\Component\Mime\Part\Multipart\RelatedPart;
+use Odigos\Symfony\Component\Mime\Part\TextPart;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -24,9 +24,9 @@ final class MessageConverter
     /**
      * @throws RuntimeException when unable to convert the message to an email
      */
-    public static function toEmail(\Symfony\Component\Mime\Message $message): \Symfony\Component\Mime\Email
+    public static function toEmail(Message $message): Email
     {
-        if ($message instanceof \Symfony\Component\Mime\Email) {
+        if ($message instanceof Email) {
             return $message;
         }
         // try to convert to a "simple" Email instance
@@ -55,25 +55,25 @@ final class MessageConverter
         }
         throw new RuntimeException(\sprintf('Unable to create an Email from an instance of "%s" as the body is too complex.', get_debug_type($message)));
     }
-    private static function createEmailFromTextPart(\Symfony\Component\Mime\Message $message, TextPart $part): \Symfony\Component\Mime\Email
+    private static function createEmailFromTextPart(Message $message, TextPart $part): Email
     {
         if ('text' === $part->getMediaType() && 'plain' === $part->getMediaSubtype()) {
-            return (new \Symfony\Component\Mime\Email(clone $message->getHeaders()))->text($part->getBody(), $part->getPreparedHeaders()->getHeaderParameter('Content-Type', 'charset') ?: 'utf-8');
+            return (new Email(clone $message->getHeaders()))->text($part->getBody(), $part->getPreparedHeaders()->getHeaderParameter('Content-Type', 'charset') ?: 'utf-8');
         }
         if ('text' === $part->getMediaType() && 'html' === $part->getMediaSubtype()) {
-            return (new \Symfony\Component\Mime\Email(clone $message->getHeaders()))->html($part->getBody(), $part->getPreparedHeaders()->getHeaderParameter('Content-Type', 'charset') ?: 'utf-8');
+            return (new Email(clone $message->getHeaders()))->html($part->getBody(), $part->getPreparedHeaders()->getHeaderParameter('Content-Type', 'charset') ?: 'utf-8');
         }
         throw new RuntimeException(\sprintf('Unable to create an Email from an instance of "%s" as the body is too complex.', get_debug_type($message)));
     }
-    private static function createEmailFromAlternativePart(\Symfony\Component\Mime\Message $message, AlternativePart $part): \Symfony\Component\Mime\Email
+    private static function createEmailFromAlternativePart(Message $message, AlternativePart $part): Email
     {
         $parts = $part->getParts();
         if (2 === \count($parts) && $parts[0] instanceof TextPart && 'text' === $parts[0]->getMediaType() && 'plain' === $parts[0]->getMediaSubtype() && $parts[1] instanceof TextPart && 'text' === $parts[1]->getMediaType() && 'html' === $parts[1]->getMediaSubtype()) {
-            return (new \Symfony\Component\Mime\Email(clone $message->getHeaders()))->text($parts[0]->getBody(), $parts[0]->getPreparedHeaders()->getHeaderParameter('Content-Type', 'charset') ?: 'utf-8')->html($parts[1]->getBody(), $parts[1]->getPreparedHeaders()->getHeaderParameter('Content-Type', 'charset') ?: 'utf-8');
+            return (new Email(clone $message->getHeaders()))->text($parts[0]->getBody(), $parts[0]->getPreparedHeaders()->getHeaderParameter('Content-Type', 'charset') ?: 'utf-8')->html($parts[1]->getBody(), $parts[1]->getPreparedHeaders()->getHeaderParameter('Content-Type', 'charset') ?: 'utf-8');
         }
         throw new RuntimeException(\sprintf('Unable to create an Email from an instance of "%s" as the body is too complex.', get_debug_type($message)));
     }
-    private static function createEmailFromRelatedPart(\Symfony\Component\Mime\Message $message, RelatedPart $part): \Symfony\Component\Mime\Email
+    private static function createEmailFromRelatedPart(Message $message, RelatedPart $part): Email
     {
         $parts = $part->getParts();
         if ($parts[0] instanceof AlternativePart) {
@@ -85,7 +85,7 @@ final class MessageConverter
         }
         return self::addParts($email, \array_slice($parts, 1));
     }
-    private static function addParts(\Symfony\Component\Mime\Email $email, array $parts): \Symfony\Component\Mime\Email
+    private static function addParts(Email $email, array $parts): Email
     {
         foreach ($parts as $part) {
             if (!$part instanceof DataPart) {

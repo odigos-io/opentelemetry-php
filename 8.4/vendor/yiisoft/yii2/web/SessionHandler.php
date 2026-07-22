@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use SessionHandlerInterface;
 /**
@@ -20,7 +20,7 @@ class SessionHandler implements SessionHandlerInterface
      * @var Session
      */
     private $_session;
-    public function __construct(\yii\web\Session $session)
+    public function __construct(Session $session)
     {
         $this->_session = $session;
     }

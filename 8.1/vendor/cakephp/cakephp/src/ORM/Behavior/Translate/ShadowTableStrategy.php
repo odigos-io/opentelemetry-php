@@ -14,30 +14,30 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Behavior\Translate;
+namespace Odigos\Cake\ORM\Behavior\Translate;
 
 use ArrayObject;
-use Cake\Collection\CollectionInterface;
-use Cake\Core\InstanceConfigTrait;
-use Cake\Database\Expression\FieldInterface;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Datasource\EntityInterface;
-use Cake\Event\EventInterface;
-use Cake\ORM\Locator\LocatorAwareTrait;
-use Cake\ORM\Marshaller;
-use Cake\ORM\Query\SelectQuery;
-use Cake\ORM\Table;
-use Cake\Utility\Hash;
-use function Cake\Core\pluginSplit;
+use Odigos\Cake\Collection\CollectionInterface;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Database\Expression\FieldInterface;
+use Odigos\Cake\Database\Expression\QueryExpression;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\ORM\Locator\LocatorAwareTrait;
+use Odigos\Cake\ORM\Marshaller;
+use Odigos\Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\ORM\Table;
+use Odigos\Cake\Utility\Hash;
+use function Odigos\Cake\Core\pluginSplit;
 /**
  * This class provides a way to translate dynamic data by keeping translations
  * in a separate shadow table where each row corresponds to a row of primary table.
  */
-class ShadowTableStrategy implements \Cake\ORM\Behavior\Translate\TranslateStrategyInterface
+class ShadowTableStrategy implements TranslateStrategyInterface
 {
     use InstanceConfigTrait;
     use LocatorAwareTrait;
-    use \Cake\ORM\Behavior\Translate\TranslateStrategyTrait {
+    use TranslateStrategyTrait {
         buildMarshalMap as private _buildMarshalMap;
     }
     /**

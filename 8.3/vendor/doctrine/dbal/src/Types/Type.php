@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
 use ArgumentCountError;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\ParameterType;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Exception\TypeArgumentCountError;
-use Doctrine\DBAL\Types\Exception\TypesException;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Types\Exception\TypeArgumentCountError;
+use Odigos\Doctrine\DBAL\Types\Exception\TypesException;
 use function array_map;
 use function is_string;
 /**
@@ -21,8 +21,8 @@ abstract class Type
     /**
      * The map of supported doctrine mapping types.
      */
-    private const BUILTIN_TYPES_MAP = [\Doctrine\DBAL\Types\Types::ASCII_STRING => \Doctrine\DBAL\Types\AsciiStringType::class, \Doctrine\DBAL\Types\Types::BIGINT => \Doctrine\DBAL\Types\BigIntType::class, \Doctrine\DBAL\Types\Types::BINARY => \Doctrine\DBAL\Types\BinaryType::class, \Doctrine\DBAL\Types\Types::BLOB => \Doctrine\DBAL\Types\BlobType::class, \Doctrine\DBAL\Types\Types::BOOLEAN => \Doctrine\DBAL\Types\BooleanType::class, \Doctrine\DBAL\Types\Types::DATE_MUTABLE => \Doctrine\DBAL\Types\DateType::class, \Doctrine\DBAL\Types\Types::DATE_IMMUTABLE => \Doctrine\DBAL\Types\DateImmutableType::class, \Doctrine\DBAL\Types\Types::DATEINTERVAL => \Doctrine\DBAL\Types\DateIntervalType::class, \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE => \Doctrine\DBAL\Types\DateTimeType::class, \Doctrine\DBAL\Types\Types::DATETIME_IMMUTABLE => \Doctrine\DBAL\Types\DateTimeImmutableType::class, \Doctrine\DBAL\Types\Types::DATETIMETZ_MUTABLE => \Doctrine\DBAL\Types\DateTimeTzType::class, \Doctrine\DBAL\Types\Types::DATETIMETZ_IMMUTABLE => \Doctrine\DBAL\Types\DateTimeTzImmutableType::class, \Doctrine\DBAL\Types\Types::DECIMAL => \Doctrine\DBAL\Types\DecimalType::class, \Doctrine\DBAL\Types\Types::NUMBER => \Doctrine\DBAL\Types\NumberType::class, \Doctrine\DBAL\Types\Types::ENUM => \Doctrine\DBAL\Types\EnumType::class, \Doctrine\DBAL\Types\Types::FLOAT => \Doctrine\DBAL\Types\FloatType::class, \Doctrine\DBAL\Types\Types::GUID => \Doctrine\DBAL\Types\GuidType::class, \Doctrine\DBAL\Types\Types::INTEGER => \Doctrine\DBAL\Types\IntegerType::class, \Doctrine\DBAL\Types\Types::JSON => \Doctrine\DBAL\Types\JsonType::class, \Doctrine\DBAL\Types\Types::JSON_OBJECT => \Doctrine\DBAL\Types\JsonType::class, \Doctrine\DBAL\Types\Types::JSONB => \Doctrine\DBAL\Types\JsonbType::class, \Doctrine\DBAL\Types\Types::JSONB_OBJECT => \Doctrine\DBAL\Types\JsonbType::class, \Doctrine\DBAL\Types\Types::SIMPLE_ARRAY => \Doctrine\DBAL\Types\SimpleArrayType::class, \Doctrine\DBAL\Types\Types::SMALLFLOAT => \Doctrine\DBAL\Types\SmallFloatType::class, \Doctrine\DBAL\Types\Types::SMALLINT => \Doctrine\DBAL\Types\SmallIntType::class, \Doctrine\DBAL\Types\Types::STRING => \Doctrine\DBAL\Types\StringType::class, \Doctrine\DBAL\Types\Types::TEXT => \Doctrine\DBAL\Types\TextType::class, \Doctrine\DBAL\Types\Types::TIME_MUTABLE => \Doctrine\DBAL\Types\TimeType::class, \Doctrine\DBAL\Types\Types::TIME_IMMUTABLE => \Doctrine\DBAL\Types\TimeImmutableType::class];
-    private static ?\Doctrine\DBAL\Types\TypeRegistry $typeRegistry = null;
+    private const BUILTIN_TYPES_MAP = [Types::ASCII_STRING => AsciiStringType::class, Types::BIGINT => BigIntType::class, Types::BINARY => BinaryType::class, Types::BLOB => BlobType::class, Types::BOOLEAN => BooleanType::class, Types::DATE_MUTABLE => DateType::class, Types::DATE_IMMUTABLE => DateImmutableType::class, Types::DATEINTERVAL => DateIntervalType::class, Types::DATETIME_MUTABLE => DateTimeType::class, Types::DATETIME_IMMUTABLE => DateTimeImmutableType::class, Types::DATETIMETZ_MUTABLE => DateTimeTzType::class, Types::DATETIMETZ_IMMUTABLE => DateTimeTzImmutableType::class, Types::DECIMAL => DecimalType::class, Types::NUMBER => NumberType::class, Types::ENUM => EnumType::class, Types::FLOAT => FloatType::class, Types::GUID => GuidType::class, Types::INTEGER => IntegerType::class, Types::JSON => JsonType::class, Types::JSON_OBJECT => JsonType::class, Types::JSONB => JsonbType::class, Types::JSONB_OBJECT => JsonbType::class, Types::SIMPLE_ARRAY => SimpleArrayType::class, Types::SMALLFLOAT => SmallFloatType::class, Types::SMALLINT => SmallIntType::class, Types::STRING => StringType::class, Types::TEXT => TextType::class, Types::TIME_MUTABLE => TimeType::class, Types::TIME_IMMUTABLE => TimeImmutableType::class];
+    private static ?TypeRegistry $typeRegistry = null;
     /**
      * Converts a value from its PHP representation to its database representation
      * of this type.
@@ -61,14 +61,14 @@ abstract class Type
      */
     abstract public function getSQLDeclaration(array $column, AbstractPlatform $platform): string;
     /** @throws TypesException */
-    final public static function getTypeRegistry(): \Doctrine\DBAL\Types\TypeRegistry
+    final public static function getTypeRegistry(): TypeRegistry
     {
         return self::$typeRegistry ??= self::createTypeRegistry();
     }
     /** @throws TypesException */
-    private static function createTypeRegistry(): \Doctrine\DBAL\Types\TypeRegistry
+    private static function createTypeRegistry(): TypeRegistry
     {
-        return new \Doctrine\DBAL\Types\TypeRegistry(array_map(static fn($class) => new $class(), self::BUILTIN_TYPES_MAP));
+        return new TypeRegistry(array_map(static fn($class) => new $class(), self::BUILTIN_TYPES_MAP));
     }
     /**
      * Factory method to create type instances.
@@ -98,7 +98,7 @@ abstract class Type
      *
      * @throws Exception
      */
-    public static function addType(string $name, string|\Doctrine\DBAL\Types\Type $type): void
+    public static function addType(string $name, string|Type $type): void
     {
         if (is_string($type)) {
             try {
@@ -130,7 +130,7 @@ abstract class Type
      *
      * @throws Exception
      */
-    public static function overrideType(string $name, string|\Doctrine\DBAL\Types\Type $type): void
+    public static function overrideType(string $name, string|Type $type): void
     {
         if (is_string($type)) {
             try {
@@ -160,7 +160,7 @@ abstract class Type
      */
     public static function getTypesMap(): array
     {
-        return array_map(static fn(\Doctrine\DBAL\Types\Type $type): string => $type::class, self::getTypeRegistry()->getMap());
+        return array_map(static fn(Type $type): string => $type::class, self::getTypeRegistry()->getMap());
     }
     /**
      * Modifies the SQL expression (identifier, parameter) to convert to a database value.

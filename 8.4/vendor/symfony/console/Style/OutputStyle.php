@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Style;
+namespace Odigos\Symfony\Component\Console\Style;
 
-use Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use Odigos\Symfony\Component\Console\Helper\ProgressBar;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Decorates output to add console style guide helpers.
  *
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-abstract class OutputStyle implements OutputInterface, \Symfony\Component\Console\Style\StyleInterface
+abstract class OutputStyle implements OutputInterface, StyleInterface
 {
     public function __construct(private OutputInterface $output)
     {

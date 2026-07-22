@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Validation\Rules;
+namespace Odigos\Illuminate\Validation\Rules;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Support\Traits\Conditionable;
 use Stringable;
 class Unique implements Stringable
 {
-    use Conditionable, \Illuminate\Validation\Rules\DatabaseRule;
+    use Conditionable, DatabaseRule;
     /**
      * The ID that should be ignored.
      *

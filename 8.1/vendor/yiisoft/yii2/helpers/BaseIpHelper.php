@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
-use yii\base\NotSupportedException;
+use Odigos\yii\base\NotSupportedException;
 /**
  * Class BaseIpHelper provides concrete implementation for [[IpHelper]]
  *

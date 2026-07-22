@@ -1,20 +1,20 @@
 <?php
 
-namespace OpenAI;
+namespace Odigos\OpenAI;
 
 use Closure;
 use Exception;
-use GuzzleHttp\Client as GuzzleClient;
-use Http\Discovery\Psr18ClientDiscovery;
-use OpenAI\Transporters\HttpTransporter;
-use OpenAI\ValueObjects\ApiKey;
-use OpenAI\ValueObjects\Transporter\BaseUri;
-use OpenAI\ValueObjects\Transporter\Headers;
-use OpenAI\ValueObjects\Transporter\QueryParams;
+use Odigos\GuzzleHttp\Client as GuzzleClient;
+use Odigos\Http\Discovery\Psr18ClientDiscovery;
+use Odigos\OpenAI\Transporters\HttpTransporter;
+use Odigos\OpenAI\ValueObjects\ApiKey;
+use Odigos\OpenAI\ValueObjects\Transporter\BaseUri;
+use Odigos\OpenAI\ValueObjects\Transporter\Headers;
+use Odigos\OpenAI\ValueObjects\Transporter\QueryParams;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\HttpClient\Psr18Client;
+use Odigos\Symfony\Component\HttpClient\Psr18Client;
 final class Factory
 {
     /**
@@ -119,7 +119,7 @@ final class Factory
     /**
      * Creates a new Open AI Client.
      */
-    public function make(): \OpenAI\Client
+    public function make(): Client
     {
         $headers = Headers::create();
         if ($this->apiKey !== null) {
@@ -142,7 +142,7 @@ final class Factory
         $client = $this->httpClient ??= Psr18ClientDiscovery::find();
         $sendAsync = $this->makeStreamHandler($client);
         $transporter = new HttpTransporter($client, $baseUri, $headers, $queryParams, $sendAsync);
-        return new \OpenAI\Client($transporter);
+        return new Client($transporter);
     }
     /**
      * Creates a new stream handler for "stream" requests.

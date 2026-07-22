@@ -1,20 +1,20 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Odigos\Illuminate\Database\Eloquent\Relations;
 
 use BadMethodCallException;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Database\Eloquent\Builder;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
+use Odigos\Illuminate\Support\Arr;
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
  * @extends \Illuminate\Database\Eloquent\Relations\BelongsTo<TRelatedModel, TDeclaringModel>
  */
-class MorphTo extends \Illuminate\Database\Eloquent\Relations\BelongsTo
+class MorphTo extends BelongsTo
 {
     use InteractsWithDictionary;
     /**

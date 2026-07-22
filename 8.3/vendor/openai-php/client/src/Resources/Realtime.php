@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\RealtimeContract;
-use OpenAI\Responses\Realtime\SessionResponse;
-use OpenAI\Responses\Realtime\TranscriptionSessionResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\RealtimeContract;
+use Odigos\OpenAI\Responses\Realtime\SessionResponse;
+use Odigos\OpenAI\Responses\Realtime\TranscriptionSessionResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 /**
  * @phpstan-import-type SessionType from SessionResponse
  * @phpstan-import-type TranscriptionSessionType from TranscriptionSessionResponse
  */
 final class Realtime implements RealtimeContract
 {
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Transportable;
     /**
      * Create an ephemeral API token for real time sessions.
      *

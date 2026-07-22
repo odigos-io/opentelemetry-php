@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use ArrayIterator;
 use Odigos\Yii;
-use yii\base\BaseObject;
-use yii\base\InvalidCallException;
+use Odigos\yii\base\BaseObject;
+use Odigos\yii\base\InvalidCallException;
 /**
  * CookieCollection maintains the cookies available in the current request.
  *
@@ -149,11 +149,11 @@ class CookieCollection extends BaseObject implements \IteratorAggregate, \ArrayA
         if ($this->readOnly) {
             throw new InvalidCallException('The cookie collection is read only.');
         }
-        if ($cookie instanceof \yii\web\Cookie) {
+        if ($cookie instanceof Cookie) {
             $cookie->expire = 1;
             $cookie->value = '';
         } else {
-            $cookie = Yii::createObject(['class' => 'yii\web\Cookie', 'name' => $cookie, 'expire' => 1]);
+            $cookie = Yii::createObject(['class' => 'Odigos\yii\web\Cookie', 'name' => $cookie, 'expire' => 1]);
         }
         if ($removeFromBrowser) {
             $this->_cookies[$cookie->name] = $cookie;

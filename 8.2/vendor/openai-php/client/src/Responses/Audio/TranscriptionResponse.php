@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Audio;
+namespace Odigos\OpenAI\Responses\Audio;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Contracts\ResponseHasMetaInformationContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Concerns\HasMetaInformation;
-use OpenAI\Responses\Meta\MetaInformation;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Contracts\ResponseHasMetaInformationContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Concerns\HasMetaInformation;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{task: ?string, language: ?string, duration: ?float, segments: array<int, array{id: int|string, start: float, end: float, text: string, seek?: int, tokens?: array<int, int>, temperature?: float, avg_logprob?: float, compression_ratio?: float, no_speech_prob?: float, transient?: bool, speaker?: string, type?: string}>, words: array<int, array{word: string, start: float, end: float}>, text: string}>
  */
@@ -37,8 +37,8 @@ final class TranscriptionResponse implements ResponseContract, ResponseHasMetaIn
         if (is_string($attributes)) {
             $attributes = ['text' => $attributes];
         }
-        $segments = isset($attributes['segments']) ? array_map(fn(array $result): \OpenAI\Responses\Audio\TranscriptionResponseSegment => \OpenAI\Responses\Audio\TranscriptionResponseSegment::from($result), $attributes['segments']) : [];
-        $words = isset($attributes['words']) ? array_map(fn(array $result): \OpenAI\Responses\Audio\TranscriptionResponseWord => \OpenAI\Responses\Audio\TranscriptionResponseWord::from($result), $attributes['words']) : [];
+        $segments = isset($attributes['segments']) ? array_map(fn(array $result): TranscriptionResponseSegment => TranscriptionResponseSegment::from($result), $attributes['segments']) : [];
+        $words = isset($attributes['words']) ? array_map(fn(array $result): TranscriptionResponseWord => TranscriptionResponseWord::from($result), $attributes['words']) : [];
         return new self($attributes['task'] ?? null, $attributes['language'] ?? null, $attributes['duration'] ?? null, $segments, $words, $attributes['text'], $meta);
     }
     /**
@@ -46,6 +46,6 @@ final class TranscriptionResponse implements ResponseContract, ResponseHasMetaIn
      */
     public function toArray(): array
     {
-        return ['task' => $this->task, 'language' => $this->language, 'duration' => $this->duration, 'segments' => array_map(static fn(\OpenAI\Responses\Audio\TranscriptionResponseSegment $result): array => $result->toArray(), $this->segments), 'words' => array_map(static fn(\OpenAI\Responses\Audio\TranscriptionResponseWord $result): array => $result->toArray(), $this->words), 'text' => $this->text];
+        return ['task' => $this->task, 'language' => $this->language, 'duration' => $this->duration, 'segments' => array_map(static fn(TranscriptionResponseSegment $result): array => $result->toArray(), $this->segments), 'words' => array_map(static fn(TranscriptionResponseWord $result): array => $result->toArray(), $this->words), 'text' => $this->text];
     }
 }

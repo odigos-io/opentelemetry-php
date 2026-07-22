@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Mail\Transport;
+namespace Odigos\Illuminate\Mail\Transport;
 
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 use Stringable;
-use Symfony\Component\Mailer\Envelope;
-use Symfony\Component\Mailer\SentMessage;
-use Symfony\Component\Mailer\Transport\TransportInterface;
-use Symfony\Component\Mime\RawMessage;
+use Odigos\Symfony\Component\Mailer\Envelope;
+use Odigos\Symfony\Component\Mailer\SentMessage;
+use Odigos\Symfony\Component\Mailer\Transport\TransportInterface;
+use Odigos\Symfony\Component\Mime\RawMessage;
 class ArrayTransport implements Stringable, TransportInterface
 {
     /**

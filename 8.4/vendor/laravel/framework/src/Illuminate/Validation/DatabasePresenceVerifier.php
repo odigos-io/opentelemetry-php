@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
 use Closure;
-use Illuminate\Database\ConnectionResolverInterface;
-class DatabasePresenceVerifier implements \Illuminate\Validation\DatabasePresenceVerifierInterface
+use Odigos\Illuminate\Database\ConnectionResolverInterface;
+class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
 {
     /**
      * The database connection instance.

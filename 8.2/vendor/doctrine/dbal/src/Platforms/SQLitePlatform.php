@@ -1,27 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms;
+namespace Odigos\Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Platforms\Exception\NotSupported;
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
-use Doctrine\DBAL\Platforms\Keywords\SQLiteKeywords;
-use Doctrine\DBAL\Platforms\SQLite\SQLiteMetadataProvider;
-use Doctrine\DBAL\Schema\Column;
-use Doctrine\DBAL\Schema\Exception\ColumnDoesNotExist;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint;
-use Doctrine\DBAL\Schema\Identifier;
-use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
-use Doctrine\DBAL\Schema\SQLiteSchemaManager;
-use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Schema\TableDiff;
-use Doctrine\DBAL\SQL\Builder\DefaultSelectSQLBuilder;
-use Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
-use Doctrine\DBAL\TransactionIsolationLevel;
-use Doctrine\DBAL\Types;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Platforms\Exception\NotSupported;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\KeywordList;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\SQLiteKeywords;
+use Odigos\Doctrine\DBAL\Platforms\SQLite\SQLiteMetadataProvider;
+use Odigos\Doctrine\DBAL\Schema\Column;
+use Odigos\Doctrine\DBAL\Schema\Exception\ColumnDoesNotExist;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Odigos\Doctrine\DBAL\Schema\Identifier;
+use Odigos\Doctrine\DBAL\Schema\Index;
+use Odigos\Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
+use Odigos\Doctrine\DBAL\Schema\SQLiteSchemaManager;
+use Odigos\Doctrine\DBAL\Schema\Table;
+use Odigos\Doctrine\DBAL\Schema\TableDiff;
+use Odigos\Doctrine\DBAL\SQL\Builder\DefaultSelectSQLBuilder;
+use Odigos\Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
+use Odigos\Doctrine\DBAL\TransactionIsolationLevel;
+use Odigos\Doctrine\DBAL\Types;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use InvalidArgumentException;
 use function array_combine;
 use function array_fill_keys;
@@ -45,7 +45,7 @@ use function substr;
  * @phpstan-import-type ColumnProperties from Column
  * @phpstan-import-type CreateTableParameters from AbstractPlatform
  */
-class SQLitePlatform extends \Doctrine\DBAL\Platforms\AbstractPlatform
+class SQLitePlatform extends AbstractPlatform
 {
     public function __construct()
     {
@@ -67,12 +67,12 @@ class SQLitePlatform extends \Doctrine\DBAL\Platforms\AbstractPlatform
     {
         return $dividend . ' % ' . $divisor;
     }
-    public function getTrimExpression(string $str, \Doctrine\DBAL\Platforms\TrimMode $mode = \Doctrine\DBAL\Platforms\TrimMode::UNSPECIFIED, ?string $char = null): string
+    public function getTrimExpression(string $str, TrimMode $mode = TrimMode::UNSPECIFIED, ?string $char = null): string
     {
         $trimFn = match ($mode) {
-            \Doctrine\DBAL\Platforms\TrimMode::UNSPECIFIED, \Doctrine\DBAL\Platforms\TrimMode::BOTH => 'TRIM',
-            \Doctrine\DBAL\Platforms\TrimMode::LEADING => 'LTRIM',
-            \Doctrine\DBAL\Platforms\TrimMode::TRAILING => 'RTRIM',
+            TrimMode::UNSPECIFIED, TrimMode::BOTH => 'TRIM',
+            TrimMode::LEADING => 'LTRIM',
+            TrimMode::TRAILING => 'RTRIM',
         };
         $arguments = [$str];
         if ($char !== null) {
@@ -94,16 +94,16 @@ class SQLitePlatform extends \Doctrine\DBAL\Platforms\AbstractPlatform
         }
         return sprintf('CASE WHEN INSTR(SUBSTR(%1$s, %3$s), %2$s) > 0 THEN INSTR(SUBSTR(%1$s, %3$s), %2$s) + %3$s - 1 ELSE 0 END', $string, $substring, $start);
     }
-    protected function getDateArithmeticIntervalExpression(string $date, string $operator, string $interval, \Doctrine\DBAL\Platforms\DateIntervalUnit $unit): string
+    protected function getDateArithmeticIntervalExpression(string $date, string $operator, string $interval, DateIntervalUnit $unit): string
     {
         switch ($unit) {
-            case \Doctrine\DBAL\Platforms\DateIntervalUnit::WEEK:
+            case DateIntervalUnit::WEEK:
                 $interval = $this->multiplyInterval($interval, 7);
-                $unit = \Doctrine\DBAL\Platforms\DateIntervalUnit::DAY;
+                $unit = DateIntervalUnit::DAY;
                 break;
-            case \Doctrine\DBAL\Platforms\DateIntervalUnit::QUARTER:
+            case DateIntervalUnit::QUARTER:
                 $interval = $this->multiplyInterval($interval, 3);
-                $unit = \Doctrine\DBAL\Platforms\DateIntervalUnit::MONTH;
+                $unit = DateIntervalUnit::MONTH;
                 break;
         }
         return 'DATETIME(' . $date . ',' . $this->getConcatExpression($this->quoteStringLiteral($operator), $interval, $this->quoteStringLiteral(' ' . $unit->value)) . ')';

@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Schema;
+namespace Odigos\Cake\Database\Schema;
 
 use Psr\SimpleCache\CacheInterface;
 /**
  * Decorates a schema collection and adds caching
  */
-class CachedCollection implements \Cake\Database\Schema\CollectionInterface
+class CachedCollection implements CollectionInterface
 {
     /**
      * Cacher instance.
@@ -33,7 +33,7 @@ class CachedCollection implements \Cake\Database\Schema\CollectionInterface
      *
      * @var \Cake\Database\Schema\CollectionInterface
      */
-    protected \Cake\Database\Schema\CollectionInterface $collection;
+    protected CollectionInterface $collection;
     /**
      * The cache key prefix
      *
@@ -47,7 +47,7 @@ class CachedCollection implements \Cake\Database\Schema\CollectionInterface
      * @param string $prefix The cache key prefix to use. Typically the connection name.
      * @param \Psr\SimpleCache\CacheInterface $cacher Cacher instance.
      */
-    public function __construct(\Cake\Database\Schema\CollectionInterface $collection, string $prefix, CacheInterface $cacher)
+    public function __construct(CollectionInterface $collection, string $prefix, CacheInterface $cacher)
     {
         $this->collection = $collection;
         $this->prefix = $prefix;
@@ -85,7 +85,7 @@ class CachedCollection implements \Cake\Database\Schema\CollectionInterface
      * @return \Cake\Database\Schema\TableSchemaInterface Object with column metadata.
      * @throws \Cake\Database\Exception\DatabaseException when table cannot be described.
      */
-    public function describe(string $name, array $options = []): \Cake\Database\Schema\TableSchemaInterface
+    public function describe(string $name, array $options = []): TableSchemaInterface
     {
         $options += ['forceRefresh' => \false];
         $cacheKey = $this->cacheKey($name);

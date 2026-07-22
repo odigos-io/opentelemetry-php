@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Symfony\Component\Process\Process;
-use function Illuminate\Support\php_binary;
+use Odigos\Symfony\Component\Process\Process;
+use function Odigos\Illuminate\Support\php_binary;
 trait InteractsWithComposerPackages
 {
     /**

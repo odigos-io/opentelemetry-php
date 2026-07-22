@@ -1,8 +1,8 @@
 <?php
 
-namespace Http\Discovery;
+namespace Odigos\Http\Discovery;
 
-use Http\Discovery\Exception\NotFoundException as RealNotFoundException;
+use Odigos\Http\Discovery\Exception\NotFoundException as RealNotFoundException;
 /**
  * Thrown when a discovery does not find any matches.
  *

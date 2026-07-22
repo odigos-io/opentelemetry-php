@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Completion;
+namespace Odigos\Symfony\Component\Console\Completion;
 
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 /**
  * Stores all completion suggestions for the current input.
  *
@@ -25,9 +25,9 @@ final class CompletionSuggestions
      *
      * @return $this
      */
-    public function suggestValue(string|\Symfony\Component\Console\Completion\Suggestion $value): static
+    public function suggestValue(string|Suggestion $value): static
     {
-        $this->valueSuggestions[] = !$value instanceof \Symfony\Component\Console\Completion\Suggestion ? new \Symfony\Component\Console\Completion\Suggestion($value) : $value;
+        $this->valueSuggestions[] = !$value instanceof Suggestion ? new Suggestion($value) : $value;
         return $this;
     }
     /**

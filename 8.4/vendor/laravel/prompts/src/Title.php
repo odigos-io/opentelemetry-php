@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
-class Title extends \Laravel\Prompts\Prompt
+class Title extends Prompt
 {
     public function __construct(public string $title)
     {

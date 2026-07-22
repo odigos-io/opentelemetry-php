@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Name\Parser;
+namespace Odigos\Doctrine\DBAL\Schema\Name\Parser;
 
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
-use Doctrine\DBAL\Schema\Name\Parser;
-use Doctrine\DBAL\Schema\Name\Parser\Exception\InvalidName;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\Exception\InvalidName;
 use function count;
 /**
  * @internal
@@ -14,7 +14,7 @@ use function count;
  */
 final readonly class OptionallyQualifiedNameParser implements Parser
 {
-    public function __construct(private \Doctrine\DBAL\Schema\Name\Parser\GenericNameParser $genericNameParser)
+    public function __construct(private GenericNameParser $genericNameParser)
     {
     }
     public function parse(string $input): OptionallyQualifiedName

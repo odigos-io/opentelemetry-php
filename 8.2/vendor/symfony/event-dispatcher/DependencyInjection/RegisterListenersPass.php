@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\EventDispatcher\DependencyInjection;
+namespace Odigos\Symfony\Component\EventDispatcher\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Contracts\EventDispatcher\Event;
+use Odigos\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use Odigos\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Odigos\Symfony\Component\DependencyInjection\ContainerBuilder;
+use Odigos\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\DependencyInjection\Reference;
+use Odigos\Symfony\Component\EventDispatcher\EventDispatcher;
+use Odigos\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Odigos\Symfony\Contracts\EventDispatcher\Event;
 /**
  * Compiler pass to register tagged services for an event dispatcher.
  */
@@ -96,7 +96,7 @@ class RegisterListenersPass implements CompilerPassInterface
                 $container->getDefinition($id)->addTag('container.no_preload');
             }
         }
-        $extractingDispatcher = new \Symfony\Component\EventDispatcher\DependencyInjection\ExtractingEventDispatcher();
+        $extractingDispatcher = new ExtractingEventDispatcher();
         foreach ($container->findTaggedServiceIds('kernel.event_subscriber', \true) as $id => $tags) {
             $def = $container->getDefinition($id);
             // We must assume that the class value has been correctly filled, even if the service is created by a factory
@@ -119,8 +119,8 @@ class RegisterListenersPass implements CompilerPassInterface
                 $dispatcherDefinitions = [$globalDispatcherDefinition];
             }
             $noPreload = 0;
-            \Symfony\Component\EventDispatcher\DependencyInjection\ExtractingEventDispatcher::$aliases = $aliases;
-            \Symfony\Component\EventDispatcher\DependencyInjection\ExtractingEventDispatcher::$subscriber = $class;
+            ExtractingEventDispatcher::$aliases = $aliases;
+            ExtractingEventDispatcher::$subscriber = $class;
             $extractingDispatcher->addSubscriber($extractingDispatcher);
             foreach ($extractingDispatcher->listeners as $args) {
                 $args[1] = [new ServiceClosureArgument(new Reference($id)), $args[1]];
@@ -137,7 +137,7 @@ class RegisterListenersPass implements CompilerPassInterface
                 $container->getDefinition($id)->addTag('container.no_preload');
             }
             $extractingDispatcher->listeners = [];
-            \Symfony\Component\EventDispatcher\DependencyInjection\ExtractingEventDispatcher::$aliases = [];
+            ExtractingEventDispatcher::$aliases = [];
         }
     }
     /**

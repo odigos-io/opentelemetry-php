@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.1.2
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
-use Cake\Database\Driver;
+use Odigos\Cake\Database\Driver;
 use InvalidArgumentException;
 use PDO;
 use Stringable;
@@ -25,7 +25,7 @@ use Stringable;
  *
  * Use to convert string data between PHP and the database types.
  */
-class StringType extends \Cake\Database\Type\BaseType implements \Cake\Database\Type\OptionalConvertInterface
+class StringType extends BaseType implements OptionalConvertInterface
 {
     /**
      * Convert string data into the database format.

@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Concerns;
 
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Events\NullDispatcher;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Events\NullDispatcher;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 use InvalidArgumentException;
 use ReflectionClass;
 trait HasEvents

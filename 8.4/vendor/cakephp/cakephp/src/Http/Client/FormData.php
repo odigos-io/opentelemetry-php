@@ -13,7 +13,7 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Client;
+namespace Odigos\Cake\Http\Client;
 
 use Countable;
 use finfo;
@@ -72,9 +72,9 @@ class FormData implements Countable, Stringable
      * @param string $value The value to add.
      * @return \Cake\Http\Client\FormDataPart
      */
-    public function newPart(string $name, string $value): \Cake\Http\Client\FormDataPart
+    public function newPart(string $name, string $value): FormDataPart
     {
-        return new \Cake\Http\Client\FormDataPart($name, $value);
+        return new FormDataPart($name, $value);
     }
     /**
      * Add a new part to the data.
@@ -90,7 +90,7 @@ class FormData implements Countable, Stringable
      * @param mixed $value The value for the part.
      * @return $this
      */
-    public function add(\Cake\Http\Client\FormDataPart|string $name, mixed $value = null)
+    public function add(FormDataPart|string $name, mixed $value = null)
     {
         if (is_string($name)) {
             if (is_array($value)) {
@@ -130,7 +130,7 @@ class FormData implements Countable, Stringable
      *  or a UploadedFileInterface instance.
      * @return \Cake\Http\Client\FormDataPart
      */
-    public function addFile(string $name, mixed $value): \Cake\Http\Client\FormDataPart
+    public function addFile(string $name, mixed $value): FormDataPart
     {
         $this->_hasFile = \true;
         $filename = \false;

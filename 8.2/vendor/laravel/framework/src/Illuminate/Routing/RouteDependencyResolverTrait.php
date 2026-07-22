@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
 /**
  * @deprecated
  */
 trait RouteDependencyResolverTrait
 {
-    use \Illuminate\Routing\ResolvesRouteDependencies;
+    use ResolvesRouteDependencies;
 }

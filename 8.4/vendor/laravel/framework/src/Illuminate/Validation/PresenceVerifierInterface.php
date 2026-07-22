@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
 interface PresenceVerifierInterface
 {

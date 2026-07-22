@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Attribute;
+namespace Odigos\Symfony\Component\Console\Attribute;
 
-use Symfony\Component\Console\Attribute\Reflection\ReflectionMember;
-use Symfony\Component\Console\Completion\CompletionInput;
-use Symfony\Component\Console\Completion\Suggestion;
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Exception\LogicException;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\String\UnicodeString;
+use Odigos\Symfony\Component\Console\Attribute\Reflection\ReflectionMember;
+use Odigos\Symfony\Component\Console\Completion\CompletionInput;
+use Odigos\Symfony\Component\Console\Completion\Suggestion;
+use Odigos\Symfony\Component\Console\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Console\Exception\LogicException;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\String\UnicodeString;
 #[\Attribute(\Attribute::TARGET_PARAMETER | \Attribute::TARGET_PROPERTY)]
 class Argument
 {
@@ -29,7 +29,7 @@ class Argument
      * @var string|class-string<\BackedEnum>
      */
     private string $typeName = '';
-    private ?\Symfony\Component\Console\Attribute\InteractiveAttributeInterface $interactiveAttribute = null;
+    private ?InteractiveAttributeInterface $interactiveAttribute = null;
     /**
      * Represents a console command <argument> definition.
      *
@@ -77,7 +77,7 @@ class Argument
         if ($isBackedEnum && !$self->suggestedValues) {
             $self->suggestedValues = array_column($self->typeName::cases(), 'value');
         }
-        $self->interactiveAttribute = \Symfony\Component\Console\Attribute\Ask::tryFrom($member, $self->name);
+        $self->interactiveAttribute = Ask::tryFrom($member, $self->name);
         if ($self->interactiveAttribute && $isOptional) {
             throw new LogicException(\sprintf('The %s "$%s" argument of "%s" cannot be both interactive and optional.', $reflection->getMemberName(), $self->name, $reflection->getSourceName()));
         }
@@ -105,7 +105,7 @@ class Argument
     /**
      * @internal
      */
-    public function getInteractiveAttribute(): ?\Symfony\Component\Console\Attribute\InteractiveAttributeInterface
+    public function getInteractiveAttribute(): ?InteractiveAttributeInterface
     {
         return $this->interactiveAttribute;
     }

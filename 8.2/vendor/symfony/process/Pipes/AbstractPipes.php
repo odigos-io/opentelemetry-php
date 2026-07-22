@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Process\Pipes;
+namespace Odigos\Symfony\Component\Process\Pipes;
 
-use Symfony\Component\Process\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Process\Exception\InvalidArgumentException;
 /**
  * @author Romain Neutron <imprec@gmail.com>
  *
  * @internal
  */
-abstract class AbstractPipes implements \Symfony\Component\Process\Pipes\PipesInterface
+abstract class AbstractPipes implements PipesInterface
 {
     public array $pipes = [];
     private string $inputBuffer = '';

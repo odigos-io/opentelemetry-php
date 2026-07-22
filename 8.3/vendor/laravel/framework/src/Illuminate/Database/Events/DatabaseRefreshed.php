@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Events;
+namespace Odigos\Illuminate\Database\Events;
 
-use Illuminate\Contracts\Database\Events\MigrationEvent as MigrationEventContract;
+use Odigos\Illuminate\Contracts\Database\Events\MigrationEvent as MigrationEventContract;
 class DatabaseRefreshed implements MigrationEventContract
 {
     /**

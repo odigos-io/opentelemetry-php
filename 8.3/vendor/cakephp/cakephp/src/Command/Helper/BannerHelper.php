@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         5.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command\Helper;
+namespace Odigos\Cake\Command\Helper;
 
-use Cake\Console\Helper;
+use Odigos\Cake\Console\Helper;
 use InvalidArgumentException;
 /**
  * Banner command helper.

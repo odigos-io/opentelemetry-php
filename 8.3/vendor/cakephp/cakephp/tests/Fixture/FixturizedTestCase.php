@@ -13,10 +13,10 @@
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Test\Fixture;
+namespace Odigos\Cake\Test\Fixture;
 
-use Cake\TestSuite\Fixture\FixtureManager;
-use Cake\TestSuite\TestCase;
+use Odigos\Cake\TestSuite\Fixture\FixtureManager;
+use Odigos\Cake\TestSuite\TestCase;
 use Exception;
 /**
  * This class helps in testing the life-cycle of fixtures inside a CakeTestCase

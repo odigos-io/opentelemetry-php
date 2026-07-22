@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\oci\conditions;
+namespace Odigos\yii\db\oci\conditions;
 
-use yii\db\conditions\InCondition;
-use yii\db\ExpressionInterface;
+use Odigos\yii\db\conditions\InCondition;
+use Odigos\yii\db\ExpressionInterface;
 /**
  * {@inheritdoc}
  */
-class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
+class InConditionBuilder extends \Odigos\yii\db\conditions\InConditionBuilder
 {
     /**
      * Method builds the raw SQL from the $expression that will not be additionally

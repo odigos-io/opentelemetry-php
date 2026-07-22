@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Process\Exceptions;
+namespace Odigos\Illuminate\Process\Exceptions;
 
-use Illuminate\Contracts\Process\ProcessResult;
+use Odigos\Illuminate\Contracts\Process\ProcessResult;
 use RuntimeException;
 class ProcessFailedException extends RuntimeException
 {

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\ValueObjects\Transporter;
+namespace Odigos\OpenAI\ValueObjects\Transporter;
 
-use OpenAI\Enums\Transporter\ContentType;
-use OpenAI\ValueObjects\ApiKey;
+use Odigos\OpenAI\Enums\Transporter\ContentType;
+use Odigos\OpenAI\ValueObjects\ApiKey;
 /**
  * @internal
  */

@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Database\Connectors;
+namespace Odigos\Illuminate\Database\Connectors;
 
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Database\Connection;
-use Illuminate\Database\MariaDbConnection;
-use Illuminate\Database\MySqlConnection;
-use Illuminate\Database\PostgresConnection;
-use Illuminate\Database\SQLiteConnection;
-use Illuminate\Database\SqlServerConnection;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Database\Connection;
+use Odigos\Illuminate\Database\MariaDbConnection;
+use Odigos\Illuminate\Database\MySqlConnection;
+use Odigos\Illuminate\Database\PostgresConnection;
+use Odigos\Illuminate\Database\SQLiteConnection;
+use Odigos\Illuminate\Database\SqlServerConnection;
+use Odigos\Illuminate\Support\Arr;
 use InvalidArgumentException;
 use PDOException;
 class ConnectionFactory
@@ -206,11 +206,11 @@ class ConnectionFactory
             return $this->container->make($key);
         }
         return match ($config['driver']) {
-            'mysql' => new \Illuminate\Database\Connectors\MySqlConnector(),
-            'mariadb' => new \Illuminate\Database\Connectors\MariaDbConnector(),
-            'pgsql' => new \Illuminate\Database\Connectors\PostgresConnector(),
-            'sqlite' => new \Illuminate\Database\Connectors\SQLiteConnector(),
-            'sqlsrv' => new \Illuminate\Database\Connectors\SqlServerConnector(),
+            'mysql' => new MySqlConnector(),
+            'mariadb' => new MariaDbConnector(),
+            'pgsql' => new PostgresConnector(),
+            'sqlite' => new SQLiteConnector(),
+            'sqlsrv' => new SqlServerConnector(),
             default => throw new InvalidArgumentException("Unsupported driver [{$config['driver']}]."),
         };
     }

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\HttpCache;
+namespace Odigos\Symfony\Component\HttpKernel\HttpCache;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
 interface SurrogateInterface
 {
     /**
@@ -21,7 +21,7 @@ interface SurrogateInterface
     /**
      * Returns a new cache strategy instance.
      */
-    public function createCacheStrategy(): \Symfony\Component\HttpKernel\HttpCache\ResponseCacheStrategyInterface;
+    public function createCacheStrategy(): ResponseCacheStrategyInterface;
     /**
      * Checks that at least one surrogate has Surrogate capability.
      */
@@ -59,5 +59,5 @@ interface SurrogateInterface
      * @throws \RuntimeException
      * @throws \Exception
      */
-    public function handle(\Symfony\Component\HttpKernel\HttpCache\HttpCache $cache, string $uri, string $alt, bool $ignoreErrors): string;
+    public function handle(HttpCache $cache, string $uri, string $alt, bool $ignoreErrors): string;
 }

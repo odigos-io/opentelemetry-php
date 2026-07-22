@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         5.0.3
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
 /**
  * An interface used to clarify that an enum has a label() method instead of having to use

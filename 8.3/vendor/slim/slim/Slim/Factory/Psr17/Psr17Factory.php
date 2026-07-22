@@ -6,13 +6,13 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Factory\Psr17;
+namespace Odigos\Slim\Factory\Psr17;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use RuntimeException;
-use Slim\Interfaces\Psr17FactoryInterface;
-use Slim\Interfaces\ServerRequestCreatorInterface;
+use Odigos\Slim\Interfaces\Psr17FactoryInterface;
+use Odigos\Slim\Interfaces\ServerRequestCreatorInterface;
 use function class_exists;
 use function get_called_class;
 abstract class Psr17Factory implements Psr17FactoryInterface
@@ -49,7 +49,7 @@ abstract class Psr17Factory implements Psr17FactoryInterface
         if (!static::isServerRequestCreatorAvailable()) {
             throw new RuntimeException(get_called_class() . ' could not instantiate a server request creator.');
         }
-        return new \Slim\Factory\Psr17\ServerRequestCreator(static::$serverRequestCreatorClass, static::$serverRequestCreatorMethod);
+        return new ServerRequestCreator(static::$serverRequestCreatorClass, static::$serverRequestCreatorMethod);
     }
     /**
      * {@inheritdoc}

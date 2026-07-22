@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core;
+namespace Odigos\Cake\Core;
 
-use Cake\Utility\Inflector;
+use Odigos\Cake\Utility\Inflector;
 /**
  * Provides methods that allow other classes access to conventions based inflections.
  */
@@ -124,10 +124,10 @@ trait ConventionsTrait
      */
     protected function _pluginPath(string $pluginName): string
     {
-        if (\Cake\Core\Plugin::isLoaded($pluginName)) {
-            return \Cake\Core\Plugin::path($pluginName);
+        if (Plugin::isLoaded($pluginName)) {
+            return Plugin::path($pluginName);
         }
-        return current(\Cake\Core\App::path('plugins')) . $pluginName . \DIRECTORY_SEPARATOR;
+        return current(App::path('plugins')) . $pluginName . \DIRECTORY_SEPARATOR;
     }
     /**
      * Return plugin's namespace

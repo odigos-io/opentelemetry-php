@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\EditsContract;
-use OpenAI\Responses\Edits\CreateResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\EditsContract;
+use Odigos\OpenAI\Responses\Edits\CreateResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 final class Edits implements EditsContract
 {
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Transportable;
     /**
      * Creates a new edit for the provided input, instruction, and parameters.
      *

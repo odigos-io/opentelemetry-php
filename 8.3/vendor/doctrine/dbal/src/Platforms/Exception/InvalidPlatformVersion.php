@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\Exception;
+namespace Odigos\Doctrine\DBAL\Platforms\Exception;
 
 use Exception;
 use function sprintf;
-final class InvalidPlatformVersion extends Exception implements \Doctrine\DBAL\Platforms\Exception\PlatformException
+final class InvalidPlatformVersion extends Exception implements PlatformException
 {
     /**
      * Returns a new instance for an invalid specified platform version.

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Laminas\HttpHandlerRunner;
+namespace Odigos\Laminas\HttpHandlerRunner;
 
 /**
  * "Run" a request handler.

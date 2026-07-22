@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Cookie;
+namespace Odigos\Illuminate\Contracts\Cookie;
 
 interface Factory
 {

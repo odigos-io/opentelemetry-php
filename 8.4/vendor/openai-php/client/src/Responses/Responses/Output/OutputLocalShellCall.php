@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses\Output;
+namespace Odigos\OpenAI\Responses\Responses\Output;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type OutputLocalShellCallActionType from OutputLocalShellCallAction
  *
@@ -23,7 +23,7 @@ final class OutputLocalShellCall implements ResponseContract
     /**
      * @param  'local_shell_call'  $type
      */
-    private function __construct(public readonly \OpenAI\Responses\Responses\Output\OutputLocalShellCallAction $action, public readonly string $callId, public readonly string $id, public readonly string $status, public readonly string $type)
+    private function __construct(public readonly OutputLocalShellCallAction $action, public readonly string $callId, public readonly string $id, public readonly string $status, public readonly string $type)
     {
     }
     /**
@@ -31,7 +31,7 @@ final class OutputLocalShellCall implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        return new self(action: \OpenAI\Responses\Responses\Output\OutputLocalShellCallAction::from($attributes['action']), callId: $attributes['call_id'], id: $attributes['id'], status: $attributes['status'], type: $attributes['type']);
+        return new self(action: OutputLocalShellCallAction::from($attributes['action']), callId: $attributes['call_id'], id: $attributes['id'], status: $attributes['status'], type: $attributes['type']);
     }
     /**
      * {@inheritDoc}

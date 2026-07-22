@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\Common\Lexer;
+namespace Odigos\Doctrine\Common\Lexer;
 
 use UnitEnum;
 use function in_array;

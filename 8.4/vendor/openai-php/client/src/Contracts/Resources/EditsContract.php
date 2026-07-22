@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Edits\CreateResponse;
+use Odigos\OpenAI\Responses\Edits\CreateResponse;
 interface EditsContract
 {
     /**

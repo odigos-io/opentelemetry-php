@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Connection;
+namespace Odigos\Doctrine\DBAL\Connection;
 
-use Doctrine\DBAL\ServerVersionProvider;
+use Odigos\Doctrine\DBAL\ServerVersionProvider;
 /** @final */
 class StaticServerVersionProvider implements ServerVersionProvider
 {

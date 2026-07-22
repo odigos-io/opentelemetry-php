@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Uid\Factory;
+namespace Odigos\Symfony\Component\Uid\Factory;
 
-use Symfony\Component\Uid\UuidV4;
+use Odigos\Symfony\Component\Uid\UuidV4;
 class RandomBasedUuidFactory
 {
     /**

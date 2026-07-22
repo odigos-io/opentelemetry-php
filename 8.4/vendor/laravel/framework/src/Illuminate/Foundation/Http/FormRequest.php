@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Foundation\Http;
+namespace Odigos\Illuminate\Foundation\Http;
 
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Auth\Access\Response;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Validation\Factory as ValidationFactory;
-use Illuminate\Contracts\Validation\ValidatesWhenResolved;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
-use Illuminate\Validation\ValidatesWhenResolvedTrait;
+use Odigos\Illuminate\Auth\Access\AuthorizationException;
+use Odigos\Illuminate\Auth\Access\Response;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Validation\Factory as ValidationFactory;
+use Odigos\Illuminate\Contracts\Validation\ValidatesWhenResolved;
+use Odigos\Illuminate\Contracts\Validation\Validator;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Routing\Redirector;
+use Odigos\Illuminate\Validation\ValidatesWhenResolvedTrait;
 class FormRequest extends Request implements ValidatesWhenResolved
 {
     use ValidatesWhenResolvedTrait;

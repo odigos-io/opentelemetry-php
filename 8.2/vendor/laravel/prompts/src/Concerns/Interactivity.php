@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Prompts\Concerns;
+namespace Odigos\Laravel\Prompts\Concerns;
 
-use Laravel\Prompts\Exceptions\NonInteractiveValidationException;
+use Odigos\Laravel\Prompts\Exceptions\NonInteractiveValidationException;
 trait Interactivity
 {
     /**

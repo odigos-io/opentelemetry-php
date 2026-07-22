@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\behaviors;
+namespace Odigos\yii\behaviors;
 
 use Closure;
-use yii\base\Behavior;
-use yii\base\Event;
-use yii\db\ActiveRecord;
-use yii\db\BaseActiveRecord;
+use Odigos\yii\base\Behavior;
+use Odigos\yii\base\Event;
+use Odigos\yii\db\ActiveRecord;
+use Odigos\yii\db\BaseActiveRecord;
 /**
  * AttributesBehavior automatically assigns values specified to one or multiple attributes of an ActiveRecord
  * object when certain events happen.

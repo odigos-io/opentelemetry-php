@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         2.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Log;
+namespace Odigos\Cake\Log;
 
-use Cake\Core\App;
-use Cake\Core\Exception\CakeException;
-use Cake\Core\ObjectRegistry;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\ObjectRegistry;
 use Psr\Log\LoggerInterface;
 /**
  * Registry of loaded log engines

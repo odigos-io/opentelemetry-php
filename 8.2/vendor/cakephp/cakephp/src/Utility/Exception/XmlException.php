@@ -12,9 +12,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Utility\Exception;
+namespace Odigos\Cake\Utility\Exception;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 /**
  * Exception class for Xml. This exception will be thrown from Xml when it
  * encounters an error.

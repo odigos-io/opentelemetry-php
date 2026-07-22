@@ -5,15 +5,15 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\widgets;
+namespace Odigos\yii\widgets;
 
 use Odigos\Yii;
-use yii\base\DynamicContentAwareInterface;
-use yii\base\DynamicContentAwareTrait;
-use yii\base\Widget;
-use yii\caching\CacheInterface;
-use yii\caching\Dependency;
-use yii\di\Instance;
+use Odigos\yii\base\DynamicContentAwareInterface;
+use Odigos\yii\base\DynamicContentAwareTrait;
+use Odigos\yii\base\Widget;
+use Odigos\yii\caching\CacheInterface;
+use Odigos\yii\caching\Dependency;
+use Odigos\yii\di\Instance;
 /**
  * FragmentCache is used by [[\yii\base\View]] to provide caching of page fragments.
  *
@@ -78,7 +78,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     public function init()
     {
         parent::init();
-        $this->cache = $this->enabled ? Instance::ensure($this->cache, 'yii\caching\CacheInterface') : null;
+        $this->cache = $this->enabled ? Instance::ensure($this->cache, 'Odigos\yii\caching\CacheInterface') : null;
         if ($this->cache instanceof CacheInterface && $this->getCachedContent() === \false) {
             $this->getView()->pushDynamicContent($this);
             ob_start();

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
-use Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * Casts a caster's Stub.
  *
@@ -43,7 +43,7 @@ class StubCaster
     /**
      * @return array
      */
-    public static function castCutArray(\Symfony\Component\VarDumper\Caster\CutArrayStub $c, array $a, Stub $stub, bool $isNested)
+    public static function castCutArray(CutArrayStub $c, array $a, Stub $stub, bool $isNested)
     {
         return $isNested ? $c->preservedSubset : $a;
     }
@@ -61,7 +61,7 @@ class StubCaster
     /**
      * @return array
      */
-    public static function castEnum(\Symfony\Component\VarDumper\Caster\EnumStub $c, array $a, Stub $stub, bool $isNested)
+    public static function castEnum(EnumStub $c, array $a, Stub $stub, bool $isNested)
     {
         if ($isNested) {
             $stub->class = $c->dumpKeys ? '' : null;
@@ -72,7 +72,7 @@ class StubCaster
             $a = [];
             if ($c->value) {
                 foreach (array_keys($c->value) as $k) {
-                    $keys[] = !isset($k[0]) || "\x00" !== $k[0] ? \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . $k : $k;
+                    $keys[] = !isset($k[0]) || "\x00" !== $k[0] ? Caster::PREFIX_VIRTUAL . $k : $k;
                 }
                 // Preserve references with array_combine()
                 $a = array_combine($keys, $c->value);
@@ -83,7 +83,7 @@ class StubCaster
     /**
      * @return array
      */
-    public static function castScalar(\Symfony\Component\VarDumper\Caster\ScalarStub $scalarStub, array $a, Stub $stub)
+    public static function castScalar(ScalarStub $scalarStub, array $a, Stub $stub)
     {
         $stub->type = Stub::TYPE_SCALAR;
         $stub->attr['value'] = $scalarStub->value;

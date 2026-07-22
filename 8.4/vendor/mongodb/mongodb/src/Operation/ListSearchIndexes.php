@@ -15,16 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use Countable;
 use Iterator;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnexpectedValueException;
-use MongoDB\Exception\UnsupportedException;
-use MongoDB\Model\CachingIterator;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnexpectedValueException;
+use Odigos\MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Model\CachingIterator;
 use function array_intersect_key;
 use function is_string;
 /**
@@ -37,7 +37,7 @@ final class ListSearchIndexes
 {
     private array $listSearchIndexesOptions;
     private array $aggregateOptions;
-    private \MongoDB\Operation\Aggregate $aggregate;
+    private Aggregate $aggregate;
     /**
      * Constructs an aggregate command for listing Atlas Search indexes
      *
@@ -70,9 +70,9 @@ final class ListSearchIndexes
         $cursor = $this->aggregate->execute($server);
         return new CachingIterator($cursor);
     }
-    private function createAggregate(): \MongoDB\Operation\Aggregate
+    private function createAggregate(): Aggregate
     {
         $pipeline = [['$listSearchIndexes' => (object) $this->listSearchIndexesOptions]];
-        return new \MongoDB\Operation\Aggregate($this->databaseName, $this->collectionName, $pipeline, $this->aggregateOptions);
+        return new Aggregate($this->databaseName, $this->collectionName, $pipeline, $this->aggregateOptions);
     }
 }

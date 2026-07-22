@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\VectorStoresFileBatchesContract;
-use OpenAI\Responses\VectorStores\FileBatches\VectorStoreFileBatchResponse;
-use OpenAI\Responses\VectorStores\Files\VectorStoreFileListResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\VectorStoresFileBatchesContract;
+use Odigos\OpenAI\Responses\VectorStores\FileBatches\VectorStoreFileBatchResponse;
+use Odigos\OpenAI\Responses\VectorStores\Files\VectorStoreFileListResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 final class VectorStoresFileBatches implements VectorStoresFileBatchesContract
 {
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Transportable;
     /**
      * Create a file batch on a vector store
      *

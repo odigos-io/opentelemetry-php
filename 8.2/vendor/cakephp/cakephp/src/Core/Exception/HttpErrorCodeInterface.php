@@ -12,7 +12,7 @@ declare (strict_types=1);
  * @since         5.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core\Exception;
+namespace Odigos\Cake\Core\Exception;
 
 use Throwable;
 interface HttpErrorCodeInterface extends Throwable

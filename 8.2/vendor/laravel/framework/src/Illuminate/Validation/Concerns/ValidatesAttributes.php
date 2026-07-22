@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Validation\Concerns;
+namespace Odigos\Illuminate\Validation\Concerns;
 
 use Odigos\Brick\Math\BigDecimal;
 use Odigos\Brick\Math\BigNumber;
@@ -15,19 +15,19 @@ use Odigos\Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Odigos\Egulias\EmailValidator\Validation\NoRFCWarningsValidation;
 use Odigos\Egulias\EmailValidator\Validation\RFCValidation;
 use Exception;
-use Illuminate\Container\Container;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Exceptions\MathException;
-use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\Exists;
-use Illuminate\Validation\Rules\Unique;
-use Illuminate\Validation\ValidationData;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Exceptions\MathException;
+use Odigos\Illuminate\Support\Facades\Date;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Validation\Rules\Exists;
+use Odigos\Illuminate\Validation\Rules\Unique;
+use Odigos\Illuminate\Validation\ValidationData;
 use InvalidArgumentException;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Odigos\Symfony\Component\HttpFoundation\File\File;
+use Odigos\Symfony\Component\HttpFoundation\File\UploadedFile;
 use ValueError;
 trait ValidatesAttributes
 {
@@ -792,8 +792,8 @@ trait ValidatesAttributes
             $validation === 'strict' => new NoRFCWarningsValidation(),
             $validation === 'dns' => new DNSCheckValidation(),
             $validation === 'spoof' => new SpoofCheckValidation(),
-            $validation === 'filter' => new \Illuminate\Validation\Concerns\FilterEmailValidation(),
-            $validation === 'filter_unicode' => \Illuminate\Validation\Concerns\FilterEmailValidation::unicode(),
+            $validation === 'filter' => new FilterEmailValidation(),
+            $validation === 'filter_unicode' => FilterEmailValidation::unicode(),
             is_string($validation) && class_exists($validation) => $this->container->make($validation),
             default => new RFCValidation(),
         })->values()->all() ?: [new RFCValidation()];

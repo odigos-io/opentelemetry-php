@@ -4,14 +4,14 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 use MongoDB\BSON\Javascript;
 use MongoDB\BSON\PackedArray;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Model\BSONArray;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Model\BSONArray;
 use function array_is_list;
 use function is_array;
 use function is_string;
@@ -22,7 +22,7 @@ use function is_string;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/function/
  * @internal
  */
-final class FunctionOperator implements \MongoDB\Builder\Expression\ResolvesToAny, OperatorInterface
+final class FunctionOperator implements ResolvesToAny, OperatorInterface
 {
     public const ENCODE = Encode::Object;
     public const NAME = '$function';

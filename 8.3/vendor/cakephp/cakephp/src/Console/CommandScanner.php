@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
-use Cake\Core\App;
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use Cake\Utility\Filesystem;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Utility\Filesystem;
+use Odigos\Cake\Utility\Inflector;
 use ReflectionClass;
 /**
  * Used by CommandCollection and CommandTask to scan the filesystem
@@ -94,14 +94,14 @@ class CommandScanner
                 continue;
             }
             $class = $namespace . $fileInfo->getBasename('.php');
-            if (!is_subclass_of($class, \Cake\Console\CommandInterface::class)) {
+            if (!is_subclass_of($class, CommandInterface::class)) {
                 continue;
             }
             $reflection = new ReflectionClass($class);
             if ($reflection->isAbstract()) {
                 continue;
             }
-            if (is_subclass_of($class, \Cake\Console\BaseCommand::class)) {
+            if (is_subclass_of($class, BaseCommand::class)) {
                 $name = $class::defaultName();
             }
             $commands[$path . $file] = ['file' => $path . $file, 'fullName' => $prefix . $name, 'name' => $name, 'class' => $class];

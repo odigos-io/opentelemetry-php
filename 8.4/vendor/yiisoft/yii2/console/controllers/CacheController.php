@@ -5,16 +5,16 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console\controllers;
+namespace Odigos\yii\console\controllers;
 
 use Odigos\Yii;
-use yii\caching\ApcCache;
-use yii\caching\CacheInterface;
-use yii\console\Application;
-use yii\console\Controller;
-use yii\console\Exception;
-use yii\console\ExitCode;
-use yii\helpers\Console;
+use Odigos\yii\caching\ApcCache;
+use Odigos\yii\caching\CacheInterface;
+use Odigos\yii\console\Application;
+use Odigos\yii\console\Controller;
+use Odigos\yii\console\Exception;
+use Odigos\yii\console\ExitCode;
+use Odigos\yii\helpers\Console;
 /**
  * Allows you to flush cache.
  *
@@ -134,7 +134,7 @@ class CacheController extends Controller
             $this->stdout("Unknown component \"{$db}\".\n", Console::FG_RED);
             return ExitCode::UNSPECIFIED_ERROR;
         }
-        if (!$connection instanceof \yii\db\Connection) {
+        if (!$connection instanceof \Odigos\yii\db\Connection) {
             $this->stdout("\"{$db}\" component doesn't inherit \\yii\\db\\Connection.\n", Console::FG_RED);
             return ExitCode::UNSPECIFIED_ERROR;
         } elseif (!$this->confirm("Flush cache schema for \"{$db}\" connection?")) {
@@ -250,7 +250,7 @@ class CacheController extends Controller
      */
     private function isCacheClass($className)
     {
-        return is_subclass_of($className, 'yii\caching\CacheInterface') || $className === 'yii\caching\CacheInterface';
+        return is_subclass_of($className, 'Odigos\yii\caching\CacheInterface') || $className === 'yii\caching\CacheInterface';
     }
     /**
      * Checks if cache of a certain class can be flushed.

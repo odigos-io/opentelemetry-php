@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Events;
+namespace Odigos\Illuminate\Database\Events;
 
-use Illuminate\Contracts\Database\Events\MigrationEvent as MigrationEventContract;
-use Illuminate\Database\Migrations\Migration;
+use Odigos\Illuminate\Contracts\Database\Events\MigrationEvent as MigrationEventContract;
+use Odigos\Illuminate\Database\Migrations\Migration;
 abstract class MigrationEvent implements MigrationEventContract
 {
     /**

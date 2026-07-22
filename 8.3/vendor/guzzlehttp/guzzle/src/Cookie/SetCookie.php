@@ -1,6 +1,6 @@
 <?php
 
-namespace GuzzleHttp\Cookie;
+namespace Odigos\GuzzleHttp\Cookie;
 
 /**
  * Set-Cookie object

@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
 use function is_float;
 use function is_int;
 /**
  * Type that maps an SQL DECIMAL to a PHP string.
  */
-class DecimalType extends \Doctrine\DBAL\Types\Type
+class DecimalType extends Type
 {
     /**
      * {@inheritDoc}

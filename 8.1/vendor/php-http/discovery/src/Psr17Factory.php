@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Discovery;
+namespace Odigos\Http\Discovery;
 
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
@@ -66,12 +66,12 @@ class Psr17Factory implements RequestFactoryInterface, ResponseFactoryInterface,
      */
     public function createRequest(string $method, $uri): RequestInterface
     {
-        $factory = $this->requestFactory ?? $this->setFactory(\Http\Discovery\Psr17FactoryDiscovery::findRequestFactory());
+        $factory = $this->requestFactory ?? $this->setFactory(Psr17FactoryDiscovery::findRequestFactory());
         return $factory->createRequest(...\func_get_args());
     }
     public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
     {
-        $factory = $this->responseFactory ?? $this->setFactory(\Http\Discovery\Psr17FactoryDiscovery::findResponseFactory());
+        $factory = $this->responseFactory ?? $this->setFactory(Psr17FactoryDiscovery::findResponseFactory());
         return $factory->createResponse(...\func_get_args());
     }
     /**
@@ -79,7 +79,7 @@ class Psr17Factory implements RequestFactoryInterface, ResponseFactoryInterface,
      */
     public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
     {
-        $factory = $this->serverRequestFactory ?? $this->setFactory(\Http\Discovery\Psr17FactoryDiscovery::findServerRequestFactory());
+        $factory = $this->serverRequestFactory ?? $this->setFactory(Psr17FactoryDiscovery::findServerRequestFactory());
         return $factory->createServerRequest(...\func_get_args());
     }
     public function createServerRequestFromGlobals(?array $server = null, ?array $get = null, ?array $post = null, ?array $cookie = null, ?array $files = null, ?StreamInterface $body = null): ServerRequestInterface
@@ -90,12 +90,12 @@ class Psr17Factory implements RequestFactoryInterface, ResponseFactoryInterface,
     }
     public function createStream(string $content = ''): StreamInterface
     {
-        $factory = $this->streamFactory ?? $this->setFactory(\Http\Discovery\Psr17FactoryDiscovery::findStreamFactory());
+        $factory = $this->streamFactory ?? $this->setFactory(Psr17FactoryDiscovery::findStreamFactory());
         return $factory->createStream($content);
     }
     public function createStreamFromFile(string $filename, string $mode = 'r'): StreamInterface
     {
-        $factory = $this->streamFactory ?? $this->setFactory(\Http\Discovery\Psr17FactoryDiscovery::findStreamFactory());
+        $factory = $this->streamFactory ?? $this->setFactory(Psr17FactoryDiscovery::findStreamFactory());
         return $factory->createStreamFromFile($filename, $mode);
     }
     /**
@@ -103,17 +103,17 @@ class Psr17Factory implements RequestFactoryInterface, ResponseFactoryInterface,
      */
     public function createStreamFromResource($resource): StreamInterface
     {
-        $factory = $this->streamFactory ?? $this->setFactory(\Http\Discovery\Psr17FactoryDiscovery::findStreamFactory());
+        $factory = $this->streamFactory ?? $this->setFactory(Psr17FactoryDiscovery::findStreamFactory());
         return $factory->createStreamFromResource($resource);
     }
     public function createUploadedFile(StreamInterface $stream, ?int $size = null, int $error = \UPLOAD_ERR_OK, ?string $clientFilename = null, ?string $clientMediaType = null): UploadedFileInterface
     {
-        $factory = $this->uploadedFileFactory ?? $this->setFactory(\Http\Discovery\Psr17FactoryDiscovery::findUploadedFileFactory());
+        $factory = $this->uploadedFileFactory ?? $this->setFactory(Psr17FactoryDiscovery::findUploadedFileFactory());
         return $factory->createUploadedFile(...\func_get_args());
     }
     public function createUri(string $uri = ''): UriInterface
     {
-        $factory = $this->uriFactory ?? $this->setFactory(\Http\Discovery\Psr17FactoryDiscovery::findUriFactory());
+        $factory = $this->uriFactory ?? $this->setFactory(Psr17FactoryDiscovery::findUriFactory());
         return $factory->createUri(...\func_get_args());
     }
     public function createUriFromGlobals(?array $server = null): UriInterface

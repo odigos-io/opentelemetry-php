@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         2.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Log\Engine;
+namespace Odigos\Cake\Log\Engine;
 
-use Cake\Console\ConsoleOutput;
-use Cake\Log\Formatter\DefaultFormatter;
+use Odigos\Cake\Console\ConsoleOutput;
+use Odigos\Cake\Log\Formatter\DefaultFormatter;
 use InvalidArgumentException;
 use Stringable;
 /**
  * Console logging. Writes logs to console output.
  */
-class ConsoleLog extends \Cake\Log\Engine\BaseLog
+class ConsoleLog extends BaseLog
 {
     /**
      * Default config for this class

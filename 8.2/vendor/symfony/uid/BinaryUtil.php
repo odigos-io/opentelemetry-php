@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Uid;
+namespace Odigos\Symfony\Component\Uid;
 
-use Symfony\Component\Uid\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Uid\Exception\InvalidArgumentException;
 /**
  * @internal
  *

@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Foundation;
+namespace Odigos\Illuminate\Foundation;
 
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Support\Collection;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Js;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\HtmlString;
+use Odigos\Illuminate\Support\Js;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Macroable;
 class Vite implements Htmlable
 {
     use Macroable;
@@ -659,7 +659,7 @@ HTML
         $chunk = $this->chunk($this->manifest($buildDirectory), $asset);
         $path = $this->publicPath($buildDirectory . '/' . $chunk['file']);
         if (!is_file($path) || !file_exists($path)) {
-            throw new \Illuminate\Foundation\ViteException("Unable to locate file from Vite manifest: {$path}.");
+            throw new ViteException("Unable to locate file from Vite manifest: {$path}.");
         }
         return file_get_contents($path);
     }
@@ -697,7 +697,7 @@ HTML
         $path = $this->manifestPath($buildDirectory);
         if (!isset(static::$manifests[$path])) {
             if (!is_file($path)) {
-                throw new \Illuminate\Foundation\ViteManifestNotFoundException("Vite manifest not found at: {$path}");
+                throw new ViteManifestNotFoundException("Vite manifest not found at: {$path}");
             }
             static::$manifests[$path] = json_decode(file_get_contents($path), \true);
         }
@@ -742,7 +742,7 @@ HTML
     protected function chunk($manifest, $file)
     {
         if (!isset($manifest[$file])) {
-            throw new \Illuminate\Foundation\ViteException("Unable to locate file in Vite manifest: {$file}.");
+            throw new ViteException("Unable to locate file in Vite manifest: {$file}.");
         }
         return $manifest[$file];
     }

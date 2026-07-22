@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Notifications\Channels;
+namespace Odigos\Illuminate\Notifications\Channels;
 
-use Illuminate\Config\Repository as ConfigRepository;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Mail\Factory as MailFactory;
-use Illuminate\Contracts\Mail\Mailable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Mail\Markdown;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Symfony\Component\Mailer\Header\MetadataHeader;
-use Symfony\Component\Mailer\Header\TagHeader;
+use Odigos\Illuminate\Config\Repository as ConfigRepository;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Mail\Factory as MailFactory;
+use Odigos\Illuminate\Contracts\Mail\Mailable;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueue;
+use Odigos\Illuminate\Mail\Markdown;
+use Odigos\Illuminate\Notifications\Notification;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Symfony\Component\Mailer\Header\MetadataHeader;
+use Odigos\Symfony\Component\Mailer\Header\TagHeader;
 class MailChannel
 {
     /**

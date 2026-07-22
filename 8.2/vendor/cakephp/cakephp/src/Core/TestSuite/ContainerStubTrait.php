@@ -13,14 +13,14 @@ declare (strict_types=1);
  * @since         4.2.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core\TestSuite;
+namespace Odigos\Cake\Core\TestSuite;
 
-use Cake\Core\Configure;
-use Cake\Core\ConsoleApplicationInterface;
-use Cake\Core\ContainerInterface;
-use Cake\Core\HttpApplicationInterface;
-use Cake\Event\EventInterface;
-use Cake\Routing\Router;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\ConsoleApplicationInterface;
+use Odigos\Cake\Core\ContainerInterface;
+use Odigos\Cake\Core\HttpApplicationInterface;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\Routing\Router;
 use Closure;
 use Odigos\League\Container\Exception\NotFoundException;
 use LogicException;
@@ -173,5 +173,5 @@ trait ContainerStubTrait
     }
 }
 // phpcs:disable
-class_alias('Cake\Core\TestSuite\ContainerStubTrait', 'Cake\TestSuite\ContainerStubTrait');
+class_alias('Odigos\Cake\Core\TestSuite\ContainerStubTrait', 'Odigos\Cake\TestSuite\ContainerStubTrait');
 // phpcs:enable

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Query;
+namespace Odigos\Illuminate\Database\Query;
 
-class JoinLateralClause extends \Illuminate\Database\Query\JoinClause
+class JoinLateralClause extends JoinClause
 {
     //
 }

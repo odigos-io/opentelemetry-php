@@ -2,7 +2,7 @@
 
 namespace Odigos;
 
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Str;
 use Pdo\Mysql;
 return [
     /*

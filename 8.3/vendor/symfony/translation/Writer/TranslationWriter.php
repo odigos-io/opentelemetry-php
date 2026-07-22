@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Writer;
+namespace Odigos\Symfony\Component\Translation\Writer;
 
-use Symfony\Component\Translation\Dumper\DumperInterface;
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
-use Symfony\Component\Translation\Exception\RuntimeException;
-use Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Translation\Dumper\DumperInterface;
+use Odigos\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Translation\Exception\RuntimeException;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
 /**
  * TranslationWriter writes translation messages.
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-class TranslationWriter implements \Symfony\Component\Translation\Writer\TranslationWriterInterface
+class TranslationWriter implements TranslationWriterInterface
 {
     /**
      * @var array<string, DumperInterface>

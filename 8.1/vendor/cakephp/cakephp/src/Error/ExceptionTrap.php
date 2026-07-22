@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Cake\Error;
+namespace Odigos\Cake\Error;
 
-use Cake\Core\InstanceConfigTrait;
-use Cake\Error\Renderer\ConsoleExceptionRenderer;
-use Cake\Error\Renderer\WebExceptionRenderer;
-use Cake\Event\EventDispatcherTrait;
-use Cake\Routing\Router;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Error\Renderer\ConsoleExceptionRenderer;
+use Odigos\Cake\Error\Renderer\WebExceptionRenderer;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Routing\Router;
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-use function Cake\Core\env;
+use function Odigos\Cake\Core\env;
 /**
  * Entry point to CakePHP's exception handling.
  *
@@ -58,7 +58,7 @@ class ExceptionTrap
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = ['exceptionRenderer' => null, 'logger' => \Cake\Error\ErrorLogger::class, 'stderr' => null, 'log' => \true, 'skipLog' => [], 'trace' => \false, 'extraFatalErrorMemory' => 4];
+    protected array $_defaultConfig = ['exceptionRenderer' => null, 'logger' => ErrorLogger::class, 'stderr' => null, 'log' => \true, 'skipLog' => [], 'trace' => \false, 'extraFatalErrorMemory' => 4];
     /**
      * A list of handling callbacks.
      *
@@ -76,7 +76,7 @@ class ExceptionTrap
      *
      * @var \Cake\Error\ExceptionTrap|null
      */
-    protected static ?\Cake\Error\ExceptionTrap $registeredTrap = null;
+    protected static ?ExceptionTrap $registeredTrap = null;
     /**
      * Track if this trap was removed from the global handler.
      *
@@ -99,13 +99,13 @@ class ExceptionTrap
      * @param \Psr\Http\Message\ServerRequestInterface|null $request The request if possible.
      * @return \Cake\Error\ExceptionRendererInterface
      */
-    public function renderer(Throwable $exception, ?ServerRequestInterface $request = null): \Cake\Error\ExceptionRendererInterface
+    public function renderer(Throwable $exception, ?ServerRequestInterface $request = null): ExceptionRendererInterface
     {
         $request ??= Router::getRequest();
         /** @var callable|class-string $class */
         $class = $this->getConfig('exceptionRenderer') ?: $this->chooseRenderer();
         if (is_string($class)) {
-            if (!is_subclass_of($class, \Cake\Error\ExceptionRendererInterface::class)) {
+            if (!is_subclass_of($class, ExceptionRendererInterface::class)) {
                 throw new InvalidArgumentException("Cannot use `{$class}` as an `exceptionRenderer`. " . 'It must be an instance of `Cake\Error\ExceptionRendererInterface`.');
             }
             /** @var class-string<\Cake\Error\ExceptionRendererInterface> $class */
@@ -128,7 +128,7 @@ class ExceptionTrap
      *
      * @return \Cake\Error\ErrorLoggerInterface
      */
-    public function logger(): \Cake\Error\ErrorLoggerInterface
+    public function logger(): ErrorLoggerInterface
     {
         /** @var class-string<\Cake\Error\ErrorLoggerInterface> $class */
         $class = $this->getConfig('logger', $this->_defaultConfig['logger']);
@@ -278,7 +278,7 @@ class ExceptionTrap
      */
     public function handleFatalError(int $code, string $description, string $file, int $line): void
     {
-        $this->handleException(new \Cake\Error\FatalErrorException('Fatal Error: ' . $description, 500, $file, $line));
+        $this->handleException(new FatalErrorException('Fatal Error: ' . $description, 500, $file, $line));
     }
     /**
      * Log an exception.

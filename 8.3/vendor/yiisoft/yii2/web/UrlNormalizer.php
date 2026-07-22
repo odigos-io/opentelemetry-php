@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\BaseObject;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\BaseObject;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * UrlNormalizer normalizes URLs for [[UrlManager]] and [[UrlRule]].
  *
@@ -78,9 +78,9 @@ class UrlNormalizer extends BaseObject
         if ($this->action === null) {
             return $route;
         } elseif ($this->action === static::ACTION_REDIRECT_PERMANENT || $this->action === static::ACTION_REDIRECT_TEMPORARY) {
-            throw new \yii\web\UrlNormalizerRedirectException([$route[0]] + $route[1], $this->action);
+            throw new UrlNormalizerRedirectException([$route[0]] + $route[1], $this->action);
         } elseif ($this->action === static::ACTION_NOT_FOUND) {
-            throw new \yii\web\NotFoundHttpException(Yii::t('yii', 'Page not found.'));
+            throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         } elseif (is_callable($this->action)) {
             return call_user_func($this->action, $route, $this);
         }

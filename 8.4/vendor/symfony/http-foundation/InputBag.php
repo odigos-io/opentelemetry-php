@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation;
+namespace Odigos\Symfony\Component\HttpFoundation;
 
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
-use Symfony\Component\HttpFoundation\Exception\UnexpectedValueException;
+use Odigos\Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Odigos\Symfony\Component\HttpFoundation\Exception\UnexpectedValueException;
 /**
  * InputBag is a container for user input values such as $_GET, $_POST, $_REQUEST, and $_COOKIE.
  *
@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Exception\UnexpectedValueException;
  *
  * @author Saif Eddin Gmati <azjezz@protonmail.com>
  */
-final class InputBag extends \Symfony\Component\HttpFoundation\ParameterBag
+final class InputBag extends ParameterBag
 {
     /**
      * Returns a scalar input value by name.

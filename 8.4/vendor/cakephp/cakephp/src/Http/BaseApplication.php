@@ -14,28 +14,28 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
-use Cake\Console\CommandCollection;
-use Cake\Controller\ControllerFactory;
-use Cake\Core\ConsoleApplicationInterface;
-use Cake\Core\Container;
-use Cake\Core\ContainerApplicationInterface;
-use Cake\Core\ContainerInterface;
-use Cake\Core\EventAwareApplicationInterface;
-use Cake\Core\Exception\MissingPluginException;
-use Cake\Core\HttpApplicationInterface;
-use Cake\Core\Plugin;
-use Cake\Core\PluginApplicationInterface;
-use Cake\Core\PluginCollection;
-use Cake\Core\PluginInterface;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
-use Cake\Event\EventManager;
-use Cake\Event\EventManagerInterface;
-use Cake\Routing\RouteBuilder;
-use Cake\Routing\Router;
-use Cake\Routing\RoutingApplicationInterface;
+use Odigos\Cake\Console\CommandCollection;
+use Odigos\Cake\Controller\ControllerFactory;
+use Odigos\Cake\Core\ConsoleApplicationInterface;
+use Odigos\Cake\Core\Container;
+use Odigos\Cake\Core\ContainerApplicationInterface;
+use Odigos\Cake\Core\ContainerInterface;
+use Odigos\Cake\Core\EventAwareApplicationInterface;
+use Odigos\Cake\Core\Exception\MissingPluginException;
+use Odigos\Cake\Core\HttpApplicationInterface;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Core\PluginApplicationInterface;
+use Odigos\Cake\Core\PluginCollection;
+use Odigos\Cake\Core\PluginInterface;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Event\EventManager;
+use Odigos\Cake\Event\EventManagerInterface;
+use Odigos\Cake\Routing\RouteBuilder;
+use Odigos\Cake\Routing\Router;
+use Odigos\Cake\Routing\RoutingApplicationInterface;
 use Closure;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -75,7 +75,7 @@ abstract class BaseApplication implements ConsoleApplicationInterface, Container
      *
      * @var \Cake\Http\ControllerFactoryInterface|null
      */
-    protected ?\Cake\Http\ControllerFactoryInterface $controllerFactory = null;
+    protected ?ControllerFactoryInterface $controllerFactory = null;
     /**
      * Container
      *
@@ -89,7 +89,7 @@ abstract class BaseApplication implements ConsoleApplicationInterface, Container
      * @param \Cake\Event\EventManagerInterface|null $eventManager Application event manager instance.
      * @param \Cake\Http\ControllerFactoryInterface|null $controllerFactory Controller factory.
      */
-    public function __construct(string $configDir, ?EventManagerInterface $eventManager = null, ?\Cake\Http\ControllerFactoryInterface $controllerFactory = null)
+    public function __construct(string $configDir, ?EventManagerInterface $eventManager = null, ?ControllerFactoryInterface $controllerFactory = null)
     {
         $this->configDir = rtrim($configDir, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
         $this->plugins = new PluginCollection();
@@ -101,11 +101,11 @@ abstract class BaseApplication implements ConsoleApplicationInterface, Container
      * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to set in your App Class
      * @return \Cake\Http\MiddlewareQueue
      */
-    abstract public function middleware(\Cake\Http\MiddlewareQueue $middlewareQueue): \Cake\Http\MiddlewareQueue;
+    abstract public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue;
     /**
      * @inheritDoc
      */
-    public function pluginMiddleware(\Cake\Http\MiddlewareQueue $middleware): \Cake\Http\MiddlewareQueue
+    public function pluginMiddleware(MiddlewareQueue $middleware): MiddlewareQueue
     {
         foreach ($this->plugins->with('middleware') as $plugin) {
             $middleware = $plugin->middleware($middleware);
@@ -300,13 +300,13 @@ abstract class BaseApplication implements ConsoleApplicationInterface, Container
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $container = $this->getContainer();
-        $container->add(\Cake\Http\ServerRequest::class, $request);
+        $container->add(ServerRequest::class, $request);
         $container->add(ContainerInterface::class, $container);
         $eventManager = $this->events($this->getEventManager());
         $this->setEventManager($this->pluginEvents($eventManager));
         $this->controllerFactory ??= new ControllerFactory($container);
         if (Router::getRequest() !== $request) {
-            assert($request instanceof \Cake\Http\ServerRequest);
+            assert($request instanceof ServerRequest);
             Router::setRequest($request);
         }
         $controller = $this->controllerFactory->create($request);

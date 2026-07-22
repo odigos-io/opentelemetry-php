@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepListResponse;
-use OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepListResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponse;
 interface ThreadsRunsStepsContract
 {
     /**

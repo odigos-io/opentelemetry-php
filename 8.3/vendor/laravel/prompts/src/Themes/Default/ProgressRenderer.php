@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\Progress;
-class ProgressRenderer extends \Laravel\Prompts\Themes\Default\Renderer
+use Odigos\Laravel\Prompts\Progress;
+class ProgressRenderer extends Renderer
 {
-    use \Laravel\Prompts\Themes\Default\Concerns\DrawsBoxes;
+    use Concerns\DrawsBoxes;
     /**
      * The character to use for the progress bar.
      */

@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Closure;
 use Odigos\Dotenv\Repository\Adapter\PutenvAdapter;
 use Odigos\Dotenv\Repository\RepositoryBuilder;
-use Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Filesystem\Filesystem;
 use Odigos\PhpOption\Option;
 use RuntimeException;
 class Env

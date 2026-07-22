@@ -4,13 +4,13 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Query;
+namespace Odigos\MongoDB\Builder\Query;
 
 use MongoDB\BSON\Decimal128;
 use MongoDB\BSON\Int64;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\FieldQueryInterface;
-use MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\FieldQueryInterface;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
 /**
  * Performs a modulo operation on the value of a field and selects documents with a specified result.
  *

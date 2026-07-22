@@ -5,16 +5,16 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\log;
+namespace Odigos\yii\log;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\InvalidConfigException;
-use yii\helpers\ArrayHelper;
-use yii\helpers\StringHelper;
-use yii\helpers\VarDumper;
-use yii\web\Request;
-use yii\web\User;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\StringHelper;
+use Odigos\yii\helpers\VarDumper;
+use Odigos\yii\web\Request;
+use Odigos\yii\web\User;
 /**
  * Target is the base class for all log target classes.
  *
@@ -140,7 +140,7 @@ abstract class Target extends Component
         $count = count($this->messages);
         if ($count > 0 && ($final || $this->exportInterval > 0 && $count >= $this->exportInterval)) {
             if (($context = $this->getContextMessage()) !== '') {
-                $this->messages[] = [$context, \yii\log\Logger::LEVEL_INFO, 'application', YII_BEGIN_TIME, [], 0];
+                $this->messages[] = [$context, Logger::LEVEL_INFO, 'application', YII_BEGIN_TIME, [], 0];
             }
             // set exportInterval to 0 to avoid triggering export again while exporting
             $oldExportInterval = $this->exportInterval;
@@ -202,7 +202,7 @@ abstract class Target extends Component
      */
     public function setLevels($levels)
     {
-        static $levelMap = ['error' => \yii\log\Logger::LEVEL_ERROR, 'warning' => \yii\log\Logger::LEVEL_WARNING, 'info' => \yii\log\Logger::LEVEL_INFO, 'trace' => \yii\log\Logger::LEVEL_TRACE, 'profile' => \yii\log\Logger::LEVEL_PROFILE];
+        static $levelMap = ['error' => Logger::LEVEL_ERROR, 'warning' => Logger::LEVEL_WARNING, 'info' => Logger::LEVEL_INFO, 'trace' => Logger::LEVEL_TRACE, 'profile' => Logger::LEVEL_PROFILE];
         if (is_array($levels)) {
             $this->_levels = 0;
             foreach ($levels as $level) {
@@ -270,7 +270,7 @@ abstract class Target extends Component
     public function formatMessage($message)
     {
         [$text, $level, $category, $timestamp] = $message;
-        $level = \yii\log\Logger::getLevelName($level);
+        $level = Logger::getLevelName($level);
         if (!is_string($text)) {
             // exceptions may not be serializable if in the call stack somewhere is a Closure
             if ($text instanceof \Exception || $text instanceof \Throwable) {

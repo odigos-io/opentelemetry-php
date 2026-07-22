@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'schedule:clear-cache')]
 class ScheduleClearCacheCommand extends Command
 {
@@ -25,7 +25,7 @@ class ScheduleClearCacheCommand extends Command
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    public function handle(\Illuminate\Console\Scheduling\Schedule $schedule)
+    public function handle(Schedule $schedule)
     {
         $mutexCleared = \false;
         foreach ($schedule->events($this->laravel) as $event) {

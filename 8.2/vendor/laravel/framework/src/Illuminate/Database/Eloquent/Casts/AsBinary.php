@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Casts;
+namespace Odigos\Illuminate\Database\Eloquent\Casts;
 
-use Illuminate\Contracts\Database\Eloquent\Castable;
-use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Support\BinaryCodec;
+use Odigos\Illuminate\Contracts\Database\Eloquent\Castable;
+use Odigos\Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use Odigos\Illuminate\Support\BinaryCodec;
 use InvalidArgumentException;
 class AsBinary implements Castable
 {

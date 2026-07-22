@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database;
+namespace Odigos\Cake\Database;
 
 /*
  * Represents a class that holds a TypeMap object
@@ -27,16 +27,16 @@ trait TypeMapTrait
     /**
      * @var \Cake\Database\TypeMap|null
      */
-    protected ?\Cake\Database\TypeMap $_typeMap = null;
+    protected ?TypeMap $_typeMap = null;
     /**
      * Creates a new TypeMap if $typeMap is an array, otherwise exchanges it for the given one.
      *
      * @param \Cake\Database\TypeMap|array<int|string, string> $typeMap Creates a TypeMap if array, otherwise sets the given TypeMap
      * @return $this
      */
-    public function setTypeMap(\Cake\Database\TypeMap|array $typeMap)
+    public function setTypeMap(TypeMap|array $typeMap)
     {
-        $this->_typeMap = is_array($typeMap) ? new \Cake\Database\TypeMap($typeMap) : $typeMap;
+        $this->_typeMap = is_array($typeMap) ? new TypeMap($typeMap) : $typeMap;
         return $this;
     }
     /**
@@ -44,9 +44,9 @@ trait TypeMapTrait
      *
      * @return \Cake\Database\TypeMap
      */
-    public function getTypeMap(): \Cake\Database\TypeMap
+    public function getTypeMap(): TypeMap
     {
-        return $this->_typeMap ??= new \Cake\Database\TypeMap();
+        return $this->_typeMap ??= new TypeMap();
     }
     /**
      * Overwrite the default type mappings for fields

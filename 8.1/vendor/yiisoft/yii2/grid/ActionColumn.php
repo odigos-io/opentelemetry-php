@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\grid;
+namespace Odigos\yii\grid;
 
 use Odigos\Yii;
-use yii\helpers\Html;
-use yii\helpers\Url;
+use Odigos\yii\helpers\Html;
+use Odigos\yii\helpers\Url;
 /**
  * ActionColumn is a column for the [[GridView]] widget that displays buttons for viewing and manipulating the items.
  *
@@ -30,7 +30,7 @@ use yii\helpers\Url;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ActionColumn extends \yii\grid\Column
+class ActionColumn extends Column
 {
     /**
      * {@inheritdoc}

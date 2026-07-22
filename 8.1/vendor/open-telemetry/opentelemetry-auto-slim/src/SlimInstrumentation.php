@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Slim;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Slim;
 
 use OpenTelemetry\API\Globals;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
@@ -20,11 +20,11 @@ use OpenTelemetry\SemConv\Incubating\Attributes\HttpIncubatingAttributes;
 use OpenTelemetry\SemConv\TraceAttributes;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\App;
-use Slim\Interfaces\InvocationStrategyInterface;
-use Slim\Interfaces\RouteInterface;
-use Slim\Middleware\RoutingMiddleware;
-use Slim\Routing\RouteContext;
+use Odigos\Slim\App;
+use Odigos\Slim\Interfaces\InvocationStrategyInterface;
+use Odigos\Slim\Interfaces\RouteInterface;
+use Odigos\Slim\Middleware\RoutingMiddleware;
+use Odigos\Slim\Routing\RouteContext;
 use Throwable;
 /** @psalm-suppress UnusedClass */
 class SlimInstrumentation
@@ -41,7 +41,7 @@ class SlimInstrumentation
         $otelVersion = phpversion('opentelemetry');
         self::$supportsResponsePropagation = $otelVersion !== \false && version_compare($otelVersion, '1.0.2beta2') >= 0;
         /** @psalm-suppress UnusedFunctionCall */
-        hook(App::class, 'handle', pre: static function (App $app, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation) {
+        hook('Slim\\App', 'handle', pre: static function (object $app, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation) {
             $request = $params[0] instanceof ServerRequestInterface ? $params[0] : null;
             /** @psalm-suppress ArgumentTypeCoercion */
             $builder = $instrumentation->tracer()->spanBuilder(sprintf('%s', $request?->getMethod() ?? 'unknown'))->setSpanKind(SpanKind::KIND_SERVER)->setAttribute(CodeAttributes::CODE_FUNCTION_NAME, sprintf('%s::%s', $class, $function))->setAttribute(CodeAttributes::CODE_FILE_PATH, $filename)->setAttribute(CodeAttributes::CODE_LINE_NUMBER, $lineno);
@@ -55,7 +55,7 @@ class SlimInstrumentation
             }
             Context::storage()->attach($span->storeInContext($parent));
             return [$request];
-        }, post: static function (App $app, array $params, ?ResponseInterface $response, ?Throwable $exception): ?ResponseInterface {
+        }, post: static function (object $app, array $params, ?ResponseInterface $response, ?Throwable $exception): ?ResponseInterface {
             $scope = Context::storage()->scope();
             if (!$scope) {
                 return $response;
@@ -75,7 +75,7 @@ class SlimInstrumentation
                 $span->setAttribute(HttpIncubatingAttributes::HTTP_RESPONSE_BODY_SIZE, $response->getHeaderLine('Content-Length'));
                 if (self::$supportsResponsePropagation) {
                     $prop = Globals::responsePropagator();
-                    $prop->inject($response, \OpenTelemetry\Contrib\Instrumentation\Slim\PsrResponsePropagationSetter::instance(), $scope->context());
+                    $prop->inject($response, PsrResponsePropagationSetter::instance(), $scope->context());
                 }
             }
             $span->end();
@@ -92,7 +92,7 @@ class SlimInstrumentation
          * @psalm-suppress ArgumentTypeCoercion
          * @psalm-suppress UnusedFunctionCall
          */
-        hook(RoutingMiddleware::class, 'performRouting', pre: null, post: static function (RoutingMiddleware $middleware, array $params, ?ServerRequestInterface $request, ?Throwable $exception) {
+        hook('Slim\\Middleware\\RoutingMiddleware', 'performRouting', pre: null, post: static function (object $middleware, array $params, ?ServerRequestInterface $request, ?Throwable $exception) {
             if ($exception || !$request) {
                 return;
             }
@@ -101,7 +101,7 @@ class SlimInstrumentation
                 return;
             }
             $route = $request->getAttribute(RouteContext::ROUTE);
-            if (!$route instanceof RouteInterface) {
+            if (!is_a($route, 'Slim\\Interfaces\\RouteInterface')) {
                 return;
             }
             $span->setAttribute(HttpAttributes::HTTP_ROUTE, $route->getName() ?? $route->getPattern());
@@ -113,13 +113,13 @@ class SlimInstrumentation
          * @psalm-suppress ArgumentTypeCoercion
          * @psalm-suppress UnusedFunctionCall
          */
-        hook(InvocationStrategyInterface::class, '__invoke', pre: static function (InvocationStrategyInterface $strategy, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation) {
+        hook('Slim\\Interfaces\\InvocationStrategyInterface', '__invoke', pre: static function (object $strategy, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation) {
             $callable = $params[0];
-            $name = \OpenTelemetry\Contrib\Instrumentation\Slim\CallableFormatter::format($callable);
+            $name = CallableFormatter::format($callable);
             $builder = $instrumentation->tracer()->spanBuilder($name)->setAttribute(CodeAttributes::CODE_FUNCTION_NAME, sprintf('%s::%s', $class, $function))->setAttribute(CodeAttributes::CODE_FILE_PATH, $filename)->setAttribute(CodeAttributes::CODE_LINE_NUMBER, $lineno);
             $span = $builder->startSpan();
             Context::storage()->attach($span->storeInContext(Context::getCurrent()));
-        }, post: static function (InvocationStrategyInterface $strategy, array $params, ?ResponseInterface $response, ?Throwable $exception) {
+        }, post: static function (object $strategy, array $params, ?ResponseInterface $response, ?Throwable $exception) {
             $scope = Context::storage()->scope();
             if (!$scope) {
                 return;

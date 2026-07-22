@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Bus;
+namespace Odigos\Illuminate\Bus;
 
 use Odigos\Carbon\CarbonImmutable;
-use Illuminate\Container\Container;
-use Illuminate\Support\Str;
-use Illuminate\Support\Testing\Fakes\BatchFake;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Testing\Fakes\BatchFake;
 trait Batchable
 {
     /**
@@ -31,7 +31,7 @@ trait Batchable
             return $this->fakeBatch;
         }
         if ($this->batchId) {
-            return Container::getInstance()->make(\Illuminate\Bus\BatchRepository::class)?->find($this->batchId);
+            return Container::getInstance()->make(BatchRepository::class)?->find($this->batchId);
         }
     }
     /**

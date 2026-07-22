@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Foundation\Http\Middleware\Concerns;
+namespace Odigos\Illuminate\Foundation\Http\Middleware\Concerns;
 
 trait ExcludesPaths
 {

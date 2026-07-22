@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
-use Cake\Cache\Cache;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
+use Odigos\Cake\Cache\Cache;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOptionParser;
 /**
  * CacheClearall command.
  */
-class CacheClearallCommand extends \Cake\Command\Command
+class CacheClearallCommand extends Command
 {
     /**
      * Get the command name.
@@ -64,7 +64,7 @@ class CacheClearallCommand extends \Cake\Command\Command
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         foreach (Cache::configured() as $engine) {
-            $this->executeCommand(\Cake\Command\CacheClearCommand::class, [$engine], $io);
+            $this->executeCommand(CacheClearCommand::class, [$engine], $io);
         }
         return static::CODE_SUCCESS;
     }

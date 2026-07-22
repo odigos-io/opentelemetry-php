@@ -14,21 +14,21 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Behavior;
+namespace Odigos\Cake\ORM\Behavior;
 
 use ArrayObject;
-use Cake\Datasource\QueryInterface;
-use Cake\Event\EventInterface;
-use Cake\I18n\I18n;
-use Cake\ORM\Behavior;
-use Cake\ORM\Behavior\Translate\ShadowTableStrategy;
-use Cake\ORM\Behavior\Translate\TranslateStrategyInterface;
-use Cake\ORM\Marshaller;
-use Cake\ORM\PropertyMarshalInterface;
-use Cake\ORM\Query\SelectQuery;
-use Cake\ORM\Table;
-use Cake\Utility\Inflector;
-use function Cake\Core\namespaceSplit;
+use Odigos\Cake\Datasource\QueryInterface;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\I18n\I18n;
+use Odigos\Cake\ORM\Behavior;
+use Odigos\Cake\ORM\Behavior\Translate\ShadowTableStrategy;
+use Odigos\Cake\ORM\Behavior\Translate\TranslateStrategyInterface;
+use Odigos\Cake\ORM\Marshaller;
+use Odigos\Cake\ORM\PropertyMarshalInterface;
+use Odigos\Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\ORM\Table;
+use Odigos\Cake\Utility\Inflector;
+use function Odigos\Cake\Core\namespaceSplit;
 /**
  * This behavior provides a way to translate dynamic data by keeping translations
  * in a separate table linked to the original record from another one. Translated

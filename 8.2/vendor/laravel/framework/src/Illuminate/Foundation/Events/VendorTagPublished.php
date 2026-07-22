@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Foundation\Events;
+namespace Odigos\Illuminate\Foundation\Events;
 
 class VendorTagPublished
 {

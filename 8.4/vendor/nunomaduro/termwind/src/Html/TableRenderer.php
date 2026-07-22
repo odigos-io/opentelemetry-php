@@ -4,12 +4,12 @@ declare (strict_types=1);
 namespace Odigos\Termwind\Html;
 
 use Iterator;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableCell;
-use Symfony\Component\Console\Helper\TableCellStyle;
-use Symfony\Component\Console\Helper\TableSeparator;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Helper\Table;
+use Odigos\Symfony\Component\Console\Helper\TableCell;
+use Odigos\Symfony\Component\Console\Helper\TableCellStyle;
+use Odigos\Symfony\Component\Console\Helper\TableSeparator;
+use Odigos\Symfony\Component\Console\Output\BufferedOutput;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 use Odigos\Termwind\Components\Element;
 use Odigos\Termwind\HtmlRenderer;
 use Odigos\Termwind\Termwind;

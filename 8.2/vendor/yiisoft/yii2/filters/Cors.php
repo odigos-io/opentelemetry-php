@@ -5,17 +5,17 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters;
+namespace Odigos\yii\filters;
 
 use Odigos\Yii;
-use yii\base\Action;
-use yii\base\ActionFilter;
-use yii\base\Component;
-use yii\base\Controller;
-use yii\base\InvalidConfigException;
-use yii\base\Module;
-use yii\web\Request;
-use yii\web\Response;
+use Odigos\yii\base\Action;
+use Odigos\yii\base\ActionFilter;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\Controller;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\Module;
+use Odigos\yii\web\Request;
+use Odigos\yii\web\Response;
 /**
  * Cors filter implements [Cross Origin Resource Sharing](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing).
  *

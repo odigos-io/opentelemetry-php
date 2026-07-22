@@ -4,14 +4,14 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Query;
+namespace Odigos\MongoDB\Builder\Query;
 
 use DateTimeInterface;
 use MongoDB\BSON\Type;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\ExpressionInterface;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Builder\Type\QueryInterface;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\ExpressionInterface;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\QueryInterface;
 use stdClass;
 /**
  * Allows use of aggregation expressions within the query language.

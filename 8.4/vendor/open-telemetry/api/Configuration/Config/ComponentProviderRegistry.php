@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace OpenTelemetry\API\Configuration\Config;
 
 use function class_alias;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use Odigos\Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Odigos\Symfony\Component\Config\Definition\Builder\NodeDefinition;
 /**
  * A registry of component providers.
  */

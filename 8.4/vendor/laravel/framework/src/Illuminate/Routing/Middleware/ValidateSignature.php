@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Routing\Middleware;
+namespace Odigos\Illuminate\Routing\Middleware;
 
 use Closure;
-use Illuminate\Routing\Exceptions\InvalidSignatureException;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Routing\Exceptions\InvalidSignatureException;
+use Odigos\Illuminate\Support\Arr;
 class ValidateSignature
 {
     /**

@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation;
+namespace Odigos\Symfony\Component\Translation;
 
-use Symfony\Contracts\Translation\LocaleAwareInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Contracts\Translation\TranslatorTrait;
+use Odigos\Symfony\Contracts\Translation\LocaleAwareInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatorTrait;
 /**
  * IdentityTranslator does not translate anything.
  *

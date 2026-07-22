@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+namespace Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
-use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
+use Odigos\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Odigos\Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * Attempt to resolve backed enum cases from request attributes, for a route path parameter,
  * leading to a 404 Not Found if the attribute value isn't a valid backing value for the enum type.

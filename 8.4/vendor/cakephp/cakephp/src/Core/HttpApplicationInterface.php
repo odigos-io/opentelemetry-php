@@ -13,9 +13,9 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core;
+namespace Odigos\Cake\Core;
 
-use Cake\Http\MiddlewareQueue;
+use Odigos\Cake\Http\MiddlewareQueue;
 use Psr\Http\Server\RequestHandlerInterface;
 /**
  * An interface defining the methods that the

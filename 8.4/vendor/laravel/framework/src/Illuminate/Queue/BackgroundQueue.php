@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
-use Illuminate\Support\Facades\Concurrency;
-class BackgroundQueue extends \Illuminate\Queue\SyncQueue
+use Odigos\Illuminate\Support\Facades\Concurrency;
+class BackgroundQueue extends SyncQueue
 {
     /**
      * Push a new job onto the queue.
@@ -17,6 +17,6 @@ class BackgroundQueue extends \Illuminate\Queue\SyncQueue
      */
     public function push($job, $data = '', $queue = null)
     {
-        Concurrency::driver('process')->defer(fn() => \Illuminate\Support\Facades\Queue::connection('sync')->push($job, $data, $queue));
+        Concurrency::driver('process')->defer(fn() => \Odigos\Illuminate\Support\Facades\Queue::connection('sync')->push($job, $data, $queue));
     }
 }

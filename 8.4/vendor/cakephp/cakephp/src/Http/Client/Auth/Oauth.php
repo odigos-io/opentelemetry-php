@@ -13,11 +13,11 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Client\Auth;
+namespace Odigos\Cake\Http\Client\Auth;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Http\Client\Request;
-use Cake\Utility\Security;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Http\Client\Request;
+use Odigos\Cake\Utility\Security;
 use Psr\Http\Message\UriInterface;
 /**
  * Oauth 1 authentication strategy for Cake\Http\Client

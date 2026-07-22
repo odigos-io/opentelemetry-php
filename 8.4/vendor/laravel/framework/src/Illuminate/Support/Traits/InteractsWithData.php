@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Support\Traits;
+namespace Odigos\Illuminate\Support\Traits;
 
 use Odigos\Carbon\CarbonInterval;
 use Odigos\Carbon\Unit;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Number;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Facades\Date;
+use Odigos\Illuminate\Support\Number;
+use Odigos\Illuminate\Support\Str;
 use stdClass;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 trait InteractsWithData
 {
     /**

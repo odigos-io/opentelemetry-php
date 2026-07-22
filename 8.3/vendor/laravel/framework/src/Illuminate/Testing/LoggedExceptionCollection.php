@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Testing;
+namespace Odigos\Illuminate\Testing;
 
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 class LoggedExceptionCollection extends Collection
 {
     //

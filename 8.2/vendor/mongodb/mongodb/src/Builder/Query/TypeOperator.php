@@ -4,12 +4,12 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Query;
+namespace Odigos\MongoDB\Builder\Query;
 
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\FieldQueryInterface;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\FieldQueryInterface;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use function array_is_list;
 /**
  * Selects documents if a field is of the specified type.

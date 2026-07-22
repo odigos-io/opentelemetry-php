@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Notifications;
+namespace Odigos\Illuminate\Notifications;
 
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
 /**
  * @template TKey of array-key
  * @template TModel of DatabaseNotification

@@ -15,16 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use Iterator;
-use MongoDB\Command\ListCollections as ListCollectionsCommand;
+use Odigos\MongoDB\Command\ListCollections as ListCollectionsCommand;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Model\CachingIterator;
-use MongoDB\Model\CallbackIterator;
-use MongoDB\Model\CollectionInfo;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Model\CachingIterator;
+use Odigos\MongoDB\Model\CallbackIterator;
+use Odigos\MongoDB\Model\CollectionInfo;
 /**
  * Operation for the listCollections command.
  *

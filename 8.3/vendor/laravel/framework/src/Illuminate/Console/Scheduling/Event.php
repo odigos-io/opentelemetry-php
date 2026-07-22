@@ -1,29 +1,29 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
 use Closure;
 use Odigos\Cron\CronExpression;
-use GuzzleHttp\Client as HttpClient;
-use GuzzleHttp\ClientInterface as HttpClientInterface;
-use GuzzleHttp\Exception\TransferException;
-use Illuminate\Console\Application;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Log\Context\Repository;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Stringable;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Traits\ReflectsClosures;
-use Illuminate\Support\Traits\Tappable;
+use Odigos\GuzzleHttp\Client as HttpClient;
+use Odigos\GuzzleHttp\ClientInterface as HttpClientInterface;
+use Odigos\GuzzleHttp\Exception\TransferException;
+use Odigos\Illuminate\Console\Application;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Debug\ExceptionHandler;
+use Odigos\Illuminate\Contracts\Mail\Mailer;
+use Odigos\Illuminate\Log\Context\Repository;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Facades\Date;
+use Odigos\Illuminate\Support\Stringable;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\Support\Traits\Tappable;
 use Psr\Http\Client\ClientExceptionInterface;
-use Symfony\Component\Process\Process;
+use Odigos\Symfony\Component\Process\Process;
 use Throwable;
 class Event
 {
-    use Macroable, \Illuminate\Console\Scheduling\ManagesAttributes, \Illuminate\Console\Scheduling\ManagesFrequencies, ReflectsClosures, Tappable;
+    use Macroable, ManagesAttributes, ManagesFrequencies, ReflectsClosures, Tappable;
     /**
      * The command string.
      *
@@ -87,7 +87,7 @@ class Event
      * @param  string  $command
      * @param  \DateTimeZone|string|null  $timezone
      */
-    public function __construct(\Illuminate\Console\Scheduling\EventMutex $mutex, $command, $timezone = null)
+    public function __construct(EventMutex $mutex, $command, $timezone = null)
     {
         $this->mutex = $mutex;
         $this->command = $command;
@@ -224,7 +224,7 @@ class Event
      */
     public function buildCommand()
     {
-        return (new \Illuminate\Console\Scheduling\CommandBuilder())->buildCommand($this);
+        return (new CommandBuilder())->buildCommand($this);
     }
     /**
      * Determine if the given event should run based on the Cron expression.
@@ -684,7 +684,7 @@ class Event
      * @param  \Illuminate\Console\Scheduling\EventMutex  $mutex
      * @return $this
      */
-    public function preventOverlapsUsing(\Illuminate\Console\Scheduling\EventMutex $mutex)
+    public function preventOverlapsUsing(EventMutex $mutex)
     {
         $this->mutex = $mutex;
         return $this;

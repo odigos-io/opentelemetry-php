@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\OpenAIPHP\OpenAIPHPInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\OpenAIPHP\OpenAIPHPInstrumentation;
 use OpenTelemetry\SDK\Sdk;
 if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(OpenAIPHPInstrumentation::NAME) === \true) {
     return;

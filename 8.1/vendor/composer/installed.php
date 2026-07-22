@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'odigos/opentelemetry-php-8.1',
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
-        'reference' => '9d7bc7ac371ea55b4d15f7e677ed4ad092c57d97',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
+        'reference' => null,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -299,9 +299,9 @@
             'dev_requirement' => false,
         ),
         'odigos/opentelemetry-php-8.1' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-            'reference' => '9d7bc7ac371ea55b4d15f7e677ed4ad092c57d97',
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
+            'reference' => null,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

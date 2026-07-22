@@ -15,9 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Exception;
+namespace Odigos\MongoDB\Exception;
 
 use MongoDB\Driver\Exception\UnexpectedValueException as DriverUnexpectedValueException;
-class UnexpectedValueException extends DriverUnexpectedValueException implements \MongoDB\Exception\Exception
+class UnexpectedValueException extends DriverUnexpectedValueException implements Exception
 {
 }

@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
 use Odigos\Yii;
-use yii\base\ErrorException;
-use yii\base\Exception;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\ErrorException;
+use Odigos\yii\base\Exception;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * BaseFileHelper provides concrete implementation for [[FileHelper]].
  *
@@ -656,13 +656,13 @@ class BaseFileHelper
         } catch (\Exception $e) {
             if (!is_dir($path)) {
                 // https://github.com/yiisoft/yii2/issues/9288
-                throw new \yii\base\Exception("Failed to create directory \"{$path}\": " . $e->getMessage(), $e->getCode(), $e);
+                throw new \Odigos\yii\base\Exception("Failed to create directory \"{$path}\": " . $e->getMessage(), $e->getCode(), $e);
             }
         }
         try {
             return chmod($path, $mode);
         } catch (\Exception $e) {
-            throw new \yii\base\Exception("Failed to change permissions for directory \"{$path}\": " . $e->getMessage(), $e->getCode(), $e);
+            throw new \Odigos\yii\base\Exception("Failed to change permissions for directory \"{$path}\": " . $e->getMessage(), $e->getCode(), $e);
         }
     }
     /**
@@ -684,8 +684,8 @@ class BaseFileHelper
             }
         } elseif ($flags & self::PATTERN_ENDSWITH) {
             /* "*literal" matching against "fooliteral" */
-            $n = \yii\helpers\StringHelper::byteLength($pattern);
-            if (\yii\helpers\StringHelper::byteSubstr($pattern, 1, $n) === \yii\helpers\StringHelper::byteSubstr($baseName, -$n, $n)) {
+            $n = StringHelper::byteLength($pattern);
+            if (StringHelper::byteSubstr($pattern, 1, $n) === StringHelper::byteSubstr($baseName, -$n, $n)) {
                 return \true;
             }
         }
@@ -693,7 +693,7 @@ class BaseFileHelper
         if ($flags & self::PATTERN_CASE_INSENSITIVE) {
             $matchOptions['caseSensitive'] = \false;
         }
-        return \yii\helpers\StringHelper::matchWildcard($pattern, $baseName, $matchOptions);
+        return StringHelper::matchWildcard($pattern, $baseName, $matchOptions);
     }
     /**
      * Compares a path part against a pattern with optional wildcards.
@@ -711,16 +711,16 @@ class BaseFileHelper
     {
         // match with FNM_PATHNAME; the pattern has base implicitly in front of it.
         if (strncmp($pattern, '/', 1) === 0) {
-            $pattern = \yii\helpers\StringHelper::byteSubstr($pattern, 1, \yii\helpers\StringHelper::byteLength($pattern));
+            $pattern = StringHelper::byteSubstr($pattern, 1, StringHelper::byteLength($pattern));
             if ($firstWildcard !== \false && $firstWildcard !== 0) {
                 $firstWildcard--;
             }
         }
-        $namelen = \yii\helpers\StringHelper::byteLength($path) - (empty($basePath) ? 0 : \yii\helpers\StringHelper::byteLength($basePath) + 1);
-        $name = \yii\helpers\StringHelper::byteSubstr($path, -$namelen, $namelen);
+        $namelen = StringHelper::byteLength($path) - (empty($basePath) ? 0 : StringHelper::byteLength($basePath) + 1);
+        $name = StringHelper::byteSubstr($path, -$namelen, $namelen);
         if ($firstWildcard !== 0) {
             if ($firstWildcard === \false) {
-                $firstWildcard = \yii\helpers\StringHelper::byteLength($pattern);
+                $firstWildcard = StringHelper::byteLength($pattern);
             }
             // if the non-wildcard part is longer than the remaining pathname, surely it cannot match.
             if ($firstWildcard > $namelen) {
@@ -729,8 +729,8 @@ class BaseFileHelper
             if (strncmp($pattern, $name, $firstWildcard)) {
                 return \false;
             }
-            $pattern = \yii\helpers\StringHelper::byteSubstr($pattern, $firstWildcard, \yii\helpers\StringHelper::byteLength($pattern));
-            $name = \yii\helpers\StringHelper::byteSubstr($name, $firstWildcard, $namelen);
+            $pattern = StringHelper::byteSubstr($pattern, $firstWildcard, StringHelper::byteLength($pattern));
+            $name = StringHelper::byteSubstr($name, $firstWildcard, $namelen);
             // If the whole pattern did not have a wildcard, then our prefix match is all we need; we do not need to call fnmatch at all.
             if (empty($pattern) && empty($name)) {
                 return \true;
@@ -740,7 +740,7 @@ class BaseFileHelper
         if ($flags & self::PATTERN_CASE_INSENSITIVE) {
             $matchOptions['caseSensitive'] = \false;
         }
-        return \yii\helpers\StringHelper::matchWildcard($pattern, $name, $matchOptions);
+        return StringHelper::matchWildcard($pattern, $name, $matchOptions);
     }
     /**
      * Scan the given exclude list in reverse to see whether pathname
@@ -801,17 +801,17 @@ class BaseFileHelper
         }
         if (strncmp($pattern, '!', 1) === 0) {
             $result['flags'] |= self::PATTERN_NEGATIVE;
-            $pattern = \yii\helpers\StringHelper::byteSubstr($pattern, 1, \yii\helpers\StringHelper::byteLength($pattern));
+            $pattern = StringHelper::byteSubstr($pattern, 1, StringHelper::byteLength($pattern));
         }
-        if (\yii\helpers\StringHelper::byteLength($pattern) && \yii\helpers\StringHelper::byteSubstr($pattern, -1, 1) === '/') {
-            $pattern = \yii\helpers\StringHelper::byteSubstr($pattern, 0, -1);
+        if (StringHelper::byteLength($pattern) && StringHelper::byteSubstr($pattern, -1, 1) === '/') {
+            $pattern = StringHelper::byteSubstr($pattern, 0, -1);
             $result['flags'] |= self::PATTERN_MUSTBEDIR;
         }
         if (strpos($pattern, '/') === \false) {
             $result['flags'] |= self::PATTERN_NODIR;
         }
         $result['firstWildcard'] = self::firstWildcardInPattern($pattern);
-        if (strncmp($pattern, '*', 1) === 0 && self::firstWildcardInPattern(\yii\helpers\StringHelper::byteSubstr($pattern, 1, \yii\helpers\StringHelper::byteLength($pattern))) === \false) {
+        if (strncmp($pattern, '*', 1) === 0 && self::firstWildcardInPattern(StringHelper::byteSubstr($pattern, 1, StringHelper::byteLength($pattern))) === \false) {
             $result['flags'] |= self::PATTERN_ENDSWITH;
         }
         $result['pattern'] = $pattern;
@@ -896,9 +896,9 @@ class BaseFileHelper
                     $group = $ownerParts[1];
                 }
             } elseif (is_array($ownership)) {
-                $ownershipIsIndexed = \yii\helpers\ArrayHelper::isIndexed($ownership);
-                $user = \yii\helpers\ArrayHelper::getValue($ownership, $ownershipIsIndexed ? 0 : 'user');
-                $group = \yii\helpers\ArrayHelper::getValue($ownership, $ownershipIsIndexed ? 1 : 'group');
+                $ownershipIsIndexed = ArrayHelper::isIndexed($ownership);
+                $user = ArrayHelper::getValue($ownership, $ownershipIsIndexed ? 0 : 'user');
+                $group = ArrayHelper::getValue($ownership, $ownershipIsIndexed ? 1 : 'group');
             } else {
                 throw new InvalidArgumentException('$ownership must be an integer, string, array, or null.');
             }

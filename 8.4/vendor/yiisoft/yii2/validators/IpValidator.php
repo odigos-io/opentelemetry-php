@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\helpers\Html;
-use yii\helpers\IpHelper;
-use yii\helpers\Json;
-use yii\web\JsExpression;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\Html;
+use Odigos\yii\helpers\IpHelper;
+use Odigos\yii\helpers\Json;
+use Odigos\yii\web\JsExpression;
 /**
  * The validator checks if the attribute value is a valid IPv4/IPv6 address or subnet.
  *
@@ -37,7 +37,7 @@ use yii\web\JsExpression;
  * @author Dmitry Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.7
  */
-class IpValidator extends \yii\validators\Validator
+class IpValidator extends Validator
 {
     /**
      * Negation char.
@@ -490,7 +490,7 @@ class IpValidator extends \yii\validators\Validator
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
-        \yii\validators\ValidationAsset::register($view);
+        ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
         return 'yii.validation.ip(value, messages, ' . Json::htmlEncode($options) . ');';
     }

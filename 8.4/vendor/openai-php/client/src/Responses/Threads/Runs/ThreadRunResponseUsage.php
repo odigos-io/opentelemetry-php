@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Threads\Runs;
+namespace Odigos\OpenAI\Responses\Threads\Runs;
 
 final class ThreadRunResponseUsage
 {

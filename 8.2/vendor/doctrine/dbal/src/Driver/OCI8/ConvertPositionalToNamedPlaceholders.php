@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\OCI8;
+namespace Odigos\Doctrine\DBAL\Driver\OCI8;
 
-use Doctrine\DBAL\SQL\Parser\Visitor;
+use Odigos\Doctrine\DBAL\SQL\Parser\Visitor;
 use function count;
 use function implode;
 /**

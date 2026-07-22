@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         2.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Cache\Engine;
+namespace Odigos\Cake\Cache\Engine;
 
-use Cake\Cache\CacheEngine;
-use Cake\Cache\Exception\InvalidArgumentException;
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Cache\CacheEngine;
+use Odigos\Cake\Cache\Exception\InvalidArgumentException;
+use Odigos\Cake\Core\Exception\CakeException;
 use DateInterval;
 use Memcached;
 /**

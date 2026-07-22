@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Loader;
+namespace Odigos\Symfony\Component\Routing\Loader;
 
 use Psr\Container\ContainerInterface;
 /**
@@ -16,7 +16,7 @@ use Psr\Container\ContainerInterface;
  *
  * @author Ryan Weaver <ryan@knpuniversity.com>
  */
-class ContainerLoader extends \Symfony\Component\Routing\Loader\ObjectLoader
+class ContainerLoader extends ObjectLoader
 {
     public function __construct(private ContainerInterface $container, ?string $env = null)
     {

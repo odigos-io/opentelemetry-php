@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 use Odigos\Yii;
 /**
@@ -43,7 +43,7 @@ use Odigos\Yii;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-abstract class Application extends \yii\base\Module
+abstract class Application extends Module
 {
     /**
      * @event Event an event raised before the application starts to handle a request.
@@ -193,7 +193,7 @@ abstract class Application extends \yii\base\Module
         $this->state = self::STATE_BEGIN;
         $this->preInit($config);
         $this->registerErrorHandler($config);
-        \yii\base\Component::__construct($config);
+        Component::__construct($config);
     }
     /**
      * Pre-initializes the application.
@@ -206,13 +206,13 @@ abstract class Application extends \yii\base\Module
     public function preInit(&$config)
     {
         if (!isset($config['id'])) {
-            throw new \yii\base\InvalidConfigException('The "id" configuration for the Application is required.');
+            throw new InvalidConfigException('The "id" configuration for the Application is required.');
         }
         if (isset($config['basePath'])) {
             $this->setBasePath($config['basePath']);
             unset($config['basePath']);
         } else {
-            throw new \yii\base\InvalidConfigException('The "basePath" configuration for the Application is required.');
+            throw new InvalidConfigException('The "basePath" configuration for the Application is required.');
         }
         if (isset($config['vendorPath'])) {
             $this->setVendorPath($config['vendorPath']);
@@ -274,7 +274,7 @@ abstract class Application extends \yii\base\Module
             }
             if (isset($extension['bootstrap'])) {
                 $component = Yii::createObject($extension['bootstrap']);
-                if ($component instanceof \yii\base\BootstrapInterface) {
+                if ($component instanceof BootstrapInterface) {
                     Yii::debug('Bootstrap with ' . get_class($component) . '::bootstrap()', __METHOD__);
                     $component->bootstrap($this);
                 } else {
@@ -295,13 +295,13 @@ abstract class Application extends \yii\base\Module
                 } elseif ($this->hasModule($mixed)) {
                     $component = $this->getModule($mixed);
                 } elseif (strpos($mixed, '\\') === \false) {
-                    throw new \yii\base\InvalidConfigException("Unknown bootstrapping component ID: {$mixed}");
+                    throw new InvalidConfigException("Unknown bootstrapping component ID: {$mixed}");
                 }
             }
             if (!isset($component)) {
                 $component = Yii::createObject($mixed);
             }
-            if ($component instanceof \yii\base\BootstrapInterface) {
+            if ($component instanceof BootstrapInterface) {
                 Yii::debug('Bootstrap with ' . get_class($component) . '::bootstrap()', __METHOD__);
                 $component->bootstrap($this);
             } else {
@@ -363,7 +363,7 @@ abstract class Application extends \yii\base\Module
             $response->send();
             $this->state = self::STATE_END;
             return $response->exitStatus;
-        } catch (\yii\base\ExitException $e) {
+        } catch (ExitException $e) {
             $this->end($e->statusCode, isset($response) ? $response : null);
             return $e->statusCode;
         }
@@ -567,9 +567,9 @@ abstract class Application extends \yii\base\Module
      */
     public function coreComponents()
     {
-        $components = ['log' => ['class' => 'yii\log\Dispatcher'], 'view' => ['class' => 'yii\web\View'], 'formatter' => ['class' => 'yii\i18n\Formatter'], 'i18n' => ['class' => 'yii\i18n\I18N'], 'urlManager' => ['class' => 'yii\web\UrlManager'], 'assetManager' => ['class' => 'yii\web\AssetManager'], 'security' => ['class' => 'yii\base\Security']];
-        if (class_exists('yii\swiftmailer\Mailer')) {
-            $components['mailer'] = ['class' => 'yii\swiftmailer\Mailer'];
+        $components = ['log' => ['class' => 'Odigos\yii\log\Dispatcher'], 'view' => ['class' => 'Odigos\yii\web\View'], 'formatter' => ['class' => 'Odigos\yii\i18n\Formatter'], 'i18n' => ['class' => 'Odigos\yii\i18n\I18N'], 'urlManager' => ['class' => 'Odigos\yii\web\UrlManager'], 'assetManager' => ['class' => 'Odigos\yii\web\AssetManager'], 'security' => ['class' => 'Odigos\yii\base\Security']];
+        if (class_exists('Odigos\yii\swiftmailer\Mailer')) {
+            $components['mailer'] = ['class' => 'Odigos\yii\swiftmailer\Mailer'];
         }
         return $components;
     }
@@ -593,7 +593,7 @@ abstract class Application extends \yii\base\Module
             $response->send();
         }
         if (YII_ENV_TEST) {
-            throw new \yii\base\ExitException($status);
+            throw new ExitException($status);
         }
         exit($status);
     }

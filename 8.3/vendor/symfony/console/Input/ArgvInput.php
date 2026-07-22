@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Input;
+namespace Odigos\Symfony\Component\Console\Input;
 
-use Symfony\Component\Console\Exception\RuntimeException;
+use Odigos\Symfony\Component\Console\Exception\RuntimeException;
 /**
  * ArgvInput represents an input coming from the CLI arguments.
  *
@@ -36,13 +36,13 @@ use Symfony\Component\Console\Exception\RuntimeException;
  * @see http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
  * @see http://www.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap12.html#tag_12_02
  */
-class ArgvInput extends \Symfony\Component\Console\Input\Input
+class ArgvInput extends Input
 {
     /** @var list<string> */
     private array $tokens;
     private array $parsed;
     /** @param list<string>|null $argv */
-    public function __construct(?array $argv = null, ?\Symfony\Component\Console\Input\InputDefinition $definition = null)
+    public function __construct(?array $argv = null, ?InputDefinition $definition = null)
     {
         $argv ??= $_SERVER['argv'] ?? [];
         foreach ($argv as $arg) {

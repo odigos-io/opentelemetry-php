@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
-use yii\base\InvalidArgumentException;
-use yii\base\NotSupportedException;
-use yii\db\conditions\ConditionInterface;
-use yii\db\conditions\HashCondition;
-use yii\helpers\StringHelper;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\NotSupportedException;
+use Odigos\yii\db\conditions\ConditionInterface;
+use Odigos\yii\db\conditions\HashCondition;
+use Odigos\yii\helpers\StringHelper;
 /**
  * QueryBuilder builds a SELECT SQL statement based on the specification given as a [[Query]] object.
  *
@@ -32,7 +32,7 @@ use yii\helpers\StringHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class QueryBuilder extends \yii\base\BaseObject
+class QueryBuilder extends \Odigos\yii\base\BaseObject
 {
     /**
      * The prefix for automatically generated query binding parameters.
@@ -132,7 +132,7 @@ class QueryBuilder extends \yii\base\BaseObject
      */
     protected function defaultConditionClasses()
     {
-        return ['NOT' => 'yii\db\conditions\NotCondition', 'AND' => 'yii\db\conditions\AndCondition', 'OR' => 'yii\db\conditions\OrCondition', 'BETWEEN' => 'yii\db\conditions\BetweenCondition', 'NOT BETWEEN' => 'yii\db\conditions\BetweenCondition', 'IN' => 'yii\db\conditions\InCondition', 'NOT IN' => 'yii\db\conditions\InCondition', 'LIKE' => 'yii\db\conditions\LikeCondition', 'NOT LIKE' => 'yii\db\conditions\LikeCondition', 'OR LIKE' => 'yii\db\conditions\LikeCondition', 'OR NOT LIKE' => 'yii\db\conditions\LikeCondition', 'EXISTS' => 'yii\db\conditions\ExistsCondition', 'NOT EXISTS' => 'yii\db\conditions\ExistsCondition'];
+        return ['NOT' => 'Odigos\yii\db\conditions\NotCondition', 'AND' => 'Odigos\yii\db\conditions\AndCondition', 'OR' => 'Odigos\yii\db\conditions\OrCondition', 'BETWEEN' => 'Odigos\yii\db\conditions\BetweenCondition', 'NOT BETWEEN' => 'Odigos\yii\db\conditions\BetweenCondition', 'IN' => 'Odigos\yii\db\conditions\InCondition', 'NOT IN' => 'Odigos\yii\db\conditions\InCondition', 'LIKE' => 'Odigos\yii\db\conditions\LikeCondition', 'NOT LIKE' => 'Odigos\yii\db\conditions\LikeCondition', 'OR LIKE' => 'Odigos\yii\db\conditions\LikeCondition', 'OR NOT LIKE' => 'Odigos\yii\db\conditions\LikeCondition', 'EXISTS' => 'Odigos\yii\db\conditions\ExistsCondition', 'NOT EXISTS' => 'Odigos\yii\db\conditions\ExistsCondition'];
     }
     /**
      * Contains array of default expression builders. Extend this method and override it, if you want to change
@@ -144,7 +144,7 @@ class QueryBuilder extends \yii\base\BaseObject
      */
     protected function defaultExpressionBuilders()
     {
-        return ['yii\db\Query' => 'yii\db\QueryExpressionBuilder', 'yii\db\PdoValue' => 'yii\db\PdoValueBuilder', 'yii\db\Expression' => 'yii\db\ExpressionBuilder', 'yii\db\conditions\ConjunctionCondition' => 'yii\db\conditions\ConjunctionConditionBuilder', 'yii\db\conditions\NotCondition' => 'yii\db\conditions\NotConditionBuilder', 'yii\db\conditions\AndCondition' => 'yii\db\conditions\ConjunctionConditionBuilder', 'yii\db\conditions\OrCondition' => 'yii\db\conditions\ConjunctionConditionBuilder', 'yii\db\conditions\BetweenCondition' => 'yii\db\conditions\BetweenConditionBuilder', 'yii\db\conditions\InCondition' => 'yii\db\conditions\InConditionBuilder', 'yii\db\conditions\LikeCondition' => 'yii\db\conditions\LikeConditionBuilder', 'yii\db\conditions\ExistsCondition' => 'yii\db\conditions\ExistsConditionBuilder', 'yii\db\conditions\SimpleCondition' => 'yii\db\conditions\SimpleConditionBuilder', 'yii\db\conditions\HashCondition' => 'yii\db\conditions\HashConditionBuilder', 'yii\db\conditions\BetweenColumnsCondition' => 'yii\db\conditions\BetweenColumnsConditionBuilder'];
+        return ['Odigos\yii\db\Query' => 'Odigos\yii\db\QueryExpressionBuilder', 'Odigos\yii\db\PdoValue' => 'Odigos\yii\db\PdoValueBuilder', 'Odigos\yii\db\Expression' => 'Odigos\yii\db\ExpressionBuilder', 'Odigos\yii\db\conditions\ConjunctionCondition' => 'Odigos\yii\db\conditions\ConjunctionConditionBuilder', 'Odigos\yii\db\conditions\NotCondition' => 'Odigos\yii\db\conditions\NotConditionBuilder', 'Odigos\yii\db\conditions\AndCondition' => 'Odigos\yii\db\conditions\ConjunctionConditionBuilder', 'Odigos\yii\db\conditions\OrCondition' => 'Odigos\yii\db\conditions\ConjunctionConditionBuilder', 'Odigos\yii\db\conditions\BetweenCondition' => 'Odigos\yii\db\conditions\BetweenConditionBuilder', 'Odigos\yii\db\conditions\InCondition' => 'Odigos\yii\db\conditions\InConditionBuilder', 'Odigos\yii\db\conditions\LikeCondition' => 'Odigos\yii\db\conditions\LikeConditionBuilder', 'Odigos\yii\db\conditions\ExistsCondition' => 'Odigos\yii\db\conditions\ExistsConditionBuilder', 'Odigos\yii\db\conditions\SimpleCondition' => 'Odigos\yii\db\conditions\SimpleConditionBuilder', 'Odigos\yii\db\conditions\HashCondition' => 'Odigos\yii\db\conditions\HashConditionBuilder', 'Odigos\yii\db\conditions\BetweenColumnsCondition' => 'Odigos\yii\db\conditions\BetweenColumnsConditionBuilder'];
     }
     /**
      * Setter for [[expressionBuilders]] property.
@@ -193,14 +193,14 @@ class QueryBuilder extends \yii\base\BaseObject
         $sql = $this->buildOrderByAndLimit($sql, $query->orderBy, $query->limit, $query->offset);
         if (!empty($query->orderBy)) {
             foreach ($query->orderBy as $expression) {
-                if ($expression instanceof \yii\db\ExpressionInterface) {
+                if ($expression instanceof ExpressionInterface) {
                     $this->buildExpression($expression, $params);
                 }
             }
         }
         if (!empty($query->groupBy)) {
             foreach ($query->groupBy as $expression) {
-                if ($expression instanceof \yii\db\ExpressionInterface) {
+                if ($expression instanceof ExpressionInterface) {
                     $this->buildExpression($expression, $params);
                 }
             }
@@ -228,7 +228,7 @@ class QueryBuilder extends \yii\base\BaseObject
      * @since 2.0.14
      * @see ExpressionInterface
      */
-    public function buildExpression(\yii\db\ExpressionInterface $expression, &$params = [])
+    public function buildExpression(ExpressionInterface $expression, &$params = [])
     {
         $builder = $this->getExpressionBuilder($expression);
         return $builder->build($expression, $params);
@@ -243,7 +243,7 @@ class QueryBuilder extends \yii\base\BaseObject
      * @since 2.0.14
      * @see expressionBuilders
      */
-    public function getExpressionBuilder(\yii\db\ExpressionInterface $expression)
+    public function getExpressionBuilder(ExpressionInterface $expression)
     {
         $className = get_class($expression);
         if (!isset($this->expressionBuilders[$className])) {
@@ -310,15 +310,15 @@ class QueryBuilder extends \yii\base\BaseObject
         $names = [];
         $placeholders = [];
         $values = ' DEFAULT VALUES';
-        if ($columns instanceof \yii\db\Query) {
+        if ($columns instanceof Query) {
             list($names, $values, $params) = $this->prepareInsertSelectSubQuery($columns, $schema, $params);
         } else {
             foreach ($columns as $name => $value) {
                 $names[] = $schema->quoteColumnName($name);
                 $value = isset($columnSchemas[$name]) ? $columnSchemas[$name]->dbTypecast($value) : $value;
-                if ($value instanceof \yii\db\ExpressionInterface) {
+                if ($value instanceof ExpressionInterface) {
                     $placeholders[] = $this->buildExpression($value, $params);
-                } elseif ($value instanceof \yii\db\Query) {
+                } elseif ($value instanceof \Odigos\yii\db\Query) {
                     list($sql, $params) = $this->build($value, $params);
                     $placeholders[] = "({$sql})";
                 } else {
@@ -408,7 +408,7 @@ class QueryBuilder extends \yii\base\BaseObject
                     $value = 0;
                 } elseif ($value === null) {
                     $value = 'NULL';
-                } elseif ($value instanceof \yii\db\ExpressionInterface) {
+                } elseif ($value instanceof ExpressionInterface) {
                     $value = $this->buildExpression($value, $params);
                 }
                 $vs[] = $value;
@@ -469,7 +469,7 @@ class QueryBuilder extends \yii\base\BaseObject
      */
     protected function prepareUpsertColumns($table, $insertColumns, $updateColumns, &$constraints = [])
     {
-        if ($insertColumns instanceof \yii\db\Query) {
+        if ($insertColumns instanceof Query) {
             list($insertNames) = $this->prepareInsertSelectSubQuery($insertColumns, $this->db->getSchema());
         } else {
             $insertNames = array_map([$this->db, 'quoteColumnName'], array_keys($insertColumns));
@@ -495,7 +495,7 @@ class QueryBuilder extends \yii\base\BaseObject
     private function getTableUniqueColumnNames($name, $columns, &$constraints = [])
     {
         $schema = $this->db->getSchema();
-        if (!$schema instanceof \yii\db\ConstraintFinderInterface) {
+        if (!$schema instanceof ConstraintFinderInterface) {
             return [];
         }
         $constraints = [];
@@ -510,14 +510,14 @@ class QueryBuilder extends \yii\base\BaseObject
         }
         $constraints = array_merge($constraints, $schema->getTableUniques($name));
         // Remove duplicates
-        $constraints = array_combine(array_map(function (\yii\db\Constraint $constraint) {
+        $constraints = array_combine(array_map(function (Constraint $constraint) {
             $columns = $constraint->columnNames;
             sort($columns, \SORT_STRING);
             return json_encode($columns);
         }, $constraints), $constraints);
         $columnNames = [];
         // Remove all constraints which do not cover the specified column list
-        $constraints = array_values(array_filter($constraints, function (\yii\db\Constraint $constraint) use ($schema, $columns, &$columnNames) {
+        $constraints = array_values(array_filter($constraints, function (Constraint $constraint) use ($schema, $columns, &$columnNames) {
             $constraintColumnNames = array_map([$schema, 'quoteColumnName'], $constraint->columnNames);
             $result = !array_diff($constraintColumnNames, $columns);
             if ($result) {
@@ -570,7 +570,7 @@ class QueryBuilder extends \yii\base\BaseObject
         $sets = [];
         foreach ($columns as $name => $value) {
             $value = isset($columnSchemas[$name]) ? $columnSchemas[$name]->dbTypecast($value) : $value;
-            if ($value instanceof \yii\db\ExpressionInterface) {
+            if ($value instanceof ExpressionInterface) {
                 $placeholder = $this->buildExpression($value, $params);
             } else {
                 $placeholder = $this->bindParam($value, $params);
@@ -998,7 +998,7 @@ class QueryBuilder extends \yii\base\BaseObject
      */
     public function createView($viewName, $subQuery)
     {
-        if ($subQuery instanceof \yii\db\Query) {
+        if ($subQuery instanceof Query) {
             list($rawQuery, $params) = $this->build($subQuery);
             array_walk($params, function (&$param) {
                 $param = $this->db->quoteValue($param);
@@ -1060,7 +1060,7 @@ class QueryBuilder extends \yii\base\BaseObject
      */
     public function getColumnType($type)
     {
-        if ($type instanceof \yii\db\ColumnSchemaBuilder) {
+        if ($type instanceof ColumnSchemaBuilder) {
             $type = $type->__toString();
         }
         if (isset($this->typeMap[$type])) {
@@ -1093,13 +1093,13 @@ class QueryBuilder extends \yii\base\BaseObject
             return $select . ' *';
         }
         foreach ($columns as $i => $column) {
-            if ($column instanceof \yii\db\ExpressionInterface) {
+            if ($column instanceof ExpressionInterface) {
                 if (is_int($i)) {
                     $columns[$i] = $this->buildExpression($column, $params);
                 } else {
                     $columns[$i] = $this->buildExpression($column, $params) . ' AS ' . $this->db->quoteColumnName($i);
                 }
-            } elseif ($column instanceof \yii\db\Query) {
+            } elseif ($column instanceof Query) {
                 list($sql, $params) = $this->build($column, $params);
                 $columns[$i] = "({$sql}) AS " . $this->db->quoteColumnName($i);
             } elseif (is_string($i) && $i !== $column) {
@@ -1143,7 +1143,7 @@ class QueryBuilder extends \yii\base\BaseObject
         }
         foreach ($joins as $i => $join) {
             if (!is_array($join) || !isset($join[0], $join[1])) {
-                throw new \yii\db\Exception('A join clause must be specified as an array of join type, join table, and optionally join condition.');
+                throw new Exception('A join clause must be specified as an array of join type, join table, and optionally join condition.');
             }
             // 0:join type, 1:join table, 2:on-condition (optional)
             list($joinType, $table) = $join;
@@ -1169,7 +1169,7 @@ class QueryBuilder extends \yii\base\BaseObject
     private function quoteTableNames($tables, &$params)
     {
         foreach ($tables as $i => $table) {
-            if ($table instanceof \yii\db\Query) {
+            if ($table instanceof Query) {
                 list($sql, $params) = $this->build($table, $params);
                 $tables[$i] = "({$sql}) " . $this->db->quoteTableName($i);
             } elseif (is_string($i)) {
@@ -1208,7 +1208,7 @@ class QueryBuilder extends \yii\base\BaseObject
             return '';
         }
         foreach ($columns as $i => $column) {
-            if ($column instanceof \yii\db\ExpressionInterface) {
+            if ($column instanceof ExpressionInterface) {
                 $columns[$i] = $this->buildExpression($column);
             } elseif (strpos($column, '(') === \false) {
                 $columns[$i] = $this->db->quoteColumnName($column);
@@ -1257,7 +1257,7 @@ class QueryBuilder extends \yii\base\BaseObject
         }
         $orders = [];
         foreach ($columns as $name => $direction) {
-            if ($direction instanceof \yii\db\ExpressionInterface) {
+            if ($direction instanceof ExpressionInterface) {
                 $orders[] = $this->buildExpression($direction);
             } else {
                 $orders[] = $this->db->quoteColumnName($name) . ($direction === \SORT_DESC ? ' DESC' : '');
@@ -1288,7 +1288,7 @@ class QueryBuilder extends \yii\base\BaseObject
      */
     protected function hasLimit($limit)
     {
-        return $limit instanceof \yii\db\ExpressionInterface || ctype_digit((string) $limit);
+        return $limit instanceof ExpressionInterface || ctype_digit((string) $limit);
     }
     /**
      * Checks to see if the given offset is effective.
@@ -1297,7 +1297,7 @@ class QueryBuilder extends \yii\base\BaseObject
      */
     protected function hasOffset($offset)
     {
-        return $offset instanceof \yii\db\ExpressionInterface || ctype_digit((string) $offset) && (string) $offset !== '0';
+        return $offset instanceof ExpressionInterface || ctype_digit((string) $offset) && (string) $offset !== '0';
     }
     /**
      * @param array $unions
@@ -1312,7 +1312,7 @@ class QueryBuilder extends \yii\base\BaseObject
         $result = '';
         foreach ($unions as $i => $union) {
             $query = $union['query'];
-            if ($query instanceof \yii\db\Query) {
+            if ($query instanceof Query) {
                 list($unions[$i]['query'], $params) = $this->build($query, $params);
             }
             $result .= 'UNION ' . ($union['all'] ? 'ALL ' : '') . '( ' . $unions[$i]['query'] . ' ) ';
@@ -1338,7 +1338,7 @@ class QueryBuilder extends \yii\base\BaseObject
                 $recursive = \true;
             }
             $query = $with['query'];
-            if ($query instanceof \yii\db\Query) {
+            if ($query instanceof Query) {
                 list($with['query'], $params) = $this->build($query, $params);
             }
             $result[] = $with['alias'] . ' AS (' . $with['query'] . ')';
@@ -1364,7 +1364,7 @@ class QueryBuilder extends \yii\base\BaseObject
             }
         }
         foreach ($columns as $i => $column) {
-            if ($column instanceof \yii\db\ExpressionInterface) {
+            if ($column instanceof ExpressionInterface) {
                 $columns[$i] = $this->buildExpression($column);
             } elseif (strpos($column, '(') === \false) {
                 $columns[$i] = $this->db->quoteColumnName($column);
@@ -1387,7 +1387,7 @@ class QueryBuilder extends \yii\base\BaseObject
             }
             $condition = $this->createConditionFromArray($condition);
         }
-        if ($condition instanceof \yii\db\ExpressionInterface) {
+        if ($condition instanceof ExpressionInterface) {
             return $this->buildExpression($condition, $params);
         }
         return (string) $condition;
@@ -1410,7 +1410,7 @@ class QueryBuilder extends \yii\base\BaseObject
             if (isset($this->conditionClasses[$operator])) {
                 $className = $this->conditionClasses[$operator];
             } else {
-                $className = 'yii\db\conditions\SimpleCondition';
+                $className = 'Odigos\yii\db\conditions\SimpleCondition';
             }
             /** @var ConditionInterface $className */
             return $className::fromArrayDefinition($operator, $condition);

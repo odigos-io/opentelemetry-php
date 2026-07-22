@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Command;
+namespace Odigos\Symfony\Component\Translation\Command;
 
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\CI\GithubActionReporter;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Completion\CompletionInput;
-use Symfony\Component\Console\Completion\CompletionSuggestions;
-use Symfony\Component\Console\Exception\RuntimeException;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
-use Symfony\Component\Translation\Util\XliffUtils;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\CI\GithubActionReporter;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Completion\CompletionInput;
+use Odigos\Symfony\Component\Console\Completion\CompletionSuggestions;
+use Odigos\Symfony\Component\Console\Exception\RuntimeException;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Style\SymfonyStyle;
+use Odigos\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Translation\Util\XliffUtils;
 /**
  * Validates XLIFF files syntax and outputs encountered errors.
  *

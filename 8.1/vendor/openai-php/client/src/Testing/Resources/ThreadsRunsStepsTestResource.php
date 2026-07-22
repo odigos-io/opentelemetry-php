@@ -1,12 +1,12 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\ThreadsRunsStepsContract;
-use OpenAI\Resources\ThreadsRunsSteps;
-use OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepListResponse;
-use OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\ThreadsRunsStepsContract;
+use Odigos\OpenAI\Resources\ThreadsRunsSteps;
+use Odigos\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepListResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 class ThreadsRunsStepsTestResource implements ThreadsRunsStepsContract
 {
     use Testable;

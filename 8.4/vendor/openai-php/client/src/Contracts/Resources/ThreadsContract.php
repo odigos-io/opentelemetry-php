@@ -1,12 +1,12 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\StreamResponse;
-use OpenAI\Responses\Threads\Runs\ThreadRunResponse;
-use OpenAI\Responses\Threads\Runs\ThreadRunStreamResponse;
-use OpenAI\Responses\Threads\ThreadDeleteResponse;
-use OpenAI\Responses\Threads\ThreadResponse;
+use Odigos\OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\ThreadRunResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\ThreadRunStreamResponse;
+use Odigos\OpenAI\Responses\Threads\ThreadDeleteResponse;
+use Odigos\OpenAI\Responses\Threads\ThreadResponse;
 interface ThreadsContract
 {
     /**
@@ -59,11 +59,11 @@ interface ThreadsContract
      *
      * @see https://platform.openai.com/docs/api-reference/messages
      */
-    public function messages(): \OpenAI\Contracts\Resources\ThreadsMessagesContract;
+    public function messages(): ThreadsMessagesContract;
     /**
      * Represents an execution run on a thread.
      *
      * @see https://platform.openai.com/docs/api-reference/runs
      */
-    public function runs(): \OpenAI\Contracts\Resources\ThreadsRunsContract;
+    public function runs(): ThreadsRunsContract;
 }

@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 /**
  * ActiveQueryInterface defines the common interface to be implemented by active record query classes.
@@ -20,7 +20,7 @@ namespace yii\db;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-interface ActiveQueryInterface extends \yii\db\QueryInterface
+interface ActiveQueryInterface extends QueryInterface
 {
     /**
      * Sets the [[asArray]] property.

@@ -12,12 +12,12 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Exception;
+namespace Odigos\Cake\Http\Exception;
 
 /**
  * Not Implemented Exception - used when an API method is not implemented
  */
-class NotImplementedException extends \Cake\Http\Exception\HttpException
+class NotImplementedException extends HttpException
 {
     /**
      * @inheritDoc

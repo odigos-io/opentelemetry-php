@@ -12,17 +12,17 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Mailer;
+namespace Odigos\Cake\Mailer;
 
 use BadMethodCallException;
-use Cake\Core\StaticConfigTrait;
-use Cake\Event\EventListenerInterface;
-use Cake\Log\Log;
-use Cake\Mailer\Exception\MissingActionException;
-use Cake\ORM\Locator\LocatorAwareTrait;
-use Cake\View\ViewBuilder;
+use Odigos\Cake\Core\StaticConfigTrait;
+use Odigos\Cake\Event\EventListenerInterface;
+use Odigos\Cake\Log\Log;
+use Odigos\Cake\Mailer\Exception\MissingActionException;
+use Odigos\Cake\ORM\Locator\LocatorAwareTrait;
+use Odigos\Cake\View\ViewBuilder;
 use InvalidArgumentException;
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * Mailer base class.
  *
@@ -145,26 +145,26 @@ class Mailer implements EventListenerInterface
      *
      * @var \Cake\Mailer\AbstractTransport|null
      */
-    protected ?\Cake\Mailer\AbstractTransport $transport = null;
+    protected ?AbstractTransport $transport = null;
     /**
      * Message class name.
      *
      * @var string
      * @phpstan-var class-string<\Cake\Mailer\Message>
      */
-    protected string $messageClass = \Cake\Mailer\Message::class;
+    protected string $messageClass = Message::class;
     /**
      * Message instance.
      *
      * @var \Cake\Mailer\Message
      */
-    protected \Cake\Mailer\Message $message;
+    protected Message $message;
     /**
      * Email Renderer
      *
      * @var \Cake\Mailer\Renderer|null
      */
-    protected ?\Cake\Mailer\Renderer $renderer = null;
+    protected ?Renderer $renderer = null;
     /**
      * Hold message, renderer and transport instance for restoring after running
      * a mailer action.
@@ -210,9 +210,9 @@ class Mailer implements EventListenerInterface
      *
      * @return \Cake\Mailer\Renderer
      */
-    public function getRenderer(): \Cake\Mailer\Renderer
+    public function getRenderer(): Renderer
     {
-        return $this->renderer ??= new \Cake\Mailer\Renderer();
+        return $this->renderer ??= new Renderer();
     }
     /**
      * Set email renderer.
@@ -220,7 +220,7 @@ class Mailer implements EventListenerInterface
      * @param \Cake\Mailer\Renderer $renderer Render instance.
      * @return $this
      */
-    public function setRenderer(\Cake\Mailer\Renderer $renderer)
+    public function setRenderer(Renderer $renderer)
     {
         $this->renderer = $renderer;
         return $this;
@@ -230,7 +230,7 @@ class Mailer implements EventListenerInterface
      *
      * @return \Cake\Mailer\Message
      */
-    public function getMessage(): \Cake\Mailer\Message
+    public function getMessage(): Message
     {
         return $this->message;
     }
@@ -241,7 +241,7 @@ class Mailer implements EventListenerInterface
      * @return $this
      * @deprecated 5.1.0 Configure the mailer according to the documentation instead of manually setting the Message instance.
      */
-    public function setMessage(\Cake\Mailer\Message $message)
+    public function setMessage(Message $message)
     {
         deprecationWarning('5.1.0', 'Setting the message instance is deprecated. Configure the mailer according to the documentation instead.');
         $this->message = $message;
@@ -402,10 +402,10 @@ class Mailer implements EventListenerInterface
      * @return $this
      * @throws \LogicException When the chosen transport lacks a send method.
      */
-    public function setTransport(\Cake\Mailer\AbstractTransport|string $name)
+    public function setTransport(AbstractTransport|string $name)
     {
         if (is_string($name)) {
-            $this->transport = \Cake\Mailer\TransportFactory::get($name);
+            $this->transport = TransportFactory::get($name);
         } else {
             $this->transport = $name;
         }
@@ -416,7 +416,7 @@ class Mailer implements EventListenerInterface
      *
      * @return \Cake\Mailer\AbstractTransport
      */
-    public function getTransport(): \Cake\Mailer\AbstractTransport
+    public function getTransport(): AbstractTransport
     {
         if ($this->transport === null) {
             throw new BadMethodCallException('Transport was not defined. ' . 'You must set on using setTransport() or set `transport` option in your mailer profile.');

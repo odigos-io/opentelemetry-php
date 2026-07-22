@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
 /**
  * @mixin \Illuminate\Console\Scheduling\Schedule
  */
 class PendingEventAttributes
 {
-    use \Illuminate\Console\Scheduling\ManagesAttributes, \Illuminate\Console\Scheduling\ManagesFrequencies;
+    use ManagesAttributes, ManagesFrequencies;
     /**
      * The recorded macro calls to replay on each event.
      *
@@ -17,7 +17,7 @@ class PendingEventAttributes
     /**
      * Create a new pending event attributes instance.
      */
-    public function __construct(protected \Illuminate\Console\Scheduling\Schedule $schedule)
+    public function __construct(protected Schedule $schedule)
     {
     }
     /**
@@ -37,7 +37,7 @@ class PendingEventAttributes
     /**
      * Merge the current attributes into the given event.
      */
-    public function mergeAttributes(\Illuminate\Console\Scheduling\Event $event): void
+    public function mergeAttributes(Event $event): void
     {
         $event->expression = $this->expression;
         $event->repeatSeconds = $this->repeatSeconds;
@@ -80,7 +80,7 @@ class PendingEventAttributes
      */
     public function __call(string $method, array $parameters): mixed
     {
-        if (\Illuminate\Console\Scheduling\Event::hasMacro($method)) {
+        if (Event::hasMacro($method)) {
             $this->macros[] = [$method, $parameters];
             return $this;
         }

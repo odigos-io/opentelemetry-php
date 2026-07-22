@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static \Illuminate\Foundation\Configuration\ApplicationBuilder configure(string|null $basePath = null)
@@ -148,7 +148,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Foundation\Application
  */
-class App extends \Illuminate\Support\Facades\Facade
+class App extends Facade
 {
     /**
      * Get the registered name of the component.

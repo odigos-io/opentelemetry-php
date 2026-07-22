@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Query\Processors;
+namespace Odigos\Illuminate\Database\Query\Processors;
 
-class MariaDbProcessor extends \Illuminate\Database\Query\Processors\MySqlProcessor
+class MariaDbProcessor extends MySqlProcessor
 {
     //
 }

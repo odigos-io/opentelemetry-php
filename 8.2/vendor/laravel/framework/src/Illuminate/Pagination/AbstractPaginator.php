@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Pagination;
+namespace Odigos\Illuminate\Pagination;
 
 use Closure;
-use Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\ForwardsCalls;
-use Illuminate\Support\Traits\Tappable;
-use Illuminate\Support\Traits\TransformsToResourceCollection;
+use Odigos\Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Support\Traits\Tappable;
+use Odigos\Illuminate\Support\Traits\TransformsToResourceCollection;
 use Stringable;
 use Traversable;
 /**

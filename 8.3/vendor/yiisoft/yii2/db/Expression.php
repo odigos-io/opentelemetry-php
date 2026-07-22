@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 /**
  * Expression represents a DB expression that does not need escaping or quoting.
@@ -28,7 +28,7 @@ namespace yii\db;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Expression extends \yii\base\BaseObject implements \yii\db\ExpressionInterface
+class Expression extends \Odigos\yii\base\BaseObject implements ExpressionInterface
 {
     /**
      * @var string the DB expression

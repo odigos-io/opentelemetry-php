@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\View\Concerns;
+namespace Odigos\Illuminate\View\Concerns;
 
 trait ManagesTranslations
 {

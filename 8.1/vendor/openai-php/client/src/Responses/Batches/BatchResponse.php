@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Batches;
+namespace Odigos\OpenAI\Responses\Batches;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Contracts\ResponseHasMetaInformationContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Concerns\HasMetaInformation;
-use OpenAI\Responses\Meta\MetaInformation;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Contracts\ResponseHasMetaInformationContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Concerns\HasMetaInformation;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{id: string, object: string, endpoint: string, errors: ?array{object: string, data: array<array-key, array{code: string, message: string, param: ?string, line: ?int}>}, input_file_id: string, completion_window: string, status: string, output_file_id: ?string, error_file_id: ?string, created_at: int, in_progress_at: ?int, expires_at: ?int, finalizing_at: ?int, completed_at: ?int, failed_at: ?int, expired_at: ?int, cancelling_at: ?int, cancelled_at: ?int, request_counts: ?array{total: int, completed: int, failed: int}, metadata: ?array<string, string>}>
  */
@@ -23,7 +23,7 @@ final class BatchResponse implements ResponseContract, ResponseHasMetaInformatio
     /**
      * @param  array<string, string>  $metadata
      */
-    private function __construct(public string $id, public string $object, public string $endpoint, public ?\OpenAI\Responses\Batches\BatchResponseErrors $errors, public string $inputFileId, public string $completionWindow, public string $status, public ?string $outputFileId, public ?string $errorFileId, public int $createdAt, public ?int $inProgressAt, public ?int $expiresAt, public ?int $finalizingAt, public ?int $completedAt, public ?int $failedAt, public ?int $expiredAt, public ?int $cancellingAt, public ?int $cancelledAt, public ?\OpenAI\Responses\Batches\BatchResponseRequestCounts $requestCounts, public ?array $metadata, private readonly MetaInformation $meta)
+    private function __construct(public string $id, public string $object, public string $endpoint, public ?BatchResponseErrors $errors, public string $inputFileId, public string $completionWindow, public string $status, public ?string $outputFileId, public ?string $errorFileId, public int $createdAt, public ?int $inProgressAt, public ?int $expiresAt, public ?int $finalizingAt, public ?int $completedAt, public ?int $failedAt, public ?int $expiredAt, public ?int $cancellingAt, public ?int $cancelledAt, public ?BatchResponseRequestCounts $requestCounts, public ?array $metadata, private readonly MetaInformation $meta)
     {
     }
     /**
@@ -33,7 +33,7 @@ final class BatchResponse implements ResponseContract, ResponseHasMetaInformatio
      */
     public static function from(array $attributes, MetaInformation $meta): self
     {
-        return new self($attributes['id'], $attributes['object'], $attributes['endpoint'], isset($attributes['errors']) ? \OpenAI\Responses\Batches\BatchResponseErrors::from($attributes['errors']) : null, $attributes['input_file_id'], $attributes['completion_window'], $attributes['status'], $attributes['output_file_id'], $attributes['error_file_id'], $attributes['created_at'], $attributes['in_progress_at'], $attributes['expires_at'], $attributes['finalizing_at'], $attributes['completed_at'], $attributes['failed_at'], $attributes['expired_at'], $attributes['cancelling_at'], $attributes['cancelled_at'], isset($attributes['request_counts']) ? \OpenAI\Responses\Batches\BatchResponseRequestCounts::from($attributes['request_counts']) : null, $attributes['metadata'], $meta);
+        return new self($attributes['id'], $attributes['object'], $attributes['endpoint'], isset($attributes['errors']) ? BatchResponseErrors::from($attributes['errors']) : null, $attributes['input_file_id'], $attributes['completion_window'], $attributes['status'], $attributes['output_file_id'], $attributes['error_file_id'], $attributes['created_at'], $attributes['in_progress_at'], $attributes['expires_at'], $attributes['finalizing_at'], $attributes['completed_at'], $attributes['failed_at'], $attributes['expired_at'], $attributes['cancelling_at'], $attributes['cancelled_at'], isset($attributes['request_counts']) ? BatchResponseRequestCounts::from($attributes['request_counts']) : null, $attributes['metadata'], $meta);
     }
     /**
      * {@inheritDoc}

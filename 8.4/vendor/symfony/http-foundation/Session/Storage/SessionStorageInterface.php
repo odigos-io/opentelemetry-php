@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\Session\Storage;
+namespace Odigos\Symfony\Component\HttpFoundation\Session\Storage;
 
-use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
+use Odigos\Symfony\Component\HttpFoundation\Session\SessionBagInterface;
 /**
  * StorageInterface.
  *
@@ -99,5 +99,5 @@ interface SessionStorageInterface
      * Registers a SessionBagInterface for use.
      */
     public function registerBag(SessionBagInterface $bag): void;
-    public function getMetadataBag(): \Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
+    public function getMetadataBag(): MetadataBag;
 }

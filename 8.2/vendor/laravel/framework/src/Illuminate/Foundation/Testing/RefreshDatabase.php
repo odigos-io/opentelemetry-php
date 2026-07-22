@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Testing;
+namespace Odigos\Illuminate\Foundation\Testing;
 
-use Illuminate\Contracts\Console\Kernel;
-use Illuminate\Foundation\Testing\Traits\CanConfigureMigrationCommands;
+use Odigos\Illuminate\Contracts\Console\Kernel;
+use Odigos\Illuminate\Foundation\Testing\Traits\CanConfigureMigrationCommands;
 trait RefreshDatabase
 {
     use CanConfigureMigrationCommands;
@@ -56,8 +56,8 @@ trait RefreshDatabase
     {
         $database = $this->app->make('db');
         foreach ($this->connectionsToTransact() as $name) {
-            if (isset(\Illuminate\Foundation\Testing\RefreshDatabaseState::$inMemoryConnections[$name])) {
-                $database->connection($name)->setPdo(\Illuminate\Foundation\Testing\RefreshDatabaseState::$inMemoryConnections[$name]);
+            if (isset(RefreshDatabaseState::$inMemoryConnections[$name])) {
+                $database->connection($name)->setPdo(RefreshDatabaseState::$inMemoryConnections[$name]);
             }
         }
     }
@@ -68,11 +68,11 @@ trait RefreshDatabase
      */
     protected function refreshTestDatabase()
     {
-        if (!\Illuminate\Foundation\Testing\RefreshDatabaseState::$migrated) {
+        if (!RefreshDatabaseState::$migrated) {
             $this->migrateDatabases();
             $this->app[Kernel::class]->setArtisan(null);
             $this->updateLocalCacheOfInMemoryDatabases();
-            \Illuminate\Foundation\Testing\RefreshDatabaseState::$migrated = \true;
+            RefreshDatabaseState::$migrated = \true;
         }
         $this->beginDatabaseTransaction();
     }
@@ -86,7 +86,7 @@ trait RefreshDatabase
         $database = $this->app->make('db');
         foreach ($this->connectionsToTransact() as $name) {
             if ($this->usingInMemoryDatabase($name)) {
-                \Illuminate\Foundation\Testing\RefreshDatabaseState::$inMemoryConnections[$name] = $database->connection($name)->getPdo();
+                RefreshDatabaseState::$inMemoryConnections[$name] = $database->connection($name)->getPdo();
             }
         }
     }
@@ -108,12 +108,12 @@ trait RefreshDatabase
     {
         $database = $this->app->make('db');
         $connections = $this->connectionsToTransact();
-        $this->app->instance('db.transactions', $transactionsManager = new \Illuminate\Foundation\Testing\DatabaseTransactionsManager($connections));
+        $this->app->instance('db.transactions', $transactionsManager = new DatabaseTransactionsManager($connections));
         foreach ($connections as $name) {
             $connection = $database->connection($name);
             $connection->setTransactionManager($transactionsManager);
             if ($this->usingInMemoryDatabase($name)) {
-                \Illuminate\Foundation\Testing\RefreshDatabaseState::$inMemoryConnections[$name] ??= $connection->getPdo();
+                RefreshDatabaseState::$inMemoryConnections[$name] ??= $connection->getPdo();
             }
             $dispatcher = $connection->getEventDispatcher();
             $connection->unsetEventDispatcher();
@@ -126,7 +126,7 @@ trait RefreshDatabase
                 $dispatcher = $connection->getEventDispatcher();
                 $connection->unsetEventDispatcher();
                 if ($connection->getPdo() && !$connection->getPdo()->inTransaction()) {
-                    \Illuminate\Foundation\Testing\RefreshDatabaseState::$migrated = \false;
+                    RefreshDatabaseState::$migrated = \false;
                 }
                 $connection->rollBack();
                 $connection->setEventDispatcher($dispatcher);

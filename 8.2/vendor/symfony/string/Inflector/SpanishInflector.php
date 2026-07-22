@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\String\Inflector;
+namespace Odigos\Symfony\Component\String\Inflector;
 
-final class SpanishInflector implements \Symfony\Component\String\Inflector\InflectorInterface
+final class SpanishInflector implements InflectorInterface
 {
     /**
      * A list of all rules for pluralise.

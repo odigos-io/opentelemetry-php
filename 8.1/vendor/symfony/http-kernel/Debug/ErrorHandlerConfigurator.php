@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Debug;
+namespace Odigos\Symfony\Component\HttpKernel\Debug;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\ErrorHandler\ErrorHandler;
+use Odigos\Symfony\Component\ErrorHandler\ErrorHandler;
 /**
  * Configures the error handler.
  *

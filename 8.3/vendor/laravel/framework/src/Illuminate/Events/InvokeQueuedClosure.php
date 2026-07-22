@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Events;
+namespace Odigos\Illuminate\Events;
 
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 class InvokeQueuedClosure
 {
     /**

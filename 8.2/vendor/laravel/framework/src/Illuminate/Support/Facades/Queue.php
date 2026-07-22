@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Queue\Worker;
-use Illuminate\Support\Testing\Fakes\QueueFake;
+use Odigos\Illuminate\Queue\Worker;
+use Odigos\Illuminate\Support\Testing\Fakes\QueueFake;
 /**
  * @method static void before(mixed $callback)
  * @method static void after(mixed $callback)
@@ -73,7 +73,7 @@ use Illuminate\Support\Testing\Fakes\QueueFake;
  * @see \Illuminate\Queue\Queue
  * @see \Illuminate\Support\Testing\Fakes\QueueFake
  */
-class Queue extends \Illuminate\Support\Facades\Facade
+class Queue extends Facade
 {
     /**
      * Register a callback to be executed to pick jobs.

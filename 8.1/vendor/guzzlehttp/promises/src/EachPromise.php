@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace GuzzleHttp\Promise;
+namespace Odigos\GuzzleHttp\Promise;
 
 /**
  * Represents a promise that iterates over many promises and invokes
@@ -9,7 +9,7 @@ namespace GuzzleHttp\Promise;
  *
  * @final
  */
-class EachPromise implements \GuzzleHttp\Promise\PromisorInterface
+class EachPromise implements PromisorInterface
 {
     private $pending = [];
     private $nextPendingIndex = 0;
@@ -52,7 +52,7 @@ class EachPromise implements \GuzzleHttp\Promise\PromisorInterface
             \Odigos\trigger_deprecation('guzzlehttp/promises', '2.5', 'Passing a non-iterable to %s::%s() is deprecated; guzzlehttp/promises 3.0 will require an iterable.', __CLASS__, __FUNCTION__);
             $iterable = [$iterable];
         }
-        $this->iterable = \GuzzleHttp\Promise\Create::iterFor($iterable);
+        $this->iterable = Create::iterFor($iterable);
         if (isset($config['concurrency'])) {
             $this->concurrency = $config['concurrency'];
         }
@@ -64,7 +64,7 @@ class EachPromise implements \GuzzleHttp\Promise\PromisorInterface
         }
     }
     /** @psalm-suppress InvalidNullableReturnType */
-    public function promise(): \GuzzleHttp\Promise\PromiseInterface
+    public function promise(): PromiseInterface
     {
         if ($this->aggregate) {
             return $this->aggregate;
@@ -75,8 +75,8 @@ class EachPromise implements \GuzzleHttp\Promise\PromisorInterface
             $this->iterable->rewind();
             $this->refillPending();
             if (!$this->pending) {
-                \GuzzleHttp\Promise\Utils::queue()->add(function (): void {
-                    if (!$this->aggregate || \GuzzleHttp\Promise\Is::settled($this->aggregate)) {
+                Utils::queue()->add(function (): void {
+                    if (!$this->aggregate || Is::settled($this->aggregate)) {
                         return;
                     }
                     try {
@@ -97,7 +97,7 @@ class EachPromise implements \GuzzleHttp\Promise\PromisorInterface
     private function createPromise(): void
     {
         $this->mutex = \false;
-        $this->aggregate = new \GuzzleHttp\Promise\Promise(function (): void {
+        $this->aggregate = new Promise(function (): void {
             if ($this->checkIfFinished()) {
                 return;
             }
@@ -107,7 +107,7 @@ class EachPromise implements \GuzzleHttp\Promise\PromisorInterface
             while ($promise = current($this->pending)) {
                 next($this->pending);
                 $promise->wait();
-                if (\GuzzleHttp\Promise\Is::settled($this->aggregate)) {
+                if (Is::settled($this->aggregate)) {
                     return;
                 }
             }
@@ -149,7 +149,7 @@ class EachPromise implements \GuzzleHttp\Promise\PromisorInterface
         if (!$this->iterable || !$this->iterable->valid()) {
             return \false;
         }
-        $promise = \GuzzleHttp\Promise\Create::promiseFor($this->iterable->current());
+        $promise = Create::promiseFor($this->iterable->current());
         $key = $this->iterable->key();
         // Iterable keys may not be unique, so we use a counter to
         // guarantee uniqueness
@@ -188,7 +188,7 @@ class EachPromise implements \GuzzleHttp\Promise\PromisorInterface
     private function step(int $idx): void
     {
         // If the promise was already resolved, then ignore this step.
-        if (\GuzzleHttp\Promise\Is::settled($this->aggregate)) {
+        if (Is::settled($this->aggregate)) {
             return;
         }
         unset($this->pending[$idx]);

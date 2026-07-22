@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
-use Doctrine\DBAL\Result;
-use Doctrine\DBAL\Types\JsonType;
-use Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Platforms\PostgreSQLPlatform;
+use Odigos\Doctrine\DBAL\Result;
+use Odigos\Doctrine\DBAL\Types\JsonType;
+use Odigos\Doctrine\DBAL\Types\Type;
 use function array_change_key_case;
 use function array_map;
 use function assert;
@@ -27,7 +27,7 @@ use const CASE_LOWER;
  *
  * @extends AbstractSchemaManager<PostgreSQLPlatform>
  */
-class PostgreSQLSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
+class PostgreSQLSchemaManager extends AbstractSchemaManager
 {
     /**
      * {@inheritDoc}
@@ -76,7 +76,7 @@ SQL
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): \Doctrine\DBAL\Schema\ForeignKeyConstraint
+    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): ForeignKeyConstraint
     {
         $onUpdate = null;
         $onDelete = null;
@@ -93,14 +93,14 @@ SQL
         $localColumns = array_map('trim', explode(',', $values[1]));
         $foreignColumns = array_map('trim', explode(',', $values[3]));
         $foreignTable = $values[2];
-        return new \Doctrine\DBAL\Schema\ForeignKeyConstraint($localColumns, $foreignTable, $foreignColumns, $tableForeignKey['conname'], ['onUpdate' => $onUpdate, 'onDelete' => $onDelete, 'deferrable' => (bool) $tableForeignKey['condeferrable'], 'deferred' => (bool) $tableForeignKey['condeferred']]);
+        return new ForeignKeyConstraint($localColumns, $foreignTable, $foreignColumns, $tableForeignKey['conname'], ['onUpdate' => $onUpdate, 'onDelete' => $onDelete, 'deferrable' => (bool) $tableForeignKey['condeferrable'], 'deferred' => (bool) $tableForeignKey['condeferred']]);
     }
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableViewDefinition(array $view): \Doctrine\DBAL\Schema\View
+    protected function _getPortableViewDefinition(array $view): View
     {
-        return new \Doctrine\DBAL\Schema\View($view['schemaname'] . '.' . $view['viewname'], $view['definition']);
+        return new View($view['schemaname'] . '.' . $view['viewname'], $view['definition']);
     }
     /**
      * @deprecated Use the schema name and the unqualified table name separately instead.
@@ -139,19 +139,19 @@ SQL
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableSequenceDefinition(array $sequence): \Doctrine\DBAL\Schema\Sequence
+    protected function _getPortableSequenceDefinition(array $sequence): Sequence
     {
         if ($sequence['schemaname'] !== 'public') {
             $sequenceName = $sequence['schemaname'] . '.' . $sequence['relname'];
         } else {
             $sequenceName = $sequence['relname'];
         }
-        return new \Doctrine\DBAL\Schema\Sequence($sequenceName, (int) $sequence['increment_by'], (int) $sequence['min_value']);
+        return new Sequence($sequenceName, (int) $sequence['increment_by'], (int) $sequence['min_value']);
     }
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableColumnDefinition(array $tableColumn): \Doctrine\DBAL\Schema\Column
+    protected function _getPortableTableColumnDefinition(array $tableColumn): Column
     {
         $tableColumn = array_change_key_case($tableColumn, CASE_LOWER);
         $length = null;
@@ -197,7 +197,7 @@ SQL
         if ($tableColumn['comment'] !== null) {
             $options['comment'] = $tableColumn['comment'];
         }
-        $column = new \Doctrine\DBAL\Schema\Column($tableColumn['field'], Type::getType($type), $options);
+        $column = new Column($tableColumn['field'], Type::getType($type), $options);
         if (!empty($tableColumn['collation'])) {
             $column->setPlatformOption('collation', $tableColumn['collation']);
         }

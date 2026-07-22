@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 /**
  * IndexConstraint represents the metadata of a table `INDEX` constraint.
@@ -13,7 +13,7 @@ namespace yii\db;
  * @author Sergey Makinen <sergey@makinen.ru>
  * @since 2.0.13
  */
-class IndexConstraint extends \yii\db\Constraint
+class IndexConstraint extends Constraint
 {
     /**
      * @var bool whether the index is unique.

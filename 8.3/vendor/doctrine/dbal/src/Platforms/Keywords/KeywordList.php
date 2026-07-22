@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\Keywords;
+namespace Odigos\Doctrine\DBAL\Platforms\Keywords;
 
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use function array_flip;
 use function array_map;
 use function strtoupper;

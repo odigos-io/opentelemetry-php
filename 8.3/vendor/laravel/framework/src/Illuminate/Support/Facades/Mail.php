@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Support\Testing\Fakes\MailFake;
+use Odigos\Illuminate\Support\Testing\Fakes\MailFake;
 /**
  * @method static \Illuminate\Contracts\Mail\Mailer mailer(string|null $name = null)
  * @method static \Illuminate\Mail\Mailer driver(string|null $driver = null)
@@ -61,7 +61,7 @@ use Illuminate\Support\Testing\Fakes\MailFake;
  * @see \Illuminate\Mail\MailManager
  * @see \Illuminate\Support\Testing\Fakes\MailFake
  */
-class Mail extends \Illuminate\Support\Facades\Facade
+class Mail extends Facade
 {
     /**
      * Replace the bound instance with a fake.

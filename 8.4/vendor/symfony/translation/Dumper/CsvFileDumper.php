@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Dumper;
+namespace Odigos\Symfony\Component\Translation\Dumper;
 
-use Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
 /**
  * CsvFileDumper generates a csv formatted string representation of a message catalogue.
  *
  * @author Stealth35
  */
-class CsvFileDumper extends \Symfony\Component\Translation\Dumper\FileDumper
+class CsvFileDumper extends FileDumper
 {
     private string $delimiter = ';';
     private string $enclosure = '"';

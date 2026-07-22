@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 use Odigos\Yii;
 /**
@@ -73,7 +73,7 @@ use Odigos\Yii;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0.13
  */
-class BaseObject implements \yii\base\Configurable
+class BaseObject implements Configurable
 {
     /**
      * Returns the fully qualified name of this class.
@@ -131,9 +131,9 @@ class BaseObject implements \yii\base\Configurable
         if (method_exists($this, $getter)) {
             return $this->{$getter}();
         } elseif (method_exists($this, 'set' . $name)) {
-            throw new \yii\base\InvalidCallException('Getting write-only property: ' . get_class($this) . '::' . $name);
+            throw new InvalidCallException('Getting write-only property: ' . get_class($this) . '::' . $name);
         }
-        throw new \yii\base\UnknownPropertyException('Getting unknown property: ' . get_class($this) . '::' . $name);
+        throw new UnknownPropertyException('Getting unknown property: ' . get_class($this) . '::' . $name);
     }
     /**
      * Sets value of an object property.
@@ -152,9 +152,9 @@ class BaseObject implements \yii\base\Configurable
         if (method_exists($this, $setter)) {
             $this->{$setter}($value);
         } elseif (method_exists($this, 'get' . $name)) {
-            throw new \yii\base\InvalidCallException('Setting read-only property: ' . get_class($this) . '::' . $name);
+            throw new InvalidCallException('Setting read-only property: ' . get_class($this) . '::' . $name);
         } else {
-            throw new \yii\base\UnknownPropertyException('Setting unknown property: ' . get_class($this) . '::' . $name);
+            throw new UnknownPropertyException('Setting unknown property: ' . get_class($this) . '::' . $name);
         }
     }
     /**
@@ -194,7 +194,7 @@ class BaseObject implements \yii\base\Configurable
         if (method_exists($this, $setter)) {
             $this->{$setter}(null);
         } elseif (method_exists($this, 'get' . $name)) {
-            throw new \yii\base\InvalidCallException('Unsetting read-only property: ' . get_class($this) . '::' . $name);
+            throw new InvalidCallException('Unsetting read-only property: ' . get_class($this) . '::' . $name);
         }
     }
     /**
@@ -209,7 +209,7 @@ class BaseObject implements \yii\base\Configurable
      */
     public function __call($name, $params)
     {
-        throw new \yii\base\UnknownMethodException('Calling unknown method: ' . get_class($this) . "::{$name}()");
+        throw new UnknownMethodException('Calling unknown method: ' . get_class($this) . "::{$name}()");
     }
     /**
      * Returns a value indicating whether a property is defined.

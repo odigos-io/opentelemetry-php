@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
-use yii\base\Arrayable;
-use yii\base\InvalidArgumentException;
-use yii\base\Model;
-use yii\web\JsExpression;
-use yii\web\JsonResponseFormatter;
+use Odigos\yii\base\Arrayable;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\Model;
+use Odigos\yii\web\JsExpression;
+use Odigos\yii\web\JsonResponseFormatter;
 /**
  * BaseJson provides concrete implementation for [[Json]].
  *
@@ -211,7 +211,7 @@ class BaseJson
      */
     public static function errorSummary($models, $options = [])
     {
-        $showAllErrors = \yii\helpers\ArrayHelper::remove($options, 'showAllErrors', \false);
+        $showAllErrors = ArrayHelper::remove($options, 'showAllErrors', \false);
         $lines = self::collectErrors($models, $showAllErrors);
         return static::encode($lines);
     }

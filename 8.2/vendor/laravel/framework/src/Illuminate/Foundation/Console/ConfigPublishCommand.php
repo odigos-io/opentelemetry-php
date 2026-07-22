@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Finder\Finder;
-use function Laravel\Prompts\select;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Finder\Finder;
+use function Odigos\Laravel\Prompts\select;
 #[AsCommand(name: 'config:publish')]
 class ConfigPublishCommand extends Command
 {

@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\ErrorHandler\Exception;
+namespace Odigos\Symfony\Component\ErrorHandler\Exception;
 
-use Symfony\Component\HttpFoundation\Exception\RequestExceptionInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\VarDumper\Caster\Caster;
-use Symfony\Component\VarDumper\Cloner\Data;
-use Symfony\Component\VarDumper\Cloner\Stub;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Odigos\Symfony\Component\HttpFoundation\Exception\RequestExceptionInterface;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Odigos\Symfony\Component\VarDumper\Caster\Caster;
+use Odigos\Symfony\Component\VarDumper\Cloner\Data;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Cloner\VarCloner;
 /**
  * FlattenException wraps a PHP Error or Exception to be able to serialize it.
  *

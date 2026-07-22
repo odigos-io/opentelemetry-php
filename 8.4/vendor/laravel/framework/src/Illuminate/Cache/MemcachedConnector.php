@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
 use Memcached;
 class MemcachedConnector

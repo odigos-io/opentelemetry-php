@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\SerializableClosure\Signers;
+namespace Odigos\Laravel\SerializableClosure\Signers;
 
-use Laravel\SerializableClosure\Contracts\Signer;
+use Odigos\Laravel\SerializableClosure\Contracts\Signer;
 class Hmac implements Signer
 {
     /**

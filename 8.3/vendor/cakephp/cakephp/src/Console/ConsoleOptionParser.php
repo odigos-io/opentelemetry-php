@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
-use Cake\Console\Exception\ConsoleException;
-use Cake\Console\Exception\MissingOptionException;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Console\Exception\ConsoleException;
+use Odigos\Cake\Console\Exception\MissingOptionException;
+use Odigos\Cake\Utility\Inflector;
 use LogicException;
 /**
  * Handles parsing the ARGV in the command line and provides support
@@ -205,9 +205,9 @@ class ConsoleOptionParser
      * @param \Cake\Console\ConsoleOptionParser|array $spec ConsoleOptionParser or spec to merge with.
      * @return $this
      */
-    public function merge(\Cake\Console\ConsoleOptionParser|array $spec)
+    public function merge(ConsoleOptionParser|array $spec)
     {
-        if ($spec instanceof \Cake\Console\ConsoleOptionParser) {
+        if ($spec instanceof ConsoleOptionParser) {
             $spec = $spec->toArray();
         }
         if (!empty($spec['arguments'])) {
@@ -215,7 +215,7 @@ class ConsoleOptionParser
         }
         if (!empty($spec['options'])) {
             foreach ($spec['options'] as $name => $params) {
-                if ($params instanceof \Cake\Console\ConsoleInputOption) {
+                if ($params instanceof ConsoleInputOption) {
                     $name = $params->name();
                 }
                 $this->removeOption($name);
@@ -323,9 +323,9 @@ class ConsoleOptionParser
      * @param array<string, mixed> $options An array of parameters that define the behavior of the option
      * @return $this
      */
-    public function addOption(\Cake\Console\ConsoleInputOption|string $name, array $options = [])
+    public function addOption(ConsoleInputOption|string $name, array $options = [])
     {
-        if ($name instanceof \Cake\Console\ConsoleInputOption) {
+        if ($name instanceof ConsoleInputOption) {
             $option = $name;
             $name = $option->name();
         } else {
@@ -334,7 +334,7 @@ class ConsoleOptionParser
             if ($options['default'] && (is_int($options['default']) || is_float($options['default']))) {
                 $options['default'] = (string) $options['default'];
             }
-            $option = new \Cake\Console\ConsoleInputOption($name, $options['short'], $options['help'], $options['boolean'], $options['default'], $options['choices'], $options['multiple'], $options['required'], $options['prompt'], $options['separator']);
+            $option = new ConsoleInputOption($name, $options['short'], $options['help'], $options['boolean'], $options['default'], $options['choices'], $options['multiple'], $options['required'], $options['prompt'], $options['separator']);
         }
         $this->_options[$name] = $option;
         asort($this->_options);
@@ -381,9 +381,9 @@ class ConsoleOptionParser
      * @param array<string, mixed> $params Parameters for the argument, see above.
      * @return $this
      */
-    public function addArgument(\Cake\Console\ConsoleInputArgument|string $name, array $params = [])
+    public function addArgument(ConsoleInputArgument|string $name, array $params = [])
     {
-        if ($name instanceof \Cake\Console\ConsoleInputArgument) {
+        if ($name instanceof ConsoleInputArgument) {
             $arg = $name;
             $index = count($this->_args);
         } else {
@@ -391,7 +391,7 @@ class ConsoleOptionParser
             $options = $params + $defaults;
             $index = $options['index'];
             unset($options['index']);
-            $arg = new \Cake\Console\ConsoleInputArgument($options);
+            $arg = new ConsoleInputArgument($options);
         }
         foreach ($this->_args as $a) {
             if ($a->isEqualTo($arg)) {
@@ -416,7 +416,7 @@ class ConsoleOptionParser
     public function addArguments(array $args)
     {
         foreach ($args as $name => $params) {
-            if ($params instanceof \Cake\Console\ConsoleInputArgument) {
+            if ($params instanceof ConsoleInputArgument) {
                 $name = $params;
                 $params = [];
             }
@@ -435,7 +435,7 @@ class ConsoleOptionParser
     public function addOptions(array $options)
     {
         foreach ($options as $name => $params) {
-            if ($params instanceof \Cake\Console\ConsoleInputOption) {
+            if ($params instanceof ConsoleInputOption) {
                 $name = $params;
                 $params = [];
             }
@@ -482,7 +482,7 @@ class ConsoleOptionParser
      * @return array [$params, $args]
      * @throws \Cake\Console\Exception\ConsoleException When an invalid parameter is encountered.
      */
-    public function parse(array $argv, ?\Cake\Console\ConsoleIo $io = null): array
+    public function parse(array $argv, ?ConsoleIo $io = null): array
     {
         $params = [];
         $args = [];
@@ -562,7 +562,7 @@ class ConsoleOptionParser
      */
     public function help(string $format = 'text', int $width = 72): string
     {
-        $formatter = new \Cake\Console\HelpFormatter($this);
+        $formatter = new HelpFormatter($this);
         $formatter->setAlias($this->rootName);
         if ($format === 'text') {
             return $formatter->text($width);

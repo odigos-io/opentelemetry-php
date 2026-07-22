@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Foundation\Bootstrap;
+namespace Odigos\Illuminate\Foundation\Bootstrap;
 
 use Closure;
-use Illuminate\Config\Repository;
-use Illuminate\Contracts\Config\Repository as RepositoryContract;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Config\Repository;
+use Odigos\Illuminate\Contracts\Config\Repository as RepositoryContract;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Support\Collection;
 use SplFileInfo;
-use Symfony\Component\Finder\Finder;
+use Odigos\Symfony\Component\Finder\Finder;
 class LoadConfiguration
 {
     /**

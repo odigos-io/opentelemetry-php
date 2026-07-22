@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\test;
+namespace Odigos\yii\test;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * FixtureTrait provides functionalities for loading, unloading and accessing fixtures for a test case.
  *
@@ -179,7 +179,7 @@ trait FixtureTrait
         $instances = [];
         $stack = array_reverse($fixtures);
         while (($fixture = array_pop($stack)) !== null) {
-            if ($fixture instanceof \yii\test\Fixture) {
+            if ($fixture instanceof Fixture) {
                 $class = get_class($fixture);
                 $name = isset($aliases[$class]) ? $aliases[$class] : $class;
                 unset($instances[$name]);

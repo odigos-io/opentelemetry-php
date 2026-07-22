@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder;
+namespace Odigos\MongoDB\Builder;
 
 use ArrayIterator;
 use IteratorAggregate;
-use MongoDB\Builder\Type\StageInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Type\StageInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function array_is_list;
 use function array_merge;
@@ -28,7 +28,7 @@ final class Pipeline implements IteratorAggregate
      *
      * @no-named-arguments
      */
-    public function __construct(StageInterface|\MongoDB\Builder\Pipeline|array|stdClass ...$stagesOrPipelines)
+    public function __construct(StageInterface|Pipeline|array|stdClass ...$stagesOrPipelines)
     {
         if (!array_is_list($stagesOrPipelines)) {
             throw new InvalidArgumentException('Named arguments are not supported for pipelines');
@@ -37,7 +37,7 @@ final class Pipeline implements IteratorAggregate
         foreach ($stagesOrPipelines as $stageOrPipeline) {
             if (is_array($stageOrPipeline) && array_is_list($stageOrPipeline)) {
                 $stages = array_merge($stages, $stageOrPipeline);
-            } elseif ($stageOrPipeline instanceof \MongoDB\Builder\Pipeline) {
+            } elseif ($stageOrPipeline instanceof Pipeline) {
                 $stages = array_merge($stages, $stageOrPipeline->stages);
             } else {
                 $stages[] = $stageOrPipeline;

@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\View\Compilers;
+namespace Odigos\Illuminate\View\Compilers;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\View\AnonymousComponent;
-use Illuminate\View\DynamicComponent;
-use Illuminate\View\ViewFinderInterface;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Contracts\View\Factory;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\View\AnonymousComponent;
+use Odigos\Illuminate\View\DynamicComponent;
+use Odigos\Illuminate\View\ViewFinderInterface;
 use InvalidArgumentException;
 use ReflectionClass;
 /**
@@ -50,11 +50,11 @@ class ComponentTagCompiler
      * @param  array  $namespaces
      * @param  \Illuminate\View\Compilers\BladeCompiler|null  $blade
      */
-    public function __construct(array $aliases = [], array $namespaces = [], ?\Illuminate\View\Compilers\BladeCompiler $blade = null)
+    public function __construct(array $aliases = [], array $namespaces = [], ?BladeCompiler $blade = null)
     {
         $this->aliases = $aliases;
         $this->namespaces = $namespaces;
-        $this->blade = $blade ?: new \Illuminate\View\Compilers\BladeCompiler(new Filesystem(), sys_get_temp_dir());
+        $this->blade = $blade ?: new BladeCompiler(new Filesystem(), sys_get_temp_dir());
     }
     /**
      * Compile the component and slot tags within the given string.

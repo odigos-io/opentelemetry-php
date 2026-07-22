@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Batches;
+namespace Odigos\OpenAI\Responses\Batches;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
 /**
  * @implements ResponseContract<array{object: string, data: array<array-key, array{code: string, message: string, param: ?string, line: ?int}>}>
  */
@@ -27,13 +27,13 @@ final class BatchResponseErrors implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        return new self($attributes['object'], array_map(fn(array $data): \OpenAI\Responses\Batches\BatchResponseErrorsData => \OpenAI\Responses\Batches\BatchResponseErrorsData::from($data), $attributes['data']));
+        return new self($attributes['object'], array_map(fn(array $data): \Odigos\OpenAI\Responses\Batches\BatchResponseErrorsData => BatchResponseErrorsData::from($data), $attributes['data']));
     }
     /**
      * {@inheritDoc}
      */
     public function toArray(): array
     {
-        return ['object' => $this->object, 'data' => array_map(fn(\OpenAI\Responses\Batches\BatchResponseErrorsData $data): array => $data->toArray(), $this->data)];
+        return ['object' => $this->object, 'data' => array_map(fn(BatchResponseErrorsData $data): array => $data->toArray(), $this->data)];
     }
 }

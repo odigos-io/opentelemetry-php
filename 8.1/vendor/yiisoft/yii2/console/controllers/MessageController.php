@@ -5,20 +5,20 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console\controllers;
+namespace Odigos\yii\console\controllers;
 
 use Odigos\Yii;
-use yii\console\Application;
-use yii\console\Controller;
-use yii\console\Exception;
-use yii\console\ExitCode;
-use yii\db\Connection;
-use yii\db\Query;
-use yii\di\Instance;
-use yii\helpers\Console;
-use yii\helpers\FileHelper;
-use yii\helpers\VarDumper;
-use yii\i18n\GettextPoFile;
+use Odigos\yii\console\Application;
+use Odigos\yii\console\Controller;
+use Odigos\yii\console\Exception;
+use Odigos\yii\console\ExitCode;
+use Odigos\yii\db\Connection;
+use Odigos\yii\db\Query;
+use Odigos\yii\di\Instance;
+use Odigos\yii\helpers\Console;
+use Odigos\yii\helpers\FileHelper;
+use Odigos\yii\helpers\VarDumper;
+use Odigos\yii\i18n\GettextPoFile;
 /**
  * Extracts messages to be translated from source files.
  *

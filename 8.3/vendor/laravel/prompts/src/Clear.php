@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
-class Clear extends \Laravel\Prompts\Prompt
+class Clear extends Prompt
 {
     /**
      * Clear the terminal.

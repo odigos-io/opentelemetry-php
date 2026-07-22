@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\SQLSrv;
+namespace Odigos\Doctrine\DBAL\Driver\SQLSrv;
 
-use Doctrine\DBAL\Driver\FetchUtils;
-use Doctrine\DBAL\Driver\Result as ResultInterface;
-use Doctrine\DBAL\Exception\InvalidColumnIndex;
+use Odigos\Doctrine\DBAL\Driver\FetchUtils;
+use Odigos\Doctrine\DBAL\Driver\Result as ResultInterface;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnIndex;
 use function sqlsrv_fetch;
 use function sqlsrv_fetch_array;
 use function sqlsrv_field_metadata;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
 use InvalidArgumentException;
 class SQLiteDatabaseDoesNotExistException extends InvalidArgumentException

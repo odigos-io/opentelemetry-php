@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Exception\SerializationFailed;
-use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Types\Exception\SerializationFailed;
+use Odigos\Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use JsonException;
 use function is_resource;
 use function json_decode;

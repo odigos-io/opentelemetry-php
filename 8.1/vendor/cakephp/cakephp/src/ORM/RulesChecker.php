@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
-use Cake\Datasource\RuleInvoker;
-use Cake\Datasource\RulesChecker as BaseRulesChecker;
-use Cake\ORM\Rule\ExistsIn;
-use Cake\ORM\Rule\IsUnique;
-use Cake\ORM\Rule\LinkConstraint;
-use Cake\ORM\Rule\ValidCount;
-use Cake\Utility\Inflector;
-use function Cake\I18n\__d;
+use Odigos\Cake\Datasource\RuleInvoker;
+use Odigos\Cake\Datasource\RulesChecker as BaseRulesChecker;
+use Odigos\Cake\ORM\Rule\ExistsIn;
+use Odigos\Cake\ORM\Rule\IsUnique;
+use Odigos\Cake\ORM\Rule\LinkConstraint;
+use Odigos\Cake\ORM\Rule\ValidCount;
+use Odigos\Cake\Utility\Inflector;
+use function Odigos\Cake\I18n\__d;
 /**
  * ORM flavored rules checker.
  *
@@ -93,7 +93,7 @@ class RulesChecker extends BaseRulesChecker
      *   also be an array of options. When an array, the 'message' key can be used to provide a message.
      * @return \Cake\Datasource\RuleInvoker
      */
-    public function existsIn(array|string $field, \Cake\ORM\Table|\Cake\ORM\Association|string $table, array|string|null $message = null): RuleInvoker
+    public function existsIn(array|string $field, Table|Association|string $table, array|string|null $message = null): RuleInvoker
     {
         $options = [];
         if (is_array($message)) {
@@ -130,7 +130,7 @@ class RulesChecker extends BaseRulesChecker
      * @return \Cake\Datasource\RuleInvoker
      * @since 4.0.0
      */
-    public function isLinkedTo(\Cake\ORM\Association|string $association, ?string $field = null, ?string $message = null): RuleInvoker
+    public function isLinkedTo(Association|string $association, ?string $field = null, ?string $message = null): RuleInvoker
     {
         return $this->_addLinkConstraintRule($association, $field, $message, LinkConstraint::STATUS_LINKED, '_isLinkedTo');
     }
@@ -153,7 +153,7 @@ class RulesChecker extends BaseRulesChecker
      * @return \Cake\Datasource\RuleInvoker
      * @since 4.0.0
      */
-    public function isNotLinkedTo(\Cake\ORM\Association|string $association, ?string $field = null, ?string $message = null): RuleInvoker
+    public function isNotLinkedTo(Association|string $association, ?string $field = null, ?string $message = null): RuleInvoker
     {
         return $this->_addLinkConstraintRule($association, $field, $message, LinkConstraint::STATUS_NOT_LINKED, '_isNotLinkedTo');
     }
@@ -174,16 +174,16 @@ class RulesChecker extends BaseRulesChecker
      * @see \Cake\ORM\Rule\LinkConstraint::STATUS_LINKED
      * @see \Cake\ORM\Rule\LinkConstraint::STATUS_NOT_LINKED
      */
-    protected function _addLinkConstraintRule(\Cake\ORM\Association|string $association, ?string $errorField, ?string $message, string $linkStatus, string $ruleName): RuleInvoker
+    protected function _addLinkConstraintRule(Association|string $association, ?string $errorField, ?string $message, string $linkStatus, string $ruleName): RuleInvoker
     {
-        if ($association instanceof \Cake\ORM\Association) {
+        if ($association instanceof Association) {
             $associationAlias = $association->getName();
             $errorField ??= $association->getProperty();
         } else {
             $associationAlias = $association;
             if ($errorField === null) {
                 $repository = $this->_options['repository'] ?? null;
-                if ($repository instanceof \Cake\ORM\Table) {
+                if ($repository instanceof Table) {
                     $association = $repository->getAssociation($association);
                     $errorField = $association->getProperty();
                 } else {

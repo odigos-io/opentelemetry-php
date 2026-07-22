@@ -1,24 +1,24 @@
 <?php
 
-namespace Illuminate\Http\Resources\JsonApi\Concerns;
+namespace Odigos\Illuminate\Http\Resources\JsonApi\Concerns;
 
 use Generator;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
-use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\JsonApi\Exceptions\ResourceIdentificationException;
-use Illuminate\Http\Resources\JsonApi\JsonApiRequest;
-use Illuminate\Http\Resources\JsonApi\JsonApiResource;
-use Illuminate\Http\Resources\JsonApi\RelationResolver;
-use Illuminate\Http\Resources\MissingValue;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\LazyCollection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
+use Odigos\Illuminate\Database\Eloquent\Relations\Pivot;
+use Odigos\Illuminate\Database\Eloquent\Relations\Relation;
+use Odigos\Illuminate\Http\Resources\Json\JsonResource;
+use Odigos\Illuminate\Http\Resources\JsonApi\Exceptions\ResourceIdentificationException;
+use Odigos\Illuminate\Http\Resources\JsonApi\JsonApiRequest;
+use Odigos\Illuminate\Http\Resources\JsonApi\JsonApiResource;
+use Odigos\Illuminate\Http\Resources\JsonApi\RelationResolver;
+use Odigos\Illuminate\Http\Resources\MissingValue;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\LazyCollection;
+use Odigos\Illuminate\Support\Str;
 use JsonSerializable;
 use WeakMap;
 trait ResolvesJsonApiElements

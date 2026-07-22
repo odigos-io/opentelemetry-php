@@ -5,17 +5,17 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console\controllers;
+namespace Odigos\yii\console\controllers;
 
 use Odigos\Yii;
-use yii\base\Application;
-use yii\base\Module;
-use yii\console\Controller;
-use yii\console\Exception;
-use yii\console\ExitCode;
-use yii\helpers\Console;
-use yii\helpers\Inflector;
-use yii\console\Application as ConsoleApplication;
+use Odigos\yii\base\Application;
+use Odigos\yii\base\Module;
+use Odigos\yii\console\Controller;
+use Odigos\yii\console\Exception;
+use Odigos\yii\console\ExitCode;
+use Odigos\yii\helpers\Console;
+use Odigos\yii\helpers\Inflector;
+use Odigos\yii\console\Application as ConsoleApplication;
 /**
  * Provides help information about console commands.
  *
@@ -256,7 +256,7 @@ class HelpController extends Controller
     {
         if (class_exists($controllerClass)) {
             $class = new \ReflectionClass($controllerClass);
-            return !$class->isAbstract() && $class->isSubclassOf('yii\console\Controller');
+            return !$class->isAbstract() && $class->isSubclassOf('Odigos\yii\console\Controller');
         }
         return \false;
     }
@@ -390,7 +390,7 @@ class HelpController extends Controller
             }
         }
         $options = $controller->getActionOptionsHelp($action);
-        $options[\yii\console\Application::OPTION_APPCONFIG] = ['type' => 'string', 'default' => null, 'comment' => "custom application configuration file path.\nIf not set, default application configuration is used."];
+        $options[\Odigos\yii\console\Application::OPTION_APPCONFIG] = ['type' => 'string', 'default' => null, 'comment' => "custom application configuration file path.\nIf not set, default application configuration is used."];
         ksort($options);
         $this->stdout(' [...options...]', Console::FG_RED);
         $this->stdout("\n\n");

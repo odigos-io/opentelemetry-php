@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 /**
  * ConflictHttpException represents a "Conflict" HTTP exception with status code 409.
@@ -14,7 +14,7 @@ namespace yii\web;
  * @author Dan Schmidt <danschmidt5189@gmail.com>
  * @since 2.0
  */
-class ConflictHttpException extends \yii\web\HttpException
+class ConflictHttpException extends HttpException
 {
     /**
      * Constructor.

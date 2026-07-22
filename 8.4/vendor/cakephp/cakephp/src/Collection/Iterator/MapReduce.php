@@ -13,7 +13,7 @@ declare (strict_types=1);
  * @link          https://cakephp.org CakePHP(tm) Project
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Collection\Iterator;
+namespace Odigos\Cake\Collection\Iterator;
 
 use ArrayIterator;
 use IteratorAggregate;

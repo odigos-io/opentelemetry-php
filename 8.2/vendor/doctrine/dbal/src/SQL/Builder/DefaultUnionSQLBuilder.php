@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\SQL\Builder;
+namespace Odigos\Doctrine\DBAL\SQL\Builder;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Query\UnionQuery;
-use Doctrine\DBAL\Query\UnionType;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Query\UnionQuery;
+use Odigos\Doctrine\DBAL\Query\UnionType;
 use function count;
 use function implode;
-final class DefaultUnionSQLBuilder implements \Doctrine\DBAL\SQL\Builder\UnionSQLBuilder
+final class DefaultUnionSQLBuilder implements UnionSQLBuilder
 {
     public function __construct(private readonly AbstractPlatform $platform)
     {

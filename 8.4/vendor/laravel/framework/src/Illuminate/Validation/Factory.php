@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
 use Closure;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Translation\Translator;
-use Illuminate\Contracts\Validation\Factory as FactoryContract;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Translation\Translator;
+use Odigos\Illuminate\Contracts\Validation\Factory as FactoryContract;
+use Odigos\Illuminate\Support\Str;
 class Factory implements FactoryContract
 {
     /**
@@ -135,7 +135,7 @@ class Factory implements FactoryContract
     protected function resolve(array $data, array $rules, array $messages, array $attributes)
     {
         if (is_null($this->resolver)) {
-            return new \Illuminate\Validation\Validator($this->translator, $data, $rules, $messages, $attributes);
+            return new Validator($this->translator, $data, $rules, $messages, $attributes);
         }
         return call_user_func($this->resolver, $this->translator, $data, $rules, $messages, $attributes);
     }
@@ -145,7 +145,7 @@ class Factory implements FactoryContract
      * @param  \Illuminate\Validation\Validator  $validator
      * @return void
      */
-    protected function addExtensions(\Illuminate\Validation\Validator $validator)
+    protected function addExtensions(Validator $validator)
     {
         $validator->addExtensions($this->extensions);
         // Next, we will add the implicit extensions, which are similar to the required
@@ -264,7 +264,7 @@ class Factory implements FactoryContract
      * @param  \Illuminate\Validation\PresenceVerifierInterface  $presenceVerifier
      * @return void
      */
-    public function setPresenceVerifier(\Illuminate\Validation\PresenceVerifierInterface $presenceVerifier)
+    public function setPresenceVerifier(PresenceVerifierInterface $presenceVerifier)
     {
         $this->verifier = $presenceVerifier;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\View\Compilers\Concerns;
+namespace Odigos\Illuminate\View\Compilers\Concerns;
 
 trait CompilesStyles
 {

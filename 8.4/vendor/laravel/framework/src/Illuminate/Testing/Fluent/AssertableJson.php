@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Testing\Fluent;
+namespace Odigos\Illuminate\Testing\Fluent;
 
 use Closure;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Traits\Tappable;
-use Illuminate\Testing\AssertableJsonString;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\Tappable;
+use Odigos\Illuminate\Testing\AssertableJsonString;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 class AssertableJson implements Arrayable
 {
-    use \Illuminate\Testing\Fluent\Concerns\Has, \Illuminate\Testing\Fluent\Concerns\Matching, \Illuminate\Testing\Fluent\Concerns\Debugging, \Illuminate\Testing\Fluent\Concerns\Interaction, Conditionable, Macroable, Tappable;
+    use Concerns\Has, Concerns\Matching, Concerns\Debugging, Concerns\Interaction, Conditionable, Macroable, Tappable;
     /**
      * The properties in the current scope.
      *

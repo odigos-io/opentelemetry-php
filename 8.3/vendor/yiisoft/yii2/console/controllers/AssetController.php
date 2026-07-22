@@ -5,17 +5,17 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console\controllers;
+namespace Odigos\yii\console\controllers;
 
 use Odigos\Yii;
-use yii\console\Application;
-use yii\console\Controller;
-use yii\console\Exception;
-use yii\console\ExitCode;
-use yii\helpers\Console;
-use yii\helpers\FileHelper;
-use yii\helpers\VarDumper;
-use yii\web\AssetBundle;
+use Odigos\yii\console\Application;
+use Odigos\yii\console\Controller;
+use Odigos\yii\console\Exception;
+use Odigos\yii\console\ExitCode;
+use Odigos\yii\helpers\Console;
+use Odigos\yii\helpers\FileHelper;
+use Odigos\yii\helpers\VarDumper;
+use Odigos\yii\web\AssetBundle;
 /**
  * Allows you to combine and compress your JavaScript and CSS files.
  *
@@ -146,7 +146,7 @@ class AssetController extends Controller
         if (!is_object($this->_assetManager)) {
             $options = $this->_assetManager;
             if (!isset($options['class'])) {
-                $options['class'] = 'yii\web\AssetManager';
+                $options['class'] = 'Odigos\yii\web\AssetManager';
             }
             if (!isset($options['basePath'])) {
                 throw new Exception("Please specify 'basePath' for the 'assetManager' option.");

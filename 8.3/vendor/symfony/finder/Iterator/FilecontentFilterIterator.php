@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Finder\Iterator;
+namespace Odigos\Symfony\Component\Finder\Iterator;
 
-use Symfony\Component\Finder\SplFileInfo;
+use Odigos\Symfony\Component\Finder\SplFileInfo;
 /**
  * FilecontentFilterIterator filters files by their contents using patterns (regexps or strings).
  *
@@ -19,7 +19,7 @@ use Symfony\Component\Finder\SplFileInfo;
  *
  * @extends MultiplePcreFilterIterator<string, SplFileInfo>
  */
-class FilecontentFilterIterator extends \Symfony\Component\Finder\Iterator\MultiplePcreFilterIterator
+class FilecontentFilterIterator extends MultiplePcreFilterIterator
 {
     /**
      * Filters the iterator values.

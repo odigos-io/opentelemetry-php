@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         4.4.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error\Renderer;
+namespace Odigos\Cake\Error\Renderer;
 
-use Cake\Error\ExceptionRendererInterface;
+use Odigos\Cake\Error\ExceptionRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 /**

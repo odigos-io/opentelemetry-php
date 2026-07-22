@@ -13,10 +13,10 @@ declare (strict_types=1);
  * @since         0.2.9
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Log;
+namespace Odigos\Cake\Log;
 
-use Cake\Core\StaticConfigTrait;
-use Cake\Log\Engine\BaseLog;
+use Odigos\Cake\Core\StaticConfigTrait;
+use Odigos\Cake\Log\Engine\BaseLog;
 use Closure;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
@@ -116,7 +116,7 @@ class Log
      * @var array<string, string>
      * @phpstan-var array<string, class-string>
      */
-    protected static array $_dsnClassMap = ['console' => \Cake\Log\Engine\ConsoleLog::class, 'file' => \Cake\Log\Engine\FileLog::class, 'syslog' => \Cake\Log\Engine\SyslogLog::class];
+    protected static array $_dsnClassMap = ['console' => Engine\ConsoleLog::class, 'file' => Engine\FileLog::class, 'syslog' => Engine\SyslogLog::class];
     /**
      * Internal flag for tracking whether configuration has been changed.
      *
@@ -128,7 +128,7 @@ class Log
      *
      * @var \Cake\Log\LogEngineRegistry
      */
-    protected static \Cake\Log\LogEngineRegistry $_registry;
+    protected static LogEngineRegistry $_registry;
     /**
      * Handled log levels
      *
@@ -148,9 +148,9 @@ class Log
      *
      * @return \Cake\Log\LogEngineRegistry
      */
-    protected static function getRegistry(): \Cake\Log\LogEngineRegistry
+    protected static function getRegistry(): LogEngineRegistry
     {
-        static::$_registry ??= new \Cake\Log\LogEngineRegistry();
+        static::$_registry ??= new LogEngineRegistry();
         if (static::$_dirtyConfig) {
             foreach (static::$_config as $name => $properties) {
                 if (isset($properties['engine'])) {

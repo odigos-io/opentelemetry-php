@@ -4,13 +4,13 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 use MongoDB\BSON\Decimal128;
 use MongoDB\BSON\Int64;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use function is_string;
 use function str_starts_with;
 /**
@@ -19,17 +19,17 @@ use function str_starts_with;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/abs/
  * @internal
  */
-final class AbsOperator implements \MongoDB\Builder\Expression\ResolvesToNumber, OperatorInterface
+final class AbsOperator implements ResolvesToNumber, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$abs';
     public const PROPERTIES = ['value' => 'value'];
     /** @var Decimal128|Int64|ResolvesToNumber|float|int|string $value */
-    public readonly Decimal128|Int64|\MongoDB\Builder\Expression\ResolvesToNumber|float|int|string $value;
+    public readonly Decimal128|Int64|ResolvesToNumber|float|int|string $value;
     /**
      * @param Decimal128|Int64|ResolvesToNumber|float|int|string $value
      */
-    public function __construct(Decimal128|Int64|\MongoDB\Builder\Expression\ResolvesToNumber|float|int|string $value)
+    public function __construct(Decimal128|Int64|ResolvesToNumber|float|int|string $value)
     {
         if (is_string($value) && !str_starts_with($value, '$')) {
             throw new InvalidArgumentException('Argument $value can be an expression, field paths and variable names must be prefixed by "$" or "$$".');

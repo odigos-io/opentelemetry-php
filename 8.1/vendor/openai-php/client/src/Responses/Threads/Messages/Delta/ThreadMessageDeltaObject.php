@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Threads\Messages\Delta;
+namespace Odigos\OpenAI\Responses\Threads\Messages\Delta;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{role: ?string, content: array<int, array{index: int, type: 'image_file', image_file: array{file_id: string, detail?: string}}|array{index: int, type: 'text', text: array{value: ?string, annotations: array<int, array{type: 'file_citation', text: string, file_citation: array{file_id: string, quote?: string}, start_index: int, end_index: int}|array{type: 'file_path', text: string, file_path: array{file_id: string}, start_index: int, end_index: int}>}}>, file_ids: ?array<int, string>}>
  */
@@ -30,9 +30,9 @@ final class ThreadMessageDeltaObject implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        $content = array_map(fn(array $content): \OpenAI\Responses\Threads\Messages\Delta\ThreadMessageDeltaResponseContentTextObject|\OpenAI\Responses\Threads\Messages\Delta\ThreadMessageDeltaResponseContentImageFileObject => match ($content['type']) {
-            'text' => \OpenAI\Responses\Threads\Messages\Delta\ThreadMessageDeltaResponseContentTextObject::from($content),
-            'image_file' => \OpenAI\Responses\Threads\Messages\Delta\ThreadMessageDeltaResponseContentImageFileObject::from($content),
+        $content = array_map(fn(array $content): ThreadMessageDeltaResponseContentTextObject|ThreadMessageDeltaResponseContentImageFileObject => match ($content['type']) {
+            'text' => ThreadMessageDeltaResponseContentTextObject::from($content),
+            'image_file' => ThreadMessageDeltaResponseContentImageFileObject::from($content),
         }, $attributes['content']);
         return new self($attributes['role'] ?? null, $content, $attributes['file_ids'] ?? null);
     }
@@ -41,6 +41,6 @@ final class ThreadMessageDeltaObject implements ResponseContract
      */
     public function toArray(): array
     {
-        return ['role' => $this->role, 'content' => array_map(fn(\OpenAI\Responses\Threads\Messages\Delta\ThreadMessageDeltaResponseContentImageFileObject|\OpenAI\Responses\Threads\Messages\Delta\ThreadMessageDeltaResponseContentTextObject $content): array => $content->toArray(), $this->content), 'file_ids' => $this->fileIds];
+        return ['role' => $this->role, 'content' => array_map(fn(ThreadMessageDeltaResponseContentImageFileObject|ThreadMessageDeltaResponseContentTextObject $content): array => $content->toArray(), $this->content), 'file_ids' => $this->fileIds];
     }
 }

@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Schema;
+namespace Odigos\Cake\Database\Schema;
 
-use Cake\Database\Connection;
+use Odigos\Cake\Database\Connection;
 /**
  * Represents a database schema collection
  *
@@ -25,7 +25,7 @@ use Cake\Database\Connection;
  *
  * @see \Cake\Database\Schema\SchemaDialect For lower level schema reflection API
  */
-class Collection implements \Cake\Database\Schema\CollectionInterface
+class Collection implements CollectionInterface
 {
     /**
      * Connection object
@@ -38,7 +38,7 @@ class Collection implements \Cake\Database\Schema\CollectionInterface
      *
      * @var \Cake\Database\Schema\SchemaDialect|null
      */
-    protected ?\Cake\Database\Schema\SchemaDialect $_dialect = null;
+    protected ?SchemaDialect $_dialect = null;
     /**
      * Constructor.
      *
@@ -76,7 +76,7 @@ class Collection implements \Cake\Database\Schema\CollectionInterface
      * @return \Cake\Database\Schema\TableSchemaInterface Object with column metadata.
      * @throws \Cake\Database\Exception\DatabaseException when table cannot be described.
      */
-    public function describe(string $name, array $options = []): \Cake\Database\Schema\TableSchemaInterface
+    public function describe(string $name, array $options = []): TableSchemaInterface
     {
         return $this->getDialect()->describe($name);
     }
@@ -85,7 +85,7 @@ class Collection implements \Cake\Database\Schema\CollectionInterface
      *
      * @return \Cake\Database\Schema\SchemaDialect
      */
-    protected function getDialect(): \Cake\Database\Schema\SchemaDialect
+    protected function getDialect(): SchemaDialect
     {
         return $this->_dialect ??= $this->_connection->getDriver()->schemaDialect();
     }

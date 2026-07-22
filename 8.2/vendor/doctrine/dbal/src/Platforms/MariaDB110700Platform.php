@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms;
+namespace Odigos\Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
-use Doctrine\DBAL\Platforms\Keywords\MariaDB117Keywords;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\KeywordList;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\MariaDB117Keywords;
+use Odigos\Doctrine\Deprecations\Deprecation;
 /**
  * Provides the behavior, features and SQL dialect of the MariaDB 11.7 database platform.
  *
  * @deprecated To be removed along with the keyword list feature.
  */
-class MariaDB110700Platform extends \Doctrine\DBAL\Platforms\MariaDB1010Platform
+class MariaDB110700Platform extends MariaDB1010Platform
 {
     /** @deprecated */
     protected function createReservedKeywordsList(): KeywordList

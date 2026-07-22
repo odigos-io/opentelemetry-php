@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Descriptor;
+namespace Odigos\Symfony\Component\Console\Descriptor;
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Formatter\OutputFormatter;
-use Symfony\Component\Console\Helper\Helper;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Application;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatter;
+use Odigos\Symfony\Component\Console\Helper\Helper;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputDefinition;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 /**
  * Text descriptor.
  *
@@ -24,7 +24,7 @@ use Symfony\Component\Console\Input\InputOption;
  *
  * @internal
  */
-class TextDescriptor extends \Symfony\Component\Console\Descriptor\Descriptor
+class TextDescriptor extends Descriptor
 {
     protected function describeInputArgument(InputArgument $argument, array $options = []): void
     {
@@ -138,7 +138,7 @@ class TextDescriptor extends \Symfony\Component\Console\Descriptor\Descriptor
     protected function describeApplication(Application $application, array $options = []): void
     {
         $describedNamespace = $options['namespace'] ?? null;
-        $description = new \Symfony\Component\Console\Descriptor\ApplicationDescription($application, $describedNamespace);
+        $description = new ApplicationDescription($application, $describedNamespace);
         if (isset($options['raw_text']) && $options['raw_text']) {
             $width = $this->getColumnWidth($description->getCommands());
             foreach ($description->getCommands() as $command) {
@@ -175,7 +175,7 @@ class TextDescriptor extends \Symfony\Component\Console\Descriptor\Descriptor
                 if (!$namespace['commands']) {
                     continue;
                 }
-                if (!$describedNamespace && \Symfony\Component\Console\Descriptor\ApplicationDescription::GLOBAL_NAMESPACE !== $namespace['id']) {
+                if (!$describedNamespace && ApplicationDescription::GLOBAL_NAMESPACE !== $namespace['id']) {
                     $this->writeText("\n");
                     $this->writeText(' <comment>' . $namespace['id'] . '</comment>', $options);
                 }

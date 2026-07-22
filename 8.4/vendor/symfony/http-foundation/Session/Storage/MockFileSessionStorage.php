@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\Session\Storage;
+namespace Odigos\Symfony\Component\HttpFoundation\Session\Storage;
 
 /**
  * MockFileSessionStorage is used to mock sessions for
@@ -22,13 +22,13 @@ namespace Symfony\Component\HttpFoundation\Session\Storage;
  *
  * @author Drak <drak@zikula.org>
  */
-class MockFileSessionStorage extends \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage
+class MockFileSessionStorage extends MockArraySessionStorage
 {
     private string $savePath;
     /**
      * @param string|null $savePath Path of directory to save session files
      */
-    public function __construct(?string $savePath = null, string $name = 'MOCKSESSID', ?\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $metaBag = null)
+    public function __construct(?string $savePath = null, string $name = 'MOCKSESSID', ?MetadataBag $metaBag = null)
     {
         $savePath ??= sys_get_temp_dir();
         if (!is_dir($savePath) && !@mkdir($savePath, 0777, \true) && !is_dir($savePath)) {

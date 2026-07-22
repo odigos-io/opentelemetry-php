@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses\Output\CodeInterpreter;
+namespace Odigos\OpenAI\Responses\Responses\Output\CodeInterpreter;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type CodeFileObjectType from CodeFileObject
  *
@@ -32,7 +32,7 @@ final class CodeFileOutput implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        $files = array_map(static fn(array $file): \OpenAI\Responses\Responses\Output\CodeInterpreter\CodeFileObject => \OpenAI\Responses\Responses\Output\CodeInterpreter\CodeFileObject::from($file), $attributes['files']);
+        $files = array_map(static fn(array $file): CodeFileObject => CodeFileObject::from($file), $attributes['files']);
         return new self(files: $files, type: $attributes['type']);
     }
     /**
@@ -40,6 +40,6 @@ final class CodeFileOutput implements ResponseContract
      */
     public function toArray(): array
     {
-        return ['type' => $this->type, 'files' => array_map(static fn(\OpenAI\Responses\Responses\Output\CodeInterpreter\CodeFileObject $file): array => $file->toArray(), $this->files)];
+        return ['type' => $this->type, 'files' => array_map(static fn(CodeFileObject $file): array => $file->toArray(), $this->files)];
     }
 }

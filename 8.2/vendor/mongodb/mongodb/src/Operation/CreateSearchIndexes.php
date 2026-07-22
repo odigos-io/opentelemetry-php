@@ -15,14 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use MongoDB\Driver\Command;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnsupportedException;
-use MongoDB\Model\SearchIndexInput;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Model\SearchIndexInput;
 use function array_column;
 use function array_is_list;
 use function current;

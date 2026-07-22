@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Contracts\Queue;
+namespace Odigos\Illuminate\Contracts\Queue;
 
-interface ShouldQueueAfterCommit extends \Illuminate\Contracts\Queue\ShouldQueue
+interface ShouldQueueAfterCommit extends ShouldQueue
 {
     //
 }

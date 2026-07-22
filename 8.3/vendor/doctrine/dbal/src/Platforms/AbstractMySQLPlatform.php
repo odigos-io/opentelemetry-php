@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms;
+namespace Odigos\Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\InvalidColumnType\ColumnValuesRequired;
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
-use Doctrine\DBAL\Platforms\Keywords\MySQLKeywords;
-use Doctrine\DBAL\Platforms\MySQL\MySQLMetadataProvider;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint;
-use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\Schema\MySQLSchemaManager;
-use Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
-use Doctrine\DBAL\Schema\TableDiff;
-use Doctrine\DBAL\SQL\Builder\DefaultSelectSQLBuilder;
-use Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
-use Doctrine\DBAL\SQL\Parser;
-use Doctrine\DBAL\TransactionIsolationLevel;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnType\ColumnValuesRequired;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\KeywordList;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\MySQLKeywords;
+use Odigos\Doctrine\DBAL\Platforms\MySQL\MySQLMetadataProvider;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Odigos\Doctrine\DBAL\Schema\Index;
+use Odigos\Doctrine\DBAL\Schema\MySQLSchemaManager;
+use Odigos\Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
+use Odigos\Doctrine\DBAL\Schema\TableDiff;
+use Odigos\Doctrine\DBAL\SQL\Builder\DefaultSelectSQLBuilder;
+use Odigos\Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
+use Odigos\Doctrine\DBAL\SQL\Parser;
+use Odigos\Doctrine\DBAL\TransactionIsolationLevel;
+use Odigos\Doctrine\DBAL\Types\Types;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use function array_diff;
 use function array_map;
 use function array_merge;
@@ -35,7 +35,7 @@ use function strtolower;
 /**
  * Provides the base implementation for the lowest versions of supported MySQL-like database platforms.
  */
-abstract class AbstractMySQLPlatform extends \Doctrine\DBAL\Platforms\AbstractPlatform
+abstract class AbstractMySQLPlatform extends AbstractPlatform
 {
     final public const LENGTH_LIMIT_TINYTEXT = 255;
     final public const LENGTH_LIMIT_TEXT = 65535;
@@ -79,7 +79,7 @@ abstract class AbstractMySQLPlatform extends \Doctrine\DBAL\Platforms\AbstractPl
     {
         return sprintf('CONCAT(%s)', implode(', ', $string));
     }
-    protected function getDateArithmeticIntervalExpression(string $date, string $operator, string $interval, \Doctrine\DBAL\Platforms\DateIntervalUnit $unit): string
+    protected function getDateArithmeticIntervalExpression(string $date, string $operator, string $interval, DateIntervalUnit $unit): string
     {
         $function = $operator === '+' ? 'DATE_ADD' : 'DATE_SUB';
         return $function . '(' . $date . ', INTERVAL ' . $interval . ' ' . $unit->value . ')';

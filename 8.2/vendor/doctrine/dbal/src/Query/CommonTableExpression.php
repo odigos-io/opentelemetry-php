@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Query;
+namespace Odigos\Doctrine\DBAL\Query;
 
 use function count;
 use function sprintf;
@@ -13,10 +13,10 @@ final readonly class CommonTableExpression
      *
      * @throws QueryException
      */
-    public function __construct(public string $name, public string|\Doctrine\DBAL\Query\QueryBuilder $query, public ?array $columns)
+    public function __construct(public string $name, public string|QueryBuilder $query, public ?array $columns)
     {
         if ($columns !== null && count($columns) === 0) {
-            throw new \Doctrine\DBAL\Query\QueryException(sprintf('Columns defined in CTE "%s" should not be an empty array.', $name));
+            throw new QueryException(sprintf('Columns defined in CTE "%s" should not be an empty array.', $name));
         }
     }
 }

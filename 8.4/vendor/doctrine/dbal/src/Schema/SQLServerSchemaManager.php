@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Platforms\SQLServer;
-use Doctrine\DBAL\Platforms\SQLServerPlatform;
-use Doctrine\DBAL\Result;
-use Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Platforms\SQLServer;
+use Odigos\Doctrine\DBAL\Platforms\SQLServerPlatform;
+use Odigos\Doctrine\DBAL\Result;
+use Odigos\Doctrine\DBAL\Types\Type;
 use function array_change_key_case;
 use function assert;
 use function explode;
@@ -25,7 +25,7 @@ use const CASE_LOWER;
  *
  * @extends AbstractSchemaManager<SQLServerPlatform>
  */
-class SQLServerSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
+class SQLServerSchemaManager extends AbstractSchemaManager
 {
     private ?string $databaseCollation = null;
     /**
@@ -43,14 +43,14 @@ SQL
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableSequenceDefinition(array $sequence): \Doctrine\DBAL\Schema\Sequence
+    protected function _getPortableSequenceDefinition(array $sequence): Sequence
     {
-        return new \Doctrine\DBAL\Schema\Sequence($sequence['name'], (int) $sequence['increment'], (int) $sequence['start_value']);
+        return new Sequence($sequence['name'], (int) $sequence['increment'], (int) $sequence['start_value']);
     }
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableColumnDefinition(array $tableColumn): \Doctrine\DBAL\Schema\Column
+    protected function _getPortableTableColumnDefinition(array $tableColumn): Column
     {
         $dbType = $tableColumn['type'];
         $length = (int) $tableColumn['length'];
@@ -99,7 +99,7 @@ SQL
         if ($length !== 0 && ($type === 'text' || $type === 'string' || $type === 'binary')) {
             $options['length'] = $length;
         }
-        $column = new \Doctrine\DBAL\Schema\Column($tableColumn['name'], Type::getType($type), $options);
+        $column = new Column($tableColumn['name'], Type::getType($type), $options);
         if ($tableColumn['default'] !== null) {
             $default = $this->parseDefaultExpression($tableColumn['default']);
             $column->setDefault($default);
@@ -161,9 +161,9 @@ SQL
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): \Doctrine\DBAL\Schema\ForeignKeyConstraint
+    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): ForeignKeyConstraint
     {
-        return new \Doctrine\DBAL\Schema\ForeignKeyConstraint($tableForeignKey['local_columns'], $tableForeignKey['foreign_table'], $tableForeignKey['foreign_columns'], $tableForeignKey['name'], $tableForeignKey['options']);
+        return new ForeignKeyConstraint($tableForeignKey['local_columns'], $tableForeignKey['foreign_table'], $tableForeignKey['foreign_columns'], $tableForeignKey['name'], $tableForeignKey['options']);
     }
     /**
      * @deprecated Use the schema name and the unqualified table name separately instead.
@@ -188,14 +188,14 @@ SQL
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableViewDefinition(array $view): \Doctrine\DBAL\Schema\View
+    protected function _getPortableViewDefinition(array $view): View
     {
-        return new \Doctrine\DBAL\Schema\View($view['name'], $view['definition']);
+        return new View($view['name'], $view['definition']);
     }
     /** @throws Exception */
-    public function createComparator(): \Doctrine\DBAL\Schema\Comparator
+    public function createComparator(): Comparator
     {
-        return new SQLServer\Comparator($this->platform, $this->getDatabaseCollation(), func_num_args() > 0 ? func_get_arg(0) : new \Doctrine\DBAL\Schema\ComparatorConfig());
+        return new SQLServer\Comparator($this->platform, $this->getDatabaseCollation(), func_num_args() > 0 ? func_get_arg(0) : new ComparatorConfig());
     }
     /** @throws Exception */
     private function getDatabaseCollation(): string

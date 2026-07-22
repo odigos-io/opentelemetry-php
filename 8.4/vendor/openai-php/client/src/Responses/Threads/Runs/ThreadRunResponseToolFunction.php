@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Threads\Runs;
+namespace Odigos\OpenAI\Responses\Threads\Runs;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{type: string, function: array{description: string, name: string, parameters: array<string, mixed>}}>
  */
@@ -16,7 +16,7 @@ final class ThreadRunResponseToolFunction implements ResponseContract
      */
     use ArrayAccessible;
     use Fakeable;
-    private function __construct(public string $type, public \OpenAI\Responses\Threads\Runs\ThreadRunResponseToolFunctionFunction $function)
+    private function __construct(public string $type, public ThreadRunResponseToolFunctionFunction $function)
     {
     }
     /**
@@ -26,7 +26,7 @@ final class ThreadRunResponseToolFunction implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        return new self($attributes['type'], \OpenAI\Responses\Threads\Runs\ThreadRunResponseToolFunctionFunction::from($attributes['function']));
+        return new self($attributes['type'], ThreadRunResponseToolFunctionFunction::from($attributes['function']));
     }
     /**
      * {@inheritDoc}

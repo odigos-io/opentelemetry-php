@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database;
+namespace Odigos\Cake\Database;
 
-use Cake\Database\Type\BatchCastingInterface;
-use Cake\Database\Type\OptionalConvertInterface;
+use Odigos\Cake\Database\Type\BatchCastingInterface;
+use Odigos\Cake\Database\Type\OptionalConvertInterface;
 /**
  * An invokable class to be used for processing each of the rows in a statement
  * result, so that the values are converted to the right PHP types.
@@ -29,7 +29,7 @@ class FieldTypeConverter
     /**
      * @var \Cake\Database\Driver
      */
-    protected \Cake\Database\Driver $driver;
+    protected Driver $driver;
     /**
      * Maps type names to conversion settings.
      *
@@ -42,10 +42,10 @@ class FieldTypeConverter
      * @param \Cake\Database\TypeMap $typeMap Contains the types to use for converting results
      * @param \Cake\Database\Driver $driver The driver to use for the type conversion
      */
-    public function __construct(\Cake\Database\TypeMap $typeMap, \Cake\Database\Driver $driver)
+    public function __construct(TypeMap $typeMap, Driver $driver)
     {
         $this->driver = $driver;
-        $types = \Cake\Database\TypeFactory::buildAll();
+        $types = TypeFactory::buildAll();
         foreach ($typeMap->toArray() as $field => $typeName) {
             $type = $types[$typeName] ?? null;
             if (!$type || $type instanceof OptionalConvertInterface && !$type->requiresToPhpCast()) {

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Exception;
+namespace Odigos\MongoDB\Exception;
 
 use MongoDB\Driver\Exception\InvalidArgumentException as DriverInvalidArgumentException;
 use function array_pop;
@@ -25,7 +25,7 @@ use function get_debug_type;
 use function implode;
 use function is_array;
 use function sprintf;
-class InvalidArgumentException extends DriverInvalidArgumentException implements \MongoDB\Exception\Exception
+class InvalidArgumentException extends DriverInvalidArgumentException implements Exception
 {
     /** @internal */
     public static function cannotCombineCodecAndTypeMap(): self

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Contracts\Database;
+namespace Odigos\Illuminate\Contracts\Database;
 
-use Illuminate\Database\Eloquent\Relations\Relation;
+use Odigos\Illuminate\Database\Eloquent\Relations\Relation;
 class ModelIdentifier
 {
     /**

@@ -3,47 +3,47 @@
 namespace Odigos;
 
 use Odigos\Carbon\CarbonInterface;
-use Illuminate\Broadcasting\FakePendingBroadcast;
-use Illuminate\Broadcasting\PendingBroadcast;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Auth\Access\Gate;
-use Illuminate\Contracts\Auth\Factory as AuthFactory;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
-use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Contracts\Cookie\Factory as CookieFactory;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Contracts\Translation\Translator;
-use Illuminate\Contracts\Validation\Factory as ValidationFactory;
-use Illuminate\Contracts\Validation\Validator as ValidatorContract;
-use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\Contracts\View\View as ViewContract;
-use Illuminate\Cookie\CookieJar;
-use Illuminate\Foundation\Bus\PendingClosureDispatch;
-use Illuminate\Foundation\Bus\PendingDispatch;
-use Illuminate\Foundation\Mix;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response as IlluminateResponse;
-use Illuminate\Log\Context\Repository as ContextRepository;
-use Illuminate\Log\LogManager;
-use Illuminate\Queue\CallQueuedClosure;
-use Illuminate\Routing\Redirector;
-use Illuminate\Routing\Router;
-use Illuminate\Support\Defer\DeferredCallback;
-use Illuminate\Support\Defer\DeferredCallbackCollection;
-use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Uri;
+use Odigos\Illuminate\Broadcasting\FakePendingBroadcast;
+use Odigos\Illuminate\Broadcasting\PendingBroadcast;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Auth\Access\Gate;
+use Odigos\Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Odigos\Illuminate\Contracts\Auth\Guard;
+use Odigos\Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
+use Odigos\Illuminate\Contracts\Bus\Dispatcher;
+use Odigos\Illuminate\Contracts\Cookie\Factory as CookieFactory;
+use Odigos\Illuminate\Contracts\Debug\ExceptionHandler;
+use Odigos\Illuminate\Contracts\Routing\ResponseFactory;
+use Odigos\Illuminate\Contracts\Routing\UrlGenerator;
+use Odigos\Illuminate\Contracts\Support\Responsable;
+use Odigos\Illuminate\Contracts\Translation\Translator;
+use Odigos\Illuminate\Contracts\Validation\Factory as ValidationFactory;
+use Odigos\Illuminate\Contracts\Validation\Validator as ValidatorContract;
+use Odigos\Illuminate\Contracts\View\Factory as ViewFactory;
+use Odigos\Illuminate\Contracts\View\View as ViewContract;
+use Odigos\Illuminate\Cookie\CookieJar;
+use Odigos\Illuminate\Foundation\Bus\PendingClosureDispatch;
+use Odigos\Illuminate\Foundation\Bus\PendingDispatch;
+use Odigos\Illuminate\Foundation\Mix;
+use Odigos\Illuminate\Http\Exceptions\HttpResponseException;
+use Odigos\Illuminate\Http\RedirectResponse;
+use Odigos\Illuminate\Http\Response as IlluminateResponse;
+use Odigos\Illuminate\Log\Context\Repository as ContextRepository;
+use Odigos\Illuminate\Log\LogManager;
+use Odigos\Illuminate\Queue\CallQueuedClosure;
+use Odigos\Illuminate\Routing\Redirector;
+use Odigos\Illuminate\Routing\Router;
+use Odigos\Illuminate\Support\Defer\DeferredCallback;
+use Odigos\Illuminate\Support\Defer\DeferredCallbackCollection;
+use Odigos\Illuminate\Support\Facades\Date;
+use Odigos\Illuminate\Support\Facades\Route;
+use Odigos\Illuminate\Support\HtmlString;
+use Odigos\Illuminate\Support\Uri;
 use Odigos\League\Uri\Contracts\UriInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\Response;
-use function Illuminate\Support\enum_value;
+use Odigos\Symfony\Component\HttpFoundation\Cookie;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use function Odigos\Illuminate\Support\enum_value;
 if (!\function_exists('Odigos\abort')) {
     /**
      * Throw an HttpException with the given data.
@@ -405,7 +405,7 @@ if (!\function_exists('defer') && !\function_exists('Odigos\defer')) {
      */
     function defer(?callable $callback = null, ?string $name = null, bool $always = \false): DeferredCallback|DeferredCallbackCollection
     {
-        return \Illuminate\Support\defer($callback, $name, $always);
+        return \Odigos\Illuminate\Support\defer($callback, $name, $always);
     }
 }
 if (!\function_exists('Odigos\dispatch')) {

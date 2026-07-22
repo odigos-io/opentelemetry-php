@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Laminas\HttpHandlerRunner\Emitter;
+namespace Odigos\Laminas\HttpHandlerRunner\Emitter;
 
 use Psr\Http\Message\ResponseInterface;
 use function flush;
@@ -12,9 +12,9 @@ use function substr;
  * @psalm-type ParsedRangeType = array{0:string,1:int,2:int,3:'*'|int}
  * @final
  */
-class SapiStreamEmitter implements \Laminas\HttpHandlerRunner\Emitter\EmitterInterface
+class SapiStreamEmitter implements EmitterInterface
 {
-    use \Laminas\HttpHandlerRunner\Emitter\SapiEmitterTrait;
+    use SapiEmitterTrait;
     public function __construct(
         /** @param int Maximum output buffering size for each iteration. */
         private int $maxBufferLength = 8192

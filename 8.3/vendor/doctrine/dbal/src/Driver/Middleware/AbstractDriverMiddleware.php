@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\Middleware;
+namespace Odigos\Doctrine\DBAL\Driver\Middleware;
 
-use Doctrine\DBAL\Driver;
-use Doctrine\DBAL\Driver\API\ExceptionConverter;
-use Doctrine\DBAL\Driver\Connection as DriverConnection;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\ServerVersionProvider;
+use Odigos\Doctrine\DBAL\Driver;
+use Odigos\Doctrine\DBAL\Driver\API\ExceptionConverter;
+use Odigos\Doctrine\DBAL\Driver\Connection as DriverConnection;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\ServerVersionProvider;
 use SensitiveParameter;
 abstract class AbstractDriverMiddleware implements Driver
 {

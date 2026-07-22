@@ -1,35 +1,35 @@
 <?php
 
-namespace Illuminate\Http\Client;
+namespace Odigos\Illuminate\Http\Client;
 
 use Closure;
 use Exception;
-use GuzzleHttp\Client;
-use GuzzleHttp\Cookie\CookieJar;
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\TransferException;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\Promise\EachPromise;
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\UriTemplate\UriTemplate;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Http\Client\Events\ConnectionFailed;
-use Illuminate\Http\Client\Events\RequestSending;
-use Illuminate\Http\Client\Events\ResponseReceived;
-use Illuminate\Http\Client\Promises\FluentPromise;
-use Illuminate\Http\Client\Promises\LazyPromise;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Stringable;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\GuzzleHttp\Client;
+use Odigos\GuzzleHttp\Cookie\CookieJar;
+use Odigos\GuzzleHttp\Exception\ConnectException;
+use Odigos\GuzzleHttp\Exception\RequestException;
+use Odigos\GuzzleHttp\Exception\TransferException;
+use Odigos\GuzzleHttp\HandlerStack;
+use Odigos\GuzzleHttp\Middleware;
+use Odigos\GuzzleHttp\Promise\EachPromise;
+use Odigos\GuzzleHttp\Promise\PromiseInterface;
+use Odigos\GuzzleHttp\UriTemplate\UriTemplate;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Http\Client\Events\ConnectionFailed;
+use Odigos\Illuminate\Http\Client\Events\RequestSending;
+use Odigos\Illuminate\Http\Client\Events\ResponseReceived;
+use Odigos\Illuminate\Http\Client\Promises\FluentPromise;
+use Odigos\Illuminate\Http\Client\Promises\LazyPromise;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Stringable;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use JsonSerializable;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
-use Symfony\Component\VarDumper\VarDumper;
+use Odigos\Symfony\Component\VarDumper\VarDumper;
 use Throwable;
 /**
  * @template TAsync of bool = false
@@ -217,13 +217,13 @@ class PendingRequest
      * @param  \Illuminate\Http\Client\Factory|null  $factory
      * @param  array  $middleware
      */
-    public function __construct(?\Illuminate\Http\Client\Factory $factory = null, $middleware = [])
+    public function __construct(?Factory $factory = null, $middleware = [])
     {
         $this->factory = $factory;
         $this->middleware = new Collection($middleware);
         $this->asJson();
         $this->options = ['connect_timeout' => 10, 'crypto_method' => \STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT, 'http_errors' => \false, 'timeout' => 30];
-        $this->beforeSendingCallbacks = new Collection([function (\Illuminate\Http\Client\Request $request, array $options, \Illuminate\Http\Client\PendingRequest $pendingRequest) {
+        $this->beforeSendingCallbacks = new Collection([function (Request $request, array $options, PendingRequest $pendingRequest) {
             $pendingRequest->request = $request;
             $pendingRequest->cookies = $options['cookies'];
             $pendingRequest->dispatchRequestSendingEvent();
@@ -674,7 +674,7 @@ class PendingRequest
     public function dump()
     {
         $values = func_get_args();
-        return $this->beforeSending(function (\Illuminate\Http\Client\Request $request, array $options) use ($values) {
+        return $this->beforeSending(function (Request $request, array $options) use ($values) {
             foreach (array_merge($values, [$request, $options]) as $value) {
                 VarDumper::dump($value);
             }
@@ -688,7 +688,7 @@ class PendingRequest
     public function dd()
     {
         $values = func_get_args();
-        return $this->beforeSending(function (\Illuminate\Http\Client\Request $request, array $options) use ($values) {
+        return $this->beforeSending(function (Request $request, array $options) use ($values) {
             foreach (array_merge($values, [$request, $options]) as $value) {
                 VarDumper::dump($value);
             }
@@ -795,7 +795,7 @@ class PendingRequest
     public function pool(callable $callback, ?int $concurrency = null)
     {
         $results = [];
-        $requests = tap(new \Illuminate\Http\Client\Pool($this->factory), $callback)->getRequests();
+        $requests = tap(new Pool($this->factory), $callback)->getRequests();
         if ($concurrency === null) {
             (new Collection($requests))->each(static function ($item) {
                 if ($item instanceof static) {
@@ -830,9 +830,9 @@ class PendingRequest
      * @param  callable  $callback
      * @return \Illuminate\Http\Client\Batch
      */
-    public function batch(callable $callback): \Illuminate\Http\Client\Batch
+    public function batch(callable $callback): Batch
     {
-        return tap(new \Illuminate\Http\Client\Batch($this->factory), $callback);
+        return tap(new Batch($this->factory), $callback);
     }
     /**
      * Send the request to the given URL.
@@ -979,16 +979,16 @@ class PendingRequest
             $this->dispatchResponseReceivedEvent($response);
             return $this->runAfterResponseCallbacks($response);
         })->otherwise(function (Throwable $e) {
-            if ($e instanceof \Illuminate\Http\Client\StrayRequestException) {
+            if ($e instanceof StrayRequestException) {
                 throw $e;
             }
             if ($e instanceof ConnectException || $e instanceof RequestException && !$e->hasResponse()) {
-                $exception = new \Illuminate\Http\Client\ConnectionException($e->getMessage(), 0, $e);
-                $this->dispatchConnectionFailedEvent((new \Illuminate\Http\Client\Request($e->getRequest()))->setRequestAttributes($this->attributes), $exception);
+                $exception = new ConnectionException($e->getMessage(), 0, $e);
+                $this->dispatchConnectionFailedEvent((new Request($e->getRequest()))->setRequestAttributes($this->attributes), $exception);
                 return $exception;
             }
             return $e instanceof RequestException && $e->hasResponse() ? $this->populateResponse($this->newResponse($e->getResponse())) : $e;
-        })->then(function (\Illuminate\Http\Client\Response|Throwable $response) use ($method, $url, $options, $attempt) {
+        })->then(function (Response|Throwable $response) use ($method, $url, $options, $attempt) {
             return $this->handlePromiseResponse($response, $method, $url, $options, $attempt);
         });
     }
@@ -1002,24 +1002,24 @@ class PendingRequest
      * @param  int  $attempt
      * @return mixed
      */
-    protected function handlePromiseResponse(\Illuminate\Http\Client\Response|Throwable $response, $method, $url, $options, $attempt)
+    protected function handlePromiseResponse(Response|Throwable $response, $method, $url, $options, $attempt)
     {
-        if ($response instanceof \Illuminate\Http\Client\Response && $response->successful()) {
+        if ($response instanceof Response && $response->successful()) {
             return $response;
         }
         if ($response instanceof RequestException) {
             $response = $this->populateResponse($this->newResponse($response->getResponse()));
         }
         try {
-            $shouldRetry = $this->retryWhenCallback ? call_user_func($this->retryWhenCallback, $response instanceof \Illuminate\Http\Client\Response ? $response->toException() : $response, $this) : \true;
+            $shouldRetry = $this->retryWhenCallback ? call_user_func($this->retryWhenCallback, $response instanceof Response ? $response->toException() : $response, $this) : \true;
         } catch (Exception $exception) {
             return $exception;
         }
         if ($attempt < $this->tries && $shouldRetry) {
-            $options['delay'] = value($this->retryDelay, $attempt, $response instanceof \Illuminate\Http\Client\Response ? $response->toException() : $response);
+            $options['delay'] = value($this->retryDelay, $attempt, $response instanceof Response ? $response->toException() : $response);
             return $this->makePromise($method, $url, $options, $attempt + 1);
         }
-        if ($response instanceof \Illuminate\Http\Client\Response && $this->throwCallback && ($this->throwIfCallback === null || call_user_func($this->throwIfCallback, $response))) {
+        if ($response instanceof Response && $this->throwCallback && ($this->throwIfCallback === null || call_user_func($this->throwIfCallback, $response))) {
             try {
                 $response->throw($this->throwCallback);
             } catch (Exception $exception) {
@@ -1027,7 +1027,7 @@ class PendingRequest
             }
         }
         if ($this->tries > 1 && $this->retryThrow) {
-            return $response instanceof \Illuminate\Http\Client\Response ? $response->toException() : $response;
+            return $response instanceof Response ? $response->toException() : $response;
         }
         return $response;
     }
@@ -1108,7 +1108,7 @@ class PendingRequest
      * @param  \Illuminate\Http\Client\Response  $response
      * @return \Illuminate\Http\Client\Response
      */
-    protected function populateResponse(\Illuminate\Http\Client\Response $response)
+    protected function populateResponse(Response $response)
     {
         $response->cookies = $this->cookies;
         $response->transferStats = $this->transferStats;
@@ -1201,7 +1201,7 @@ class PendingRequest
             return function ($request, $options) use ($handler) {
                 $promise = $handler($request, $options);
                 return $promise->then(function ($response) use ($request, $options) {
-                    $this->factory?->recordRequestResponsePair((new \Illuminate\Http\Client\Request($request))->withData($options['laravel_data'])->setRequestAttributes($this->attributes), $this->newResponse($response));
+                    $this->factory?->recordRequestResponsePair((new Request($request))->withData($options['laravel_data'])->setRequestAttributes($this->attributes), $this->newResponse($response));
                     return $response;
                 });
             };
@@ -1218,14 +1218,14 @@ class PendingRequest
     {
         return function ($handler) {
             return function ($request, $options) use ($handler) {
-                $response = ($this->stubCallbacks ?? new Collection())->map->__invoke((new \Illuminate\Http\Client\Request($request))->withData($options['laravel_data'])->setRequestAttributes($this->attributes), $options)->filter()->first();
+                $response = ($this->stubCallbacks ?? new Collection())->map->__invoke((new Request($request))->withData($options['laravel_data'])->setRequestAttributes($this->attributes), $options)->filter()->first();
                 if (is_null($response)) {
                     if (!$this->isAllowedRequestUrl((string) $request->getUri())) {
-                        throw new \Illuminate\Http\Client\StrayRequestException((string) $request->getUri());
+                        throw new StrayRequestException((string) $request->getUri());
                     }
                     return $handler($request, $options);
                 }
-                $response = is_array($response) ? \Illuminate\Http\Client\Factory::response($response) : $response;
+                $response = is_array($response) ? Factory::response($response) : $response;
                 $sink = $options['sink'] ?? null;
                 if ($sink) {
                     $response->then($this->sinkStubHandler($sink));
@@ -1263,10 +1263,10 @@ class PendingRequest
     {
         return tap($request, function (&$request) use ($options) {
             $this->beforeSendingCallbacks->each(function ($callback) use (&$request, $options) {
-                $callbackResult = call_user_func($callback, (new \Illuminate\Http\Client\Request($request))->withData($options['laravel_data'])->setRequestAttributes($this->attributes), $options, $this);
+                $callbackResult = call_user_func($callback, (new Request($request))->withData($options['laravel_data'])->setRequestAttributes($this->attributes), $options, $this);
                 if ($callbackResult instanceof RequestInterface) {
                     $request = $callbackResult;
-                } elseif ($callbackResult instanceof \Illuminate\Http\Client\Request) {
+                } elseif ($callbackResult instanceof Request) {
                     $request = $callbackResult->toPsrRequest();
                 }
             });
@@ -1290,7 +1290,7 @@ class PendingRequest
      */
     protected function newResponse($response)
     {
-        return tap(new \Illuminate\Http\Client\Response($response), function (\Illuminate\Http\Client\Response $laravelResponse) {
+        return tap(new Response($response), function (Response $laravelResponse) {
             if ($this->truncateExceptionsAt === null) {
                 return;
             }
@@ -1303,11 +1303,11 @@ class PendingRequest
      * @param  \Illuminate\Http\Client\Response  $response
      * @return \Illuminate\Http\Client\Response
      */
-    protected function runAfterResponseCallbacks(\Illuminate\Http\Client\Response $response)
+    protected function runAfterResponseCallbacks(Response $response)
     {
         foreach ($this->afterResponseCallbacks as $callback) {
             $returnedResponse = $callback($response);
-            if ($returnedResponse instanceof \Illuminate\Http\Client\Response) {
+            if ($returnedResponse instanceof Response) {
                 $response = $returnedResponse;
             }
         }
@@ -1405,7 +1405,7 @@ class PendingRequest
      * @param  \Illuminate\Http\Client\Response  $response
      * @return void
      */
-    protected function dispatchResponseReceivedEvent(\Illuminate\Http\Client\Response $response)
+    protected function dispatchResponseReceivedEvent(Response $response)
     {
         if (!($dispatcher = $this->factory?->getDispatcher()) || !$this->request) {
             return;
@@ -1419,7 +1419,7 @@ class PendingRequest
      * @param  \Illuminate\Http\Client\ConnectionException  $exception
      * @return void
      */
-    protected function dispatchConnectionFailedEvent(\Illuminate\Http\Client\Request $request, \Illuminate\Http\Client\ConnectionException $exception)
+    protected function dispatchConnectionFailedEvent(Request $request, ConnectionException $exception)
     {
         if ($dispatcher = $this->factory?->getDispatcher()) {
             $dispatcher->dispatch(new ConnectionFailed($request, $exception));
@@ -1456,8 +1456,8 @@ class PendingRequest
      */
     protected function marshalConnectionException(ConnectException $e)
     {
-        $exception = new \Illuminate\Http\Client\ConnectionException($e->getMessage(), 0, $e);
-        $request = (new \Illuminate\Http\Client\Request($e->getRequest()))->setRequestAttributes($this->attributes);
+        $exception = new ConnectionException($e->getMessage(), 0, $e);
+        $request = (new Request($e->getRequest()))->setRequestAttributes($this->attributes);
         $this->factory?->recordRequestResponsePair($request, null);
         $this->dispatchConnectionFailedEvent($request, $exception);
         throw $exception;
@@ -1472,8 +1472,8 @@ class PendingRequest
      */
     protected function marshalRequestExceptionWithoutResponse(RequestException $e)
     {
-        $exception = new \Illuminate\Http\Client\ConnectionException($e->getMessage(), 0, $e);
-        $request = (new \Illuminate\Http\Client\Request($e->getRequest()))->setRequestAttributes($this->attributes);
+        $exception = new ConnectionException($e->getMessage(), 0, $e);
+        $request = (new Request($e->getRequest()))->setRequestAttributes($this->attributes);
         $this->factory?->recordRequestResponsePair($request, null);
         $this->dispatchConnectionFailedEvent($request, $exception);
         throw $exception;
@@ -1490,8 +1490,8 @@ class PendingRequest
     protected function marshalRequestExceptionWithResponse(RequestException $e)
     {
         $response = $this->populateResponse($this->newResponse($e->getResponse()));
-        $this->factory?->recordRequestResponsePair((new \Illuminate\Http\Client\Request($e->getRequest()))->setRequestAttributes($this->attributes), $response);
-        throw $response->toException() ?? new \Illuminate\Http\Client\ConnectionException($e->getMessage(), 0, $e);
+        $this->factory?->recordRequestResponsePair((new Request($e->getRequest()))->setRequestAttributes($this->attributes), $response);
+        throw $response->toException() ?? new ConnectionException($e->getMessage(), 0, $e);
     }
     /**
      * Set the client instance.

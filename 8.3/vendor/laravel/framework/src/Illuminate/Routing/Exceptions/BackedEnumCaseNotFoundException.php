@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Routing\Exceptions;
+namespace Odigos\Illuminate\Routing\Exceptions;
 
 use RuntimeException;
 class BackedEnumCaseNotFoundException extends RuntimeException

@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Association;
+namespace Odigos\Cake\ORM\Association;
 
-use Cake\Datasource\EntityInterface;
-use Cake\ORM\Association;
-use Cake\ORM\Association\Loader\SelectLoader;
-use Cake\ORM\Table;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\ORM\Association;
+use Odigos\Cake\ORM\Association\Loader\SelectLoader;
+use Odigos\Cake\ORM\Table;
+use Odigos\Cake\Utility\Inflector;
 use Closure;
-use function Cake\Core\pluginSplit;
+use function Odigos\Cake\Core\pluginSplit;
 /**
  * Represents an 1 - 1 relationship where the source side of the relation is
  * related to only one record in the target table and vice versa.
@@ -135,7 +135,7 @@ class HasOne extends Association
      */
     public function cascadeDelete(EntityInterface $entity, array $options = []): bool
     {
-        $helper = new \Cake\ORM\Association\DependentDeleteHelper();
+        $helper = new DependentDeleteHelper();
         return $helper->cascadeDelete($this, $entity, $options);
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
-use Illuminate\Support\Collection;
-class AutoCompletePrompt extends \Laravel\Prompts\Prompt
+use Odigos\Illuminate\Support\Collection;
+class AutoCompletePrompt extends Prompt
 {
-    use \Laravel\Prompts\Concerns\TypedValue;
+    use Concerns\TypedValue;
     /**
      * The options for the autocomplete prompt.
      *
@@ -28,21 +28,21 @@ class AutoCompletePrompt extends \Laravel\Prompts\Prompt
     {
         $this->options = $options instanceof Collection ? $options->all() : $options;
         $this->on('key', function ($key) {
-            if (in_array($key, [\Laravel\Prompts\Key::UP, \Laravel\Prompts\Key::UP_ARROW])) {
+            if (in_array($key, [Key::UP, Key::UP_ARROW])) {
                 $matches = $this->matches();
                 if (count($matches) > 0) {
                     $this->highlighted = ($this->highlighted - 1 + count($matches)) % count($matches);
                 }
                 return;
             }
-            if (in_array($key, [\Laravel\Prompts\Key::DOWN, \Laravel\Prompts\Key::DOWN_ARROW])) {
+            if (in_array($key, [Key::DOWN, Key::DOWN_ARROW])) {
                 $matches = $this->matches();
                 if (count($matches) > 0) {
                     $this->highlighted = ($this->highlighted + 1) % count($matches);
                 }
                 return;
             }
-            if ($key === \Laravel\Prompts\Key::TAB && $this->cursorPosition >= mb_strlen($this->typedValue)) {
+            if ($key === Key::TAB && $this->cursorPosition >= mb_strlen($this->typedValue)) {
                 $match = $this->getMatch();
                 if ($match !== '' && mb_strlen($match) > mb_strlen($this->value())) {
                     // Ghost text is showing — accept it
@@ -55,7 +55,7 @@ class AutoCompletePrompt extends \Laravel\Prompts\Prompt
                 }
                 return;
             }
-            if (in_array($key, [\Laravel\Prompts\Key::RIGHT, \Laravel\Prompts\Key::RIGHT_ARROW]) && $this->cursorPosition >= mb_strlen($this->typedValue)) {
+            if (in_array($key, [Key::RIGHT, Key::RIGHT_ARROW]) && $this->cursorPosition >= mb_strlen($this->typedValue)) {
                 $match = $this->getMatch();
                 if ($match !== '') {
                     $this->typedValue = $match;
@@ -67,7 +67,7 @@ class AutoCompletePrompt extends \Laravel\Prompts\Prompt
             $this->highlighted = 0;
             $this->matches = null;
         });
-        $this->trackTypedValue($default, ignore: fn($key) => in_array($key, [\Laravel\Prompts\Key::UP, \Laravel\Prompts\Key::UP_ARROW, \Laravel\Prompts\Key::DOWN, \Laravel\Prompts\Key::DOWN_ARROW]));
+        $this->trackTypedValue($default, ignore: fn($key) => in_array($key, [Key::UP, Key::UP_ARROW, Key::DOWN, Key::DOWN_ARROW]));
     }
     /**
      * Get the entered value with a virtual cursor.

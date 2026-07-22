@@ -1,37 +1,37 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
 use ArrayAccess;
 use BadMethodCallException;
 use Closure;
 use DateTimeInterface;
-use Illuminate\Cache\Events\CacheFlushed;
-use Illuminate\Cache\Events\CacheFlushFailed;
-use Illuminate\Cache\Events\CacheFlushing;
-use Illuminate\Cache\Events\CacheHit;
-use Illuminate\Cache\Events\CacheMissed;
-use Illuminate\Cache\Events\ForgettingKey;
-use Illuminate\Cache\Events\KeyForgetFailed;
-use Illuminate\Cache\Events\KeyForgotten;
-use Illuminate\Cache\Events\KeyWriteFailed;
-use Illuminate\Cache\Events\KeyWritten;
-use Illuminate\Cache\Events\RetrievingKey;
-use Illuminate\Cache\Events\RetrievingManyKeys;
-use Illuminate\Cache\Events\WritingKey;
-use Illuminate\Cache\Events\WritingManyKeys;
-use Illuminate\Cache\Limiters\ConcurrencyLimiterBuilder;
-use Illuminate\Contracts\Cache\LockProvider;
-use Illuminate\Contracts\Cache\Repository as CacheContract;
-use Illuminate\Contracts\Cache\Store;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\InteractsWithTime;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Cache\Events\CacheFlushed;
+use Odigos\Illuminate\Cache\Events\CacheFlushFailed;
+use Odigos\Illuminate\Cache\Events\CacheFlushing;
+use Odigos\Illuminate\Cache\Events\CacheHit;
+use Odigos\Illuminate\Cache\Events\CacheMissed;
+use Odigos\Illuminate\Cache\Events\ForgettingKey;
+use Odigos\Illuminate\Cache\Events\KeyForgetFailed;
+use Odigos\Illuminate\Cache\Events\KeyForgotten;
+use Odigos\Illuminate\Cache\Events\KeyWriteFailed;
+use Odigos\Illuminate\Cache\Events\KeyWritten;
+use Odigos\Illuminate\Cache\Events\RetrievingKey;
+use Odigos\Illuminate\Cache\Events\RetrievingManyKeys;
+use Odigos\Illuminate\Cache\Events\WritingKey;
+use Odigos\Illuminate\Cache\Events\WritingManyKeys;
+use Odigos\Illuminate\Cache\Limiters\ConcurrencyLimiterBuilder;
+use Odigos\Illuminate\Contracts\Cache\LockProvider;
+use Odigos\Illuminate\Contracts\Cache\Repository as CacheContract;
+use Odigos\Illuminate\Contracts\Cache\Store;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
-use function Illuminate\Support\defer;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\defer;
+use function Odigos\Illuminate\Support\enum_value;
 /**
  * @mixin \Illuminate\Contracts\Cache\Store
  */

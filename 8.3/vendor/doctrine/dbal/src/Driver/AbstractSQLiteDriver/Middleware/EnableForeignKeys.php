@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\AbstractSQLiteDriver\Middleware;
+namespace Odigos\Doctrine\DBAL\Driver\AbstractSQLiteDriver\Middleware;
 
-use Doctrine\DBAL\Driver;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\Driver\Middleware;
-use Doctrine\DBAL\Driver\Middleware\AbstractDriverMiddleware;
+use Odigos\Doctrine\DBAL\Driver;
+use Odigos\Doctrine\DBAL\Driver\Connection;
+use Odigos\Doctrine\DBAL\Driver\Middleware;
+use Odigos\Doctrine\DBAL\Driver\Middleware\AbstractDriverMiddleware;
 use SensitiveParameter;
 final class EnableForeignKeys implements Middleware
 {

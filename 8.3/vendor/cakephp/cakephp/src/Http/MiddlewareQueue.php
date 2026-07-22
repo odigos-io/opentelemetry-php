@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
-use Cake\Core\App;
-use Cake\Core\ContainerInterface;
-use Cake\Http\Middleware\ClosureDecoratorMiddleware;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\ContainerInterface;
+use Odigos\Cake\Http\Middleware\ClosureDecoratorMiddleware;
 use Closure;
 use Countable;
 use InvalidArgumentException;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Broadcasting;
+namespace Odigos\Illuminate\Broadcasting;
 
-use Illuminate\Support\Arr;
-use function Illuminate\Support\enum_value;
+use Odigos\Illuminate\Support\Arr;
+use function Odigos\Illuminate\Support\enum_value;
 trait InteractsWithBroadcasting
 {
     /**

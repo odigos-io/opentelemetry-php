@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Driver;
+namespace Odigos\Cake\Database\Driver;
 
-use Cake\Database\Driver;
-use Cake\Database\DriverFeatureEnum;
-use Cake\Database\Expression\FunctionExpression;
-use Cake\Database\Expression\TupleComparison;
-use Cake\Database\Schema\SchemaDialect;
-use Cake\Database\Schema\SqliteSchemaDialect;
-use Cake\Database\Statement\SqliteStatement;
+use Odigos\Cake\Database\Driver;
+use Odigos\Cake\Database\DriverFeatureEnum;
+use Odigos\Cake\Database\Expression\FunctionExpression;
+use Odigos\Cake\Database\Expression\TupleComparison;
+use Odigos\Cake\Database\Schema\SchemaDialect;
+use Odigos\Cake\Database\Schema\SqliteSchemaDialect;
+use Odigos\Cake\Database\Statement\SqliteStatement;
 use InvalidArgumentException;
 use PDO;
 /**
@@ -30,7 +30,7 @@ use PDO;
  */
 class Sqlite extends Driver
 {
-    use \Cake\Database\Driver\TupleComparisonTranslatorTrait;
+    use TupleComparisonTranslatorTrait;
     /**
      * @inheritDoc
      */

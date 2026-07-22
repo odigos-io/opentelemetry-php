@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Testing\Constraints;
+namespace Odigos\Illuminate\Testing\Constraints;
 
-use Illuminate\Database\Connection;
+use Odigos\Illuminate\Database\Connection;
 use Odigos\PHPUnit\Framework\Constraint\Constraint;
 class NotSoftDeletedInDatabase extends Constraint
 {

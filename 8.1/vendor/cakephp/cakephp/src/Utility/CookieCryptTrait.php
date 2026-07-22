@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.1.6
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Utility;
+namespace Odigos\Cake\Utility;
 
 use InvalidArgumentException;
 /**
@@ -60,7 +60,7 @@ trait CookieCryptTrait
         $cipher = '';
         $key ??= $this->_getCookieEncryptionKey();
         if ($encrypt === 'aes') {
-            $cipher = \Cake\Utility\Security::encrypt($value, $key);
+            $cipher = Security::encrypt($value, $key);
         }
         return $prefix . base64_encode($cipher);
     }
@@ -122,7 +122,7 @@ trait CookieCryptTrait
         }
         $key ??= $this->_getCookieEncryptionKey();
         if ($encrypt === 'aes') {
-            $value = \Cake\Utility\Security::decrypt($value, $key);
+            $value = Security::decrypt($value, $key);
         }
         if ($value === null) {
             return '';

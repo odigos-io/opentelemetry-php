@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 /**
  * NotSupportedException represents an exception caused by accessing features that are not supported.
@@ -13,7 +13,7 @@ namespace yii\base;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class NotSupportedException extends \yii\base\Exception
+class NotSupportedException extends Exception
 {
     /**
      * @return string the user-friendly name of this exception

@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Cache\Events\CacheFlushed;
-use Illuminate\Cache\Events\CacheFlushing;
-use Illuminate\Redis\Connections\PhpRedisClusterConnection;
-use Illuminate\Redis\Connections\PhpRedisConnection;
-use Illuminate\Redis\Connections\PredisClusterConnection;
-use Illuminate\Redis\Connections\PredisConnection;
-class RedisTaggedCache extends \Illuminate\Cache\TaggedCache
+use Odigos\Illuminate\Cache\Events\CacheFlushed;
+use Odigos\Illuminate\Cache\Events\CacheFlushing;
+use Odigos\Illuminate\Redis\Connections\PhpRedisClusterConnection;
+use Odigos\Illuminate\Redis\Connections\PhpRedisConnection;
+use Odigos\Illuminate\Redis\Connections\PredisClusterConnection;
+use Odigos\Illuminate\Redis\Connections\PredisConnection;
+class RedisTaggedCache extends TaggedCache
 {
     /**
      * Store an item in the cache if the key does not exist.

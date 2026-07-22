@@ -1,15 +1,15 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\ContainerFileContract;
-use OpenAI\Contracts\Resources\ContainersContract;
-use OpenAI\Resources\Containers;
-use OpenAI\Responses\Containers\CreateContainer;
-use OpenAI\Responses\Containers\DeleteContainer;
-use OpenAI\Responses\Containers\ListContainers;
-use OpenAI\Responses\Containers\RetrieveContainer;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\ContainerFileContract;
+use Odigos\OpenAI\Contracts\Resources\ContainersContract;
+use Odigos\OpenAI\Resources\Containers;
+use Odigos\OpenAI\Responses\Containers\CreateContainer;
+use Odigos\OpenAI\Responses\Containers\DeleteContainer;
+use Odigos\OpenAI\Responses\Containers\ListContainers;
+use Odigos\OpenAI\Responses\Containers\RetrieveContainer;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class ContainersTestResource implements ContainersContract
 {
     use Testable;
@@ -35,6 +35,6 @@ final class ContainersTestResource implements ContainersContract
     }
     public function files(): ContainerFileContract
     {
-        return new \OpenAI\Testing\Resources\ContainerFileTestResource($this->fake);
+        return new ContainerFileTestResource($this->fake);
     }
 }

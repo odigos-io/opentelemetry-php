@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\ParameterType;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
 /**
  * Type that maps an SQL INT to a PHP integer.
  */
-class IntegerType extends \Doctrine\DBAL\Types\Type implements \Doctrine\DBAL\Types\PhpIntegerMappingType
+class IntegerType extends Type implements PhpIntegerMappingType
 {
     /**
      * {@inheritDoc}

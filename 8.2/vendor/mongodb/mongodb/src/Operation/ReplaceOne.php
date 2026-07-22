@@ -15,17 +15,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
-use MongoDB\Codec\DocumentCodec;
+use Odigos\MongoDB\Codec\DocumentCodec;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnsupportedException;
-use MongoDB\UpdateResult;
-use function MongoDB\is_document;
-use function MongoDB\is_first_key_operator;
-use function MongoDB\is_pipeline;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\UpdateResult;
+use function Odigos\MongoDB\is_document;
+use function Odigos\MongoDB\is_first_key_operator;
+use function Odigos\MongoDB\is_pipeline;
 /**
  * Operation for replacing a single document with the update command.
  *
@@ -34,7 +34,7 @@ use function MongoDB\is_pipeline;
  */
 final class ReplaceOne
 {
-    private \MongoDB\Operation\Update $update;
+    private Update $update;
     /**
      * Constructs an update command.
      *
@@ -92,7 +92,7 @@ final class ReplaceOne
         if (isset($options['codec'], $options['typeMap'])) {
             throw InvalidArgumentException::cannotCombineCodecAndTypeMap();
         }
-        $this->update = new \MongoDB\Operation\Update($databaseName, $collectionName, $filter, $this->validateReplacement($replacement, $options['codec'] ?? null), ['multi' => \false] + $options);
+        $this->update = new Update($databaseName, $collectionName, $filter, $this->validateReplacement($replacement, $options['codec'] ?? null), ['multi' => \false] + $options);
     }
     /**
      * Execute the operation.

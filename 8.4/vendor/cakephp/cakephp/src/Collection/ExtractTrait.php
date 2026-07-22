@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Collection;
+namespace Odigos\Cake\Collection;
 
 use ArrayAccess;
 use Closure;
@@ -72,7 +72,7 @@ trait ExtractTrait
             }
             if ($collectionTransform) {
                 $rest = implode('.', array_slice($parts, $i));
-                return (new \Cake\Collection\Collection($data))->extract($rest);
+                return (new Collection($data))->extract($rest);
             }
             if (!isset($data[$column])) {
                 return null;

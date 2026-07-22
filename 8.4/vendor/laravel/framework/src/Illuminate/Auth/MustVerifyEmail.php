@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Auth;
+namespace Odigos\Illuminate\Auth;
 
-use Illuminate\Auth\Notifications\VerifyEmail;
+use Odigos\Illuminate\Auth\Notifications\VerifyEmail;
 trait MustVerifyEmail
 {
     /**

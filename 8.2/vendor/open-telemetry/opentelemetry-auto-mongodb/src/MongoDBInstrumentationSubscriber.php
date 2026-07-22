@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\MongoDB;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\MongoDB;
 
 use Closure;
 use MongoDB\Driver\Monitoring\CommandFailedEvent;
@@ -63,7 +63,7 @@ final class MongoDBInstrumentationSubscriber implements CommandSubscriber, SDAMS
     public function commandStarted(CommandStartedEvent $event): void
     {
         $command = $event->getCommand();
-        $collectionName = \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBCollectionExtractor::extract($command);
+        $collectionName = MongoDBCollectionExtractor::extract($command);
         $databaseName = $event->getDatabaseName();
         $commandName = $event->getCommandName();
         $version = phpversion('mongodb');
@@ -79,7 +79,7 @@ final class MongoDBInstrumentationSubscriber implements CommandSubscriber, SDAMS
         $isSocket = str_starts_with($host, '/');
         /** @psalm-suppress RiskyTruthyFalsyComparison **/
         $scopedCommand = ($collectionName ? $collectionName . '.' : '') . $commandName;
-        $builder = self::startSpan($this->instrumentation, 'MongoDB ' . $scopedCommand)->setSpanKind(SpanKind::KIND_CLIENT)->setAttribute(DbAttributes::DB_SYSTEM_NAME, 'mongodb')->setAttribute(DbAttributes::DB_NAMESPACE, $databaseName)->setAttribute(DbAttributes::DB_OPERATION_NAME, $commandName)->setAttribute(ServerAttributes::SERVER_ADDRESS, $isSocket ? null : $host)->setAttribute(ServerAttributes::SERVER_PORT, $isSocket ? null : $port)->setAttribute(NetworkAttributes::NETWORK_TRANSPORT, $isSocket ? 'unix' : 'tcp')->setAttribute(DbAttributes::DB_QUERY_TEXT, ($this->commandSerializer)($command))->setAttribute(DbAttributes::DB_COLLECTION_NAME, $collectionName)->setAttribute(\OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_REQUEST_ID, $event->getRequestId())->setAttribute(\OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_OPERATION_ID, $event->getOperationId())->setAttributes($attributes);
+        $builder = self::startSpan($this->instrumentation, 'MongoDB ' . $scopedCommand)->setSpanKind(SpanKind::KIND_CLIENT)->setAttribute(DbAttributes::DB_SYSTEM_NAME, 'mongodb')->setAttribute(DbAttributes::DB_NAMESPACE, $databaseName)->setAttribute(DbAttributes::DB_OPERATION_NAME, $commandName)->setAttribute(ServerAttributes::SERVER_ADDRESS, $isSocket ? null : $host)->setAttribute(ServerAttributes::SERVER_PORT, $isSocket ? null : $port)->setAttribute(NetworkAttributes::NETWORK_TRANSPORT, $isSocket ? 'unix' : 'tcp')->setAttribute(DbAttributes::DB_QUERY_TEXT, ($this->commandSerializer)($command))->setAttribute(DbAttributes::DB_COLLECTION_NAME, $collectionName)->setAttribute(MongoDBTraceAttributes::DB_MONGODB_REQUEST_ID, $event->getRequestId())->setAttribute(MongoDBTraceAttributes::DB_MONGODB_OPERATION_ID, $event->getOperationId())->setAttributes($attributes);
         $parent = Context::getCurrent();
         $span = $builder->startSpan();
         Context::storage()->attach($span->storeInContext($parent));
@@ -121,7 +121,7 @@ final class MongoDBInstrumentationSubscriber implements CommandSubscriber, SDAMS
         $host = $event->getHost();
         $port = $event->getPort();
         $info = $event->getNewDescription()->getHelloResponse();
-        $attributes = [\OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_MASTER => $info['ismaster'] ?? null, \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_READ_ONLY => $info['readOnly'] ?? null, \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_CONNECTION_ID => $info['connectionId'] ?? null, \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_MAX_WIRE_VERSION => $info['maxWireVersion'] ?? null, \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_MIN_WIRE_VERSION => $info['minWireVersion'] ?? null, \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_MAX_BSON_OBJECT_SIZE_BYTES => $info['maxBsonObjectSize'] ?? null, \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_MAX_MESSAGE_SIZE_BYTES => $info['maxMessageSizeBytes'] ?? null, \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_MAX_WRITE_BATCH_SIZE => $info['maxWriteBatchSize'] ?? null];
+        $attributes = [MongoDBTraceAttributes::DB_MONGODB_MASTER => $info['ismaster'] ?? null, MongoDBTraceAttributes::DB_MONGODB_READ_ONLY => $info['readOnly'] ?? null, MongoDBTraceAttributes::DB_MONGODB_CONNECTION_ID => $info['connectionId'] ?? null, MongoDBTraceAttributes::DB_MONGODB_MAX_WIRE_VERSION => $info['maxWireVersion'] ?? null, MongoDBTraceAttributes::DB_MONGODB_MIN_WIRE_VERSION => $info['minWireVersion'] ?? null, MongoDBTraceAttributes::DB_MONGODB_MAX_BSON_OBJECT_SIZE_BYTES => $info['maxBsonObjectSize'] ?? null, MongoDBTraceAttributes::DB_MONGODB_MAX_MESSAGE_SIZE_BYTES => $info['maxMessageSizeBytes'] ?? null, MongoDBTraceAttributes::DB_MONGODB_MAX_WRITE_BATCH_SIZE => $info['maxWriteBatchSize'] ?? null];
         $this->serverAttributes[$host][$port] = $attributes;
     }
     public function serverOpened(ServerOpeningEvent $event): void

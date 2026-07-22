@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
-use Cake\Chronos\ChronosDate;
-use Cake\Database\Driver;
-use Cake\Database\Exception\DatabaseException;
-use Cake\I18n\DateTime;
+use Odigos\Cake\Chronos\ChronosDate;
+use Odigos\Cake\Database\Driver;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\I18n\DateTime;
 use DateTime as NativeDateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -32,7 +32,7 @@ use PDO;
  *
  * Use to convert datetime instances to strings & back.
  */
-class DateTimeType extends \Cake\Database\Type\BaseType implements \Cake\Database\Type\BatchCastingInterface
+class DateTimeType extends BaseType implements BatchCastingInterface
 {
     /**
      * The DateTime format used when converting to string.

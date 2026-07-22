@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types\Exception;
+namespace Odigos\Doctrine\DBAL\Types\Exception;
 
-use Doctrine\DBAL\Types\ConversionException;
+use Odigos\Doctrine\DBAL\Types\ConversionException;
 use Throwable;
 use function get_debug_type;
 use function implode;
@@ -13,7 +13,7 @@ use function var_export;
 /**
  * Thrown when the PHP value passed to the converter was not of the expected type.
  */
-final class InvalidType extends ConversionException implements \Doctrine\DBAL\Types\Exception\TypesException
+final class InvalidType extends ConversionException implements TypesException
 {
     /**
      * @param string[] $possibleTypes

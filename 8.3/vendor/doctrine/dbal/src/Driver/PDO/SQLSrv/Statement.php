@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PDO\SQLSrv;
+namespace Odigos\Doctrine\DBAL\Driver\PDO\SQLSrv;
 
-use Doctrine\DBAL\Driver\Middleware\AbstractStatementMiddleware;
-use Doctrine\DBAL\Driver\PDO\Statement as PDOStatement;
-use Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Driver\Middleware\AbstractStatementMiddleware;
+use Odigos\Doctrine\DBAL\Driver\PDO\Statement as PDOStatement;
+use Odigos\Doctrine\DBAL\ParameterType;
 use PDO;
 final class Statement extends AbstractStatementMiddleware
 {

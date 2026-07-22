@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Fixture\Extension;
+namespace Odigos\Cake\TestSuite\Fixture\Extension;
 
 use Odigos\PHPUnit\Runner\Extension\Extension;
 use Odigos\PHPUnit\Runner\Extension\Facade;
@@ -33,6 +33,6 @@ class PHPUnitExtension implements Extension
      */
     public function bootstrap(Configuration $configuration, Facade $facade, ParameterCollection $parameters): void
     {
-        $facade->registerSubscriber(new \Cake\TestSuite\Fixture\Extension\PHPUnitStartedSubscriber());
+        $facade->registerSubscriber(new PHPUnitStartedSubscriber());
     }
 }

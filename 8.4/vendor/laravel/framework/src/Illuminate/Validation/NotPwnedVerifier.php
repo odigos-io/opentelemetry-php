@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
 use Exception;
-use Illuminate\Contracts\Validation\UncompromisedVerifier;
-use Illuminate\Support\Stringable;
+use Odigos\Illuminate\Contracts\Validation\UncompromisedVerifier;
+use Odigos\Illuminate\Support\Stringable;
 class NotPwnedVerifier implements UncompromisedVerifier
 {
     /**

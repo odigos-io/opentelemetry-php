@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
-use Cake\Console\Exception\ConsoleException;
+use Odigos\Cake\Console\Exception\ConsoleException;
 use InvalidArgumentException;
-use function Cake\Core\env;
+use function Odigos\Cake\Core\env;
 /**
  * Object wrapper for outputting information from a shell application.
  * Can be connected to any stream resource that can be used with fopen()

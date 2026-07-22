@@ -4,13 +4,13 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Stage;
+namespace Odigos\MongoDB\Builder\Stage;
 
-use MongoDB\Builder\Expression\ArrayFieldPath;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Builder\Type\Optional;
-use MongoDB\Builder\Type\StageInterface;
+use Odigos\MongoDB\Builder\Expression\ArrayFieldPath;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\Optional;
+use Odigos\MongoDB\Builder\Type\StageInterface;
 /**
  * Deconstructs an array field from the input documents to output a document for each element. Each output document replaces the array with an element value. For each input document, outputs n documents where n is the number of array elements and can be zero for an empty array.
  *

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Schema\Exception\InvalidSequenceDefinition;
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidSequenceDefinition;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
 final class SequenceEditor
 {
     private ?OptionallyQualifiedName $name = null;
@@ -58,11 +58,11 @@ final class SequenceEditor
         $this->cacheSize = $cacheSize;
         return $this;
     }
-    public function create(): \Doctrine\DBAL\Schema\Sequence
+    public function create(): Sequence
     {
         if ($this->name === null) {
             throw InvalidSequenceDefinition::nameNotSet();
         }
-        return new \Doctrine\DBAL\Schema\Sequence($this->name->toString(), $this->allocationSize, $this->initialValue, $this->cacheSize);
+        return new Sequence($this->name->toString(), $this->allocationSize, $this->initialValue, $this->cacheSize);
     }
 }

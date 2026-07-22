@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\i18n;
+namespace Odigos\yii\i18n;
 
 use Odigos\Yii;
 /**
@@ -14,7 +14,7 @@ use Odigos\Yii;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class GettextPoFile extends \yii\i18n\GettextFile
+class GettextPoFile extends GettextFile
 {
     /**
      * Loads messages from a PO file.

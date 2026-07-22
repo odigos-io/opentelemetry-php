@@ -1,33 +1,33 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
 use Odigos\Carbon\CarbonInterval;
 use Closure;
 use DateTimeInterface;
 use Exception;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Database\Events\StatementPrepared;
-use Illuminate\Database\Events\TransactionBeginning;
-use Illuminate\Database\Events\TransactionCommitted;
-use Illuminate\Database\Events\TransactionCommitting;
-use Illuminate\Database\Events\TransactionRolledBack;
-use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Database\Query\Expression;
-use Illuminate\Database\Query\Grammars\Grammar as QueryGrammar;
-use Illuminate\Database\Query\Processors\Processor;
-use Illuminate\Database\Schema\Builder as SchemaBuilder;
-use Illuminate\Support\Arr;
-use Illuminate\Support\InteractsWithTime;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Database\Events\QueryExecuted;
+use Odigos\Illuminate\Database\Events\StatementPrepared;
+use Odigos\Illuminate\Database\Events\TransactionBeginning;
+use Odigos\Illuminate\Database\Events\TransactionCommitted;
+use Odigos\Illuminate\Database\Events\TransactionCommitting;
+use Odigos\Illuminate\Database\Events\TransactionRolledBack;
+use Odigos\Illuminate\Database\Query\Builder as QueryBuilder;
+use Odigos\Illuminate\Database\Query\Expression;
+use Odigos\Illuminate\Database\Query\Grammars\Grammar as QueryGrammar;
+use Odigos\Illuminate\Database\Query\Processors\Processor;
+use Odigos\Illuminate\Database\Schema\Builder as SchemaBuilder;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use PDO;
 use PDOStatement;
 use RuntimeException;
-use function Illuminate\Support\enum_value;
-class Connection implements \Illuminate\Database\ConnectionInterface
+use function Odigos\Illuminate\Support\enum_value;
+class Connection implements ConnectionInterface
 {
-    use \Illuminate\Database\DetectsConcurrencyErrors, \Illuminate\Database\DetectsLostConnections, \Illuminate\Database\Concerns\ManagesTransactions, InteractsWithTime, Macroable;
+    use DetectsConcurrencyErrors, DetectsLostConnections, Concerns\ManagesTransactions, InteractsWithTime, Macroable;
     /**
      * The active PDO connection.
      *
@@ -324,7 +324,7 @@ class Connection implements \Illuminate\Database\ConnectionInterface
         }
         $record = (array) $record;
         if (count($record) > 1) {
-            throw new \Illuminate\Database\MultipleColumnsSelectedException();
+            throw new MultipleColumnsSelectedException();
         }
         return array_first($record);
     }
@@ -658,7 +658,7 @@ class Connection implements \Illuminate\Database\ConnectionInterface
         // to re-establish connection and re-run the query with a fresh connection.
         try {
             $result = $this->runQueryCallback($query, $bindings, $callback);
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             $result = $this->handleQueryException($e, $query, $bindings, $callback);
         }
         // Once we have run the query we will calculate the time that it took to run and
@@ -685,7 +685,7 @@ class Connection implements \Illuminate\Database\ConnectionInterface
         try {
             return $callback($query, $bindings);
         } catch (Exception $e) {
-            $exceptionType = $this->isUniqueConstraintError($e) ? \Illuminate\Database\UniqueConstraintViolationException::class : \Illuminate\Database\QueryException::class;
+            $exceptionType = $this->isUniqueConstraintError($e) ? UniqueConstraintViolationException::class : QueryException::class;
             throw new $exceptionType($this->getNameWithReadWriteType(), $query, $this->prepareBindings($bindings), $e, $this->getConnectionDetails(), $this->latestReadWriteTypeUsed());
         }
     }
@@ -787,7 +787,7 @@ class Connection implements \Illuminate\Database\ConnectionInterface
      *
      * @throws \Illuminate\Database\QueryException
      */
-    protected function handleQueryException(\Illuminate\Database\QueryException $e, $query, $bindings, Closure $callback)
+    protected function handleQueryException(QueryException $e, $query, $bindings, Closure $callback)
     {
         if ($this->transactions >= 1) {
             throw $e;
@@ -805,7 +805,7 @@ class Connection implements \Illuminate\Database\ConnectionInterface
      *
      * @throws \Illuminate\Database\QueryException
      */
-    protected function tryAgainIfCausedByLostConnection(\Illuminate\Database\QueryException $e, $query, $bindings, Closure $callback)
+    protected function tryAgainIfCausedByLostConnection(QueryException $e, $query, $bindings, Closure $callback)
     {
         if ($this->causedByLostConnection($e->getPrevious())) {
             $this->reconnect();
@@ -825,7 +825,7 @@ class Connection implements \Illuminate\Database\ConnectionInterface
         if (is_callable($this->reconnector)) {
             return call_user_func($this->reconnector, $this);
         }
-        throw new \Illuminate\Database\LostConnectionException('Lost connection and no reconnector available.');
+        throw new LostConnectionException('Lost connection and no reconnector available.');
     }
     /**
      * Reconnect to the database if a PDO connection is missing.
@@ -877,7 +877,7 @@ class Connection implements \Illuminate\Database\ConnectionInterface
      */
     public function listen(Closure $callback)
     {
-        $this->events?->listen(\Illuminate\Database\Events\QueryExecuted::class, $callback);
+        $this->events?->listen(Events\QueryExecuted::class, $callback);
     }
     /**
      * Fire an event for this connection.
@@ -1197,7 +1197,7 @@ class Connection implements \Illuminate\Database\ConnectionInterface
      * @param  \Illuminate\Database\Query\Grammars\Grammar  $grammar
      * @return $this
      */
-    public function setQueryGrammar(\Illuminate\Database\Query\Grammars\Grammar $grammar)
+    public function setQueryGrammar(Query\Grammars\Grammar $grammar)
     {
         $this->queryGrammar = $grammar;
         return $this;
@@ -1217,7 +1217,7 @@ class Connection implements \Illuminate\Database\ConnectionInterface
      * @param  \Illuminate\Database\Schema\Grammars\Grammar  $grammar
      * @return $this
      */
-    public function setSchemaGrammar(\Illuminate\Database\Schema\Grammars\Grammar $grammar)
+    public function setSchemaGrammar(Schema\Grammars\Grammar $grammar)
     {
         $this->schemaGrammar = $grammar;
         return $this;

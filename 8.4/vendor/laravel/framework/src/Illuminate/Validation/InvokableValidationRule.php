@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
-use Illuminate\Contracts\Validation\DataAwareRule;
-use Illuminate\Contracts\Validation\ImplicitRule;
-use Illuminate\Contracts\Validation\InvokableRule;
-use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Contracts\Validation\ValidatorAwareRule;
-use Illuminate\Translation\CreatesPotentiallyTranslatedStrings;
+use Odigos\Illuminate\Contracts\Validation\DataAwareRule;
+use Odigos\Illuminate\Contracts\Validation\ImplicitRule;
+use Odigos\Illuminate\Contracts\Validation\InvokableRule;
+use Odigos\Illuminate\Contracts\Validation\Rule;
+use Odigos\Illuminate\Contracts\Validation\ValidationRule;
+use Odigos\Illuminate\Contracts\Validation\ValidatorAwareRule;
+use Odigos\Illuminate\Translation\CreatesPotentiallyTranslatedStrings;
 class InvokableValidationRule implements Rule, ValidatorAwareRule
 {
     use CreatesPotentiallyTranslatedStrings;
@@ -60,11 +60,11 @@ class InvokableValidationRule implements Rule, ValidatorAwareRule
     public static function make($invokable)
     {
         if ($invokable->implicit ?? \false) {
-            return new class($invokable) extends \Illuminate\Validation\InvokableValidationRule implements ImplicitRule
+            return new class($invokable) extends InvokableValidationRule implements ImplicitRule
             {
             };
         }
-        return new \Illuminate\Validation\InvokableValidationRule($invokable);
+        return new InvokableValidationRule($invokable);
     }
     /**
      * Determine if the validation rule passes.

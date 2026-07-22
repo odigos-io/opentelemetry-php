@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Laminas\HttpHandlerRunner\Emitter;
+namespace Odigos\Laminas\HttpHandlerRunner\Emitter;
 
-use Laminas\HttpHandlerRunner\Exception\EmitterException;
+use Odigos\Laminas\HttpHandlerRunner\Exception\EmitterException;
 use Psr\Http\Message\ResponseInterface;
 use function assert;
 use function function_exists;
@@ -86,17 +86,17 @@ trait SapiEmitterTrait
     }
     private function headersSent(?string &$filename = null, ?int &$line = null): bool
     {
-        if (function_exists('Laminas\HttpHandlerRunner\Emitter\headers_sent')) {
+        if (function_exists('Odigos\Laminas\HttpHandlerRunner\Emitter\headers_sent')) {
             // phpcs:ignore SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFullyQualifiedName
-            return \Laminas\HttpHandlerRunner\Emitter\headers_sent($filename, $line);
+            return \Odigos\Laminas\HttpHandlerRunner\Emitter\headers_sent($filename, $line);
         }
         return headers_sent($filename, $line);
     }
     private function header(string $headerName, bool $replace, int $statusCode): void
     {
-        if (function_exists('Laminas\HttpHandlerRunner\Emitter\header')) {
+        if (function_exists('Odigos\Laminas\HttpHandlerRunner\Emitter\header')) {
             // phpcs:ignore SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFullyQualifiedName
-            \Laminas\HttpHandlerRunner\Emitter\header($headerName, $replace, $statusCode);
+            \Odigos\Laminas\HttpHandlerRunner\Emitter\header($headerName, $replace, $statusCode);
             return;
         }
         header($headerName, $replace, $statusCode);

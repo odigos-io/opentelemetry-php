@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Http;
+namespace Odigos\Illuminate\Http;
 
 class StreamedEvent
 {

@@ -6,7 +6,7 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Routing;
+namespace Odigos\Slim\Routing;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -14,15 +14,15 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Slim\Handlers\Strategies\RequestHandler;
-use Slim\Handlers\Strategies\RequestResponse;
-use Slim\Interfaces\AdvancedCallableResolverInterface;
-use Slim\Interfaces\CallableResolverInterface;
-use Slim\Interfaces\InvocationStrategyInterface;
-use Slim\Interfaces\RequestHandlerInvocationStrategyInterface;
-use Slim\Interfaces\RouteGroupInterface;
-use Slim\Interfaces\RouteInterface;
-use Slim\MiddlewareDispatcher;
+use Odigos\Slim\Handlers\Strategies\RequestHandler;
+use Odigos\Slim\Handlers\Strategies\RequestResponse;
+use Odigos\Slim\Interfaces\AdvancedCallableResolverInterface;
+use Odigos\Slim\Interfaces\CallableResolverInterface;
+use Odigos\Slim\Interfaces\InvocationStrategyInterface;
+use Odigos\Slim\Interfaces\RequestHandlerInvocationStrategyInterface;
+use Odigos\Slim\Interfaces\RouteGroupInterface;
+use Odigos\Slim\Interfaces\RouteInterface;
+use Odigos\Slim\MiddlewareDispatcher;
 use function array_key_exists;
 use function array_replace;
 use function array_reverse;

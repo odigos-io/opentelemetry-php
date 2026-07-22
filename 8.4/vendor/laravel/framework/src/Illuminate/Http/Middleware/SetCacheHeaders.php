@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Http\Middleware;
+namespace Odigos\Illuminate\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Odigos\Symfony\Component\HttpFoundation\StreamedResponse;
 class SetCacheHeaders
 {
     /**

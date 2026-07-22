@@ -4,13 +4,13 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Stage;
+namespace Odigos\MongoDB\Builder\Stage;
 
-use MongoDB\Builder\Expression\FieldPath;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Builder\Type\StageInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Expression\FieldPath;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\StageInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use function array_is_list;
 /**
  * Removes or excludes fields from documents.

@@ -5,16 +5,16 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters;
+namespace Odigos\yii\filters;
 
 use Odigos\Yii;
-use yii\base\ActionFilter;
-use yii\base\BootstrapInterface;
-use yii\base\Component;
-use yii\web\BadRequestHttpException;
-use yii\web\NotAcceptableHttpException;
-use yii\web\Request;
-use yii\web\Response;
+use Odigos\yii\base\ActionFilter;
+use Odigos\yii\base\BootstrapInterface;
+use Odigos\yii\base\Component;
+use Odigos\yii\web\BadRequestHttpException;
+use Odigos\yii\web\NotAcceptableHttpException;
+use Odigos\yii\web\Request;
+use Odigos\yii\web\Response;
 /**
  * ContentNegotiator supports response format negotiation and application language negotiation.
  *

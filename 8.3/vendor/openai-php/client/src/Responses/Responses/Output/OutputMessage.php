@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses\Output;
+namespace Odigos\OpenAI\Responses\Responses\Output;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type OutputTextType from OutputMessageContentOutputText
  * @phpstan-import-type ContentRefusalType from OutputMessageContentRefusal
@@ -35,9 +35,9 @@ final class OutputMessage implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        $content = array_map(fn(array $item): \OpenAI\Responses\Responses\Output\OutputMessageContentOutputText|\OpenAI\Responses\Responses\Output\OutputMessageContentRefusal => match ($item['type']) {
-            'output_text' => \OpenAI\Responses\Responses\Output\OutputMessageContentOutputText::from($item),
-            'refusal' => \OpenAI\Responses\Responses\Output\OutputMessageContentRefusal::from($item),
+        $content = array_map(fn(array $item): OutputMessageContentOutputText|OutputMessageContentRefusal => match ($item['type']) {
+            'output_text' => OutputMessageContentOutputText::from($item),
+            'refusal' => OutputMessageContentRefusal::from($item),
         }, $attributes['content']);
         return new self(content: $content, id: $attributes['id'], role: $attributes['role'], status: $attributes['status'], type: $attributes['type']);
     }
@@ -46,6 +46,6 @@ final class OutputMessage implements ResponseContract
      */
     public function toArray(): array
     {
-        return ['content' => array_map(fn(\OpenAI\Responses\Responses\Output\OutputMessageContentOutputText|\OpenAI\Responses\Responses\Output\OutputMessageContentRefusal $item): array => $item->toArray(), $this->content), 'id' => $this->id, 'role' => $this->role, 'status' => $this->status, 'type' => $this->type];
+        return ['content' => array_map(fn(OutputMessageContentOutputText|OutputMessageContentRefusal $item): array => $item->toArray(), $this->content), 'id' => $this->id, 'role' => $this->role, 'status' => $this->status, 'type' => $this->type];
     }
 }

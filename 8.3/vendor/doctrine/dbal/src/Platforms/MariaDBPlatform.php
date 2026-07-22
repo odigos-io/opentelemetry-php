@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms;
+namespace Odigos\Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
-use Doctrine\DBAL\Platforms\Keywords\MariaDBKeywords;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint;
-use Doctrine\DBAL\Schema\TableDiff;
-use Doctrine\DBAL\Types\JsonType;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\KeywordList;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\MariaDBKeywords;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Odigos\Doctrine\DBAL\Schema\TableDiff;
+use Odigos\Doctrine\DBAL\Types\JsonType;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use function array_diff_key;
 use function array_merge;
 use function count;
@@ -16,7 +16,7 @@ use function in_array;
 /**
  * Provides the behavior, features and SQL dialect of the MariaDB database platform of the oldest supported version.
  */
-class MariaDBPlatform extends \Doctrine\DBAL\Platforms\AbstractMySQLPlatform
+class MariaDBPlatform extends AbstractMySQLPlatform
 {
     /**
      * Generate SQL snippets to reverse the aliasing of JSON to LONGTEXT.

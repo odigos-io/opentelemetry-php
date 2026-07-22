@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Testing\Fakes\EventFake;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Support\Testing\Fakes\EventFake;
 /**
  * @method static void listen(\Illuminate\Events\QueuedClosure|callable|array|string $events, \Illuminate\Events\QueuedClosure|callable|array|string|null $listener = null)
  * @method static bool hasListeners(string $eventName)
@@ -40,7 +40,7 @@ use Illuminate\Support\Testing\Fakes\EventFake;
  * @see \Illuminate\Events\Dispatcher
  * @see \Illuminate\Support\Testing\Fakes\EventFake
  */
-class Event extends \Illuminate\Support\Facades\Facade
+class Event extends Facade
 {
     /**
      * Replace the bound instance with a fake.
@@ -54,7 +54,7 @@ class Event extends \Illuminate\Support\Facades\Facade
         return tap(new EventFake($actualDispatcher, $eventsToFake), function ($fake) {
             static::swap($fake);
             Model::setEventDispatcher($fake);
-            \Illuminate\Support\Facades\Cache::refreshEventDispatcher();
+            Cache::refreshEventDispatcher();
         });
     }
     /**
@@ -85,7 +85,7 @@ class Event extends \Illuminate\Support\Facades\Facade
         } finally {
             static::swap($originalDispatcher);
             Model::setEventDispatcher($originalDispatcher);
-            \Illuminate\Support\Facades\Cache::refreshEventDispatcher();
+            Cache::refreshEventDispatcher();
         }
     }
     /**
@@ -104,7 +104,7 @@ class Event extends \Illuminate\Support\Facades\Facade
         } finally {
             static::swap($originalDispatcher);
             Model::setEventDispatcher($originalDispatcher);
-            \Illuminate\Support\Facades\Cache::refreshEventDispatcher();
+            Cache::refreshEventDispatcher();
         }
     }
     /**

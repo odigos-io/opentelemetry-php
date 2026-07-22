@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Client\Exception;
+namespace Odigos\Http\Client\Exception;
 
 use Psr\Http\Client\RequestExceptionInterface as PsrRequestException;
 use Psr\Http\Message\RequestInterface;
@@ -12,9 +12,9 @@ use Psr\Http\Message\RequestInterface;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class RequestException extends \Http\Client\Exception\TransferException implements PsrRequestException
+class RequestException extends TransferException implements PsrRequestException
 {
-    use \Http\Client\Exception\RequestAwareTrait;
+    use RequestAwareTrait;
     /**
      * @param string $message
      */

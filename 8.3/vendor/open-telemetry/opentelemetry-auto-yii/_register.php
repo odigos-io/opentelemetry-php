@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\Yii\YiiInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Yii\YiiInstrumentation;
 use OpenTelemetry\SDK\Sdk;
 if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(YiiInstrumentation::NAME) === \true) {
     return;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Broadcasting;
+namespace Odigos\Illuminate\Broadcasting;
 
-class FakePendingBroadcast extends \Illuminate\Broadcasting\PendingBroadcast
+class FakePendingBroadcast extends PendingBroadcast
 {
     /**
      * Create a new pending broadcast instance.

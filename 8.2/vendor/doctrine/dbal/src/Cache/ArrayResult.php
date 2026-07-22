@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Cache;
+namespace Odigos\Doctrine\DBAL\Cache;
 
-use Doctrine\DBAL\Driver\FetchUtils;
-use Doctrine\DBAL\Driver\Result;
-use Doctrine\DBAL\Exception\InvalidColumnIndex;
+use Odigos\Doctrine\DBAL\Driver\FetchUtils;
+use Odigos\Doctrine\DBAL\Driver\Result;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnIndex;
 use function array_combine;
 use function array_keys;
 use function array_map;

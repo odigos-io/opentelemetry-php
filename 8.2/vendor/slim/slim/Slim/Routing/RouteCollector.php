@@ -6,19 +6,19 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Routing;
+namespace Odigos\Slim\Routing;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use RuntimeException;
-use Slim\Handlers\Strategies\RequestResponse;
-use Slim\Interfaces\CallableResolverInterface;
-use Slim\Interfaces\InvocationStrategyInterface;
-use Slim\Interfaces\RouteCollectorInterface;
-use Slim\Interfaces\RouteCollectorProxyInterface;
-use Slim\Interfaces\RouteGroupInterface;
-use Slim\Interfaces\RouteInterface;
-use Slim\Interfaces\RouteParserInterface;
+use Odigos\Slim\Handlers\Strategies\RequestResponse;
+use Odigos\Slim\Interfaces\CallableResolverInterface;
+use Odigos\Slim\Interfaces\InvocationStrategyInterface;
+use Odigos\Slim\Interfaces\RouteCollectorInterface;
+use Odigos\Slim\Interfaces\RouteCollectorProxyInterface;
+use Odigos\Slim\Interfaces\RouteGroupInterface;
+use Odigos\Slim\Interfaces\RouteInterface;
+use Odigos\Slim\Interfaces\RouteParserInterface;
 use function array_pop;
 use function dirname;
 use function file_exists;
@@ -76,7 +76,7 @@ class RouteCollector implements RouteCollectorInterface
         $this->callableResolver = $callableResolver;
         $this->container = $container;
         $this->defaultInvocationStrategy = $defaultInvocationStrategy ?? new RequestResponse();
-        $this->routeParser = $routeParser ?? new \Slim\Routing\RouteParser($this);
+        $this->routeParser = $routeParser ?? new RouteParser($this);
         if ($cacheFile) {
             $this->setCacheFile($cacheFile);
         }
@@ -196,7 +196,7 @@ class RouteCollector implements RouteCollectorInterface
     protected function createGroup(string $pattern, $callable): RouteGroupInterface
     {
         $routeCollectorProxy = $this->createProxy($pattern);
-        return new \Slim\Routing\RouteGroup($pattern, $callable, $this->callableResolver, $routeCollectorProxy);
+        return new RouteGroup($pattern, $callable, $this->callableResolver, $routeCollectorProxy);
     }
     /**
      * @return RouteCollectorProxyInterface<TContainerInterface>
@@ -204,7 +204,7 @@ class RouteCollector implements RouteCollectorInterface
     protected function createProxy(string $pattern): RouteCollectorProxyInterface
     {
         /** @var RouteCollectorProxy<TContainerInterface> */
-        return new \Slim\Routing\RouteCollectorProxy($this->responseFactory, $this->callableResolver, $this->container, $this, $pattern);
+        return new RouteCollectorProxy($this->responseFactory, $this->callableResolver, $this->container, $this, $pattern);
     }
     /**
      * {@inheritdoc}
@@ -226,6 +226,6 @@ class RouteCollector implements RouteCollectorInterface
      */
     protected function createRoute(array $methods, string $pattern, $callable): RouteInterface
     {
-        return new \Slim\Routing\Route($methods, $pattern, $callable, $this->responseFactory, $this->callableResolver, $this->container, $this->defaultInvocationStrategy, $this->routeGroups, $this->routeCounter);
+        return new Route($methods, $pattern, $callable, $this->responseFactory, $this->callableResolver, $this->container, $this->defaultInvocationStrategy, $this->routeGroups, $this->routeCounter);
     }
 }

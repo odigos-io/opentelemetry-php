@@ -8,28 +8,28 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Helper;
+namespace Odigos\Symfony\Component\Console\Helper;
 
-use Symfony\Component\Console\Cursor;
-use Symfony\Component\Console\Exception\MissingInputException;
-use Symfony\Component\Console\Exception\RuntimeException;
-use Symfony\Component\Console\Formatter\OutputFormatter;
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\StreamableInputInterface;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
-use Symfony\Component\Console\Output\ConsoleSectionOutput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Console\Terminal;
-use function Symfony\Component\String\s;
+use Odigos\Symfony\Component\Console\Cursor;
+use Odigos\Symfony\Component\Console\Exception\MissingInputException;
+use Odigos\Symfony\Component\Console\Exception\RuntimeException;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatter;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Input\StreamableInputInterface;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Odigos\Symfony\Component\Console\Output\ConsoleSectionOutput;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Question\ChoiceQuestion;
+use Odigos\Symfony\Component\Console\Question\Question;
+use Odigos\Symfony\Component\Console\Terminal;
+use function Odigos\Symfony\Component\String\s;
 /**
  * The QuestionHelper class provides helpers to interact with the user.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class QuestionHelper extends \Symfony\Component\Console\Helper\Helper
+class QuestionHelper extends Helper
 {
     private static bool $stty = \true;
     private static bool $stdinIsInteractive;
@@ -202,7 +202,7 @@ class QuestionHelper extends \Symfony\Component\Console\Helper\Helper
         $ofs = -1;
         $matches = $autocomplete($ret);
         $numMatches = \count($matches);
-        $inputHelper = new \Symfony\Component\Console\Helper\TerminalInputHelper($inputStream);
+        $inputHelper = new TerminalInputHelper($inputStream);
         // Disable icanon (so we can fread each keypress) and echo (we'll do echoing here instead)
         shell_exec('stty -icanon -echo');
         // Add highlighted text style
@@ -340,7 +340,7 @@ class QuestionHelper extends \Symfony\Component\Console\Helper\Helper
         }
         $inputHelper = null;
         if (self::$stty && Terminal::hasSttyAvailable()) {
-            $inputHelper = new \Symfony\Component\Console\Helper\TerminalInputHelper($inputStream);
+            $inputHelper = new TerminalInputHelper($inputStream);
             shell_exec('stty -echo');
         } elseif ($this->isInteractiveInput($inputStream)) {
             throw new RuntimeException('Unable to hide the response.');
@@ -482,10 +482,10 @@ class QuestionHelper extends \Symfony\Component\Console\Helper\Helper
     /**
      * @param resource $inputStream
      */
-    private function doReadInput($inputStream, ?string $exitChar = null, ?\Symfony\Component\Console\Helper\TerminalInputHelper $helper = null): string
+    private function doReadInput($inputStream, ?string $exitChar = null, ?TerminalInputHelper $helper = null): string
     {
         $ret = '';
-        $helper ??= new \Symfony\Component\Console\Helper\TerminalInputHelper($inputStream, \false);
+        $helper ??= new TerminalInputHelper($inputStream, \false);
         while (!feof($inputStream)) {
             $helper->waitForInput();
             $char = fread($inputStream, 1);

@@ -1,8 +1,8 @@
 <?php
 
 declare (strict_types=1);
-namespace Carbon\Doctrine;
+namespace Odigos\Carbon\Doctrine;
 
-class CarbonImmutableType extends \Carbon\Doctrine\DateTimeImmutableType implements \Carbon\Doctrine\CarbonDoctrineType
+class CarbonImmutableType extends DateTimeImmutableType implements CarbonDoctrineType
 {
 }

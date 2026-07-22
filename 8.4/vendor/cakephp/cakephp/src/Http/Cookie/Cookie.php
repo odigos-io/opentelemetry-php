@@ -13,9 +13,9 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Cookie;
+namespace Odigos\Cake\Http\Cookie;
 
-use Cake\Utility\Hash;
+use Odigos\Cake\Utility\Hash;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -48,7 +48,7 @@ use ValueError;
  * @see \Cake\Http\Cookie\CookieCollection for working with collections of cookies.
  * @see \Cake\Http\Response::getCookieCollection() for working with response cookies.
  */
-class Cookie implements \Cake\Http\Cookie\CookieInterface
+class Cookie implements CookieInterface
 {
     /**
      * Cookie name
@@ -103,7 +103,7 @@ class Cookie implements \Cake\Http\Cookie\CookieInterface
      *
      * @var \Cake\Http\Cookie\SameSiteEnum|null
      */
-    protected ?\Cake\Http\Cookie\SameSiteEnum $sameSite = null;
+    protected ?SameSiteEnum $sameSite = null;
     /**
      * Default attributes for a cookie.
      *
@@ -128,7 +128,7 @@ class Cookie implements \Cake\Http\Cookie\CookieInterface
      * @param bool|null $httpOnly HTTP Only
      * @param \Cake\Http\Cookie\SameSiteEnum|string|null $sameSite Samesite
      */
-    public function __construct(string $name, array|string|float|int|bool $value = '', ?DateTimeInterface $expiresAt = null, ?string $path = null, ?string $domain = null, ?bool $secure = null, ?bool $httpOnly = null, \Cake\Http\Cookie\SameSiteEnum|string|null $sameSite = null)
+    public function __construct(string $name, array|string|float|int|bool $value = '', ?DateTimeInterface $expiresAt = null, ?string $path = null, ?string $domain = null, ?bool $secure = null, ?bool $httpOnly = null, SameSiteEnum|string|null $sameSite = null)
     {
         $this->validateName($name);
         $this->name = $name;
@@ -262,7 +262,7 @@ class Cookie implements \Cake\Http\Cookie\CookieInterface
         $value = $data['value'];
         unset($data['name'], $data['value']);
         /** @phpstan-ignore return.type */
-        return \Cake\Http\Cookie\Cookie::create($name, $value, $data);
+        return Cookie::create($name, $value, $data);
     }
     /**
      * Returns a header value as string
@@ -517,14 +517,14 @@ class Cookie implements \Cake\Http\Cookie\CookieInterface
     /**
      * @inheritDoc
      */
-    public function getSameSite(): ?\Cake\Http\Cookie\SameSiteEnum
+    public function getSameSite(): ?SameSiteEnum
     {
         return $this->sameSite;
     }
     /**
      * @inheritDoc
      */
-    public function withSameSite(\Cake\Http\Cookie\SameSiteEnum|string|null $sameSite): static
+    public function withSameSite(SameSiteEnum|string|null $sameSite): static
     {
         $new = clone $this;
         $new->sameSite = static::resolveSameSiteEnum($sameSite);
@@ -536,12 +536,12 @@ class Cookie implements \Cake\Http\Cookie\CookieInterface
      * @param \Cake\Http\Cookie\SameSiteEnum|string|null $sameSite SameSite value
      * @return \Cake\Http\Cookie\SameSiteEnum|null
      */
-    protected static function resolveSameSiteEnum(\Cake\Http\Cookie\SameSiteEnum|string|null $sameSite): ?\Cake\Http\Cookie\SameSiteEnum
+    protected static function resolveSameSiteEnum(SameSiteEnum|string|null $sameSite): ?SameSiteEnum
     {
         return match (\true) {
             $sameSite === null => $sameSite,
-            $sameSite instanceof \Cake\Http\Cookie\SameSiteEnum => $sameSite,
-            default => \Cake\Http\Cookie\SameSiteEnum::from(ucfirst(strtolower($sameSite))),
+            $sameSite instanceof SameSiteEnum => $sameSite,
+            default => SameSiteEnum::from(ucfirst(strtolower($sameSite))),
         };
     }
     /**

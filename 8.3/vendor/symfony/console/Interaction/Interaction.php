@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Interaction;
+namespace Odigos\Symfony\Component\Console\Interaction;
 
-use Symfony\Component\Console\Attribute\InteractiveAttributeInterface;
-use Symfony\Component\Console\Attribute\MapInput;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Attribute\InteractiveAttributeInterface;
+use Odigos\Symfony\Component\Console\Attribute\MapInput;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @internal
  */

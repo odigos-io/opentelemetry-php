@@ -14,25 +14,25 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Cache;
+namespace Odigos\Cake\Cache;
 
-use Cake\Cache\Event\CacheAfterAddEvent;
-use Cake\Cache\Event\CacheBeforeAddEvent;
-use Cake\Cache\Exception\InvalidArgumentException;
-use Cake\Core\InstanceConfigTrait;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Cache\Event\CacheAfterAddEvent;
+use Odigos\Cake\Cache\Event\CacheBeforeAddEvent;
+use Odigos\Cake\Cache\Exception\InvalidArgumentException;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherTrait;
 use DateInterval;
 use DateTime;
 use Psr\SimpleCache\CacheInterface;
-use function Cake\Core\triggerWarning;
+use function Odigos\Cake\Core\triggerWarning;
 /**
  * Storage engine for CakePHP caching
  *
  * @template TSubject of \Cake\Cache\CacheEngine
  * @implements \Cake\Event\EventDispatcherInterface<TSubject>
  */
-abstract class CacheEngine implements CacheInterface, \Cake\Cache\CacheEngineInterface, EventDispatcherInterface
+abstract class CacheEngine implements CacheInterface, CacheEngineInterface, EventDispatcherInterface
 {
     /**
      * @use \Cake\Event\EventDispatcherTrait<TSubject>

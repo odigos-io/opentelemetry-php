@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 /**
  * WidgetEvent represents the event parameter used for a widget event.
@@ -15,7 +15,7 @@ namespace yii\base;
  * @author Petra Barus <petra.barus@gmail.com>
  * @since 2.0.11
  */
-class WidgetEvent extends \yii\base\Event
+class WidgetEvent extends Event
 {
     /**
      * @var mixed the widget result. Event handlers may modify this property to change the widget result.

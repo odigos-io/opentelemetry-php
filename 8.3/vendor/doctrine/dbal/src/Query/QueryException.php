@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Query;
+namespace Odigos\Doctrine\DBAL\Query;
 
-use Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Exception;
 class QueryException extends \Exception implements Exception
 {
 }

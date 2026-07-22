@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Exception;
+namespace Odigos\Doctrine\DBAL\Schema\Exception;
 
-use Doctrine\DBAL\Schema\SchemaException;
+use Odigos\Doctrine\DBAL\Schema\SchemaException;
 use LogicException;
 use function sprintf;
 final class ForeignKeyDoesNotExist extends LogicException implements SchemaException

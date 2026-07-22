@@ -7,10 +7,10 @@ namespace Odigos;
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-use yii\base\InvalidConfigException;
-use yii\db\Migration;
-use yii\db\Query;
-use yii\rbac\DbManager;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\db\Migration;
+use Odigos\yii\db\Query;
+use Odigos\yii\rbac\DbManager;
 /**
  * Fix MSSQL trigger.
  *

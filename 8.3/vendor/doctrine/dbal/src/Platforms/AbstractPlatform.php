@@ -1,46 +1,46 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms;
+namespace Odigos\Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Exception\InvalidArgumentException;
-use Doctrine\DBAL\Exception\InvalidColumnDeclaration;
-use Doctrine\DBAL\Exception\InvalidColumnType;
-use Doctrine\DBAL\Exception\InvalidColumnType\ColumnLengthRequired;
-use Doctrine\DBAL\Exception\InvalidColumnType\ColumnPrecisionRequired;
-use Doctrine\DBAL\Exception\InvalidColumnType\ColumnScaleRequired;
-use Doctrine\DBAL\Exception\InvalidColumnType\ColumnValuesRequired;
-use Doctrine\DBAL\LockMode;
-use Doctrine\DBAL\Platforms\Exception\NoColumnsSpecifiedForTable;
-use Doctrine\DBAL\Platforms\Exception\NotSupported;
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
-use Doctrine\DBAL\Schema\Column;
-use Doctrine\DBAL\Schema\DefaultExpression;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint;
-use Doctrine\DBAL\Schema\Identifier;
-use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\Schema\Metadata\MetadataProvider;
-use Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
-use Doctrine\DBAL\Schema\SchemaDiff;
-use Doctrine\DBAL\Schema\Sequence;
-use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Schema\TableDiff;
-use Doctrine\DBAL\Schema\UniqueConstraint;
-use Doctrine\DBAL\SQL\Builder\DefaultSelectSQLBuilder;
-use Doctrine\DBAL\SQL\Builder\DefaultUnionSQLBuilder;
-use Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
-use Doctrine\DBAL\SQL\Builder\UnionSQLBuilder;
-use Doctrine\DBAL\SQL\Builder\WithSQLBuilder;
-use Doctrine\DBAL\SQL\Parser;
-use Doctrine\DBAL\TransactionIsolationLevel;
-use Doctrine\DBAL\Types;
-use Doctrine\DBAL\Types\Exception\TypeNotFound;
-use Doctrine\DBAL\Types\Exception\TypesException;
-use Doctrine\DBAL\Types\Type;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Exception\InvalidArgumentException;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnDeclaration;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnType;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnType\ColumnLengthRequired;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnType\ColumnPrecisionRequired;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnType\ColumnScaleRequired;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnType\ColumnValuesRequired;
+use Odigos\Doctrine\DBAL\LockMode;
+use Odigos\Doctrine\DBAL\Platforms\Exception\NoColumnsSpecifiedForTable;
+use Odigos\Doctrine\DBAL\Platforms\Exception\NotSupported;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\KeywordList;
+use Odigos\Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Odigos\Doctrine\DBAL\Schema\Column;
+use Odigos\Doctrine\DBAL\Schema\DefaultExpression;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Odigos\Doctrine\DBAL\Schema\Identifier;
+use Odigos\Doctrine\DBAL\Schema\Index;
+use Odigos\Doctrine\DBAL\Schema\Metadata\MetadataProvider;
+use Odigos\Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
+use Odigos\Doctrine\DBAL\Schema\SchemaDiff;
+use Odigos\Doctrine\DBAL\Schema\Sequence;
+use Odigos\Doctrine\DBAL\Schema\Table;
+use Odigos\Doctrine\DBAL\Schema\TableDiff;
+use Odigos\Doctrine\DBAL\Schema\UniqueConstraint;
+use Odigos\Doctrine\DBAL\SQL\Builder\DefaultSelectSQLBuilder;
+use Odigos\Doctrine\DBAL\SQL\Builder\DefaultUnionSQLBuilder;
+use Odigos\Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
+use Odigos\Doctrine\DBAL\SQL\Builder\UnionSQLBuilder;
+use Odigos\Doctrine\DBAL\SQL\Builder\WithSQLBuilder;
+use Odigos\Doctrine\DBAL\SQL\Parser;
+use Odigos\Doctrine\DBAL\TransactionIsolationLevel;
+use Odigos\Doctrine\DBAL\Types;
+use Odigos\Doctrine\DBAL\Types\Exception\TypeNotFound;
+use Odigos\Doctrine\DBAL\Types\Exception\TypesException;
+use Odigos\Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use function addcslashes;
 use function array_map;
 use function array_merge;
@@ -402,19 +402,19 @@ abstract class AbstractPlatform
      * @param TrimMode    $mode The position of the trim.
      * @param string|null $char The char to trim, has to be quoted already. Defaults to space.
      */
-    public function getTrimExpression(string $str, \Doctrine\DBAL\Platforms\TrimMode $mode = \Doctrine\DBAL\Platforms\TrimMode::UNSPECIFIED, ?string $char = null): string
+    public function getTrimExpression(string $str, TrimMode $mode = TrimMode::UNSPECIFIED, ?string $char = null): string
     {
         $tokens = [];
         switch ($mode) {
-            case \Doctrine\DBAL\Platforms\TrimMode::UNSPECIFIED:
+            case TrimMode::UNSPECIFIED:
                 break;
-            case \Doctrine\DBAL\Platforms\TrimMode::LEADING:
+            case TrimMode::LEADING:
                 $tokens[] = 'LEADING';
                 break;
-            case \Doctrine\DBAL\Platforms\TrimMode::TRAILING:
+            case TrimMode::TRAILING:
                 $tokens[] = 'TRAILING';
                 break;
-            case \Doctrine\DBAL\Platforms\TrimMode::BOTH:
+            case TrimMode::BOTH:
                 $tokens[] = 'BOTH';
                 break;
         }
@@ -474,7 +474,7 @@ abstract class AbstractPlatform
      */
     public function getDateAddSecondsExpression(string $date, string $seconds): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '+', $seconds, \Doctrine\DBAL\Platforms\DateIntervalUnit::SECOND);
+        return $this->getDateArithmeticIntervalExpression($date, '+', $seconds, DateIntervalUnit::SECOND);
     }
     /**
      * Returns the SQL to subtract the number of given seconds from a date.
@@ -484,7 +484,7 @@ abstract class AbstractPlatform
      */
     public function getDateSubSecondsExpression(string $date, string $seconds): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '-', $seconds, \Doctrine\DBAL\Platforms\DateIntervalUnit::SECOND);
+        return $this->getDateArithmeticIntervalExpression($date, '-', $seconds, DateIntervalUnit::SECOND);
     }
     /**
      * Returns the SQL to add the number of given minutes to a date.
@@ -494,7 +494,7 @@ abstract class AbstractPlatform
      */
     public function getDateAddMinutesExpression(string $date, string $minutes): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '+', $minutes, \Doctrine\DBAL\Platforms\DateIntervalUnit::MINUTE);
+        return $this->getDateArithmeticIntervalExpression($date, '+', $minutes, DateIntervalUnit::MINUTE);
     }
     /**
      * Returns the SQL to subtract the number of given minutes from a date.
@@ -504,7 +504,7 @@ abstract class AbstractPlatform
      */
     public function getDateSubMinutesExpression(string $date, string $minutes): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '-', $minutes, \Doctrine\DBAL\Platforms\DateIntervalUnit::MINUTE);
+        return $this->getDateArithmeticIntervalExpression($date, '-', $minutes, DateIntervalUnit::MINUTE);
     }
     /**
      * Returns the SQL to add the number of given hours to a date.
@@ -514,7 +514,7 @@ abstract class AbstractPlatform
      */
     public function getDateAddHourExpression(string $date, string $hours): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '+', $hours, \Doctrine\DBAL\Platforms\DateIntervalUnit::HOUR);
+        return $this->getDateArithmeticIntervalExpression($date, '+', $hours, DateIntervalUnit::HOUR);
     }
     /**
      * Returns the SQL to subtract the number of given hours to a date.
@@ -524,7 +524,7 @@ abstract class AbstractPlatform
      */
     public function getDateSubHourExpression(string $date, string $hours): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '-', $hours, \Doctrine\DBAL\Platforms\DateIntervalUnit::HOUR);
+        return $this->getDateArithmeticIntervalExpression($date, '-', $hours, DateIntervalUnit::HOUR);
     }
     /**
      * Returns the SQL to add the number of given days to a date.
@@ -534,7 +534,7 @@ abstract class AbstractPlatform
      */
     public function getDateAddDaysExpression(string $date, string $days): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '+', $days, \Doctrine\DBAL\Platforms\DateIntervalUnit::DAY);
+        return $this->getDateArithmeticIntervalExpression($date, '+', $days, DateIntervalUnit::DAY);
     }
     /**
      * Returns the SQL to subtract the number of given days to a date.
@@ -544,7 +544,7 @@ abstract class AbstractPlatform
      */
     public function getDateSubDaysExpression(string $date, string $days): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '-', $days, \Doctrine\DBAL\Platforms\DateIntervalUnit::DAY);
+        return $this->getDateArithmeticIntervalExpression($date, '-', $days, DateIntervalUnit::DAY);
     }
     /**
      * Returns the SQL to add the number of given weeks to a date.
@@ -554,7 +554,7 @@ abstract class AbstractPlatform
      */
     public function getDateAddWeeksExpression(string $date, string $weeks): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '+', $weeks, \Doctrine\DBAL\Platforms\DateIntervalUnit::WEEK);
+        return $this->getDateArithmeticIntervalExpression($date, '+', $weeks, DateIntervalUnit::WEEK);
     }
     /**
      * Returns the SQL to subtract the number of given weeks from a date.
@@ -564,7 +564,7 @@ abstract class AbstractPlatform
      */
     public function getDateSubWeeksExpression(string $date, string $weeks): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '-', $weeks, \Doctrine\DBAL\Platforms\DateIntervalUnit::WEEK);
+        return $this->getDateArithmeticIntervalExpression($date, '-', $weeks, DateIntervalUnit::WEEK);
     }
     /**
      * Returns the SQL to add the number of given months to a date.
@@ -574,7 +574,7 @@ abstract class AbstractPlatform
      */
     public function getDateAddMonthExpression(string $date, string $months): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '+', $months, \Doctrine\DBAL\Platforms\DateIntervalUnit::MONTH);
+        return $this->getDateArithmeticIntervalExpression($date, '+', $months, DateIntervalUnit::MONTH);
     }
     /**
      * Returns the SQL to subtract the number of given months to a date.
@@ -584,7 +584,7 @@ abstract class AbstractPlatform
      */
     public function getDateSubMonthExpression(string $date, string $months): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '-', $months, \Doctrine\DBAL\Platforms\DateIntervalUnit::MONTH);
+        return $this->getDateArithmeticIntervalExpression($date, '-', $months, DateIntervalUnit::MONTH);
     }
     /**
      * Returns the SQL to add the number of given quarters to a date.
@@ -594,7 +594,7 @@ abstract class AbstractPlatform
      */
     public function getDateAddQuartersExpression(string $date, string $quarters): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '+', $quarters, \Doctrine\DBAL\Platforms\DateIntervalUnit::QUARTER);
+        return $this->getDateArithmeticIntervalExpression($date, '+', $quarters, DateIntervalUnit::QUARTER);
     }
     /**
      * Returns the SQL to subtract the number of given quarters from a date.
@@ -604,7 +604,7 @@ abstract class AbstractPlatform
      */
     public function getDateSubQuartersExpression(string $date, string $quarters): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '-', $quarters, \Doctrine\DBAL\Platforms\DateIntervalUnit::QUARTER);
+        return $this->getDateArithmeticIntervalExpression($date, '-', $quarters, DateIntervalUnit::QUARTER);
     }
     /**
      * Returns the SQL to add the number of given years to a date.
@@ -614,7 +614,7 @@ abstract class AbstractPlatform
      */
     public function getDateAddYearsExpression(string $date, string $years): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '+', $years, \Doctrine\DBAL\Platforms\DateIntervalUnit::YEAR);
+        return $this->getDateArithmeticIntervalExpression($date, '+', $years, DateIntervalUnit::YEAR);
     }
     /**
      * Returns the SQL to subtract the number of given years from a date.
@@ -624,7 +624,7 @@ abstract class AbstractPlatform
      */
     public function getDateSubYearsExpression(string $date, string $years): string
     {
-        return $this->getDateArithmeticIntervalExpression($date, '-', $years, \Doctrine\DBAL\Platforms\DateIntervalUnit::YEAR);
+        return $this->getDateArithmeticIntervalExpression($date, '-', $years, DateIntervalUnit::YEAR);
     }
     /**
      * Returns the SQL for a date arithmetic expression.
@@ -635,7 +635,7 @@ abstract class AbstractPlatform
      *                                   into the date.
      * @param DateIntervalUnit $unit     The unit of the interval that shall be calculated into the date.
      */
-    abstract protected function getDateArithmeticIntervalExpression(string $date, string $operator, string $interval, \Doctrine\DBAL\Platforms\DateIntervalUnit $unit): string;
+    abstract protected function getDateArithmeticIntervalExpression(string $date, string $operator, string $interval, DateIntervalUnit $unit): string;
     /**
      * Generates the SQL expression which represents the given date interval multiplied by a number
      *

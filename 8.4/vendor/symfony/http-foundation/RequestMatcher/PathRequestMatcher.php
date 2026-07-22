@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\RequestMatcher;
+namespace Odigos\Symfony\Component\HttpFoundation\RequestMatcher;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestMatcherInterface;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\RequestMatcherInterface;
 /**
  * Checks the Request URL path info matches a regular expression.
  *

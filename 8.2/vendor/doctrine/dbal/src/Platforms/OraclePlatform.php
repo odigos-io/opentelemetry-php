@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms;
+namespace Odigos\Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\InvalidColumnType\ColumnLengthRequired;
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
-use Doctrine\DBAL\Platforms\Keywords\OracleKeywords;
-use Doctrine\DBAL\Platforms\Oracle\OracleMetadataProvider;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint;
-use Doctrine\DBAL\Schema\Identifier;
-use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
-use Doctrine\DBAL\Schema\OracleSchemaManager;
-use Doctrine\DBAL\Schema\Sequence;
-use Doctrine\DBAL\Schema\TableDiff;
-use Doctrine\DBAL\TransactionIsolationLevel;
-use Doctrine\DBAL\Types\BinaryType;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnType\ColumnLengthRequired;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\KeywordList;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\OracleKeywords;
+use Odigos\Doctrine\DBAL\Platforms\Oracle\OracleMetadataProvider;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Odigos\Doctrine\DBAL\Schema\Identifier;
+use Odigos\Doctrine\DBAL\Schema\Index;
+use Odigos\Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
+use Odigos\Doctrine\DBAL\Schema\OracleSchemaManager;
+use Odigos\Doctrine\DBAL\Schema\Sequence;
+use Odigos\Doctrine\DBAL\Schema\TableDiff;
+use Odigos\Doctrine\DBAL\TransactionIsolationLevel;
+use Odigos\Doctrine\DBAL\Types\BinaryType;
+use Odigos\Doctrine\DBAL\Types\Types;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use InvalidArgumentException;
 use function array_merge;
 use function count;
@@ -32,7 +32,7 @@ use function substr;
 /**
  * OraclePlatform.
  */
-class OraclePlatform extends \Doctrine\DBAL\Platforms\AbstractPlatform
+class OraclePlatform extends AbstractPlatform
 {
     public function __construct()
     {
@@ -52,17 +52,17 @@ class OraclePlatform extends \Doctrine\DBAL\Platforms\AbstractPlatform
         }
         return sprintf('INSTR(%s, %s, %s)', $string, $substring, $start);
     }
-    protected function getDateArithmeticIntervalExpression(string $date, string $operator, string $interval, \Doctrine\DBAL\Platforms\DateIntervalUnit $unit): string
+    protected function getDateArithmeticIntervalExpression(string $date, string $operator, string $interval, DateIntervalUnit $unit): string
     {
         switch ($unit) {
-            case \Doctrine\DBAL\Platforms\DateIntervalUnit::MONTH:
-            case \Doctrine\DBAL\Platforms\DateIntervalUnit::QUARTER:
-            case \Doctrine\DBAL\Platforms\DateIntervalUnit::YEAR:
+            case DateIntervalUnit::MONTH:
+            case DateIntervalUnit::QUARTER:
+            case DateIntervalUnit::YEAR:
                 switch ($unit) {
-                    case \Doctrine\DBAL\Platforms\DateIntervalUnit::QUARTER:
+                    case DateIntervalUnit::QUARTER:
                         $interval = $this->multiplyInterval($interval, 3);
                         break;
-                    case \Doctrine\DBAL\Platforms\DateIntervalUnit::YEAR:
+                    case DateIntervalUnit::YEAR:
                         $interval = $this->multiplyInterval($interval, 12);
                         break;
                 }
@@ -70,16 +70,16 @@ class OraclePlatform extends \Doctrine\DBAL\Platforms\AbstractPlatform
             default:
                 $calculationClause = '';
                 switch ($unit) {
-                    case \Doctrine\DBAL\Platforms\DateIntervalUnit::SECOND:
+                    case DateIntervalUnit::SECOND:
                         $calculationClause = '/24/60/60';
                         break;
-                    case \Doctrine\DBAL\Platforms\DateIntervalUnit::MINUTE:
+                    case DateIntervalUnit::MINUTE:
                         $calculationClause = '/24/60';
                         break;
-                    case \Doctrine\DBAL\Platforms\DateIntervalUnit::HOUR:
+                    case DateIntervalUnit::HOUR:
                         $calculationClause = '/24';
                         break;
-                    case \Doctrine\DBAL\Platforms\DateIntervalUnit::WEEK:
+                    case DateIntervalUnit::WEEK:
                         $calculationClause = '*7';
                         break;
                 }

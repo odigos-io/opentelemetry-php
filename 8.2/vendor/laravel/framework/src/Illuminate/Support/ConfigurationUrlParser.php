@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use InvalidArgumentException;
 class ConfigurationUrlParser
@@ -31,7 +31,7 @@ class ConfigurationUrlParser
         if (is_string($config)) {
             $config = ['url' => $config];
         }
-        $url = \Illuminate\Support\Arr::pull($config, 'url');
+        $url = Arr::pull($config, 'url');
         if (!$url) {
             return $config;
         }

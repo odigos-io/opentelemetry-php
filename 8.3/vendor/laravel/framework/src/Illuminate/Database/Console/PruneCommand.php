@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Database\Console;
+namespace Odigos\Illuminate\Database\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Events\ModelPruningFinished;
-use Illuminate\Database\Events\ModelPruningStarting;
-use Illuminate\Database\Events\ModelsPruned;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Events\ModelPruningFinished;
+use Odigos\Illuminate\Database\Events\ModelPruningStarting;
+use Odigos\Illuminate\Database\Events\ModelsPruned;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
 use InvalidArgumentException;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Finder\Finder;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Finder\Finder;
 #[AsCommand(name: 'model:prune')]
 class PruneCommand extends Command
 {

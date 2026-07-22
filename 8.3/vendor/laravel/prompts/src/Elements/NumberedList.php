@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Prompts\Elements;
+namespace Odigos\Laravel\Prompts\Elements;
 
-class NumberedList implements \Laravel\Prompts\Elements\ElementContract
+class NumberedList implements ElementContract
 {
     /**
      * @param  array<int, string>  $items

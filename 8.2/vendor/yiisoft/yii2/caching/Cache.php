@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\helpers\StringHelper;
+use Odigos\yii\base\Component;
+use Odigos\yii\helpers\StringHelper;
 /**
  * Cache is the base class for cache classes supporting different cache storage implementations.
  *
@@ -50,7 +50,7 @@ use yii\helpers\StringHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-abstract class Cache extends Component implements \yii\caching\CacheInterface
+abstract class Cache extends Component implements CacheInterface
 {
     /**
      * @var string a string prefixed to every cache key so that it is unique globally in the whole cache storage.
@@ -131,7 +131,7 @@ abstract class Cache extends Component implements \yii\caching\CacheInterface
         } else {
             $value = call_user_func($this->serializer[1], $value);
         }
-        if (is_array($value) && !($value[1] instanceof \yii\caching\Dependency && $value[1]->isChanged($this))) {
+        if (is_array($value) && !($value[1] instanceof Dependency && $value[1]->isChanged($this))) {
             return $value[0];
         }
         return \false;
@@ -196,7 +196,7 @@ abstract class Cache extends Component implements \yii\caching\CacheInterface
                     $results[$key] = $values[$newKey];
                 } else {
                     $value = $this->serializer === null ? unserialize($values[$newKey]) : call_user_func($this->serializer[1], $values[$newKey]);
-                    if (is_array($value) && !($value[1] instanceof \yii\caching\Dependency && $value[1]->isChanged($this))) {
+                    if (is_array($value) && !($value[1] instanceof Dependency && $value[1]->isChanged($this))) {
                         $results[$key] = $value[0];
                     }
                 }

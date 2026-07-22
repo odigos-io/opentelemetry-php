@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\Psr15\Psr15Instrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Psr15\Psr15Instrumentation;
 use OpenTelemetry\SDK\Sdk;
 if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(Psr15Instrumentation::NAME) === \true) {
     return;

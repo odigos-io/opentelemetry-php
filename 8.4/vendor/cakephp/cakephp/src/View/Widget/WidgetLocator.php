@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Widget;
+namespace Odigos\Cake\View\Widget;
 
-use Cake\Core\App;
-use Cake\Core\Configure\Engine\PhpConfig;
-use Cake\View\StringTemplate;
-use Cake\View\View;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Configure\Engine\PhpConfig;
+use Odigos\Cake\View\StringTemplate;
+use Odigos\Cake\View\View;
 use InvalidArgumentException;
 use ReflectionClass;
 /**
@@ -114,7 +114,7 @@ class WidgetLocator
                 continue;
             }
             if (is_object($widget)) {
-                assert($widget instanceof \Cake\View\Widget\WidgetInterface, sprintf('Widget objects must implement `%s`. Got `%s` instance instead.', \Cake\View\Widget\WidgetInterface::class, get_debug_type($widget)));
+                assert($widget instanceof WidgetInterface, sprintf('Widget objects must implement `%s`. Got `%s` instance instead.', WidgetInterface::class, get_debug_type($widget)));
             }
             $this->_widgets[$key] = $widget;
         }
@@ -134,7 +134,7 @@ class WidgetLocator
      * @return \Cake\View\Widget\WidgetInterface WidgetInterface instance.
      * @throws \InvalidArgumentException when widget is undefined.
      */
-    public function get(string $name): \Cake\View\Widget\WidgetInterface
+    public function get(string $name): WidgetInterface
     {
         if (!isset($this->_widgets[$name])) {
             if (empty($this->_widgets['_default'])) {
@@ -142,7 +142,7 @@ class WidgetLocator
             }
             $name = '_default';
         }
-        if ($this->_widgets[$name] instanceof \Cake\View\Widget\WidgetInterface) {
+        if ($this->_widgets[$name] instanceof WidgetInterface) {
             return $this->_widgets[$name];
         }
         return $this->_widgets[$name] = $this->_resolveWidget($this->_widgets[$name]);
@@ -163,7 +163,7 @@ class WidgetLocator
      * @return \Cake\View\Widget\WidgetInterface Widget instance.
      * @throws \InvalidArgumentException
      */
-    protected function _resolveWidget(array|string $config): \Cake\View\Widget\WidgetInterface
+    protected function _resolveWidget(array|string $config): WidgetInterface
     {
         if (is_string($config)) {
             $config = [$config];

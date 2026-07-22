@@ -14,17 +14,17 @@ declare (strict_types=1);
  * @since         4.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Fixture;
+namespace Odigos\Cake\TestSuite\Fixture;
 
 /**
  * Fixture strategy that truncates all fixture tables at the end of test.
  */
-class TruncateStrategy implements \Cake\TestSuite\Fixture\FixtureStrategyInterface
+class TruncateStrategy implements FixtureStrategyInterface
 {
     /**
      * @var \Cake\TestSuite\Fixture\FixtureHelper
      */
-    protected \Cake\TestSuite\Fixture\FixtureHelper $helper;
+    protected FixtureHelper $helper;
     /**
      * @var array<\Cake\Datasource\FixtureInterface>
      */
@@ -34,7 +34,7 @@ class TruncateStrategy implements \Cake\TestSuite\Fixture\FixtureStrategyInterfa
      */
     public function __construct()
     {
-        $this->helper = new \Cake\TestSuite\Fixture\FixtureHelper();
+        $this->helper = new FixtureHelper();
     }
     /**
      * @inheritDoc

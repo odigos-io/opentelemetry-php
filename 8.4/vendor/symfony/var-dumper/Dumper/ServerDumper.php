@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Dumper;
+namespace Odigos\Symfony\Component\VarDumper\Dumper;
 
-use Symfony\Component\VarDumper\Cloner\Data;
-use Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
-use Symfony\Component\VarDumper\Server\Connection;
+use Odigos\Symfony\Component\VarDumper\Cloner\Data;
+use Odigos\Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
+use Odigos\Symfony\Component\VarDumper\Server\Connection;
 /**
  * ServerDumper forwards serialized Data clones to a server.
  *
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
  */
-class ServerDumper implements \Symfony\Component\VarDumper\Dumper\DataDumperInterface
+class ServerDumper implements DataDumperInterface
 {
     private Connection $connection;
     /**
@@ -26,7 +26,7 @@ class ServerDumper implements \Symfony\Component\VarDumper\Dumper\DataDumperInte
      * @param DataDumperInterface|null   $wrappedDumper    A wrapped instance used whenever we failed contacting the server
      * @param ContextProviderInterface[] $contextProviders Context providers indexed by context name
      */
-    public function __construct(string $host, private ?\Symfony\Component\VarDumper\Dumper\DataDumperInterface $wrappedDumper = null, array $contextProviders = [])
+    public function __construct(string $host, private ?DataDumperInterface $wrappedDumper = null, array $contextProviders = [])
     {
         $this->connection = new Connection($host, $contextProviders);
     }

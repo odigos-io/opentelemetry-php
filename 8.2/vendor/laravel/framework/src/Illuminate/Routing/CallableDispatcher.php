@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Container\Container;
-use Illuminate\Routing\Contracts\CallableDispatcher as CallableDispatcherContract;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Routing\Contracts\CallableDispatcher as CallableDispatcherContract;
 use ReflectionFunction;
 class CallableDispatcher implements CallableDispatcherContract
 {
-    use \Illuminate\Routing\ResolvesRouteDependencies;
+    use ResolvesRouteDependencies;
     /**
      * The container instance.
      *
@@ -30,7 +30,7 @@ class CallableDispatcher implements CallableDispatcherContract
      * @param  callable  $callable
      * @return mixed
      */
-    public function dispatch(\Illuminate\Routing\Route $route, $callable)
+    public function dispatch(Route $route, $callable)
     {
         return $callable(...array_values($this->resolveParameters($route, $callable)));
     }
@@ -41,7 +41,7 @@ class CallableDispatcher implements CallableDispatcherContract
      * @param  callable  $callable
      * @return array
      */
-    protected function resolveParameters(\Illuminate\Routing\Route $route, $callable)
+    protected function resolveParameters(Route $route, $callable)
     {
         return $this->resolveMethodDependencies($route->parametersWithoutNulls(), new ReflectionFunction($callable));
     }

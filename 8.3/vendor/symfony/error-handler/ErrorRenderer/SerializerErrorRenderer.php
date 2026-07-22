@@ -8,32 +8,32 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\ErrorHandler\ErrorRenderer;
+namespace Odigos\Symfony\Component\ErrorHandler\ErrorRenderer;
 
-use Symfony\Component\ErrorHandler\Exception\FlattenException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Serializer\Exception\NotEncodableValueException;
-use Symfony\Component\Serializer\SerializerInterface;
+use Odigos\Symfony\Component\ErrorHandler\Exception\FlattenException;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\RequestStack;
+use Odigos\Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Odigos\Symfony\Component\Serializer\SerializerInterface;
 /**
  * Formats an exception using Serializer for rendering.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class SerializerErrorRenderer implements \Symfony\Component\ErrorHandler\ErrorRenderer\ErrorRendererInterface
+class SerializerErrorRenderer implements ErrorRendererInterface
 {
     private string|\Closure $format;
-    private \Symfony\Component\ErrorHandler\ErrorRenderer\ErrorRendererInterface $fallbackErrorRenderer;
+    private ErrorRendererInterface $fallbackErrorRenderer;
     private bool|\Closure $debug;
     /**
      * @param string|callable(FlattenException): string $format The format as a string or a callable that should return it
      *                                                          formats not supported by Request::getMimeTypes() should be given as mime types
      * @param bool|callable                             $debug  The debugging mode as a boolean or a callable that should return it
      */
-    public function __construct(private SerializerInterface $serializer, string|callable $format, ?\Symfony\Component\ErrorHandler\ErrorRenderer\ErrorRendererInterface $fallbackErrorRenderer = null, bool|callable $debug = \false)
+    public function __construct(private SerializerInterface $serializer, string|callable $format, ?ErrorRendererInterface $fallbackErrorRenderer = null, bool|callable $debug = \false)
     {
         $this->format = \is_string($format) ? $format : $format(...);
-        $this->fallbackErrorRenderer = $fallbackErrorRenderer ?? new \Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer();
+        $this->fallbackErrorRenderer = $fallbackErrorRenderer ?? new HtmlErrorRenderer();
         $this->debug = \is_bool($debug) ? $debug : $debug(...);
     }
     public function render(\Throwable $exception): FlattenException

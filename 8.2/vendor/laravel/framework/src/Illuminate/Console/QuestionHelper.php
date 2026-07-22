@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Console;
+namespace Odigos\Illuminate\Console;
 
-use Illuminate\Console\View\Components\TwoColumnDetail;
-use Illuminate\Support\Stringable;
-use Symfony\Component\Console\Formatter\OutputFormatter;
-use Symfony\Component\Console\Helper\SymfonyQuestionHelper;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Console\Question\Question;
+use Odigos\Illuminate\Console\View\Components\TwoColumnDetail;
+use Odigos\Illuminate\Support\Stringable;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatter;
+use Odigos\Symfony\Component\Console\Helper\SymfonyQuestionHelper;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Question\ChoiceQuestion;
+use Odigos\Symfony\Component\Console\Question\ConfirmationQuestion;
+use Odigos\Symfony\Component\Console\Question\Question;
 class QuestionHelper extends SymfonyQuestionHelper
 {
     /**

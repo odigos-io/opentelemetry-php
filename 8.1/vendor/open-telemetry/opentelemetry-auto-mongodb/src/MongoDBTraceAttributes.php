@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\MongoDB;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\MongoDB;
 
 /**
  * @todo These attributes are not part of the specification and should be removed before this package goes stable,

@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Testing\Fluent\Concerns;
+namespace Odigos\Illuminate\Testing\Fluent\Concerns;
 
 use Closure;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Support\Collection;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 trait Matching
 {
     /**

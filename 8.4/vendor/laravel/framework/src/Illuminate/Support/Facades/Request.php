@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static \Illuminate\Http\Request capture()
@@ -196,7 +196,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Http\Request
  */
-class Request extends \Illuminate\Support\Facades\Facade
+class Request extends Facade
 {
     /**
      * Get the registered name of the component.

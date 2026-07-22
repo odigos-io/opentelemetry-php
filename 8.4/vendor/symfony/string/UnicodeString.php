@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\String;
+namespace Odigos\Symfony\Component\String;
 
-use Symfony\Component\String\Exception\ExceptionInterface;
-use Symfony\Component\String\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\String\Exception\ExceptionInterface;
+use Odigos\Symfony\Component\String\Exception\InvalidArgumentException;
 /**
  * Represents a string of Unicode grapheme clusters encoded as UTF-8.
  *
@@ -28,7 +28,7 @@ use Symfony\Component\String\Exception\InvalidArgumentException;
  *
  * @throws ExceptionInterface
  */
-class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
+class UnicodeString extends AbstractUnicodeString
 {
     public function __construct(string $string = '')
     {
@@ -75,9 +75,9 @@ class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
         }
         return $chunks;
     }
-    public function endsWith(string|iterable|\Symfony\Component\String\AbstractString $suffix): bool
+    public function endsWith(string|iterable|AbstractString $suffix): bool
     {
-        if ($suffix instanceof \Symfony\Component\String\AbstractString) {
+        if ($suffix instanceof AbstractString) {
             $suffix = $suffix->string;
         } elseif (!\is_string($suffix)) {
             return parent::endsWith($suffix);
@@ -95,9 +95,9 @@ class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
         }
         return $suffix === $grapheme;
     }
-    public function equalsTo(string|iterable|\Symfony\Component\String\AbstractString $string): bool
+    public function equalsTo(string|iterable|AbstractString $string): bool
     {
-        if ($string instanceof \Symfony\Component\String\AbstractString) {
+        if ($string instanceof AbstractString) {
             $string = $string->string;
         } elseif (!\is_string($string)) {
             return parent::equalsTo($string);
@@ -109,9 +109,9 @@ class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
         }
         return $string === $this->string;
     }
-    public function indexOf(string|iterable|\Symfony\Component\String\AbstractString $needle, int $offset = 0): ?int
+    public function indexOf(string|iterable|AbstractString $needle, int $offset = 0): ?int
     {
-        if ($needle instanceof \Symfony\Component\String\AbstractString) {
+        if ($needle instanceof AbstractString) {
             $needle = $needle->string;
         } elseif (!\is_string($needle)) {
             return parent::indexOf($needle, $offset);
@@ -128,9 +128,9 @@ class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
         }
         return \false === $i ? null : $i;
     }
-    public function indexOfLast(string|iterable|\Symfony\Component\String\AbstractString $needle, int $offset = 0): ?int
+    public function indexOfLast(string|iterable|AbstractString $needle, int $offset = 0): ?int
     {
-        if ($needle instanceof \Symfony\Component\String\AbstractString) {
+        if ($needle instanceof AbstractString) {
             $needle = $needle->string;
         } elseif (!\is_string($needle)) {
             return parent::indexOfLast($needle, $offset);
@@ -270,9 +270,9 @@ class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
         $chunks[] = clone $str;
         return $chunks;
     }
-    public function startsWith(string|iterable|\Symfony\Component\String\AbstractString $prefix): bool
+    public function startsWith(string|iterable|AbstractString $prefix): bool
     {
-        if ($prefix instanceof \Symfony\Component\String\AbstractString) {
+        if ($prefix instanceof AbstractString) {
             $prefix = $prefix->string;
         } elseif (!\is_string($prefix)) {
             return parent::startsWith($prefix);
@@ -295,7 +295,7 @@ class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
         if (\is_array($prefix) || $prefix instanceof \Traversable) {
             return parent::trimPrefix($prefix);
         }
-        if ($prefix instanceof \Symfony\Component\String\AbstractString) {
+        if ($prefix instanceof AbstractString) {
             $prefix = $prefix->string;
         } else {
             $prefix = (string) $prefix;
@@ -310,7 +310,7 @@ class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
         if (\is_array($suffix) || $suffix instanceof \Traversable) {
             return parent::trimSuffix($suffix);
         }
-        if ($suffix instanceof \Symfony\Component\String\AbstractString) {
+        if ($suffix instanceof AbstractString) {
             $suffix = $suffix->string;
         } else {
             $suffix = (string) $suffix;

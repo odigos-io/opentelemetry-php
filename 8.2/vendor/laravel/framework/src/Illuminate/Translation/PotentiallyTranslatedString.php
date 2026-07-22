@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Translation;
+namespace Odigos\Illuminate\Translation;
 
 use Stringable;
 class PotentiallyTranslatedString implements Stringable

@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\ThreadsRunsContract;
-use OpenAI\Contracts\Resources\ThreadsRunsStepsContract;
-use OpenAI\Responses\StreamResponse;
-use OpenAI\Responses\Threads\Runs\ThreadRunListResponse;
-use OpenAI\Responses\Threads\Runs\ThreadRunResponse;
-use OpenAI\Responses\Threads\Runs\ThreadRunStreamResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\ThreadsRunsContract;
+use Odigos\OpenAI\Contracts\Resources\ThreadsRunsStepsContract;
+use Odigos\OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\ThreadRunListResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\ThreadRunResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\ThreadRunStreamResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 final class ThreadsRuns implements ThreadsRunsContract
 {
-    use \OpenAI\Resources\Concerns\Streamable;
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Streamable;
+    use Concerns\Transportable;
     /**
      * Create a run.
      *
@@ -133,6 +133,6 @@ final class ThreadsRuns implements ThreadsRunsContract
      */
     public function steps(): ThreadsRunsStepsContract
     {
-        return new \OpenAI\Resources\ThreadsRunsSteps($this->transporter);
+        return new ThreadsRunsSteps($this->transporter);
     }
 }

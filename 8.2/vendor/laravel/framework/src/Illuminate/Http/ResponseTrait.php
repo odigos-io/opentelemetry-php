@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http;
+namespace Odigos\Illuminate\Http;
 
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Symfony\Component\HttpFoundation\HeaderBag;
+use Odigos\Illuminate\Http\Exceptions\HttpResponseException;
+use Odigos\Symfony\Component\HttpFoundation\HeaderBag;
 use Throwable;
 trait ResponseTrait
 {

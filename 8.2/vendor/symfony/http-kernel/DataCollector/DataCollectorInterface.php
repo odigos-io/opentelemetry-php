@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\DataCollector;
+namespace Odigos\Symfony\Component\HttpKernel\DataCollector;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Service\ResetInterface;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Contracts\Service\ResetInterface;
 /**
  * DataCollectorInterface.
  *

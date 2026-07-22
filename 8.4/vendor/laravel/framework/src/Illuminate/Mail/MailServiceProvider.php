@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Mail;
+namespace Odigos\Illuminate\Mail;
 
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Support\DeferrableProvider;
+use Odigos\Illuminate\Support\ServiceProvider;
 class MailServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
@@ -24,7 +24,7 @@ class MailServiceProvider extends ServiceProvider implements DeferrableProvider
     protected function registerIlluminateMailer()
     {
         $this->app->singleton('mail.manager', function ($app) {
-            return new \Illuminate\Mail\MailManager($app);
+            return new MailManager($app);
         });
         $this->app->bind('mailer', function ($app) {
             return $app->make('mail.manager')->mailer();
@@ -40,9 +40,9 @@ class MailServiceProvider extends ServiceProvider implements DeferrableProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([__DIR__ . '/resources/views' => $this->app->resourcePath('views/vendor/mail')], 'laravel-mail');
         }
-        $this->app->singleton(\Illuminate\Mail\Markdown::class, function ($app) {
+        $this->app->singleton(Markdown::class, function ($app) {
             $config = $app->make('config');
-            return new \Illuminate\Mail\Markdown($app->make('view'), ['theme' => $config->get('mail.markdown.theme', 'default'), 'paths' => $config->get('mail.markdown.paths', []), 'extensions' => $config->get('mail.markdown.extensions', [])]);
+            return new Markdown($app->make('view'), ['theme' => $config->get('mail.markdown.theme', 'default'), 'paths' => $config->get('mail.markdown.paths', []), 'extensions' => $config->get('mail.markdown.extensions', [])]);
         });
     }
     /**
@@ -52,6 +52,6 @@ class MailServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     public function provides()
     {
-        return ['mail.manager', 'mailer', \Illuminate\Mail\Markdown::class];
+        return ['mail.manager', 'mailer', Markdown::class];
     }
 }

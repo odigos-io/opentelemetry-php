@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
 use Odigos\Yii;
-use yii\helpers\Json;
-use yii\helpers\StringHelper;
-use yii\web\JsExpression;
+use Odigos\yii\helpers\Json;
+use Odigos\yii\helpers\StringHelper;
+use Odigos\yii\web\JsExpression;
 /**
  * NumberValidator validates that the attribute value is a number.
  *
@@ -21,7 +21,7 @@ use yii\web\JsExpression;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class NumberValidator extends \yii\validators\Validator
+class NumberValidator extends Validator
 {
     /**
      * @var bool whether to allow array type attribute. Defaults to false.
@@ -139,7 +139,7 @@ class NumberValidator extends \yii\validators\Validator
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
-        \yii\validators\ValidationAsset::register($view);
+        ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
         return 'yii.validation.number(value, messages, ' . Json::htmlEncode($options) . ');';
     }

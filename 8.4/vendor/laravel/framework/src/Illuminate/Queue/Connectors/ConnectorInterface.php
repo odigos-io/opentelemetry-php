@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Queue\Connectors;
+namespace Odigos\Illuminate\Queue\Connectors;
 
 interface ConnectorInterface
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Queue\Console;
+namespace Odigos\Illuminate\Queue\Console;
 
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'queue:flush')]
 class FlushFailedCommand extends Command
 {

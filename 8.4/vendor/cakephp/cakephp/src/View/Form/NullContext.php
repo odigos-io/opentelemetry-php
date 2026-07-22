@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Form;
+namespace Odigos\Cake\View\Form;
 
 /**
  * Provides a context provider that does nothing.
@@ -22,7 +22,7 @@ namespace Cake\View\Form;
  * This context provider simply fulfils the interface requirements
  * that FormHelper has.
  */
-class NullContext implements \Cake\View\Form\ContextInterface
+class NullContext implements ContextInterface
 {
     /**
      * Constructor.

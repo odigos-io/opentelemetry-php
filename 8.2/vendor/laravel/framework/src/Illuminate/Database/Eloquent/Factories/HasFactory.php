@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Factories;
+namespace Odigos\Illuminate\Database\Eloquent\Factories;
 
-use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Odigos\Illuminate\Database\Eloquent\Attributes\UseFactory;
 /**
  * @template TFactory of \Illuminate\Database\Eloquent\Factories\Factory
  */
@@ -17,7 +17,7 @@ trait HasFactory
      */
     public static function factory($count = null, $state = [])
     {
-        $factory = static::newFactory() ?? \Illuminate\Database\Eloquent\Factories\Factory::factoryForModel(static::class);
+        $factory = static::newFactory() ?? Factory::factoryForModel(static::class);
         return $factory->count(is_numeric($count) ? $count : null)->state(is_callable($count) || is_array($count) ? $count : $state);
     }
     /**

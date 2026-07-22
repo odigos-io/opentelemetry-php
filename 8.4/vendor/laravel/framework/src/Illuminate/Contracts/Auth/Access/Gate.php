@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Auth\Access;
+namespace Odigos\Illuminate\Contracts\Auth\Access;
 
 interface Gate
 {

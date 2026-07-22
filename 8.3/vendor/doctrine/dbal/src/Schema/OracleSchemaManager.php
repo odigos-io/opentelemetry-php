@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Exception\DatabaseObjectNotFoundException;
-use Doctrine\DBAL\Platforms\OraclePlatform;
-use Doctrine\DBAL\Result;
-use Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Exception\DatabaseObjectNotFoundException;
+use Odigos\Doctrine\DBAL\Platforms\OraclePlatform;
+use Odigos\Doctrine\DBAL\Result;
+use Odigos\Doctrine\DBAL\Types\Type;
 use function array_change_key_case;
 use function array_key_exists;
 use function assert;
@@ -27,15 +27,15 @@ use const CASE_LOWER;
  *
  * @extends AbstractSchemaManager<OraclePlatform>
  */
-class OracleSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
+class OracleSchemaManager extends AbstractSchemaManager
 {
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableViewDefinition(array $view): \Doctrine\DBAL\Schema\View
+    protected function _getPortableViewDefinition(array $view): View
     {
         $view = array_change_key_case($view, CASE_LOWER);
-        return new \Doctrine\DBAL\Schema\View($this->getQuotedIdentifierName($view['view_name']), $view['text']);
+        return new View($this->getQuotedIdentifierName($view['view_name']), $view['text']);
     }
     /**
      * @deprecated Use the schema name and the unqualified table name separately instead.
@@ -74,7 +74,7 @@ class OracleSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableColumnDefinition(array $tableColumn): \Doctrine\DBAL\Schema\Column
+    protected function _getPortableTableColumnDefinition(array $tableColumn): Column
     {
         $tableColumn = array_change_key_case($tableColumn, CASE_LOWER);
         $dbType = strtolower($tableColumn['data_type']);
@@ -145,7 +145,7 @@ class OracleSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
         if ($tableColumn['comments'] !== null) {
             $options['comment'] = $tableColumn['comments'];
         }
-        return new \Doctrine\DBAL\Schema\Column($this->getQuotedIdentifierName($tableColumn['column_name']), Type::getType($type), $options);
+        return new Column($this->getQuotedIdentifierName($tableColumn['column_name']), Type::getType($type), $options);
     }
     /**
      * {@inheritDoc}
@@ -171,17 +171,17 @@ class OracleSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): \Doctrine\DBAL\Schema\ForeignKeyConstraint
+    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): ForeignKeyConstraint
     {
-        return new \Doctrine\DBAL\Schema\ForeignKeyConstraint($tableForeignKey['local'], $this->getQuotedIdentifierName($tableForeignKey['foreignTable']), $tableForeignKey['foreign'], $this->getQuotedIdentifierName($tableForeignKey['name']), ['onDelete' => $tableForeignKey['onDelete'], 'deferrable' => $tableForeignKey['deferrable'], 'deferred' => $tableForeignKey['deferred']]);
+        return new ForeignKeyConstraint($tableForeignKey['local'], $this->getQuotedIdentifierName($tableForeignKey['foreignTable']), $tableForeignKey['foreign'], $this->getQuotedIdentifierName($tableForeignKey['name']), ['onDelete' => $tableForeignKey['onDelete'], 'deferrable' => $tableForeignKey['deferrable'], 'deferred' => $tableForeignKey['deferred']]);
     }
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableSequenceDefinition(array $sequence): \Doctrine\DBAL\Schema\Sequence
+    protected function _getPortableSequenceDefinition(array $sequence): Sequence
     {
         $sequence = array_change_key_case($sequence, CASE_LOWER);
-        return new \Doctrine\DBAL\Schema\Sequence($this->getQuotedIdentifierName($sequence['sequence_name']), (int) $sequence['increment_by'], (int) $sequence['min_value']);
+        return new Sequence($this->getQuotedIdentifierName($sequence['sequence_name']), (int) $sequence['increment_by'], (int) $sequence['min_value']);
     }
     /**
      * {@inheritDoc}
@@ -372,7 +372,7 @@ SQL
     /** @deprecated Use {@see Identifier::toNormalizedValue()} instead. */
     protected function normalizeName(string $name): string
     {
-        $identifier = new \Doctrine\DBAL\Schema\Identifier($name);
+        $identifier = new Identifier($name);
         return $identifier->isQuoted() ? $identifier->getName() : strtoupper($name);
     }
 }

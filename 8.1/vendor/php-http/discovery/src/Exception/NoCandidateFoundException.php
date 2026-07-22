@@ -1,8 +1,8 @@
 <?php
 
-namespace Http\Discovery\Exception;
+namespace Odigos\Http\Discovery\Exception;
 
-use Http\Discovery\Exception;
+use Odigos\Http\Discovery\Exception;
 /**
  * When we have used a strategy but no candidates provided by that strategy could be used.
  *

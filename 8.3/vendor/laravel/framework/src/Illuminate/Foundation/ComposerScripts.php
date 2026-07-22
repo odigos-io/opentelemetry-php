@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Foundation;
+namespace Odigos\Illuminate\Foundation;
 
 use Composer\Installer\PackageEvent;
 use Composer\IO\IOInterface;
 use Composer\Script\Event;
-use Illuminate\Concurrency\ProcessDriver;
-use Illuminate\Encryption\EncryptionServiceProvider;
-use Illuminate\Foundation\Bootstrap\LoadConfiguration;
-use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Odigos\Illuminate\Concurrency\ProcessDriver;
+use Odigos\Illuminate\Encryption\EncryptionServiceProvider;
+use Odigos\Illuminate\Foundation\Bootstrap\LoadConfiguration;
+use Odigos\Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Throwable;
 class ComposerScripts
 {
@@ -60,7 +60,7 @@ class ComposerScripts
         $eventName = null;
         try {
             require_once $event->getComposer()->getConfig()->get('vendor-dir') . '/autoload.php';
-            $laravel = new \Illuminate\Foundation\Application(getcwd());
+            $laravel = new Application(getcwd());
             $laravel->bootstrapWith([LoadEnvironmentVariables::class, LoadConfiguration::class]);
             // Ensure we can encrypt our serializable closure...
             (new EncryptionServiceProvider($laravel))->register();
@@ -81,7 +81,7 @@ class ComposerScripts
      */
     protected static function clearCompiled()
     {
-        $laravel = new \Illuminate\Foundation\Application(getcwd());
+        $laravel = new Application(getcwd());
         if (is_file($configPath = $laravel->getCachedConfigPath())) {
             @unlink($configPath);
         }

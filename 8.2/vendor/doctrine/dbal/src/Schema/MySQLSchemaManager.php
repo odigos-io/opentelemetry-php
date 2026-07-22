@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
-use Doctrine\DBAL\Platforms\MariaDBPlatform;
-use Doctrine\DBAL\Platforms\MySQL;
-use Doctrine\DBAL\Platforms\MySQL\CharsetMetadataProvider\CachingCharsetMetadataProvider;
-use Doctrine\DBAL\Platforms\MySQL\CharsetMetadataProvider\ConnectionCharsetMetadataProvider;
-use Doctrine\DBAL\Platforms\MySQL\CollationMetadataProvider\CachingCollationMetadataProvider;
-use Doctrine\DBAL\Platforms\MySQL\CollationMetadataProvider\ConnectionCollationMetadataProvider;
-use Doctrine\DBAL\Platforms\MySQL\DefaultTableOptions;
-use Doctrine\DBAL\Result;
-use Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
+use Odigos\Doctrine\DBAL\Platforms\MariaDBPlatform;
+use Odigos\Doctrine\DBAL\Platforms\MySQL;
+use Odigos\Doctrine\DBAL\Platforms\MySQL\CharsetMetadataProvider\CachingCharsetMetadataProvider;
+use Odigos\Doctrine\DBAL\Platforms\MySQL\CharsetMetadataProvider\ConnectionCharsetMetadataProvider;
+use Odigos\Doctrine\DBAL\Platforms\MySQL\CollationMetadataProvider\CachingCollationMetadataProvider;
+use Odigos\Doctrine\DBAL\Platforms\MySQL\CollationMetadataProvider\ConnectionCollationMetadataProvider;
+use Odigos\Doctrine\DBAL\Platforms\MySQL\DefaultTableOptions;
+use Odigos\Doctrine\DBAL\Result;
+use Odigos\Doctrine\DBAL\Types\Type;
 use function array_change_key_case;
 use function array_map;
 use function assert;
@@ -32,7 +32,7 @@ use const CASE_LOWER;
  *
  * @extends AbstractSchemaManager<AbstractMySQLPlatform>
  */
-class MySQLSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
+class MySQLSchemaManager extends AbstractSchemaManager
 {
     /** @see https://mariadb.com/kb/en/library/string-literals/#escape-sequences */
     private const MARIADB_ESCAPE_SEQUENCES = [
@@ -63,9 +63,9 @@ class MySQLSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableViewDefinition(array $view): \Doctrine\DBAL\Schema\View
+    protected function _getPortableViewDefinition(array $view): View
     {
-        return new \Doctrine\DBAL\Schema\View($view['TABLE_NAME'], $view['VIEW_DEFINITION']);
+        return new View($view['TABLE_NAME'], $view['VIEW_DEFINITION']);
     }
     /**
      * {@inheritDoc}
@@ -98,7 +98,7 @@ class MySQLSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableColumnDefinition(array $tableColumn): \Doctrine\DBAL\Schema\Column
+    protected function _getPortableTableColumnDefinition(array $tableColumn): Column
     {
         $tableColumn = array_change_key_case($tableColumn, CASE_LOWER);
         $dbType = $tableColumn['type'];
@@ -164,7 +164,7 @@ class MySQLSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
         if ($tableColumn['comment'] !== null) {
             $options['comment'] = $tableColumn['comment'];
         }
-        $column = new \Doctrine\DBAL\Schema\Column($tableColumn['field'], Type::getType($type), $options);
+        $column = new Column($tableColumn['field'], Type::getType($type), $options);
         $column->setPlatformOption('charset', $tableColumn['characterset']);
         $column->setPlatformOption('collation', $tableColumn['collation']);
         return $column;
@@ -232,14 +232,14 @@ class MySQLSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): \Doctrine\DBAL\Schema\ForeignKeyConstraint
+    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): ForeignKeyConstraint
     {
-        return new \Doctrine\DBAL\Schema\ForeignKeyConstraint($tableForeignKey['local'], $tableForeignKey['foreignTable'], $tableForeignKey['foreign'], $tableForeignKey['name'], ['onDelete' => $tableForeignKey['onDelete'], 'onUpdate' => $tableForeignKey['onUpdate']]);
+        return new ForeignKeyConstraint($tableForeignKey['local'], $tableForeignKey['foreignTable'], $tableForeignKey['foreign'], $tableForeignKey['name'], ['onDelete' => $tableForeignKey['onDelete'], 'onUpdate' => $tableForeignKey['onUpdate']]);
     }
     /** @throws Exception */
-    public function createComparator(): \Doctrine\DBAL\Schema\Comparator
+    public function createComparator(): Comparator
     {
-        return new MySQL\Comparator($this->platform, new CachingCharsetMetadataProvider(new ConnectionCharsetMetadataProvider($this->connection)), new CachingCollationMetadataProvider(new ConnectionCollationMetadataProvider($this->connection)), $this->getDefaultTableOptions(), func_num_args() > 0 ? func_get_arg(0) : new \Doctrine\DBAL\Schema\ComparatorConfig());
+        return new MySQL\Comparator($this->platform, new CachingCharsetMetadataProvider(new ConnectionCharsetMetadataProvider($this->connection)), new CachingCollationMetadataProvider(new ConnectionCollationMetadataProvider($this->connection)), $this->getDefaultTableOptions(), func_num_args() > 0 ? func_get_arg(0) : new ComparatorConfig());
     }
     protected function selectTableNames(string $databaseName): Result
     {

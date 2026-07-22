@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Mail;
+namespace Odigos\Illuminate\Mail;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Mail\Factory as MailFactory;
-use Illuminate\Contracts\Mail\Mailable as MailableContract;
-use Illuminate\Contracts\Queue\ShouldBeEncrypted;
-use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
-use Illuminate\Queue\InteractsWithQueue;
+use Odigos\Illuminate\Bus\Queueable;
+use Odigos\Illuminate\Contracts\Mail\Factory as MailFactory;
+use Odigos\Illuminate\Contracts\Mail\Mailable as MailableContract;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
+use Odigos\Illuminate\Queue\InteractsWithQueue;
 class SendQueuedMailable
 {
     use Queueable, InteractsWithQueue;

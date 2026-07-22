@@ -14,14 +14,14 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing\Middleware;
+namespace Odigos\Cake\Routing\Middleware;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Core\Plugin;
-use Cake\Http\MimeType;
-use Cake\Http\Response;
-use Cake\I18n\DateTime;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Http\MimeType;
+use Odigos\Cake\Http\Response;
+use Odigos\Cake\I18n\DateTime;
+use Odigos\Cake\Utility\Inflector;
 use Odigos\Laminas\Diactoros\Stream;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

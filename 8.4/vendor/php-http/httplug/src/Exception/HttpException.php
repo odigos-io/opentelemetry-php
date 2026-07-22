@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Client\Exception;
+namespace Odigos\Http\Client\Exception;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -11,7 +11,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class HttpException extends \Http\Client\Exception\RequestException
+class HttpException extends RequestException
 {
     /**
      * @var ResponseInterface

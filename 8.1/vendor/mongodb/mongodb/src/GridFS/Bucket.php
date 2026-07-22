@@ -15,25 +15,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\GridFS;
+namespace Odigos\MongoDB\GridFS;
 
 use MongoDB\BSON\Document;
-use MongoDB\Codec\DocumentCodec;
-use MongoDB\Collection;
+use Odigos\MongoDB\Codec\DocumentCodec;
+use Odigos\MongoDB\Collection;
 use MongoDB\Driver\CursorInterface;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Manager;
 use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\WriteConcern;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnsupportedException;
-use MongoDB\GridFS\Exception\CorruptFileException;
-use MongoDB\GridFS\Exception\FileNotFoundException;
-use MongoDB\GridFS\Exception\LogicException;
-use MongoDB\GridFS\Exception\StreamException;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\GridFS\Exception\CorruptFileException;
+use Odigos\MongoDB\GridFS\Exception\FileNotFoundException;
+use Odigos\MongoDB\GridFS\Exception\LogicException;
+use Odigos\MongoDB\GridFS\Exception\StreamException;
+use Odigos\MongoDB\Model\BSONArray;
+use Odigos\MongoDB\Model\BSONDocument;
 use function array_intersect_key;
 use function array_key_exists;
 use function assert;
@@ -47,7 +47,7 @@ use function is_object;
 use function is_resource;
 use function is_string;
 use function method_exists;
-use function MongoDB\apply_type_map_to_document;
+use function Odigos\MongoDB\apply_type_map_to_document;
 use function property_exists;
 use function sprintf;
 use function str_contains;
@@ -67,7 +67,7 @@ class Bucket
     private const DEFAULT_TYPE_MAP = ['array' => BSONArray::class, 'document' => BSONDocument::class, 'root' => BSONDocument::class];
     private const STREAM_WRAPPER_PROTOCOL = 'gridfs';
     private ?DocumentCodec $codec = null;
-    private \MongoDB\GridFS\CollectionWrapper $collectionWrapper;
+    private CollectionWrapper $collectionWrapper;
     private string $bucketName;
     private int $chunkSizeBytes;
     private ReadConcern $readConcern;
@@ -141,7 +141,7 @@ class Bucket
          * files collection (i.e. find, findOne, and getFileDocumentForStream).
          */
         $collectionOptions = array_intersect_key($options, ['readConcern' => 1, 'readPreference' => 1, 'typeMap' => 1, 'writeConcern' => 1]);
-        $this->collectionWrapper = new \MongoDB\GridFS\CollectionWrapper($manager, $databaseName, $options['bucketName'], $collectionOptions);
+        $this->collectionWrapper = new CollectionWrapper($manager, $databaseName, $options['bucketName'], $collectionOptions);
         $this->registerStreamWrapper();
     }
     /**
@@ -487,7 +487,7 @@ class Bucket
             throw new InvalidArgumentException(sprintf('The bucket alias must be a non-empty string without any slash, "%s" given', $alias));
         }
         // Use a closure to expose the private method into another class
-        \MongoDB\GridFS\StreamWrapper::setContextResolver($alias, fn(string $path, string $mode, array $context) => $this->resolveStreamContext($path, $mode, $context));
+        StreamWrapper::setContextResolver($alias, fn(string $path, string $mode, array $context) => $this->resolveStreamContext($path, $mode, $context));
     }
     /**
      * Renames the GridFS file with the specified ID.
@@ -601,8 +601,8 @@ class Bucket
             throw InvalidArgumentException::invalidType('$stream', $stream, 'resource');
         }
         $metadata = stream_get_meta_data($stream);
-        if (!isset($metadata['wrapper_data']) || !$metadata['wrapper_data'] instanceof \MongoDB\GridFS\StreamWrapper) {
-            throw InvalidArgumentException::invalidType('$stream wrapper data', $metadata['wrapper_data'] ?? null, \MongoDB\GridFS\StreamWrapper::class);
+        if (!isset($metadata['wrapper_data']) || !$metadata['wrapper_data'] instanceof StreamWrapper) {
+            throw InvalidArgumentException::invalidType('$stream wrapper data', $metadata['wrapper_data'] ?? null, StreamWrapper::class);
         }
         return $metadata['wrapper_data']->getFile();
     }
@@ -626,7 +626,7 @@ class Bucket
         if (in_array(self::STREAM_WRAPPER_PROTOCOL, stream_get_wrappers())) {
             return;
         }
-        \MongoDB\GridFS\StreamWrapper::register(self::STREAM_WRAPPER_PROTOCOL);
+        StreamWrapper::register(self::STREAM_WRAPPER_PROTOCOL);
     }
     /**
      * Create a stream context from the path and mode provided to fopen().

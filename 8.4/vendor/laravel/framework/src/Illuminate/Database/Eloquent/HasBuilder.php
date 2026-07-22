@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
 /**
  * @template TBuilder of \Illuminate\Database\Eloquent\Builder

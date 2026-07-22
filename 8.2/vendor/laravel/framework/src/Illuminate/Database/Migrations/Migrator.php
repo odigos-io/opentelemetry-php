@@ -1,26 +1,26 @@
 <?php
 
-namespace Illuminate\Database\Migrations;
+namespace Odigos\Illuminate\Database\Migrations;
 
 use Closure;
-use Illuminate\Console\View\Components\BulletList;
-use Illuminate\Console\View\Components\Info;
-use Illuminate\Console\View\Components\Task;
-use Illuminate\Console\View\Components\TwoColumnDetail;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\ConnectionResolverInterface as Resolver;
-use Illuminate\Database\Events\MigrationEnded;
-use Illuminate\Database\Events\MigrationsEnded;
-use Illuminate\Database\Events\MigrationSkipped;
-use Illuminate\Database\Events\MigrationsStarted;
-use Illuminate\Database\Events\MigrationStarted;
-use Illuminate\Database\Events\NoPendingMigrations;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Console\View\Components\BulletList;
+use Odigos\Illuminate\Console\View\Components\Info;
+use Odigos\Illuminate\Console\View\Components\Task;
+use Odigos\Illuminate\Console\View\Components\TwoColumnDetail;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Database\ConnectionResolverInterface as Resolver;
+use Odigos\Illuminate\Database\Events\MigrationEnded;
+use Odigos\Illuminate\Database\Events\MigrationsEnded;
+use Odigos\Illuminate\Database\Events\MigrationSkipped;
+use Odigos\Illuminate\Database\Events\MigrationsStarted;
+use Odigos\Illuminate\Database\Events\MigrationStarted;
+use Odigos\Illuminate\Database\Events\NoPendingMigrations;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
 use ReflectionClass;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 class Migrator
 {
     /**
@@ -91,7 +91,7 @@ class Migrator
      * @param  \Illuminate\Filesystem\Filesystem  $files
      * @param  \Illuminate\Contracts\Events\Dispatcher|null  $dispatcher
      */
-    public function __construct(\Illuminate\Database\Migrations\MigrationRepositoryInterface $repository, Resolver $resolver, Filesystem $files, ?Dispatcher $dispatcher = null)
+    public function __construct(MigrationRepositoryInterface $repository, Resolver $resolver, Filesystem $files, ?Dispatcher $dispatcher = null)
     {
         $this->files = $files;
         $this->events = $dispatcher;
@@ -194,10 +194,10 @@ class Migrator
         if ($pretend) {
             return $this->pretendToRun($migration, 'up');
         }
-        $shouldRunMigration = $migration instanceof \Illuminate\Database\Migrations\Migration ? $migration->shouldRun() : \true;
+        $shouldRunMigration = $migration instanceof Migration ? $migration->shouldRun() : \true;
         if (!$shouldRunMigration) {
             $this->fireMigrationEvent(new MigrationSkipped($name));
-            $this->write(Task::class, $name, fn() => \Illuminate\Database\Migrations\MigrationResult::Skipped->value);
+            $this->write(Task::class, $name, fn() => MigrationResult::Skipped->value);
         } else {
             $this->write(Task::class, $name, fn() => $this->runMigration($migration, 'up'));
             // Once we have run a migrations class, we will log that it was run in this

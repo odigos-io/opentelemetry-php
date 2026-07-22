@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Casts;
+namespace Odigos\Illuminate\Database\Eloquent\Casts;
 
 use BackedEnum;
-use Illuminate\Contracts\Database\Eloquent\Castable;
-use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Support\Collection;
-use function Illuminate\Support\enum_value;
+use Odigos\Illuminate\Contracts\Database\Eloquent\Castable;
+use Odigos\Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use Odigos\Illuminate\Support\Collection;
+use function Odigos\Illuminate\Support\enum_value;
 class AsEnumArrayObject implements Castable
 {
     /**
@@ -31,12 +31,12 @@ class AsEnumArrayObject implements Castable
                 if (!isset($attributes[$key])) {
                     return;
                 }
-                $data = \Illuminate\Database\Eloquent\Casts\Json::decode($attributes[$key]);
+                $data = Json::decode($attributes[$key]);
                 if (!is_array($data)) {
                     return;
                 }
                 $enumClass = $this->arguments[0];
-                return new \Illuminate\Database\Eloquent\Casts\ArrayObject((new Collection($data))->map(function ($value) use ($enumClass) {
+                return new ArrayObject((new Collection($data))->map(function ($value) use ($enumClass) {
                     return is_subclass_of($enumClass, BackedEnum::class) ? $enumClass::from($value) : constant($enumClass . '::' . $value);
                 })->toArray());
             }
@@ -49,7 +49,7 @@ class AsEnumArrayObject implements Castable
                 foreach ($value as $enum) {
                     $storable[] = $this->getStorableEnumValue($enum);
                 }
-                return [$key => \Illuminate\Database\Eloquent\Casts\Json::encode($storable)];
+                return [$key => Json::encode($storable)];
             }
             public function serialize($model, string $key, $value, array $attributes)
             {

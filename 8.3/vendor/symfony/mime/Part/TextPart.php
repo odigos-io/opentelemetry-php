@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Part;
+namespace Odigos\Symfony\Component\Mime\Part;
 
-use Symfony\Component\Mime\Encoder\Base64ContentEncoder;
-use Symfony\Component\Mime\Encoder\ContentEncoderInterface;
-use Symfony\Component\Mime\Encoder\EightBitContentEncoder;
-use Symfony\Component\Mime\Encoder\QpContentEncoder;
-use Symfony\Component\Mime\Exception\InvalidArgumentException;
-use Symfony\Component\Mime\Header\Headers;
+use Odigos\Symfony\Component\Mime\Encoder\Base64ContentEncoder;
+use Odigos\Symfony\Component\Mime\Encoder\ContentEncoderInterface;
+use Odigos\Symfony\Component\Mime\Encoder\EightBitContentEncoder;
+use Odigos\Symfony\Component\Mime\Encoder\QpContentEncoder;
+use Odigos\Symfony\Component\Mime\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Mime\Header\Headers;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class TextPart extends \Symfony\Component\Mime\Part\AbstractPart
+class TextPart extends AbstractPart
 {
     private const DEFAULT_ENCODERS = ['quoted-printable', 'base64', '8bit'];
     /** @internal, to be removed in 8.0 */
@@ -39,10 +39,10 @@ class TextPart extends \Symfony\Component\Mime\Part\AbstractPart
     public function __construct($body, ?string $charset = 'utf-8', string $subtype = 'plain', ?string $encoding = null)
     {
         parent::__construct();
-        if (!\is_string($body) && !\is_resource($body) && !$body instanceof \Symfony\Component\Mime\Part\File) {
-            throw new \TypeError(\sprintf('The body of "%s" must be a string, a resource, or an instance of "%s" (got "%s").', self::class, \Symfony\Component\Mime\Part\File::class, get_debug_type($body)));
+        if (!\is_string($body) && !\is_resource($body) && !$body instanceof File) {
+            throw new \TypeError(\sprintf('The body of "%s" must be a string, a resource, or an instance of "%s" (got "%s").', self::class, File::class, get_debug_type($body)));
         }
-        if ($body instanceof \Symfony\Component\Mime\Part\File) {
+        if ($body instanceof File) {
             $path = $body->getPath();
             if (is_file($path) && !is_readable($path) || is_dir($path)) {
                 throw new InvalidArgumentException(\sprintf('Path "%s" is not readable.', $path));
@@ -105,7 +105,7 @@ class TextPart extends \Symfony\Component\Mime\Part\AbstractPart
     }
     public function getBody(): string
     {
-        if ($this->body instanceof \Symfony\Component\Mime\Part\File) {
+        if ($this->body instanceof File) {
             if (\false === $ret = @file_get_contents($this->body->getPath())) {
                 throw new InvalidArgumentException(error_get_last()['message']);
             }
@@ -125,7 +125,7 @@ class TextPart extends \Symfony\Component\Mime\Part\AbstractPart
     }
     public function bodyToIterable(): iterable
     {
-        if ($this->body instanceof \Symfony\Component\Mime\Part\File) {
+        if ($this->body instanceof File) {
             $path = $this->body->getPath();
             if (\false === $handle = @fopen($path, 'r', \false)) {
                 throw new InvalidArgumentException(\sprintf('Unable to open path "%s".', $path));
@@ -244,7 +244,7 @@ class TextPart extends \Symfony\Component\Mime\Part\AbstractPart
             $this->encoding = $data['encoding'];
             if ($wakeup) {
                 $this->__wakeup();
-            } elseif (!\is_string($this->body) && !$this->body instanceof \Symfony\Component\Mime\Part\File) {
+            } elseif (!\is_string($this->body) && !$this->body instanceof File) {
                 throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
             }
             return;
@@ -259,7 +259,7 @@ class TextPart extends \Symfony\Component\Mime\Part\AbstractPart
             if ($wakeup) {
                 $this->_headers = $headers;
                 $this->__wakeup();
-            } elseif (!\is_string($this->body) && !$this->body instanceof \Symfony\Component\Mime\Part\File) {
+            } elseif (!\is_string($this->body) && !$this->body instanceof File) {
                 throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
             }
             return;
@@ -294,7 +294,7 @@ class TextPart extends \Symfony\Component\Mime\Part\AbstractPart
     public function __wakeup(): void
     {
         trigger_deprecation('symfony/mime', '7.4', 'Calling "%s::__wakeup()" is deprecated, use "__unserialize()" instead.', get_debug_type($this));
-        $r = new \ReflectionProperty(\Symfony\Component\Mime\Part\AbstractPart::class, 'headers');
+        $r = new \ReflectionProperty(AbstractPart::class, 'headers');
         $r->setValue($this, $this->_headers);
         unset($this->_headers);
     }

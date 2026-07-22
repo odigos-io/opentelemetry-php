@@ -15,8 +15,8 @@ namespace Odigos;
  * @since         0.10.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-use Cake\Database\Exception\QueryException;
-use function Cake\Core\h;
+use Odigos\Cake\Database\Exception\QueryException;
+use function Odigos\Cake\Core\h;
 $this->setLayout('dev_error');
 $this->assign('title', 'Database Error');
 $this->assign('templateName', 'pdo_error.php');

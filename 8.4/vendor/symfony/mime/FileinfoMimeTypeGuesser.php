@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime;
+namespace Odigos\Symfony\Component\Mime;
 
-use Symfony\Component\Mime\Exception\InvalidArgumentException;
-use Symfony\Component\Mime\Exception\LogicException;
-use Symfony\Component\Mime\Exception\RuntimeException;
+use Odigos\Symfony\Component\Mime\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Mime\Exception\LogicException;
+use Odigos\Symfony\Component\Mime\Exception\RuntimeException;
 /**
  * Guesses the MIME type using the PECL extension FileInfo.
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class FileinfoMimeTypeGuesser implements \Symfony\Component\Mime\MimeTypeGuesserInterface
+class FileinfoMimeTypeGuesser implements MimeTypeGuesserInterface
 {
     /**
      * @var array<string, \finfo>

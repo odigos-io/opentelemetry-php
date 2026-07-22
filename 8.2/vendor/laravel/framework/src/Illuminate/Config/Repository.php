@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Config;
+namespace Odigos\Illuminate\Config;
 
 use ArrayAccess;
-use Illuminate\Contracts\Config\Repository as ConfigContract;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Config\Repository as ConfigContract;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 class Repository implements ArrayAccess, ConfigContract
 {

@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Database\Console;
+namespace Odigos\Illuminate\Database\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Console\Prohibitable;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Connection;
-use Illuminate\Database\ConnectionResolverInterface;
-use Illuminate\Database\Events\MigrationsPruned;
-use Illuminate\Database\Events\SchemaDumped;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Config;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Console\Prohibitable;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Database\Connection;
+use Odigos\Illuminate\Database\ConnectionResolverInterface;
+use Odigos\Illuminate\Database\Events\MigrationsPruned;
+use Odigos\Illuminate\Database\Events\SchemaDumped;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Facades\Config;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'schema:dump')]
 class DumpCommand extends Command
 {

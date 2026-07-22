@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\DependencyInjection;
+namespace Odigos\Symfony\Component\Console\DependencyInjection;
 
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Command\LazyCommand;
-use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
-use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\TypedReference;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Command\LazyCommand;
+use Odigos\Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
+use Odigos\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use Odigos\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Odigos\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
+use Odigos\Symfony\Component\DependencyInjection\ContainerBuilder;
+use Odigos\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\DependencyInjection\Reference;
+use Odigos\Symfony\Component\DependencyInjection\TypedReference;
 /**
  * Registers console commands.
  *

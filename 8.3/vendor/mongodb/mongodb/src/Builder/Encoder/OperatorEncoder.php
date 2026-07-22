@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder\Encoder;
+namespace Odigos\MongoDB\Builder\Encoder;
 
 use LogicException;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Builder\Type\Optional;
-use MongoDB\Codec\EncodeIfSupported;
-use MongoDB\Codec\Encoder;
-use MongoDB\Exception\UnsupportedValueException;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\Optional;
+use Odigos\MongoDB\Codec\EncodeIfSupported;
+use Odigos\MongoDB\Codec\Encoder;
+use Odigos\MongoDB\Exception\UnsupportedValueException;
 use stdClass;
 use function assert;
 use function is_string;
@@ -22,7 +22,7 @@ final class OperatorEncoder implements Encoder
 {
     /** @template-use EncodeIfSupported<stdClass, OperatorInterface> */
     use EncodeIfSupported;
-    use \MongoDB\Builder\Encoder\RecursiveEncode;
+    use RecursiveEncode;
     public function canEncode(mixed $value): bool
     {
         return $value instanceof OperatorInterface;

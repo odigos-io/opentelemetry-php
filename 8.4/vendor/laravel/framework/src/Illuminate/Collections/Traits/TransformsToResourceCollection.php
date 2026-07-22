@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Support\Traits;
+namespace Odigos\Illuminate\Support\Traits;
 
-use Illuminate\Database\Eloquent\Attributes\UseResource;
-use Illuminate\Database\Eloquent\Attributes\UseResourceCollection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Odigos\Illuminate\Database\Eloquent\Attributes\UseResource;
+use Odigos\Illuminate\Database\Eloquent\Attributes\UseResourceCollection;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Http\Resources\Json\ResourceCollection;
 use LogicException;
 use ReflectionClass;
 trait TransformsToResourceCollection

@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\I18n;
+namespace Odigos\Cake\I18n;
 
-use Cake\Chronos\ChronosDate;
-use Cake\Chronos\DifferenceFormatterInterface;
+use Odigos\Cake\Chronos\ChronosDate;
+use Odigos\Cake\Chronos\DifferenceFormatterInterface;
 use DateTimeInterface;
 /**
  * Helper class for formatting relative dates & times.
@@ -40,9 +40,9 @@ class RelativeTimeFormatter implements DifferenceFormatterInterface
         $isNow = $second === null;
         if ($second === null) {
             if ($first instanceof ChronosDate) {
-                $second = \Cake\I18n\Date::now();
+                $second = Date::now();
             } else {
-                $second = \Cake\I18n\DateTime::now($first->getTimezone());
+                $second = DateTime::now($first->getTimezone());
             }
         }
         assert($first instanceof ChronosDate && $second instanceof ChronosDate || $first instanceof DateTimeInterface && $second instanceof DateTimeInterface);
@@ -58,8 +58,8 @@ class RelativeTimeFormatter implements DifferenceFormatterInterface
                 break;
             case $diffInterval->d > 0:
                 $count = $diffInterval->d;
-                if ($count >= \Cake\I18n\DateTime::DAYS_PER_WEEK) {
-                    $count = (int) ($count / \Cake\I18n\DateTime::DAYS_PER_WEEK);
+                if ($count >= DateTime::DAYS_PER_WEEK) {
+                    $count = (int) ($count / DateTime::DAYS_PER_WEEK);
                     $message = __dn('cake', '{0} week', '{0} weeks', $count, $count);
                 } else {
                     $message = __dn('cake', '{0} day', '{0} days', $count, $count);
@@ -95,10 +95,10 @@ class RelativeTimeFormatter implements DifferenceFormatterInterface
      * @return string Relative time string.
      * @see \Cake\I18n\Time::timeAgoInWords()
      */
-    public function timeAgoInWords(\Cake\I18n\DateTime|\Cake\I18n\Date $time, array $options = []): string
+    public function timeAgoInWords(DateTime|Date $time, array $options = []): string
     {
-        $options = $this->_options($options, \Cake\I18n\DateTime::class);
-        if ($time instanceof \Cake\I18n\DateTime && $options['timezone']) {
+        $options = $this->_options($options, DateTime::class);
+        if ($time instanceof DateTime && $options['timezone']) {
             $time = $time->setTimezone($options['timezone']);
         }
         /** @var \Cake\Chronos\Chronos $from */
@@ -116,7 +116,7 @@ class RelativeTimeFormatter implements DifferenceFormatterInterface
         if (!$diff) {
             return __d('cake', 'just now', 'just now');
         }
-        if ($diff > abs($now - (int) (new \Cake\I18n\DateTime($options['end']))->format('U'))) {
+        if ($diff > abs($now - (int) (new DateTime($options['end']))->format('U'))) {
             return sprintf($options['absoluteString'], $time->i18nFormat($options['format']));
         }
         $diffData = $this->_diffData($futureTime, $pastTime, $backwards, $options);
@@ -253,10 +253,10 @@ class RelativeTimeFormatter implements DifferenceFormatterInterface
      * @return string Relative date string.
      * @see \Cake\I18n\Date::timeAgoInWords()
      */
-    public function dateAgoInWords(\Cake\I18n\DateTime|\Cake\I18n\Date $date, array $options = []): string
+    public function dateAgoInWords(DateTime|Date $date, array $options = []): string
     {
-        $options = $this->_options($options, \Cake\I18n\Date::class);
-        if ($date instanceof \Cake\I18n\DateTime && $options['timezone']) {
+        $options = $this->_options($options, Date::class);
+        if ($date instanceof DateTime && $options['timezone']) {
             $date = $date->setTimezone($options['timezone']);
         }
         /** @var \Cake\Chronos\Chronos $from */
@@ -274,7 +274,7 @@ class RelativeTimeFormatter implements DifferenceFormatterInterface
         if (!$diff) {
             return __d('cake', 'today');
         }
-        if ($diff > abs($now - (int) (new \Cake\I18n\Date($options['end']))->format('U'))) {
+        if ($diff > abs($now - (int) (new Date($options['end']))->format('U'))) {
             return sprintf($options['absoluteString'], $date->i18nFormat($options['format']));
         }
         $diffData = $this->_diffData($futureTime, $pastTime, $backwards, $options);

@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Extractor\Visitor;
+namespace Odigos\Symfony\Component\Translation\Extractor\Visitor;
 
 use Odigos\PhpParser\Node;
 use Odigos\PhpParser\NodeVisitor;
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
  */
-final class TranslatableMessageVisitor extends \Symfony\Component\Translation\Extractor\Visitor\AbstractVisitor implements NodeVisitor
+final class TranslatableMessageVisitor extends AbstractVisitor implements NodeVisitor
 {
     public function beforeTraverse(array $nodes): ?Node
     {

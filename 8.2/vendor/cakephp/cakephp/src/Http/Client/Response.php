@@ -13,10 +13,10 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Client;
+namespace Odigos\Cake\Http\Client;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Http\Cookie\CookieCollection;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Http\Cookie\CookieCollection;
 use Odigos\Laminas\Diactoros\MessageTrait;
 use Odigos\Laminas\Diactoros\Stream;
 use Psr\Http\Message\ResponseInterface;
@@ -79,7 +79,7 @@ use SimpleXMLElement;
  * $content = $response->getStatusCode();
  * ```
  */
-class Response extends \Cake\Http\Client\Message implements ResponseInterface
+class Response extends Message implements ResponseInterface
 {
     use MessageTrait;
     /**

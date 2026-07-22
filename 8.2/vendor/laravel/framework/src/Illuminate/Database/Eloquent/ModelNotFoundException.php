@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
-use Illuminate\Database\RecordsNotFoundException;
-use Illuminate\Support\Arr;
-use function Illuminate\Support\enum_value;
+use Odigos\Illuminate\Database\RecordsNotFoundException;
+use Odigos\Illuminate\Support\Arr;
+use function Odigos\Illuminate\Support\enum_value;
 /**
  * @template TModel of \Illuminate\Database\Eloquent\Model
  */

@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Extractor;
+namespace Odigos\Symfony\Component\Translation\Extractor;
 
-use Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
 /**
  * ChainExtractor extracts translation messages from template files.
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-class ChainExtractor implements \Symfony\Component\Translation\Extractor\ExtractorInterface
+class ChainExtractor implements ExtractorInterface
 {
     /**
      * The extractors.
@@ -27,7 +27,7 @@ class ChainExtractor implements \Symfony\Component\Translation\Extractor\Extract
     /**
      * Adds a loader to the translation extractor.
      */
-    public function addExtractor(string $format, \Symfony\Component\Translation\Extractor\ExtractorInterface $extractor): void
+    public function addExtractor(string $format, ExtractorInterface $extractor): void
     {
         $this->extractors[$format] = $extractor;
     }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
-class Note extends \Laravel\Prompts\Prompt
+class Note extends Prompt
 {
     /**
      * Create a new Note instance.

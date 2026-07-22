@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation\Http\Middleware;
+namespace Odigos\Illuminate\Foundation\Http\Middleware;
 
-use Illuminate\Http\Middleware\ValidatePostSize as Middleware;
+use Odigos\Illuminate\Http\Middleware\ValidatePostSize as Middleware;
 class ValidatePostSize extends Middleware
 {
     //

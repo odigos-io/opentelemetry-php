@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\MongoDB;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\MongoDB;
 
 final class MongoDBCollectionExtractor
 {

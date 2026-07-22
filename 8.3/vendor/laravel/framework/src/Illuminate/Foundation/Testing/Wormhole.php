@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation\Testing;
+namespace Odigos\Illuminate\Foundation\Testing;
 
-use Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Carbon;
 class Wormhole
 {
     /**

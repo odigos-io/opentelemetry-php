@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\widgets;
+namespace Odigos\yii\widgets;
 
 use Closure;
 use Odigos\Yii;
-use yii\base\Widget;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
-use yii\helpers\Url;
+use Odigos\yii\base\Widget;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\Html;
+use Odigos\yii\helpers\Url;
 /**
  * Menu displays a multi-level menu using nested HTML lists.
  *

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Http\Resources\Json;
+namespace Odigos\Illuminate\Http\Resources\Json;
 
-class AnonymousResourceCollection extends \Illuminate\Http\Resources\Json\ResourceCollection
+class AnonymousResourceCollection extends ResourceCollection
 {
     /**
      * The name of the resource being collected.

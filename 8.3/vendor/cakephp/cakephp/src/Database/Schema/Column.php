@@ -16,9 +16,9 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Schema;
+namespace Odigos\Cake\Database\Schema;
 
-use Cake\Database\TypeFactory;
+use Odigos\Cake\Database\TypeFactory;
 use RuntimeException;
 /**
  * Schema metadata for a single column
@@ -474,9 +474,9 @@ class Column
         $length = $this->getLength();
         $precision = $this->getPrecision();
         if ($precision !== null && $precision > 0) {
-            if ($type === \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP) {
+            if ($type === TableSchemaInterface::TYPE_TIMESTAMP) {
                 $type = 'timestampfractional';
-            } elseif ($type === \Cake\Database\Schema\TableSchemaInterface::TYPE_DATETIME) {
+            } elseif ($type === TableSchemaInterface::TYPE_DATETIME) {
                 $type = 'datetimefractional';
             }
         }

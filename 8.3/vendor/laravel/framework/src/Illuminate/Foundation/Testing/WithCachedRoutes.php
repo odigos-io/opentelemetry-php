@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Testing;
+namespace Odigos\Illuminate\Foundation\Testing;
 
-use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
+use Odigos\Illuminate\Foundation\Application;
+use Odigos\Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 trait WithCachedRoutes
 {
     /**
@@ -13,11 +13,11 @@ trait WithCachedRoutes
      */
     protected function setUpWithCachedRoutes(): void
     {
-        if ((\Illuminate\Foundation\Testing\CachedState::$cachedRoutes ?? null) === null) {
+        if ((CachedState::$cachedRoutes ?? null) === null) {
             $routes = $this->app['router']->getRoutes();
             $routes->refreshNameLookups();
             $routes->refreshActionLookups();
-            \Illuminate\Foundation\Testing\CachedState::$cachedRoutes = $routes->compile();
+            CachedState::$cachedRoutes = $routes->compile();
         }
         $this->markRoutesCached($this->app);
     }
@@ -38,6 +38,6 @@ trait WithCachedRoutes
     protected function markRoutesCached(Application $app): void
     {
         $app->instance('routes.cached', \true);
-        RouteServiceProvider::loadCachedRoutesUsing(static fn() => app('router')->setCompiledRoutes(\Illuminate\Foundation\Testing\CachedState::$cachedRoutes));
+        RouteServiceProvider::loadCachedRoutesUsing(static fn() => app('router')->setCompiledRoutes(CachedState::$cachedRoutes));
     }
 }

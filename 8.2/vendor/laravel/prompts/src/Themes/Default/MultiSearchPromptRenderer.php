@@ -1,13 +1,13 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\MultiSearchPrompt;
-use Laravel\Prompts\Themes\Contracts\Scrolling;
-class MultiSearchPromptRenderer extends \Laravel\Prompts\Themes\Default\Renderer implements Scrolling
+use Odigos\Laravel\Prompts\MultiSearchPrompt;
+use Odigos\Laravel\Prompts\Themes\Contracts\Scrolling;
+class MultiSearchPromptRenderer extends Renderer implements Scrolling
 {
-    use \Laravel\Prompts\Themes\Default\Concerns\DrawsBoxes;
-    use \Laravel\Prompts\Themes\Default\Concerns\DrawsScrollbars;
+    use Concerns\DrawsBoxes;
+    use Concerns\DrawsScrollbars;
     /**
      * Render the suggest prompt.
      */

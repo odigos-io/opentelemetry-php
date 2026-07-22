@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\RateLimiter;
+namespace Odigos\Symfony\Component\HttpFoundation\RateLimiter;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\RateLimiter\RateLimit;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\RateLimiter\RateLimit;
 /**
  * A special type of limiter that deals with requests.
  *

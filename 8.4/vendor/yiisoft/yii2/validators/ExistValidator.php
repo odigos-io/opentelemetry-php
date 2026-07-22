@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\base\Model;
-use yii\db\ActiveQuery;
-use yii\db\ActiveRecord;
-use yii\db\QueryInterface;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\Model;
+use Odigos\yii\db\ActiveQuery;
+use Odigos\yii\db\ActiveRecord;
+use Odigos\yii\db\QueryInterface;
 /**
  * ExistValidator validates that the attribute value exists in a table.
  *
@@ -45,7 +45,7 @@ use yii\db\QueryInterface;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ExistValidator extends \yii\validators\Validator
+class ExistValidator extends Validator
 {
     /**
      * @var string|null the name of the ActiveRecord class that should be used to validate the existence
@@ -199,7 +199,7 @@ class ExistValidator extends \yii\validators\Validator
             $conditions = [$targetAttribute => $model->{$attribute}];
         }
         $targetModelClass = $this->getTargetClass($model);
-        if (!is_subclass_of($targetModelClass, 'yii\db\ActiveRecord')) {
+        if (!is_subclass_of($targetModelClass, 'Odigos\yii\db\ActiveRecord')) {
             return $conditions;
         }
         /** @var ActiveRecord $targetModelClass */

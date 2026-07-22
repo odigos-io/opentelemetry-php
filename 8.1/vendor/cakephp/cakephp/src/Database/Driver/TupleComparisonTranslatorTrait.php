@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Driver;
+namespace Odigos\Cake\Database\Driver;
 
-use Cake\Database\Expression\IdentifierExpression;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Database\Expression\TupleComparison;
-use Cake\Database\Query;
-use Cake\Database\Query\SelectQuery;
+use Odigos\Cake\Database\Expression\IdentifierExpression;
+use Odigos\Cake\Database\Expression\QueryExpression;
+use Odigos\Cake\Database\Expression\TupleComparison;
+use Odigos\Cake\Database\Query;
+use Odigos\Cake\Database\Query\SelectQuery;
 use InvalidArgumentException;
 /**
  * Provides a translator method for tuple comparisons

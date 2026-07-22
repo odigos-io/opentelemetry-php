@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
-use yii\helpers\StringHelper;
+use Odigos\yii\helpers\StringHelper;
 /**
  * ActionFilter is the base class for action filters.
  *
@@ -24,7 +24,7 @@ use yii\helpers\StringHelper;
  * @template T of Component = Component
  * @extends Behavior<T>
  */
-class ActionFilter extends \yii\base\Behavior
+class ActionFilter extends Behavior
 {
     /**
      * @var array list of action IDs that this filter should apply to. If this property is not set,
@@ -50,7 +50,7 @@ class ActionFilter extends \yii\base\Behavior
     public function attach($owner)
     {
         $this->owner = $owner;
-        $owner->on(\yii\base\Controller::EVENT_BEFORE_ACTION, [$this, 'beforeFilter']);
+        $owner->on(Controller::EVENT_BEFORE_ACTION, [$this, 'beforeFilter']);
     }
     /**
      * {@inheritdoc}
@@ -58,8 +58,8 @@ class ActionFilter extends \yii\base\Behavior
     public function detach()
     {
         if ($this->owner) {
-            $this->owner->off(\yii\base\Controller::EVENT_BEFORE_ACTION, [$this, 'beforeFilter']);
-            $this->owner->off(\yii\base\Controller::EVENT_AFTER_ACTION, [$this, 'afterFilter']);
+            $this->owner->off(Controller::EVENT_BEFORE_ACTION, [$this, 'beforeFilter']);
+            $this->owner->off(Controller::EVENT_AFTER_ACTION, [$this, 'afterFilter']);
             $this->owner = null;
         }
     }
@@ -75,7 +75,7 @@ class ActionFilter extends \yii\base\Behavior
         if ($event->isValid) {
             // call afterFilter only if beforeFilter succeeds
             // beforeFilter and afterFilter should be properly nested
-            $this->owner->on(\yii\base\Controller::EVENT_AFTER_ACTION, [$this, 'afterFilter'], null, \false);
+            $this->owner->on(Controller::EVENT_AFTER_ACTION, [$this, 'afterFilter'], null, \false);
         } else {
             $event->handled = \true;
         }
@@ -86,7 +86,7 @@ class ActionFilter extends \yii\base\Behavior
     public function afterFilter($event)
     {
         $event->result = $this->afterAction($event->action, $event->result);
-        $this->owner->off(\yii\base\Controller::EVENT_AFTER_ACTION, [$this, 'afterFilter']);
+        $this->owner->off(Controller::EVENT_AFTER_ACTION, [$this, 'afterFilter']);
     }
     /**
      * This method is invoked right before an action is to be executed (after all possible filters.)
@@ -117,7 +117,7 @@ class ActionFilter extends \yii\base\Behavior
      */
     protected function getActionId($action)
     {
-        if ($this->owner instanceof \yii\base\Module) {
+        if ($this->owner instanceof Module) {
             $mid = $this->owner->getUniqueId();
             $id = $action->getUniqueId();
             if ($mid !== '' && strpos($id, $mid) === 0) {

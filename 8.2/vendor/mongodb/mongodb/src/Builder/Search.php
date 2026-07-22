@@ -1,8 +1,8 @@
 <?php
 
-namespace MongoDB\Builder;
+namespace Odigos\MongoDB\Builder;
 
-use MongoDB\Builder\Search\FactoryTrait;
+use Odigos\MongoDB\Builder\Search\FactoryTrait;
 final class Search
 {
     use FactoryTrait;

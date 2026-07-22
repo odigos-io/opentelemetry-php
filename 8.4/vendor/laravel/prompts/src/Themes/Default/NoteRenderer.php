@@ -1,9 +1,9 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\Note;
-class NoteRenderer extends \Laravel\Prompts\Themes\Default\Renderer
+use Odigos\Laravel\Prompts\Note;
+class NoteRenderer extends Renderer
 {
     /**
      * Render the note.

@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Test;
+namespace Odigos\Symfony\Component\VarDumper\Test;
 
 use Odigos\PHPUnit\Framework\Attributes\After;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Symfony\Component\VarDumper\Dumper\CliDumper;
+use Odigos\Symfony\Component\VarDumper\Cloner\VarCloner;
+use Odigos\Symfony\Component\VarDumper\Dumper\CliDumper;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */

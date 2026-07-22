@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Laminas\HttpHandlerRunner\Emitter;
+namespace Odigos\Laminas\HttpHandlerRunner\Emitter;
 
-use Laminas\HttpHandlerRunner\Exception;
+use Odigos\Laminas\HttpHandlerRunner\Exception;
 use Psr\Http\Message\ResponseInterface;
 use ReturnTypeWillChange;
 use SplStack;
@@ -18,7 +18,7 @@ use SplStack;
  * @template-extends SplStack<EmitterInterface>
  * @final
  */
-class EmitterStack extends SplStack implements \Laminas\HttpHandlerRunner\Emitter\EmitterInterface
+class EmitterStack extends SplStack implements EmitterInterface
 {
     /**
      * Emit a response
@@ -87,7 +87,7 @@ class EmitterStack extends SplStack implements \Laminas\HttpHandlerRunner\Emitte
      */
     private function validateEmitter(mixed $emitter): void
     {
-        if (!$emitter instanceof \Laminas\HttpHandlerRunner\Emitter\EmitterInterface) {
+        if (!$emitter instanceof EmitterInterface) {
             throw Exception\InvalidEmitterException::forEmitter($emitter);
         }
     }

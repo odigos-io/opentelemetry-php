@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\String;
+namespace Odigos\Symfony\Component\String;
 
-use Symfony\Component\String\Exception\ExceptionInterface;
-use Symfony\Component\String\Exception\InvalidArgumentException;
-use Symfony\Component\String\Exception\RuntimeException;
+use Odigos\Symfony\Component\String\Exception\ExceptionInterface;
+use Odigos\Symfony\Component\String\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\String\Exception\RuntimeException;
 /**
  * Represents a string of abstract characters.
  *
@@ -400,11 +400,11 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
         return \false;
     }
     abstract public function title(bool $allWords = \false): static;
-    public function toByteString(?string $toEncoding = null): \Symfony\Component\String\ByteString
+    public function toByteString(?string $toEncoding = null): ByteString
     {
-        $b = new \Symfony\Component\String\ByteString();
+        $b = new ByteString();
         $toEncoding = \in_array($toEncoding, ['utf8', 'utf-8', 'UTF8'], \true) ? 'UTF-8' : $toEncoding;
-        if (null === $toEncoding || $toEncoding === $fromEncoding = $this instanceof \Symfony\Component\String\AbstractUnicodeString || preg_match('//u', $b->string) ? 'UTF-8' : 'Windows-1252') {
+        if (null === $toEncoding || $toEncoding === $fromEncoding = $this instanceof AbstractUnicodeString || preg_match('//u', $b->string) ? 'UTF-8' : 'Windows-1252') {
             $b->string = $this->string;
             return $b;
         }
@@ -418,17 +418,17 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
         }
         return $b;
     }
-    public function toCodePointString(): \Symfony\Component\String\CodePointString
+    public function toCodePointString(): CodePointString
     {
-        return new \Symfony\Component\String\CodePointString($this->string);
+        return new CodePointString($this->string);
     }
     public function toString(): string
     {
         return $this->string;
     }
-    public function toUnicodeString(): \Symfony\Component\String\UnicodeString
+    public function toUnicodeString(): UnicodeString
     {
-        return new \Symfony\Component\String\UnicodeString($this->string);
+        return new UnicodeString($this->string);
     }
     abstract public function trim(string $chars = " \t\n\r\x00\v\f ﻿"): static;
     abstract public function trimEnd(string $chars = " \t\n\r\x00\v\f ﻿"): static;
@@ -485,7 +485,7 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
         }
         return $str;
     }
-    public function truncate(int $length, string $ellipsis = '', bool|\Symfony\Component\String\TruncateMode $cut = \Symfony\Component\String\TruncateMode::Char): static
+    public function truncate(int $length, string $ellipsis = '', bool|TruncateMode $cut = TruncateMode::Char): static
     {
         $stringLength = $this->length();
         if ($stringLength <= $length) {
@@ -496,16 +496,16 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
             $ellipsisLength = 0;
         }
         $desiredLength = $length;
-        if (\Symfony\Component\String\TruncateMode::WordAfter === $cut || !$cut) {
+        if (TruncateMode::WordAfter === $cut || !$cut) {
             if (null === $length = $this->indexOf([' ', "\r", "\n", "\t"], ($length ?: 1) - 1)) {
                 return clone $this;
             }
             $length += $ellipsisLength;
-        } elseif (\Symfony\Component\String\TruncateMode::WordBefore === $cut && null !== $this->indexOf([' ', "\r", "\n", "\t"], ($length ?: 1) - 1)) {
+        } elseif (TruncateMode::WordBefore === $cut && null !== $this->indexOf([' ', "\r", "\n", "\t"], ($length ?: 1) - 1)) {
             $length += $ellipsisLength;
         }
         $str = $this->slice(0, $length - $ellipsisLength);
-        if (\Symfony\Component\String\TruncateMode::WordBefore === $cut) {
+        if (TruncateMode::WordBefore === $cut) {
             if (0 === $ellipsisLength && $desiredLength === $this->indexOf([' ', "\r", "\n", "\t"], $length)) {
                 return $str;
             }

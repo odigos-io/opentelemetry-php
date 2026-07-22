@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Concurrency;
+namespace Odigos\Illuminate\Concurrency;
 
 use Closure;
-use Illuminate\Contracts\Concurrency\Driver;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Defer\DeferredCallback;
+use Odigos\Illuminate\Contracts\Concurrency\Driver;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Defer\DeferredCallback;
 use Odigos\Spatie\Fork\Fork;
-use function Illuminate\Support\defer;
+use function Odigos\Illuminate\Support\defer;
 class ForkDriver implements Driver
 {
     /**

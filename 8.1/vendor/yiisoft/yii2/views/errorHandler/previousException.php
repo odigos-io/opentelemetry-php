@@ -42,7 +42,7 @@ echo $exception->getFile();
 echo $exception->getLine();
 ?></span></p>
     <?php 
-if ($exception instanceof \yii\db\Exception && !empty($exception->errorInfo)) {
+if ($exception instanceof \Odigos\yii\db\Exception && !empty($exception->errorInfo)) {
     ?>
         <pre>Error Info: <?php 
     echo $handler->htmlEncode(\print_r($exception->errorInfo, \true));

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
 use RuntimeException;
 class RelationNotFoundException extends RuntimeException

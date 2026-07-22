@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Http\Concerns;
+namespace Odigos\Illuminate\Http\Concerns;
 
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Fluent;
-use Illuminate\Support\Traits\Dumpable;
-use Illuminate\Support\Traits\InteractsWithData;
+use Odigos\Illuminate\Http\UploadedFile;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Fluent;
+use Odigos\Illuminate\Support\Traits\Dumpable;
+use Odigos\Illuminate\Support\Traits\InteractsWithData;
 use SplFileInfo;
-use Symfony\Component\HttpFoundation\InputBag;
+use Odigos\Symfony\Component\HttpFoundation\InputBag;
 trait InteractsWithInput
 {
     use Dumpable, InteractsWithData;

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Embeddings;
+namespace Odigos\OpenAI\Responses\Embeddings;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Contracts\ResponseHasMetaInformationContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Concerns\HasMetaInformation;
-use OpenAI\Responses\Meta\MetaInformation;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Contracts\ResponseHasMetaInformationContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Concerns\HasMetaInformation;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{object: string, data: array<int, array{object: string, embedding: array<int, float>, index: int}>, usage: array{prompt_tokens: int, total_tokens: int}}>
  */
@@ -23,7 +23,7 @@ final class CreateResponse implements ResponseContract, ResponseHasMetaInformati
     /**
      * @param  array<int, CreateResponseEmbedding>  $embeddings
      */
-    private function __construct(public readonly string $object, public readonly array $embeddings, public readonly \OpenAI\Responses\Embeddings\CreateResponseUsage $usage, private readonly MetaInformation $meta)
+    private function __construct(public readonly string $object, public readonly array $embeddings, public readonly CreateResponseUsage $usage, private readonly MetaInformation $meta)
     {
     }
     /**
@@ -33,14 +33,14 @@ final class CreateResponse implements ResponseContract, ResponseHasMetaInformati
      */
     public static function from(array $attributes, MetaInformation $meta): self
     {
-        $embeddings = array_map(fn(array $result): \OpenAI\Responses\Embeddings\CreateResponseEmbedding => \OpenAI\Responses\Embeddings\CreateResponseEmbedding::from($result), $attributes['data']);
-        return new self($attributes['object'], $embeddings, \OpenAI\Responses\Embeddings\CreateResponseUsage::from($attributes['usage']), $meta);
+        $embeddings = array_map(fn(array $result): CreateResponseEmbedding => CreateResponseEmbedding::from($result), $attributes['data']);
+        return new self($attributes['object'], $embeddings, CreateResponseUsage::from($attributes['usage']), $meta);
     }
     /**
      * {@inheritDoc}
      */
     public function toArray(): array
     {
-        return ['object' => $this->object, 'data' => array_map(static fn(\OpenAI\Responses\Embeddings\CreateResponseEmbedding $result): array => $result->toArray(), $this->embeddings), 'usage' => $this->usage->toArray()];
+        return ['object' => $this->object, 'data' => array_map(static fn(CreateResponseEmbedding $result): array => $result->toArray(), $this->embeddings), 'usage' => $this->usage->toArray()];
     }
 }

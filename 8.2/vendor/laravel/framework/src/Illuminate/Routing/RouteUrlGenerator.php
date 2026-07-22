@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
 use BackedEnum;
-use Illuminate\Contracts\Routing\UrlRoutable;
-use Illuminate\Routing\Exceptions\UrlGenerationException;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Routing\UrlRoutable;
+use Odigos\Illuminate\Routing\Exceptions\UrlGenerationException;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 class RouteUrlGenerator
 {
     /**
@@ -134,7 +134,7 @@ class RouteUrlGenerator
      * @param  mixed  $parameters
      * @return array
      */
-    protected function formatParameters(\Illuminate\Routing\Route $route, $parameters)
+    protected function formatParameters(Route $route, $parameters)
     {
         $parameters = Arr::wrap($parameters);
         $namedParameters = [];

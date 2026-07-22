@@ -18,9 +18,9 @@ use Odigos\Carbon\Language;
 use Odigos\Carbon\Translator;
 use Odigos\Carbon\TranslatorStrongTypeInterface;
 use Closure;
-use Symfony\Component\Translation\TranslatorBagInterface;
-use Symfony\Contracts\Translation\LocaleAwareInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Component\Translation\TranslatorBagInterface;
+use Odigos\Symfony\Contracts\Translation\LocaleAwareInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Trait Localization.
  *

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
-use Illuminate\Contracts\Validation\CompilableRules;
+use Odigos\Illuminate\Contracts\Validation\CompilableRules;
 class NestedRules implements CompilableRules
 {
     /**
@@ -32,6 +32,6 @@ class NestedRules implements CompilableRules
     public function compile($attribute, $value, $data = null, $context = null)
     {
         $rules = call_user_func($this->callback, $value, $attribute, $data, $context);
-        return \Illuminate\Validation\Rule::compile($attribute, $rules, $data);
+        return Rule::compile($attribute, $rules, $data);
     }
 }

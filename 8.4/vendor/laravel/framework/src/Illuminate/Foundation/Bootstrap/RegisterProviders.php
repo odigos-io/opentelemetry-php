@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Bootstrap;
+namespace Odigos\Illuminate\Foundation\Bootstrap;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Support\ServiceProvider;
 class RegisterProviders
 {
     /**

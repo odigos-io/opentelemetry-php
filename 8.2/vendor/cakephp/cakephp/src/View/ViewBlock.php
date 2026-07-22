@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         2.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 /**
  * ViewBlock implements the concept of Blocks or Slots in the View layer.
  * Slots or blocks are combined with extending views and layouts to afford slots
@@ -78,7 +78,7 @@ class ViewBlock
      * @throws \Cake\Core\Exception\CakeException When starting a block twice
      * @return void
      */
-    public function start(string $name, string $mode = \Cake\View\ViewBlock::OVERRIDE): void
+    public function start(string $name, string $mode = ViewBlock::OVERRIDE): void
     {
         if (array_key_exists($name, $this->_active)) {
             throw new CakeException(sprintf('A view block with the name `%s` is already/still open.', $name));
@@ -105,7 +105,7 @@ class ViewBlock
         $mode = end($this->_active);
         $active = key($this->_active);
         $content = (string) ob_get_clean();
-        if ($mode === \Cake\View\ViewBlock::OVERRIDE) {
+        if ($mode === ViewBlock::OVERRIDE) {
             $this->_blocks[$active] = $content;
         } else {
             $this->concat($active, $content, $mode);
@@ -127,7 +127,7 @@ class ViewBlock
      *   If ViewBlock::PREPEND it will be prepended.
      * @return void
      */
-    public function concat(string $name, mixed $value = null, string $mode = \Cake\View\ViewBlock::APPEND): void
+    public function concat(string $name, mixed $value = null, string $mode = ViewBlock::APPEND): void
     {
         if ($value === null) {
             $this->start($name, $mode);
@@ -136,7 +136,7 @@ class ViewBlock
         if (!isset($this->_blocks[$name])) {
             $this->_blocks[$name] = '';
         }
-        if ($mode === \Cake\View\ViewBlock::PREPEND) {
+        if ($mode === ViewBlock::PREPEND) {
             $this->_blocks[$name] = $value . $this->_blocks[$name];
         } else {
             $this->_blocks[$name] .= $value;

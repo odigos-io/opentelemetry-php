@@ -4,15 +4,15 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Query;
+namespace Odigos\MongoDB\Builder\Query;
 
 use MongoDB\BSON\Binary;
 use MongoDB\BSON\PackedArray;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\FieldQueryInterface;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Model\BSONArray;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\FieldQueryInterface;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Model\BSONArray;
 use function array_is_list;
 use function is_array;
 /**

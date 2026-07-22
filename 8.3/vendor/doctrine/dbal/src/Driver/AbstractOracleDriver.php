@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver;
+namespace Odigos\Doctrine\DBAL\Driver;
 
-use Doctrine\DBAL\Driver;
-use Doctrine\DBAL\Driver\AbstractOracleDriver\EasyConnectString;
-use Doctrine\DBAL\Driver\API\ExceptionConverter as ExceptionConverterInterface;
-use Doctrine\DBAL\Driver\API\OCI\ExceptionConverter;
-use Doctrine\DBAL\Platforms\OraclePlatform;
-use Doctrine\DBAL\ServerVersionProvider;
+use Odigos\Doctrine\DBAL\Driver;
+use Odigos\Doctrine\DBAL\Driver\AbstractOracleDriver\EasyConnectString;
+use Odigos\Doctrine\DBAL\Driver\API\ExceptionConverter as ExceptionConverterInterface;
+use Odigos\Doctrine\DBAL\Driver\API\OCI\ExceptionConverter;
+use Odigos\Doctrine\DBAL\Platforms\OraclePlatform;
+use Odigos\Doctrine\DBAL\ServerVersionProvider;
 /**
  * Abstract base implementation of the {@see Driver} interface for Oracle based drivers.
  */

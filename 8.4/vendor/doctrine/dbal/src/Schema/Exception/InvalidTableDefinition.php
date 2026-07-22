@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Exception;
+namespace Odigos\Doctrine\DBAL\Schema\Exception;
 
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
-use Doctrine\DBAL\Schema\SchemaException;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\SchemaException;
 use LogicException;
 use function sprintf;
 final class InvalidTableDefinition extends LogicException implements SchemaException

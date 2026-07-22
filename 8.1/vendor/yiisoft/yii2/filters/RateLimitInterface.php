@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters;
+namespace Odigos\yii\filters;
 
-use yii\base\Action;
+use Odigos\yii\base\Action;
 /**
  * RateLimitInterface is the interface that may be implemented by an identity object to enforce rate limiting.
  *

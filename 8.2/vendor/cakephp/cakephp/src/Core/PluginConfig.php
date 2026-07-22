@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         5.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core;
+namespace Odigos\Cake\Core;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Utility\Hash;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Utility\Hash;
 /**
  * PluginConfig contains all available plugins and their config if/how they should be loaded
  *
@@ -37,19 +37,19 @@ class PluginConfig
      */
     public static function loadInstallerConfig(): void
     {
-        if (\Cake\Core\Configure::check('plugins')) {
+        if (Configure::check('plugins')) {
             return;
         }
         $vendorFile = dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'cakephp-plugins.php';
         if (!is_file($vendorFile)) {
             $vendorFile = dirname(__DIR__, 4) . \DIRECTORY_SEPARATOR . 'cakephp-plugins.php';
             if (!is_file($vendorFile)) {
-                \Cake\Core\Configure::write(['plugins' => []]);
+                Configure::write(['plugins' => []]);
                 return;
             }
         }
         $config = require $vendorFile;
-        \Cake\Core\Configure::write($config);
+        Configure::write($config);
     }
     /**
      * Get the config how plugins should be loaded
@@ -73,12 +73,12 @@ class PluginConfig
             $composerVersions = [];
         }
         $result = [];
-        $availablePlugins = \Cake\Core\Configure::read('plugins', []);
+        $availablePlugins = Configure::read('plugins', []);
         if ($availablePlugins && is_array($availablePlugins)) {
             foreach ($availablePlugins as $pluginName => $pluginPath) {
                 if ($pluginLoadConfig && array_key_exists($pluginName, $pluginLoadConfig)) {
                     $options = $pluginLoadConfig[$pluginName];
-                    $hooks = \Cake\Core\PluginInterface::VALID_HOOKS;
+                    $hooks = PluginInterface::VALID_HOOKS;
                     $mainConfig = ['isLoaded' => \true, 'onlyDebug' => $options['onlyDebug'] ?? \false, 'onlyCli' => $options['onlyCli'] ?? \false, 'optional' => $options['optional'] ?? \false];
                     foreach ($hooks as $hook) {
                         $mainConfig[$hook] = $options[$hook] ?? \true;

@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAI\Responses\Chat;
+namespace Odigos\OpenAI\Responses\Chat;
 
 final class CreateResponseChoiceAnnotations
 {
-    public function __construct(public readonly string $type, public readonly \OpenAI\Responses\Chat\CreateResponseChoiceAnnotationsUrlCitations $urlCitations)
+    public function __construct(public readonly string $type, public readonly CreateResponseChoiceAnnotationsUrlCitations $urlCitations)
     {
     }
     /**
@@ -12,7 +12,7 @@ final class CreateResponseChoiceAnnotations
      */
     public static function from(array $attributes): self
     {
-        return new self($attributes['type'], \OpenAI\Responses\Chat\CreateResponseChoiceAnnotationsUrlCitations::from($attributes['url_citation']));
+        return new self($attributes['type'], CreateResponseChoiceAnnotationsUrlCitations::from($attributes['url_citation']));
     }
     /**
      * @return array{type: string, url_citation: array{end_index: int, start_index: int, title: string, url: string}}

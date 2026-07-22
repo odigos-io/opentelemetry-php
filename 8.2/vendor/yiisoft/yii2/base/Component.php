@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 use Odigos\Yii;
-use yii\helpers\StringHelper;
+use Odigos\yii\helpers\StringHelper;
 /**
  * Component is the base class that implements the *property*, *event* and *behavior* features.
  *
@@ -100,7 +100,7 @@ use yii\helpers\StringHelper;
  * @phpstan-property-read Behavior<static>[] $behaviors
  * @psalm-property-read Behavior<self>[] $behaviors
  */
-class Component extends \yii\base\BaseObject
+class Component extends BaseObject
 {
     /**
      * @var array the attached event handlers (event name => handlers)
@@ -146,9 +146,9 @@ class Component extends \yii\base\BaseObject
             }
         }
         if (method_exists($this, 'set' . $name)) {
-            throw new \yii\base\InvalidCallException('Getting write-only property: ' . get_class($this) . '::' . $name);
+            throw new InvalidCallException('Getting write-only property: ' . get_class($this) . '::' . $name);
         }
-        throw new \yii\base\UnknownPropertyException('Getting unknown property: ' . get_class($this) . '::' . $name);
+        throw new UnknownPropertyException('Getting unknown property: ' . get_class($this) . '::' . $name);
     }
     /**
      * Sets the value of a component property.
@@ -182,18 +182,18 @@ class Component extends \yii\base\BaseObject
         } elseif (strncmp($name, 'as ', 3) === 0) {
             // as behavior: attach behavior
             $name = trim(substr($name, 3));
-            if ($value instanceof \yii\base\Behavior) {
+            if ($value instanceof Behavior) {
                 $this->attachBehavior($name, $value);
             } elseif ($value instanceof \Closure) {
                 $this->attachBehavior($name, call_user_func($value));
-            } elseif (isset($value['__class']) && is_subclass_of($value['__class'], \yii\base\Behavior::class)) {
+            } elseif (isset($value['__class']) && is_subclass_of($value['__class'], Behavior::class)) {
                 $this->attachBehavior($name, Yii::createObject($value));
-            } elseif (!isset($value['__class']) && isset($value['class']) && is_subclass_of($value['class'], \yii\base\Behavior::class)) {
+            } elseif (!isset($value['__class']) && isset($value['class']) && is_subclass_of($value['class'], Behavior::class)) {
                 $this->attachBehavior($name, Yii::createObject($value));
-            } elseif (is_string($value) && is_subclass_of($value, \yii\base\Behavior::class, \true)) {
+            } elseif (is_string($value) && is_subclass_of($value, Behavior::class, \true)) {
                 $this->attachBehavior($name, Yii::createObject($value));
             } else {
-                throw new \yii\base\InvalidConfigException('Class is not of type ' . \yii\base\Behavior::class . ' or its subclasses');
+                throw new InvalidConfigException('Class is not of type ' . Behavior::class . ' or its subclasses');
             }
             return;
         }
@@ -206,9 +206,9 @@ class Component extends \yii\base\BaseObject
             }
         }
         if (method_exists($this, 'get' . $name)) {
-            throw new \yii\base\InvalidCallException('Setting read-only property: ' . get_class($this) . '::' . $name);
+            throw new InvalidCallException('Setting read-only property: ' . get_class($this) . '::' . $name);
         }
-        throw new \yii\base\UnknownPropertyException('Setting unknown property: ' . get_class($this) . '::' . $name);
+        throw new UnknownPropertyException('Setting unknown property: ' . get_class($this) . '::' . $name);
     }
     /**
      * Checks if a property is set, i.e. defined and not null.
@@ -269,7 +269,7 @@ class Component extends \yii\base\BaseObject
                 return;
             }
         }
-        throw new \yii\base\InvalidCallException('Unsetting an unknown or read-only property: ' . get_class($this) . '::' . $name);
+        throw new InvalidCallException('Unsetting an unknown or read-only property: ' . get_class($this) . '::' . $name);
     }
     /**
      * Calls the named method which is not a class method.
@@ -292,7 +292,7 @@ class Component extends \yii\base\BaseObject
                 return call_user_func_array([$object, $name], $params);
             }
         }
-        throw new \yii\base\UnknownMethodException('Calling unknown method: ' . get_class($this) . "::{$name}()");
+        throw new UnknownMethodException('Calling unknown method: ' . get_class($this) . "::{$name}()");
     }
     /**
      * This method is called after the object is created by cloning an existing one.
@@ -456,7 +456,7 @@ class Component extends \yii\base\BaseObject
                 return \true;
             }
         }
-        return \yii\base\Event::hasHandlers($this, $name);
+        return Event::hasHandlers($this, $name);
     }
     /**
      * Attaches an event handler to an event.
@@ -578,7 +578,7 @@ class Component extends \yii\base\BaseObject
      * @param string $name the event name
      * @param Event|null $event the event instance. If not set, a default [[Event]] object will be created.
      */
-    public function trigger($name, ?\yii\base\Event $event = null)
+    public function trigger($name, ?Event $event = null)
     {
         $this->ensureBehaviors();
         $eventHandlers = [];
@@ -593,7 +593,7 @@ class Component extends \yii\base\BaseObject
         if (!empty($eventHandlers)) {
             $eventHandlers = call_user_func_array('array_merge', $eventHandlers);
             if ($event === null) {
-                $event = new \yii\base\Event();
+                $event = new Event();
             }
             if ($event->sender === null) {
                 $event->sender = $this;
@@ -610,7 +610,7 @@ class Component extends \yii\base\BaseObject
             }
         }
         // invoke class-level attached handlers
-        \yii\base\Event::trigger($this, $name, $event);
+        Event::trigger($this, $name, $event);
     }
     /**
      * Returns the named behavior object.
@@ -729,7 +729,7 @@ class Component extends \yii\base\BaseObject
      */
     private function attachBehaviorInternal($name, $behavior)
     {
-        if (!$behavior instanceof \yii\base\Behavior) {
+        if (!$behavior instanceof Behavior) {
             $behavior = Yii::createObject($behavior);
         }
         if (is_int($name)) {

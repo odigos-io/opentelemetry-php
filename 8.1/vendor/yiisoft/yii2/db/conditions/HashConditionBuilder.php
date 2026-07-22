@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\conditions;
+namespace Odigos\yii\db\conditions;
 
-use yii\db\ExpressionBuilderInterface;
-use yii\db\ExpressionBuilderTrait;
-use yii\db\ExpressionInterface;
-use yii\db\Query;
-use yii\helpers\ArrayHelper;
+use Odigos\yii\db\ExpressionBuilderInterface;
+use Odigos\yii\db\ExpressionBuilderTrait;
+use Odigos\yii\db\ExpressionInterface;
+use Odigos\yii\db\Query;
+use Odigos\yii\helpers\ArrayHelper;
 /**
  * Class HashConditionBuilder builds objects of [[HashCondition]]
  *
@@ -36,7 +36,7 @@ class HashConditionBuilder implements ExpressionBuilderInterface
         foreach ($hash as $column => $value) {
             if (ArrayHelper::isTraversable($value) || $value instanceof Query) {
                 // IN condition
-                $parts[] = $this->queryBuilder->buildCondition(new \yii\db\conditions\InCondition($column, 'IN', $value), $params);
+                $parts[] = $this->queryBuilder->buildCondition(new InCondition($column, 'IN', $value), $params);
             } else {
                 if (strpos($column, '(') === \false) {
                     $column = $this->queryBuilder->db->quoteColumnName($column);

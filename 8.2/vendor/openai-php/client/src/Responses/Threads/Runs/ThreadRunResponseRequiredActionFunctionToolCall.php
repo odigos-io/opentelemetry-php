@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Threads\Runs;
+namespace Odigos\OpenAI\Responses\Threads\Runs;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{id: string, type: string, function: array{name: string, arguments: string}}>
  */
@@ -16,7 +16,7 @@ final class ThreadRunResponseRequiredActionFunctionToolCall implements ResponseC
      */
     use ArrayAccessible;
     use Fakeable;
-    private function __construct(public string $id, public string $type, public \OpenAI\Responses\Threads\Runs\ThreadRunResponseRequiredActionFunctionToolCallFunction $function)
+    private function __construct(public string $id, public string $type, public ThreadRunResponseRequiredActionFunctionToolCallFunction $function)
     {
     }
     /**
@@ -26,7 +26,7 @@ final class ThreadRunResponseRequiredActionFunctionToolCall implements ResponseC
      */
     public static function from(array $attributes): self
     {
-        return new self($attributes['id'], $attributes['type'], \OpenAI\Responses\Threads\Runs\ThreadRunResponseRequiredActionFunctionToolCallFunction::from($attributes['function']));
+        return new self($attributes['id'], $attributes['type'], ThreadRunResponseRequiredActionFunctionToolCallFunction::from($attributes['function']));
     }
     /**
      * {@inheritDoc}

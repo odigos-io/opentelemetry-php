@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace GuzzleHttp\Promise;
+namespace Odigos\GuzzleHttp\Promise;
 
 /**
  * A promise that has been rejected.
@@ -11,7 +11,7 @@ namespace GuzzleHttp\Promise;
  *
  * @final
  */
-class RejectedPromise implements \GuzzleHttp\Promise\PromiseInterface
+class RejectedPromise implements PromiseInterface
 {
     private $reason;
     /**
@@ -24,17 +24,17 @@ class RejectedPromise implements \GuzzleHttp\Promise\PromiseInterface
         }
         $this->reason = $reason;
     }
-    public function then(?callable $onFulfilled = null, ?callable $onRejected = null): \GuzzleHttp\Promise\PromiseInterface
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null): PromiseInterface
     {
         // If there's no onRejected callback then just return self.
         if (!$onRejected) {
             return $this;
         }
-        $queue = \GuzzleHttp\Promise\Utils::queue();
+        $queue = Utils::queue();
         $reason = $this->reason;
-        $p = new \GuzzleHttp\Promise\Promise([$queue, 'run']);
+        $p = new Promise([$queue, 'run']);
         $queue->add(static function () use ($p, $reason, $onRejected): void {
-            if (\GuzzleHttp\Promise\Is::pending($p)) {
+            if (Is::pending($p)) {
                 try {
                     // Return a resolved promise if onRejected does not throw.
                     $p->resolve($onRejected($reason));
@@ -46,14 +46,14 @@ class RejectedPromise implements \GuzzleHttp\Promise\PromiseInterface
         });
         return $p;
     }
-    public function otherwise(callable $onRejected): \GuzzleHttp\Promise\PromiseInterface
+    public function otherwise(callable $onRejected): PromiseInterface
     {
         return $this->then(null, $onRejected);
     }
     public function wait(bool $unwrap = \true)
     {
         if ($unwrap) {
-            throw \GuzzleHttp\Promise\Create::exceptionFor($this->reason);
+            throw Create::exceptionFor($this->reason);
         }
         return null;
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Session\Console;
+namespace Odigos\Illuminate\Session\Console;
 
-use Illuminate\Console\MigrationGeneratorCommand;
-use Symfony\Component\Console\Attribute\AsCommand;
-use function Illuminate\Filesystem\join_paths;
+use Odigos\Illuminate\Console\MigrationGeneratorCommand;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use function Odigos\Illuminate\Filesystem\join_paths;
 #[AsCommand(name: 'make:session-table', aliases: ['session:table'])]
 class SessionTableCommand extends MigrationGeneratorCommand
 {

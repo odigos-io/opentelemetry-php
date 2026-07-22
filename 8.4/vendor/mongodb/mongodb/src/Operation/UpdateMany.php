@@ -15,24 +15,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnsupportedException;
-use MongoDB\UpdateResult;
-use function MongoDB\is_first_key_operator;
-use function MongoDB\is_pipeline;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\UpdateResult;
+use function Odigos\MongoDB\is_first_key_operator;
+use function Odigos\MongoDB\is_pipeline;
 /**
  * Operation for updating multiple documents with the update command.
  *
  * @see \MongoDB\Collection::updateMany()
  * @see https://mongodb.com/docs/manual/reference/command/update/
  */
-final class UpdateMany implements \MongoDB\Operation\Explainable
+final class UpdateMany implements Explainable
 {
-    private \MongoDB\Operation\Update $update;
+    private Update $update;
     /**
      * Constructs an update command.
      *
@@ -81,7 +81,7 @@ final class UpdateMany implements \MongoDB\Operation\Explainable
         if (!is_first_key_operator($update) && !is_pipeline($update)) {
             throw new InvalidArgumentException('Expected update operator(s) or non-empty pipeline for $update');
         }
-        $this->update = new \MongoDB\Operation\Update($databaseName, $collectionName, $filter, $update, ['multi' => \true] + $options);
+        $this->update = new Update($databaseName, $collectionName, $filter, $update, ['multi' => \true] + $options);
     }
     /**
      * Execute the operation.

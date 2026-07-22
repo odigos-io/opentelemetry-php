@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         5.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Fixture\Extension;
+namespace Odigos\Cake\TestSuite\Fixture\Extension;
 
-use Cake\Log\Log;
-use Cake\TestSuite\ConnectionHelper;
+use Odigos\Cake\Log\Log;
+use Odigos\Cake\TestSuite\ConnectionHelper;
 use Odigos\PHPUnit\Event\TestSuite\Started;
 use Odigos\PHPUnit\Event\TestSuite\StartedSubscriber as PHPUnitStarted;
-use function Cake\Core\env;
+use function Odigos\Cake\Core\env;
 class PHPUnitStartedSubscriber implements PHPUnitStarted
 {
     /**

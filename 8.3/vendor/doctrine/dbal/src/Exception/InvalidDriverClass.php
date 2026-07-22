@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
-use Doctrine\DBAL\Driver;
+use Odigos\Doctrine\DBAL\Driver;
 use function sprintf;
-final class InvalidDriverClass extends \Doctrine\DBAL\Exception\InvalidArgumentException
+final class InvalidDriverClass extends InvalidArgumentException
 {
     public static function new(string $driverClass): self
     {

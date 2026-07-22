@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Profiler;
+namespace Odigos\Symfony\Component\HttpKernel\Profiler;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Exception\ConflictingHeadersException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
-use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
-use Symfony\Contracts\Service\ResetInterface;
+use Odigos\Symfony\Component\HttpFoundation\Exception\ConflictingHeadersException;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
+use Odigos\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
+use Odigos\Symfony\Contracts\Service\ResetInterface;
 /**
  * Profiler.
  *
@@ -29,7 +29,7 @@ class Profiler implements ResetInterface
      */
     private array $collectors = [];
     private bool $initiallyEnabled = \true;
-    public function __construct(private \Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface $storage, private ?LoggerInterface $logger = null, private bool $enabled = \true)
+    public function __construct(private ProfilerStorageInterface $storage, private ?LoggerInterface $logger = null, private bool $enabled = \true)
     {
         $this->initiallyEnabled = $enabled;
     }
@@ -54,7 +54,7 @@ class Profiler implements ResetInterface
     /**
      * Loads the Profile for the given Response.
      */
-    public function loadProfileFromResponse(Response $response): ?\Symfony\Component\HttpKernel\Profiler\Profile
+    public function loadProfileFromResponse(Response $response): ?Profile
     {
         if (!$token = $response->headers->get('X-Debug-Token')) {
             return null;
@@ -64,14 +64,14 @@ class Profiler implements ResetInterface
     /**
      * Loads the Profile for the given token.
      */
-    public function loadProfile(string $token): ?\Symfony\Component\HttpKernel\Profiler\Profile
+    public function loadProfile(string $token): ?Profile
     {
         return $this->storage->read($token);
     }
     /**
      * Saves a Profile.
      */
-    public function saveProfile(\Symfony\Component\HttpKernel\Profiler\Profile $profile): bool
+    public function saveProfile(Profile $profile): bool
     {
         // late collect
         foreach ($profile->getCollectors() as $collector) {
@@ -108,12 +108,12 @@ class Profiler implements ResetInterface
     /**
      * Collects data for the given Response.
      */
-    public function collect(Request $request, Response $response, ?\Throwable $exception = null): ?\Symfony\Component\HttpKernel\Profiler\Profile
+    public function collect(Request $request, Response $response, ?\Throwable $exception = null): ?Profile
     {
         if (\false === $this->enabled) {
             return null;
         }
-        $profile = new \Symfony\Component\HttpKernel\Profiler\Profile(bin2hex(random_bytes(3)));
+        $profile = new Profile(bin2hex(random_bytes(3)));
         $profile->setTime(time());
         $profile->setUrl($request->getUri());
         $profile->setMethod($request->getMethod());

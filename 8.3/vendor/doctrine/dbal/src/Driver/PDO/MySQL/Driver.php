@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PDO\MySQL;
+namespace Odigos\Doctrine\DBAL\Driver\PDO\MySQL;
 
-use Doctrine\DBAL\Driver\AbstractMySQLDriver;
-use Doctrine\DBAL\Driver\PDO\Connection;
-use Doctrine\DBAL\Driver\PDO\Exception;
-use Doctrine\DBAL\Driver\PDO\Exception\InvalidConfiguration;
-use Doctrine\DBAL\Driver\PDO\PDOConnect;
+use Odigos\Doctrine\DBAL\Driver\AbstractMySQLDriver;
+use Odigos\Doctrine\DBAL\Driver\PDO\Connection;
+use Odigos\Doctrine\DBAL\Driver\PDO\Exception;
+use Odigos\Doctrine\DBAL\Driver\PDO\Exception\InvalidConfiguration;
+use Odigos\Doctrine\DBAL\Driver\PDO\PDOConnect;
 use PDO;
 use PDOException;
 use SensitiveParameter;

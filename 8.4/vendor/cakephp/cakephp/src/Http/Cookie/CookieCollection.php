@@ -13,7 +13,7 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Cookie;
+namespace Odigos\Cake\Http\Cookie;
 
 use ArrayIterator;
 use Countable;
@@ -27,7 +27,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Traversable;
 use TypeError;
-use function Cake\Core\triggerWarning;
+use function Odigos\Cake\Core\triggerWarning;
 /**
  * Cookie Collection
  *
@@ -68,7 +68,7 @@ class CookieCollection implements IteratorAggregate, Countable
         $cookies = [];
         foreach ($header as $value) {
             try {
-                $cookies[] = \Cake\Http\Cookie\Cookie::createFromHeaderString($value, $defaults);
+                $cookies[] = Cookie::createFromHeaderString($value, $defaults);
             } catch (Exception|TypeError) {
                 // Don't blow up on invalid cookies
             }
@@ -86,7 +86,7 @@ class CookieCollection implements IteratorAggregate, Countable
         $data = $request->getCookieParams();
         $cookies = [];
         foreach ($data as $name => $value) {
-            $cookies[] = new \Cake\Http\Cookie\Cookie((string) $name, $value);
+            $cookies[] = new Cookie((string) $name, $value);
         }
         return new static($cookies);
     }
@@ -109,7 +109,7 @@ class CookieCollection implements IteratorAggregate, Countable
      * @param \Cake\Http\Cookie\CookieInterface $cookie Cookie instance to add.
      * @return static
      */
-    public function add(\Cake\Http\Cookie\CookieInterface $cookie): static
+    public function add(CookieInterface $cookie): static
     {
         $new = clone $this;
         $new->cookies[$cookie->getId()] = $cookie;
@@ -122,7 +122,7 @@ class CookieCollection implements IteratorAggregate, Countable
      * @return \Cake\Http\Cookie\CookieInterface
      * @throws \InvalidArgumentException If cookie not found.
      */
-    public function get(string $name): \Cake\Http\Cookie\CookieInterface
+    public function get(string $name): CookieInterface
     {
         $cookie = $this->__get($name);
         if ($cookie === null) {
@@ -146,7 +146,7 @@ class CookieCollection implements IteratorAggregate, Countable
      * @param string $name The name of the cookie.
      * @return \Cake\Http\Cookie\CookieInterface|null
      */
-    public function __get(string $name): ?\Cake\Http\Cookie\CookieInterface
+    public function __get(string $name): ?CookieInterface
     {
         $key = mb_strtolower($name);
         foreach ($this->cookies as $cookie) {
@@ -195,7 +195,7 @@ class CookieCollection implements IteratorAggregate, Countable
     protected function checkCookies(array $cookies): void
     {
         foreach ($cookies as $index => $cookie) {
-            if (!$cookie instanceof \Cake\Http\Cookie\CookieInterface) {
+            if (!$cookie instanceof CookieInterface) {
                 throw new InvalidArgumentException(sprintf('Expected `%s[]` as $cookies but instead got `%s` at index %d', static::class, get_debug_type($cookie), $index));
             }
         }

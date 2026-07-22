@@ -16,9 +16,9 @@ namespace Odigos;
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  * @var string $class
  */
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use function Cake\Core\h;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Plugin;
+use function Odigos\Cake\Core\h;
 $namespace = Configure::read('App.namespace');
 if (!empty($plugin)) {
     $namespace = \str_replace('/', '\\', $plugin);

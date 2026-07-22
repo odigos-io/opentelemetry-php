@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport\Smtp;
+namespace Odigos\Symfony\Component\Mailer\Transport\Smtp;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Mailer\Envelope;
-use Symfony\Component\Mailer\Exception\InvalidArgumentException;
-use Symfony\Component\Mailer\Exception\LogicException;
-use Symfony\Component\Mailer\Exception\TransportException;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
-use Symfony\Component\Mailer\SentMessage;
-use Symfony\Component\Mailer\Transport\AbstractTransport;
-use Symfony\Component\Mailer\Transport\Smtp\Stream\AbstractStream;
-use Symfony\Component\Mailer\Transport\Smtp\Stream\SocketStream;
-use Symfony\Component\Mime\RawMessage;
+use Odigos\Symfony\Component\Mailer\Envelope;
+use Odigos\Symfony\Component\Mailer\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Mailer\Exception\LogicException;
+use Odigos\Symfony\Component\Mailer\Exception\TransportException;
+use Odigos\Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Odigos\Symfony\Component\Mailer\Exception\UnexpectedResponseException;
+use Odigos\Symfony\Component\Mailer\SentMessage;
+use Odigos\Symfony\Component\Mailer\Transport\AbstractTransport;
+use Odigos\Symfony\Component\Mailer\Transport\Smtp\Stream\AbstractStream;
+use Odigos\Symfony\Component\Mailer\Transport\Smtp\Stream\SocketStream;
+use Odigos\Symfony\Component\Mime\RawMessage;
 /**
  * Sends emails over SMTP.
  *

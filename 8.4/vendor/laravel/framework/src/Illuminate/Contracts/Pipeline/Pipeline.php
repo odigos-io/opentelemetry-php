@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Pipeline;
+namespace Odigos\Illuminate\Contracts\Pipeline;
 
 use Closure;
 interface Pipeline

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Foundation\Testing;
+namespace Odigos\Illuminate\Foundation\Testing;
 
 trait DatabaseTransactions
 {
@@ -13,7 +13,7 @@ trait DatabaseTransactions
     {
         $database = $this->app->make('db');
         $connections = $this->connectionsToTransact();
-        $this->app->instance('db.transactions', $transactionsManager = new \Illuminate\Foundation\Testing\DatabaseTransactionsManager($connections));
+        $this->app->instance('db.transactions', $transactionsManager = new DatabaseTransactionsManager($connections));
         foreach ($connections as $name) {
             $connection = $database->connection($name);
             $connection->setTransactionManager($transactionsManager);

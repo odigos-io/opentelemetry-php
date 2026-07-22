@@ -11,8 +11,8 @@ declare (strict_types=1);
  */
 namespace Odigos\Monolog\Handler;
 
-use MongoDB\Client;
-use MongoDB\Collection;
+use Odigos\MongoDB\Client;
+use Odigos\MongoDB\Collection;
 use MongoDB\Driver\BulkWrite;
 use MongoDB\Driver\Manager;
 use Odigos\Monolog\Level;

@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use ArrayAccess;
 use ArrayIterator;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\InteractsWithData;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Jsonable;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\InteractsWithData;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use IteratorAggregate;
 use JsonSerializable;
 use Traversable;
@@ -126,7 +126,7 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
         }
         $results = [];
         foreach (is_array($keys) ? $keys : func_get_args() as $key) {
-            \Illuminate\Support\Arr::set($results, $key, \Illuminate\Support\Arr::get($data, $key));
+            Arr::set($results, $key, Arr::get($data, $key));
         }
         return $results;
     }

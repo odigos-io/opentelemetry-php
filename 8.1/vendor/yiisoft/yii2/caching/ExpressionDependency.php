@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
 /**
  * ExpressionDependency represents a dependency based on the result of a PHP expression.
@@ -22,7 +22,7 @@ namespace yii\caching;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ExpressionDependency extends \yii\caching\Dependency
+class ExpressionDependency extends Dependency
 {
     /**
      * @var string the string representation of a PHP expression whose result is used to determine the dependency.

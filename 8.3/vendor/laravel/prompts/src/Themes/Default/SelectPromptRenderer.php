@@ -1,13 +1,13 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\SelectPrompt;
-use Laravel\Prompts\Themes\Contracts\Scrolling;
-class SelectPromptRenderer extends \Laravel\Prompts\Themes\Default\Renderer implements Scrolling
+use Odigos\Laravel\Prompts\SelectPrompt;
+use Odigos\Laravel\Prompts\Themes\Contracts\Scrolling;
+class SelectPromptRenderer extends Renderer implements Scrolling
 {
-    use \Laravel\Prompts\Themes\Default\Concerns\DrawsBoxes;
-    use \Laravel\Prompts\Themes\Default\Concerns\DrawsScrollbars;
+    use Concerns\DrawsBoxes;
+    use Concerns\DrawsScrollbars;
     /**
      * Render the select prompt.
      */

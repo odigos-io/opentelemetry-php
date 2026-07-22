@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
 /**
  * Type generating JSON objects values stored in JSONB columns.
  */
-class JsonbType extends \Doctrine\DBAL\Types\JsonType
+class JsonbType extends JsonType
 {
     /**
      * {@inheritDoc}

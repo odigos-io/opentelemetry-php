@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Catalogue;
+namespace Odigos\Symfony\Component\Translation\Catalogue;
 
-use Symfony\Component\Translation\MessageCatalogueInterface;
+use Odigos\Symfony\Component\Translation\MessageCatalogueInterface;
 /**
  * Merge operation between two catalogues as follows:
  * all = source ∪ target = {x: x ∈ source ∨ x ∈ target}
@@ -20,7 +20,7 @@ use Symfony\Component\Translation\MessageCatalogueInterface;
  *
  * @author Jean-François Simon <contact@jfsimon.fr>
  */
-class MergeOperation extends \Symfony\Component\Translation\Catalogue\AbstractOperation
+class MergeOperation extends AbstractOperation
 {
     protected function processDomain(string $domain): void
     {

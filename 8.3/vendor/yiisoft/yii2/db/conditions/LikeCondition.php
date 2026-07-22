@@ -5,16 +5,16 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\conditions;
+namespace Odigos\yii\db\conditions;
 
-use yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidArgumentException;
 /**
  * Class LikeCondition represents a `LIKE` condition.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.14
  */
-class LikeCondition extends \yii\db\conditions\SimpleCondition
+class LikeCondition extends SimpleCondition
 {
     /**
      * @var array|null|false map of chars to their replacements, `false` if characters should not be escaped

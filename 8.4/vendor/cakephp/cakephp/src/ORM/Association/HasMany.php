@@ -14,18 +14,18 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Association;
+namespace Odigos\Cake\ORM\Association;
 
-use Cake\Collection\Collection;
-use Cake\Database\Expression\FieldInterface;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Database\ExpressionInterface;
-use Cake\Datasource\EntityInterface;
-use Cake\Datasource\InvalidPropertyInterface;
-use Cake\ORM\Association;
-use Cake\ORM\Association\Loader\SelectLoader;
-use Cake\ORM\Query\SelectQuery;
-use Cake\ORM\Table;
+use Odigos\Cake\Collection\Collection;
+use Odigos\Cake\Database\Expression\FieldInterface;
+use Odigos\Cake\Database\Expression\QueryExpression;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Datasource\InvalidPropertyInterface;
+use Odigos\Cake\ORM\Association;
+use Odigos\Cake\ORM\Association\Loader\SelectLoader;
+use Odigos\Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\ORM\Table;
 use Closure;
 use InvalidArgumentException;
 /**
@@ -560,7 +560,7 @@ class HasMany extends Association
      */
     public function cascadeDelete(EntityInterface $entity, array $options = []): bool
     {
-        $helper = new \Cake\ORM\Association\DependentDeleteHelper();
+        $helper = new DependentDeleteHelper();
         return $helper->cascadeDelete($this, $entity, $options);
     }
 }

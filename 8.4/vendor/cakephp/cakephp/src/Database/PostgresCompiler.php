@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         4.0.3
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database;
+namespace Odigos\Cake\Database;
 
-use Cake\Database\Expression\FunctionExpression;
+use Odigos\Cake\Database\Expression\FunctionExpression;
 /**
  * Responsible for compiling a Query object into its SQL representation
  * for Postgres
  *
  * @internal
  */
-class PostgresCompiler extends \Cake\Database\QueryCompiler
+class PostgresCompiler extends QueryCompiler
 {
     /**
      * Always quote aliases in SELECT clause.
@@ -49,7 +49,7 @@ class PostgresCompiler extends \Cake\Database\QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildHavingPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildHavingPart(array $parts, Query $query, ValueBinder $binder): string
     {
         $selectParts = $query->clause('select');
         foreach ($selectParts as $selectKey => $selectPart) {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Queue\Connectors;
+namespace Odigos\Illuminate\Queue\Connectors;
 
-use Illuminate\Queue\BeanstalkdQueue;
+use Odigos\Illuminate\Queue\BeanstalkdQueue;
 use Odigos\Pheanstalk\Contract\SocketFactoryInterface;
 use Odigos\Pheanstalk\Pheanstalk;
 use Odigos\Pheanstalk\Values\Timeout;
-class BeanstalkdConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
+class BeanstalkdConnector implements ConnectorInterface
 {
     /**
      * Establish a queue connection.

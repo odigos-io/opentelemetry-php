@@ -5,27 +5,27 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\oci;
+namespace Odigos\yii\db\oci;
 
-use yii\base\InvalidArgumentException;
-use yii\db\Connection;
-use yii\db\Exception;
-use yii\db\Expression;
-use yii\db\Query;
-use yii\helpers\StringHelper;
-use yii\db\ExpressionInterface;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\db\Connection;
+use Odigos\yii\db\Exception;
+use Odigos\yii\db\Expression;
+use Odigos\yii\db\Query;
+use Odigos\yii\helpers\StringHelper;
+use Odigos\yii\db\ExpressionInterface;
 /**
  * QueryBuilder is the query builder for Oracle databases.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class QueryBuilder extends \yii\db\QueryBuilder
+class QueryBuilder extends \Odigos\yii\db\QueryBuilder
 {
     /**
      * @var array mapping from abstract column types (keys) to physical column types (values).
      */
-    public $typeMap = [\yii\db\oci\Schema::TYPE_PK => 'NUMBER(10) NOT NULL PRIMARY KEY', \yii\db\oci\Schema::TYPE_UPK => 'NUMBER(10) UNSIGNED NOT NULL PRIMARY KEY', \yii\db\oci\Schema::TYPE_BIGPK => 'NUMBER(20) NOT NULL PRIMARY KEY', \yii\db\oci\Schema::TYPE_UBIGPK => 'NUMBER(20) UNSIGNED NOT NULL PRIMARY KEY', \yii\db\oci\Schema::TYPE_CHAR => 'CHAR(1)', \yii\db\oci\Schema::TYPE_STRING => 'VARCHAR2(255)', \yii\db\oci\Schema::TYPE_TEXT => 'CLOB', \yii\db\oci\Schema::TYPE_TINYINT => 'NUMBER(3)', \yii\db\oci\Schema::TYPE_SMALLINT => 'NUMBER(5)', \yii\db\oci\Schema::TYPE_INTEGER => 'NUMBER(10)', \yii\db\oci\Schema::TYPE_BIGINT => 'NUMBER(20)', \yii\db\oci\Schema::TYPE_FLOAT => 'NUMBER', \yii\db\oci\Schema::TYPE_DOUBLE => 'NUMBER', \yii\db\oci\Schema::TYPE_DECIMAL => 'NUMBER', \yii\db\oci\Schema::TYPE_DATETIME => 'TIMESTAMP', \yii\db\oci\Schema::TYPE_TIMESTAMP => 'TIMESTAMP', \yii\db\oci\Schema::TYPE_TIME => 'TIMESTAMP', \yii\db\oci\Schema::TYPE_DATE => 'DATE', \yii\db\oci\Schema::TYPE_BINARY => 'BLOB', \yii\db\oci\Schema::TYPE_BOOLEAN => 'NUMBER(1)', \yii\db\oci\Schema::TYPE_MONEY => 'NUMBER(19,4)'];
+    public $typeMap = [Schema::TYPE_PK => 'NUMBER(10) NOT NULL PRIMARY KEY', Schema::TYPE_UPK => 'NUMBER(10) UNSIGNED NOT NULL PRIMARY KEY', Schema::TYPE_BIGPK => 'NUMBER(20) NOT NULL PRIMARY KEY', Schema::TYPE_UBIGPK => 'NUMBER(20) UNSIGNED NOT NULL PRIMARY KEY', Schema::TYPE_CHAR => 'CHAR(1)', Schema::TYPE_STRING => 'VARCHAR2(255)', Schema::TYPE_TEXT => 'CLOB', Schema::TYPE_TINYINT => 'NUMBER(3)', Schema::TYPE_SMALLINT => 'NUMBER(5)', Schema::TYPE_INTEGER => 'NUMBER(10)', Schema::TYPE_BIGINT => 'NUMBER(20)', Schema::TYPE_FLOAT => 'NUMBER', Schema::TYPE_DOUBLE => 'NUMBER', Schema::TYPE_DECIMAL => 'NUMBER', Schema::TYPE_DATETIME => 'TIMESTAMP', Schema::TYPE_TIMESTAMP => 'TIMESTAMP', Schema::TYPE_TIME => 'TIMESTAMP', Schema::TYPE_DATE => 'DATE', Schema::TYPE_BINARY => 'BLOB', Schema::TYPE_BOOLEAN => 'NUMBER(1)', Schema::TYPE_MONEY => 'NUMBER(19,4)'];
     /**
      * {@inheritdoc}
      */

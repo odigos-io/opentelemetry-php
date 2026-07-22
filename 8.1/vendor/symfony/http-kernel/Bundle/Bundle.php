@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Bundle;
+namespace Odigos\Symfony\Component\HttpKernel\Bundle;
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use Odigos\Symfony\Component\Console\Application;
+use Odigos\Symfony\Component\DependencyInjection\Container;
+use Odigos\Symfony\Component\DependencyInjection\ContainerBuilder;
+use Odigos\Symfony\Component\DependencyInjection\ContainerInterface;
+use Odigos\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 /**
  * An implementation of BundleInterface that adds a few conventions for DependencyInjection extensions.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Bundle implements \Symfony\Component\HttpKernel\Bundle\BundleInterface
+abstract class Bundle implements BundleInterface
 {
     protected $name;
     protected $extension;

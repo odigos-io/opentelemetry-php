@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Queue\Jobs;
+namespace Odigos\Illuminate\Queue\Jobs;
 
-use Illuminate\Contracts\Queue\Job as JobContract;
-use Illuminate\Support\Str;
-class FakeJob extends \Illuminate\Queue\Jobs\Job implements JobContract
+use Odigos\Illuminate\Contracts\Queue\Job as JobContract;
+use Odigos\Illuminate\Support\Str;
+class FakeJob extends Job implements JobContract
 {
     /**
      * The number of seconds the released job was delayed.

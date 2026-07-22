@@ -1,21 +1,21 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Events\VendorTagPublished;
-use Illuminate\Support\Arr;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Foundation\Events\VendorTagPublished;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Support\Str;
 use Odigos\League\Flysystem\Filesystem as Flysystem;
 use Odigos\League\Flysystem\Local\LocalFilesystemAdapter as LocalAdapter;
 use Odigos\League\Flysystem\MountManager;
 use Odigos\League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use Odigos\League\Flysystem\Visibility;
-use Symfony\Component\Console\Attribute\AsCommand;
-use function Laravel\Prompts\search;
-use function Laravel\Prompts\select;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use function Odigos\Laravel\Prompts\search;
+use function Odigos\Laravel\Prompts\select;
 #[AsCommand(name: 'vendor:publish')]
 class VendorPublishCommand extends Command
 {

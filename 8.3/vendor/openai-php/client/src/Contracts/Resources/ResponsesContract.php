@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Responses\CreateResponse;
-use OpenAI\Responses\Responses\CreateStreamedResponse;
-use OpenAI\Responses\Responses\DeleteResponse;
-use OpenAI\Responses\Responses\ListInputItems;
-use OpenAI\Responses\Responses\RetrieveResponse;
-use OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\Responses\Responses\CreateResponse;
+use Odigos\OpenAI\Responses\Responses\CreateStreamedResponse;
+use Odigos\OpenAI\Responses\Responses\DeleteResponse;
+use Odigos\OpenAI\Responses\Responses\ListInputItems;
+use Odigos\OpenAI\Responses\Responses\RetrieveResponse;
+use Odigos\OpenAI\Responses\StreamResponse;
 interface ResponsesContract
 {
     /**
@@ -60,5 +60,5 @@ interface ResponsesContract
     /**
      * Manage conversations as a sub-resource of Responses namespace for convenience in tests.
      */
-    public function conversations(): \OpenAI\Contracts\Resources\ConversationsContract;
+    public function conversations(): ConversationsContract;
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\View\Compilers;
+namespace Odigos\Illuminate\View\Compilers;
 
 interface CompilerInterface
 {

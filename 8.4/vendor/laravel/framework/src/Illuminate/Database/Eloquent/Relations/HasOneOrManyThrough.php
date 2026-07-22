@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Odigos\Illuminate\Database\Eloquent\Relations;
 
 use Closure;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
-use Illuminate\Database\Query\Grammars\MySqlGrammar;
-use Illuminate\Database\UniqueConstraintViolationException;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Database\Eloquent\Builder;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\ModelNotFoundException;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
+use Odigos\Illuminate\Database\Query\Grammars\MySqlGrammar;
+use Odigos\Illuminate\Database\UniqueConstraintViolationException;
+use Odigos\Illuminate\Support\Arr;
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TIntermediateModel of \Illuminate\Database\Eloquent\Model
@@ -20,7 +20,7 @@ use Illuminate\Support\Arr;
  *
  * @extends \Illuminate\Database\Eloquent\Relations\Relation<TRelatedModel, TIntermediateModel, TResult>
  */
-abstract class HasOneOrManyThrough extends \Illuminate\Database\Eloquent\Relations\Relation
+abstract class HasOneOrManyThrough extends Relation
 {
     use InteractsWithDictionary;
     /**

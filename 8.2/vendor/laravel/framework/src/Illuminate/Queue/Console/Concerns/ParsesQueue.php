@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Queue\Console\Concerns;
+namespace Odigos\Illuminate\Queue\Console\Concerns;
 
 trait ParsesQueue
 {

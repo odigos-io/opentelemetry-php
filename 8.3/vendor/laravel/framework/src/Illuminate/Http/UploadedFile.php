@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Http;
+namespace Odigos\Illuminate\Http;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Http\Testing\FileFactory;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Traits\Macroable;
-use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
+use Odigos\Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Odigos\Illuminate\Http\Testing\FileFactory;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 class UploadedFile extends SymfonyUploadedFile
 {
-    use \Illuminate\Http\FileHelpers, Macroable;
+    use FileHelpers, Macroable;
     /**
      * Begin creating a new file fake.
      *

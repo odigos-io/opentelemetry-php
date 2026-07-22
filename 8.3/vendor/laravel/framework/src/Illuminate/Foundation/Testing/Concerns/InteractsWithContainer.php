@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Foundation\Testing\Concerns;
+namespace Odigos\Illuminate\Foundation\Testing\Concerns;
 
 use Closure;
-use Illuminate\Foundation\Mix;
-use Illuminate\Foundation\Vite;
-use Illuminate\Support\Defer\DeferredCallbackCollection;
-use Illuminate\Support\Facades\Vite as ViteFacade;
-use Illuminate\Support\HtmlString;
+use Odigos\Illuminate\Foundation\Mix;
+use Odigos\Illuminate\Foundation\Vite;
+use Odigos\Illuminate\Support\Defer\DeferredCallbackCollection;
+use Odigos\Illuminate\Support\Facades\Vite as ViteFacade;
+use Odigos\Illuminate\Support\HtmlString;
 use Odigos\Mockery;
 trait InteractsWithContainer
 {

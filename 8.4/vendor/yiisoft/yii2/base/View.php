@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 use Odigos\Yii;
-use yii\helpers\FileHelper;
-use yii\widgets\Block;
-use yii\widgets\ContentDecorator;
-use yii\widgets\FragmentCache;
+use Odigos\yii\helpers\FileHelper;
+use Odigos\yii\widgets\Block;
+use Odigos\yii\widgets\ContentDecorator;
+use Odigos\yii\widgets\FragmentCache;
 /**
  * View represents a view object in the MVC pattern.
  *
@@ -26,7 +26,7 @@ use yii\widgets\FragmentCache;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class View extends \yii\base\Component implements \yii\base\DynamicContentAwareInterface
+class View extends Component implements DynamicContentAwareInterface
 {
     /**
      * @event Event an event that is triggered by [[beginPage()]].
@@ -113,7 +113,7 @@ class View extends \yii\base\Component implements \yii\base\DynamicContentAwareI
         parent::init();
         if (is_array($this->theme)) {
             if (!isset($this->theme['class'])) {
-                $this->theme['class'] = 'yii\base\Theme';
+                $this->theme['class'] = 'Odigos\yii\base\Theme';
             }
             $this->theme = Yii::createObject($this->theme);
         } elseif (is_string($this->theme)) {
@@ -174,14 +174,14 @@ class View extends \yii\base\Component implements \yii\base\DynamicContentAwareI
             if (Yii::$app->controller !== null) {
                 $file = Yii::$app->controller->module->getViewPath() . \DIRECTORY_SEPARATOR . ltrim($view, '/');
             } else {
-                throw new \yii\base\InvalidCallException("Unable to locate view file for view '{$view}': no active controller.");
+                throw new InvalidCallException("Unable to locate view file for view '{$view}': no active controller.");
             }
-        } elseif ($context instanceof \yii\base\ViewContextInterface) {
+        } elseif ($context instanceof ViewContextInterface) {
             $file = $context->getViewPath() . \DIRECTORY_SEPARATOR . $view;
         } elseif (($currentViewFile = $this->getRequestedViewFile()) !== \false) {
             $file = dirname($currentViewFile) . \DIRECTORY_SEPARATOR . $view;
         } else {
-            throw new \yii\base\InvalidCallException("Unable to resolve view file for view '{$view}': no active view context.");
+            throw new InvalidCallException("Unable to resolve view file for view '{$view}': no active view context.");
         }
         if (pathinfo($file, \PATHINFO_EXTENSION) !== '') {
             return $file;
@@ -220,7 +220,7 @@ class View extends \yii\base\Component implements \yii\base\DynamicContentAwareI
         if (is_file($viewFile)) {
             $viewFile = FileHelper::localize($viewFile);
         } else {
-            throw new \yii\base\ViewNotFoundException("The view file does not exist: {$viewFile}");
+            throw new ViewNotFoundException("The view file does not exist: {$viewFile}");
         }
         $oldContext = $this->context;
         if ($context !== null) {
@@ -272,7 +272,7 @@ class View extends \yii\base\Component implements \yii\base\DynamicContentAwareI
      */
     public function beforeRender($viewFile, $params)
     {
-        $event = new \yii\base\ViewEvent(['viewFile' => $viewFile, 'params' => $params]);
+        $event = new ViewEvent(['viewFile' => $viewFile, 'params' => $params]);
         $this->trigger(self::EVENT_BEFORE_RENDER, $event);
         return $event->isValid;
     }
@@ -288,7 +288,7 @@ class View extends \yii\base\Component implements \yii\base\DynamicContentAwareI
     public function afterRender($viewFile, $params, &$output)
     {
         if ($this->hasEventHandlers(self::EVENT_AFTER_RENDER)) {
-            $event = new \yii\base\ViewEvent(['viewFile' => $viewFile, 'params' => $params]);
+            $event = new ViewEvent(['viewFile' => $viewFile, 'params' => $params]);
             $event->output =& $output;
             $this->trigger(self::EVENT_AFTER_RENDER, $event);
         }
@@ -379,7 +379,7 @@ class View extends \yii\base\Component implements \yii\base\DynamicContentAwareI
     public function addDynamicPlaceholder($placeholder, $statements)
     {
         foreach ($this->cacheStack as $cache) {
-            if ($cache instanceof \yii\base\DynamicContentAwareInterface) {
+            if ($cache instanceof DynamicContentAwareInterface) {
                 $cache->addDynamicPlaceholder($placeholder, $statements);
             } else {
                 // TODO: Remove in 2.1
@@ -413,7 +413,7 @@ class View extends \yii\base\Component implements \yii\base\DynamicContentAwareI
      * @param DynamicContentAwareInterface $instance class instance supporting dynamic contents.
      * @since 2.0.14
      */
-    public function pushDynamicContent(\yii\base\DynamicContentAwareInterface $instance)
+    public function pushDynamicContent(DynamicContentAwareInterface $instance)
     {
         $this->cacheStack[] = $instance;
     }

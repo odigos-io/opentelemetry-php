@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Translation;
+namespace Odigos\Illuminate\Translation;
 
-use Illuminate\Contracts\Translation\Loader;
+use Odigos\Illuminate\Contracts\Translation\Loader;
 class ArrayLoader implements Loader
 {
     /**

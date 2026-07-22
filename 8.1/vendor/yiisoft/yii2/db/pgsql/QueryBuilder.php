@@ -5,21 +5,21 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\pgsql;
+namespace Odigos\yii\db\pgsql;
 
-use yii\base\InvalidArgumentException;
-use yii\db\Expression;
-use yii\db\ExpressionInterface;
-use yii\db\Query;
-use yii\db\PdoValue;
-use yii\helpers\StringHelper;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\db\Expression;
+use Odigos\yii\db\ExpressionInterface;
+use Odigos\yii\db\Query;
+use Odigos\yii\db\PdoValue;
+use Odigos\yii\helpers\StringHelper;
 /**
  * QueryBuilder is the query builder for PostgreSQL databases.
  *
  * @author Gevik Babakhani <gevikb@gmail.com>
  * @since 2.0
  */
-class QueryBuilder extends \yii\db\QueryBuilder
+class QueryBuilder extends \Odigos\yii\db\QueryBuilder
 {
     /**
      * Defines a UNIQUE index for [[createIndex()]].
@@ -49,7 +49,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
     /**
      * @var array mapping from abstract column types (keys) to physical column types (values).
      */
-    public $typeMap = [\yii\db\pgsql\Schema::TYPE_PK => 'serial NOT NULL PRIMARY KEY', \yii\db\pgsql\Schema::TYPE_UPK => 'serial NOT NULL PRIMARY KEY', \yii\db\pgsql\Schema::TYPE_BIGPK => 'bigserial NOT NULL PRIMARY KEY', \yii\db\pgsql\Schema::TYPE_UBIGPK => 'bigserial NOT NULL PRIMARY KEY', \yii\db\pgsql\Schema::TYPE_CHAR => 'char(1)', \yii\db\pgsql\Schema::TYPE_STRING => 'varchar(255)', \yii\db\pgsql\Schema::TYPE_TEXT => 'text', \yii\db\pgsql\Schema::TYPE_TINYINT => 'smallint', \yii\db\pgsql\Schema::TYPE_SMALLINT => 'smallint', \yii\db\pgsql\Schema::TYPE_INTEGER => 'integer', \yii\db\pgsql\Schema::TYPE_BIGINT => 'bigint', \yii\db\pgsql\Schema::TYPE_FLOAT => 'double precision', \yii\db\pgsql\Schema::TYPE_DOUBLE => 'double precision', \yii\db\pgsql\Schema::TYPE_DECIMAL => 'numeric(10,0)', \yii\db\pgsql\Schema::TYPE_DATETIME => 'timestamp(0)', \yii\db\pgsql\Schema::TYPE_TIMESTAMP => 'timestamp(0)', \yii\db\pgsql\Schema::TYPE_TIME => 'time(0)', \yii\db\pgsql\Schema::TYPE_DATE => 'date', \yii\db\pgsql\Schema::TYPE_BINARY => 'bytea', \yii\db\pgsql\Schema::TYPE_BOOLEAN => 'boolean', \yii\db\pgsql\Schema::TYPE_MONEY => 'numeric(19,4)', \yii\db\pgsql\Schema::TYPE_JSON => 'jsonb'];
+    public $typeMap = [Schema::TYPE_PK => 'serial NOT NULL PRIMARY KEY', Schema::TYPE_UPK => 'serial NOT NULL PRIMARY KEY', Schema::TYPE_BIGPK => 'bigserial NOT NULL PRIMARY KEY', Schema::TYPE_UBIGPK => 'bigserial NOT NULL PRIMARY KEY', Schema::TYPE_CHAR => 'char(1)', Schema::TYPE_STRING => 'varchar(255)', Schema::TYPE_TEXT => 'text', Schema::TYPE_TINYINT => 'smallint', Schema::TYPE_SMALLINT => 'smallint', Schema::TYPE_INTEGER => 'integer', Schema::TYPE_BIGINT => 'bigint', Schema::TYPE_FLOAT => 'double precision', Schema::TYPE_DOUBLE => 'double precision', Schema::TYPE_DECIMAL => 'numeric(10,0)', Schema::TYPE_DATETIME => 'timestamp(0)', Schema::TYPE_TIMESTAMP => 'timestamp(0)', Schema::TYPE_TIME => 'time(0)', Schema::TYPE_DATE => 'date', Schema::TYPE_BINARY => 'bytea', Schema::TYPE_BOOLEAN => 'boolean', Schema::TYPE_MONEY => 'numeric(19,4)', Schema::TYPE_JSON => 'jsonb'];
     /**
      * {@inheritdoc}
      */
@@ -387,7 +387,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         if (($tableSchema = $this->db->getSchema()->getTableSchema($table)) !== null) {
             $columnSchemas = $tableSchema->columns;
             foreach ($columns as $name => $value) {
-                if (isset($columnSchemas[$name]) && $columnSchemas[$name]->type === \yii\db\pgsql\Schema::TYPE_BINARY && is_string($value)) {
+                if (isset($columnSchemas[$name]) && $columnSchemas[$name]->type === Schema::TYPE_BINARY && is_string($value)) {
                     $columns[$name] = new PdoValue($value, \PDO::PARAM_LOB);
                     // explicitly setup PDO param type for binary column
                 }

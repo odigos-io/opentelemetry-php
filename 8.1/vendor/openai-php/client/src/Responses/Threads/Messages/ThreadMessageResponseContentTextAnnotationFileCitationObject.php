@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Threads\Messages;
+namespace Odigos\OpenAI\Responses\Threads\Messages;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{type: 'file_citation', text: string, file_citation: array{file_id: string, quote?: string}, start_index: int, end_index: int}>
  */
@@ -19,7 +19,7 @@ final class ThreadMessageResponseContentTextAnnotationFileCitationObject impleme
     /**
      * @param  'file_citation'  $type
      */
-    private function __construct(public string $type, public string $text, public int $startIndex, public int $endIndex, public \OpenAI\Responses\Threads\Messages\ThreadMessageResponseContentTextAnnotationFileCitation $fileCitation)
+    private function __construct(public string $type, public string $text, public int $startIndex, public int $endIndex, public ThreadMessageResponseContentTextAnnotationFileCitation $fileCitation)
     {
     }
     /**
@@ -29,7 +29,7 @@ final class ThreadMessageResponseContentTextAnnotationFileCitationObject impleme
      */
     public static function from(array $attributes): self
     {
-        return new self($attributes['type'], $attributes['text'], $attributes['start_index'], $attributes['end_index'], \OpenAI\Responses\Threads\Messages\ThreadMessageResponseContentTextAnnotationFileCitation::from($attributes['file_citation']));
+        return new self($attributes['type'], $attributes['text'], $attributes['start_index'], $attributes['end_index'], ThreadMessageResponseContentTextAnnotationFileCitation::from($attributes['file_citation']));
     }
     /**
      * {@inheritDoc}

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
-use Illuminate\Contracts\Validation\Rule as RuleContract;
-use Illuminate\Contracts\Validation\ValidatorAwareRule;
-use Illuminate\Translation\CreatesPotentiallyTranslatedStrings;
+use Odigos\Illuminate\Contracts\Validation\Rule as RuleContract;
+use Odigos\Illuminate\Contracts\Validation\ValidatorAwareRule;
+use Odigos\Illuminate\Translation\CreatesPotentiallyTranslatedStrings;
 class ClosureValidationRule implements RuleContract, ValidatorAwareRule
 {
     use CreatesPotentiallyTranslatedStrings;

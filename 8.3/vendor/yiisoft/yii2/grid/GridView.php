@@ -5,17 +5,17 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\grid;
+namespace Odigos\yii\grid;
 
 use Closure;
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\base\Model;
-use yii\helpers\Html;
-use yii\helpers\Json;
-use yii\helpers\Url;
-use yii\i18n\Formatter;
-use yii\widgets\BaseListView;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\Model;
+use Odigos\yii\helpers\Html;
+use Odigos\yii\helpers\Json;
+use Odigos\yii\helpers\Url;
+use Odigos\yii\i18n\Formatter;
+use Odigos\yii\widgets\BaseListView;
 /**
  * The GridView widget is used to display data in a grid.
  *
@@ -296,7 +296,7 @@ class GridView extends BaseListView
     public function run()
     {
         $view = $this->getView();
-        \yii\grid\GridViewAsset::register($view);
+        GridViewAsset::register($view);
         $id = $this->options['id'];
         $options = Json::htmlEncode(array_merge($this->getClientOptions(), ['filterOnFocusOut' => $this->filterOnFocusOut]));
         $view->registerJs("jQuery('#{$id}').yiiGridView({$options});");
@@ -515,7 +515,7 @@ class GridView extends BaseListView
             if (is_string($column)) {
                 $column = $this->createDataColumn($column);
             } else {
-                $column = Yii::createObject(array_merge(['class' => $this->dataColumnClass ?: \yii\grid\DataColumn::className(), 'grid' => $this], $column));
+                $column = Yii::createObject(array_merge(['class' => $this->dataColumnClass ?: DataColumn::className(), 'grid' => $this], $column));
             }
             if (!$column->visible) {
                 unset($this->columns[$i]);
@@ -535,7 +535,7 @@ class GridView extends BaseListView
         if (!preg_match('/^([^:]+)(:(\w*))?(:(.*))?$/', $text, $matches)) {
             throw new InvalidConfigException('The column must be specified in the format of "attribute", "attribute:format" or "attribute:format:label"');
         }
-        return Yii::createObject(['class' => $this->dataColumnClass ?: \yii\grid\DataColumn::className(), 'grid' => $this, 'attribute' => $matches[1], 'format' => isset($matches[3]) ? $matches[3] : 'text', 'label' => isset($matches[5]) ? $matches[5] : null]);
+        return Yii::createObject(['class' => $this->dataColumnClass ?: DataColumn::className(), 'grid' => $this, 'attribute' => $matches[1], 'format' => isset($matches[3]) ? $matches[3] : 'text', 'label' => isset($matches[5]) ? $matches[5] : null]);
     }
     /**
      * This function tries to guess the columns to show from the given data

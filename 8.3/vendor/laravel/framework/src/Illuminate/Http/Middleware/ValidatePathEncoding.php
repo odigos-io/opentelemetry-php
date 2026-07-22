@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Http\Middleware;
+namespace Odigos\Illuminate\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Exceptions\MalformedUrlException;
-use Illuminate\Http\Request;
+use Odigos\Illuminate\Http\Exceptions\MalformedUrlException;
+use Odigos\Illuminate\Http\Request;
 class ValidatePathEncoding
 {
     /**

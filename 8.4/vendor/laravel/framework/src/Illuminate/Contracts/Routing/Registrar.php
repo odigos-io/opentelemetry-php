@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Routing;
+namespace Odigos\Illuminate\Contracts\Routing;
 
 interface Registrar
 {

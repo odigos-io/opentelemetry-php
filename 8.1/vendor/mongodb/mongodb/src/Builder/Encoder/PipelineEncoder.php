@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder\Encoder;
+namespace Odigos\MongoDB\Builder\Encoder;
 
-use MongoDB\Builder\Pipeline;
-use MongoDB\Codec\EncodeIfSupported;
-use MongoDB\Codec\Encoder;
-use MongoDB\Exception\UnsupportedValueException;
+use Odigos\MongoDB\Builder\Pipeline;
+use Odigos\MongoDB\Codec\EncodeIfSupported;
+use Odigos\MongoDB\Codec\Encoder;
+use Odigos\MongoDB\Exception\UnsupportedValueException;
 /**
  * @template-implements Encoder<list<mixed>, Pipeline>
  * @internal
@@ -15,7 +15,7 @@ final class PipelineEncoder implements Encoder
 {
     /** @template-use EncodeIfSupported<list<mixed>, Pipeline> */
     use EncodeIfSupported;
-    use \MongoDB\Builder\Encoder\RecursiveEncode;
+    use RecursiveEncode;
     /** @psalm-assert-if-true Pipeline $value */
     public function canEncode(mixed $value): bool
     {

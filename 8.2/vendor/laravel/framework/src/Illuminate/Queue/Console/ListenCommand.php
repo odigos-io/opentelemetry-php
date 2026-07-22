@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Queue\Console;
+namespace Odigos\Illuminate\Queue\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Queue\Listener;
-use Illuminate\Queue\ListenerOptions;
-use Illuminate\Support\Stringable;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Queue\Listener;
+use Odigos\Illuminate\Queue\ListenerOptions;
+use Odigos\Illuminate\Support\Stringable;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'queue:listen')]
 class ListenCommand extends Command
 {

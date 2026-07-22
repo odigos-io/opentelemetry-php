@@ -1,9 +1,9 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\Title;
-class TitleRenderer extends \Laravel\Prompts\Themes\Default\Renderer
+use Odigos\Laravel\Prompts\Title;
+class TitleRenderer extends Renderer
 {
     /**
      * Render the title.

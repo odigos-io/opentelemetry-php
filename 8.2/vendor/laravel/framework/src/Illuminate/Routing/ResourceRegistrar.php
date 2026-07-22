@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Str;
 class ResourceRegistrar
 {
     /**
@@ -52,7 +52,7 @@ class ResourceRegistrar
      *
      * @param  \Illuminate\Routing\Router  $router
      */
-    public function __construct(\Illuminate\Routing\Router $router)
+    public function __construct(Router $router)
     {
         $this->router = $router;
     }
@@ -81,7 +81,7 @@ class ResourceRegistrar
         // place-holder on the route parameters, which should be the base resources.
         $base = $this->getResourceWildcard(last(explode('.', $name)));
         $defaults = $this->resourceDefaults;
-        $collection = new \Illuminate\Routing\RouteCollection();
+        $collection = new RouteCollection();
         $resourceMethods = $this->getResourceMethods($defaults, $options);
         foreach ($resourceMethods as $m) {
             $optionsForMethod = $options;
@@ -89,7 +89,7 @@ class ResourceRegistrar
                 $optionsForMethod['middleware'] = $optionsForMethod['middleware_for'][$m];
             }
             if (isset($optionsForMethod['excluded_middleware_for'][$m])) {
-                $optionsForMethod['excluded_middleware'] = \Illuminate\Routing\Router::uniqueMiddleware(array_merge($optionsForMethod['excluded_middleware'] ?? [], $optionsForMethod['excluded_middleware_for'][$m]));
+                $optionsForMethod['excluded_middleware'] = Router::uniqueMiddleware(array_merge($optionsForMethod['excluded_middleware'] ?? [], $optionsForMethod['excluded_middleware_for'][$m]));
             }
             $route = $this->{'addResource' . ucfirst($m)}($name, $base, $controller, $optionsForMethod);
             if (isset($options['bindingFields'])) {
@@ -128,7 +128,7 @@ class ResourceRegistrar
         } elseif (isset($options['destroyable'])) {
             $defaults = array_merge($defaults, ['destroy']);
         }
-        $collection = new \Illuminate\Routing\RouteCollection();
+        $collection = new RouteCollection();
         $resourceMethods = $this->getResourceMethods($defaults, $options);
         foreach ($resourceMethods as $m) {
             $optionsForMethod = $options;
@@ -136,7 +136,7 @@ class ResourceRegistrar
                 $optionsForMethod['middleware'] = $optionsForMethod['middleware_for'][$m];
             }
             if (isset($optionsForMethod['excluded_middleware_for'][$m])) {
-                $optionsForMethod['excluded_middleware'] = \Illuminate\Routing\Router::uniqueMiddleware(array_merge($optionsForMethod['excluded_middleware'] ?? [], $optionsForMethod['excluded_middleware_for'][$m]));
+                $optionsForMethod['excluded_middleware'] = Router::uniqueMiddleware(array_merge($optionsForMethod['excluded_middleware'] ?? [], $optionsForMethod['excluded_middleware_for'][$m]));
             }
             $route = $this->{'addSingleton' . ucfirst($m)}($name, $controller, $optionsForMethod);
             if (isset($options['bindingFields'])) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Process;
+namespace Odigos\Illuminate\Contracts\Process;
 
 interface InvokedProcess
 {

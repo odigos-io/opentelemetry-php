@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Http\Concerns;
+namespace Odigos\Illuminate\Http\Concerns;
 
-use Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\Model;
 trait InteractsWithFlashData
 {
     /**

@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Odigos\Carbon\Carbon as BaseCarbon;
 use Odigos\Carbon\CarbonImmutable as BaseCarbonImmutable;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\Dumpable;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Dumpable;
 use Odigos\Ramsey\Uuid\Uuid;
-use Symfony\Component\Uid\Ulid;
+use Odigos\Symfony\Component\Uid\Ulid;
 class Carbon extends BaseCarbon
 {
     use Conditionable, Dumpable;

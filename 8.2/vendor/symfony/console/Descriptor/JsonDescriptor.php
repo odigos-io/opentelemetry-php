@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Descriptor;
+namespace Odigos\Symfony\Component\Console\Descriptor;
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Application;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputDefinition;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 /**
  * JSON descriptor.
  *
@@ -22,7 +22,7 @@ use Symfony\Component\Console\Input\InputOption;
  *
  * @internal
  */
-class JsonDescriptor extends \Symfony\Component\Console\Descriptor\Descriptor
+class JsonDescriptor extends Descriptor
 {
     protected function describeInputArgument(InputArgument $argument, array $options = []): void
     {
@@ -46,7 +46,7 @@ class JsonDescriptor extends \Symfony\Component\Console\Descriptor\Descriptor
     protected function describeApplication(Application $application, array $options = []): void
     {
         $describedNamespace = $options['namespace'] ?? null;
-        $description = new \Symfony\Component\Console\Descriptor\ApplicationDescription($application, $describedNamespace, \true);
+        $description = new ApplicationDescription($application, $describedNamespace, \true);
         $commands = [];
         foreach ($description->getCommands() as $command) {
             $commands[] = $this->getCommandData($command, $options['short'] ?? \false);

@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error\Debug;
+namespace Odigos\Cake\Error\Debug;
 
 /**
  * Interface for formatters used by Debugger::exportVar()
@@ -29,7 +29,7 @@ interface FormatterInterface
      * @param \Cake\Error\Debug\NodeInterface $node The node tree to dump.
      * @return string
      */
-    public function dump(\Cake\Error\Debug\NodeInterface $node): string;
+    public function dump(NodeInterface $node): string;
     /**
      * Output a dump wrapper with location context.
      *

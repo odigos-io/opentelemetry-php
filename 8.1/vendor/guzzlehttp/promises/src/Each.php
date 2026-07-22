@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace GuzzleHttp\Promise;
+namespace Odigos\GuzzleHttp\Promise;
 
 final class Each
 {
@@ -20,10 +20,10 @@ final class Each
      *
      * @param mixed $iterable Iterator or array to iterate over.
      */
-    public static function of($iterable, ?callable $onFulfilled = null, ?callable $onRejected = null): \GuzzleHttp\Promise\PromiseInterface
+    public static function of($iterable, ?callable $onFulfilled = null, ?callable $onRejected = null): PromiseInterface
     {
         $iterable = self::prepareIterable($iterable, __FUNCTION__);
-        return (new \GuzzleHttp\Promise\EachPromise($iterable, ['fulfilled' => $onFulfilled, 'rejected' => $onRejected]))->promise();
+        return (new EachPromise($iterable, ['fulfilled' => $onFulfilled, 'rejected' => $onRejected]))->promise();
     }
     /**
      * Like of, but only allows a certain number of outstanding promises at any
@@ -36,10 +36,10 @@ final class Each
      * @param mixed        $iterable
      * @param int|callable $concurrency
      */
-    public static function ofLimit($iterable, $concurrency, ?callable $onFulfilled = null, ?callable $onRejected = null): \GuzzleHttp\Promise\PromiseInterface
+    public static function ofLimit($iterable, $concurrency, ?callable $onFulfilled = null, ?callable $onRejected = null): PromiseInterface
     {
         $iterable = self::prepareIterable($iterable, __FUNCTION__);
-        return (new \GuzzleHttp\Promise\EachPromise($iterable, ['fulfilled' => $onFulfilled, 'rejected' => $onRejected, 'concurrency' => $concurrency]))->promise();
+        return (new EachPromise($iterable, ['fulfilled' => $onFulfilled, 'rejected' => $onRejected, 'concurrency' => $concurrency]))->promise();
     }
     /**
      * Like limit, but ensures that no promise in the given $iterable argument
@@ -49,10 +49,10 @@ final class Each
      * @param mixed        $iterable
      * @param int|callable $concurrency
      */
-    public static function ofLimitAll($iterable, $concurrency, ?callable $onFulfilled = null): \GuzzleHttp\Promise\PromiseInterface
+    public static function ofLimitAll($iterable, $concurrency, ?callable $onFulfilled = null): PromiseInterface
     {
         $iterable = self::prepareIterable($iterable, __FUNCTION__);
-        return self::ofLimit($iterable, $concurrency, $onFulfilled, function ($reason, $idx, \GuzzleHttp\Promise\PromiseInterface $aggregate): void {
+        return self::ofLimit($iterable, $concurrency, $onFulfilled, function ($reason, $idx, PromiseInterface $aggregate): void {
             $aggregate->reject($reason);
         });
     }

@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\I18n;
+namespace Odigos\Cake\I18n;
 
-use Cake\Chronos\ChronosDatePeriod;
+use Odigos\Cake\Chronos\ChronosDatePeriod;
 /**
  * DatePeriod wrapper that returns DateTime instances.
  *
@@ -29,8 +29,8 @@ class DatePeriod extends ChronosDatePeriod
     /**
      * @return \Cake\I18n\Date
      */
-    public function current(): \Cake\I18n\Date
+    public function current(): Date
     {
-        return new \Cake\I18n\Date($this->iterator->current());
+        return new Date($this->iterator->current());
     }
 }

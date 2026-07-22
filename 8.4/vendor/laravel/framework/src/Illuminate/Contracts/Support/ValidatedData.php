@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Contracts\Support;
+namespace Odigos\Illuminate\Contracts\Support;
 
 use ArrayAccess;
 use IteratorAggregate;
-interface ValidatedData extends \Illuminate\Contracts\Support\Arrayable, ArrayAccess, IteratorAggregate
+interface ValidatedData extends Arrayable, ArrayAccess, IteratorAggregate
 {
     //
 }

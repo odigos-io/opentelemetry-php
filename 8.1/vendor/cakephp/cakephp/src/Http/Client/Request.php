@@ -13,9 +13,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Client;
+namespace Odigos\Cake\Http\Client;
 
-use Cake\Utility\Xml;
+use Odigos\Cake\Utility\Xml;
 use Odigos\Laminas\Diactoros\RequestTrait;
 use Odigos\Laminas\Diactoros\Stream;
 use Psr\Http\Message\RequestInterface;
@@ -26,7 +26,7 @@ use Psr\Http\Message\UriInterface;
  * Used by Cake\Http\Client to contain request information
  * for making requests.
  */
-class Request extends \Cake\Http\Client\Message implements RequestInterface
+class Request extends Message implements RequestInterface
 {
     use RequestTrait;
     /**
@@ -86,7 +86,7 @@ class Request extends \Cake\Http\Client\Message implements RequestInterface
                 /** @phpstan-ignore-next-line */
                 $content = (string) Xml::fromArray($content);
             } else {
-                $formData = new \Cake\Http\Client\FormData();
+                $formData = new FormData();
                 $formData->addMany($content);
                 /** @phpstan-var array<non-empty-string, non-empty-string> $headers */
                 $headers = ['Content-Type' => $formData->contentType()];

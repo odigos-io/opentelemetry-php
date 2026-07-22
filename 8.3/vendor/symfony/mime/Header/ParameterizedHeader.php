@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Header;
+namespace Odigos\Symfony\Component\Mime\Header;
 
-use Symfony\Component\Mime\Encoder\Rfc2231Encoder;
+use Odigos\Symfony\Component\Mime\Encoder\Rfc2231Encoder;
 /**
  * @author Chris Corbyn
  */
-final class ParameterizedHeader extends \Symfony\Component\Mime\Header\UnstructuredHeader
+final class ParameterizedHeader extends UnstructuredHeader
 {
     /**
      * RFC 2231's definition of a token.

@@ -12,9 +12,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource\Exception;
+namespace Odigos\Cake\Datasource\Exception;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 /**
  * Exception class to be thrown when a datasource configuration is not found
  */

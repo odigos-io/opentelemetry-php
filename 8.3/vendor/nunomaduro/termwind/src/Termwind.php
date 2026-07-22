@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Odigos\Termwind;
 
 use Closure;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutput;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 use Odigos\Termwind\Components\Element;
 use Odigos\Termwind\Exceptions\InvalidChild;
 /**

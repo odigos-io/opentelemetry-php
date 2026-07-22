@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\IBMDB2;
+namespace Odigos\Doctrine\DBAL\Driver\IBMDB2;
 
-use Doctrine\DBAL\Driver\FetchUtils;
-use Doctrine\DBAL\Driver\IBMDB2\Exception\StatementError;
-use Doctrine\DBAL\Driver\Result as ResultInterface;
-use Doctrine\DBAL\Exception\InvalidColumnIndex;
+use Odigos\Doctrine\DBAL\Driver\FetchUtils;
+use Odigos\Doctrine\DBAL\Driver\IBMDB2\Exception\StatementError;
+use Odigos\Doctrine\DBAL\Driver\Result as ResultInterface;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnIndex;
 use function db2_fetch_array;
 use function db2_fetch_assoc;
 use function db2_field_name;

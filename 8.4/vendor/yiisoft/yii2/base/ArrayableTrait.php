@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 use Odigos\Yii;
-use yii\helpers\ArrayHelper;
-use yii\web\Link;
-use yii\web\Linkable;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\web\Link;
+use Odigos\yii\web\Linkable;
 /**
  * ArrayableTrait provides a common implementation of the [[Arrayable]] interface.
  *
@@ -124,13 +124,13 @@ trait ArrayableTrait
             if ($recursive) {
                 $nestedFields = $this->extractFieldsFor($fields, $field);
                 $nestedExpand = $this->extractFieldsFor($expand, $field);
-                if ($attribute instanceof \yii\base\Arrayable) {
+                if ($attribute instanceof Arrayable) {
                     $attribute = $attribute->toArray($nestedFields, $nestedExpand);
                 } elseif ($attribute instanceof \JsonSerializable) {
                     $attribute = $attribute->jsonSerialize();
                 } elseif (is_array($attribute)) {
                     $attribute = array_map(function ($item) use ($nestedFields, $nestedExpand) {
-                        if ($item instanceof \yii\base\Arrayable) {
+                        if ($item instanceof Arrayable) {
                             return $item->toArray($nestedFields, $nestedExpand);
                         } elseif ($item instanceof \JsonSerializable) {
                             return $item->jsonSerialize();

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Redis\Connections;
+namespace Odigos\Illuminate\Redis\Connections;
 
 use Odigos\Predis\Command\Redis\FLUSHDB;
 use Odigos\Predis\Command\ServerFlushDatabase;
-class PredisClusterConnection extends \Illuminate\Redis\Connections\PredisConnection
+class PredisClusterConnection extends PredisConnection
 {
     /**
      * Get the keys that match the given pattern.

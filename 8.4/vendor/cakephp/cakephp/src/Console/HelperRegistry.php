@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
-use Cake\Console\Exception\MissingHelperException;
-use Cake\Core\App;
-use Cake\Core\ObjectRegistry;
+use Odigos\Cake\Console\Exception\MissingHelperException;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\ObjectRegistry;
 /**
  * Registry for Helpers. Provides features
  * for lazily loading helpers.
@@ -32,14 +32,14 @@ class HelperRegistry extends ObjectRegistry
      *
      * @var \Cake\Console\ConsoleIo
      */
-    protected \Cake\Console\ConsoleIo $_io;
+    protected ConsoleIo $_io;
     /**
      * Sets The IO instance that should be passed to the shell helpers
      *
      * @param \Cake\Console\ConsoleIo $io An io instance.
      * @return void
      */
-    public function setIo(\Cake\Console\ConsoleIo $io): void
+    public function setIo(ConsoleIo $io): void
     {
         $this->_io = $io;
     }
@@ -81,7 +81,7 @@ class HelperRegistry extends ObjectRegistry
      * @param array<string, mixed> $config An array of settings to use for the helper.
      * @return \Cake\Console\Helper The constructed helper class.
      */
-    protected function _create(object|string $class, string $alias, array $config): \Cake\Console\Helper
+    protected function _create(object|string $class, string $alias, array $config): Helper
     {
         if (is_object($class)) {
             return $class;

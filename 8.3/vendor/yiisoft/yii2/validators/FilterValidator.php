@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
-use yii\base\InvalidConfigException;
-use yii\helpers\Json;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\Json;
 /**
  * FilterValidator converts the attribute value according to a filter.
  *
@@ -33,7 +33,7 @@ use yii\helpers\Json;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class FilterValidator extends \yii\validators\Validator
+class FilterValidator extends Validator
 {
     /**
      * @var callable the filter. This can be a global function name, anonymous function, etc.
@@ -85,7 +85,7 @@ class FilterValidator extends \yii\validators\Validator
         if ($this->filter !== 'trim') {
             return null;
         }
-        \yii\validators\ValidationAsset::register($view);
+        ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
         return 'value = yii.validation.trim($form, attribute, ' . Json::htmlEncode($options) . ', value);';
     }

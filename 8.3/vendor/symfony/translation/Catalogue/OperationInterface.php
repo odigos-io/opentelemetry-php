@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Catalogue;
+namespace Odigos\Symfony\Component\Translation\Catalogue;
 
-use Symfony\Component\Translation\MessageCatalogueInterface;
+use Odigos\Symfony\Component\Translation\MessageCatalogueInterface;
 /**
  * Represents an operation on catalogue(s).
  *

@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Transporters;
+namespace Odigos\OpenAI\Transporters;
 
 use Closure;
-use GuzzleHttp\Exception\ClientException;
+use Odigos\GuzzleHttp\Exception\ClientException;
 use JsonException;
-use OpenAI\Contracts\TransporterContract;
-use OpenAI\Enums\Transporter\ContentType;
-use OpenAI\Exceptions\ErrorException;
-use OpenAI\Exceptions\RateLimitException;
-use OpenAI\Exceptions\TransporterException;
-use OpenAI\Exceptions\UnserializableResponse;
-use OpenAI\ValueObjects\Transporter\AdaptableResponse;
-use OpenAI\ValueObjects\Transporter\BaseUri;
-use OpenAI\ValueObjects\Transporter\Headers;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\QueryParams;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\TransporterContract;
+use Odigos\OpenAI\Enums\Transporter\ContentType;
+use Odigos\OpenAI\Exceptions\ErrorException;
+use Odigos\OpenAI\Exceptions\RateLimitException;
+use Odigos\OpenAI\Exceptions\TransporterException;
+use Odigos\OpenAI\Exceptions\UnserializableResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\AdaptableResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\BaseUri;
+use Odigos\OpenAI\ValueObjects\Transporter\Headers;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\QueryParams;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;

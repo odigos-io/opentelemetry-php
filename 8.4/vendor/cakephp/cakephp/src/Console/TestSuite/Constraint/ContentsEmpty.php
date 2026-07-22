@@ -13,14 +13,14 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console\TestSuite\Constraint;
+namespace Odigos\Cake\Console\TestSuite\Constraint;
 
 /**
  * ContentsEmpty
  *
  * @internal
  */
-class ContentsEmpty extends \Cake\Console\TestSuite\Constraint\ContentsBase
+class ContentsEmpty extends ContentsBase
 {
     /**
      * Checks if contents are empty
@@ -60,5 +60,5 @@ class ContentsEmpty extends \Cake\Console\TestSuite\Constraint\ContentsBase
     }
 }
 // phpcs:disable
-class_alias('Cake\Console\TestSuite\Constraint\ContentsEmpty', 'Cake\TestSuite\Constraint\Console\ContentsEmpty');
+class_alias('Odigos\Cake\Console\TestSuite\Constraint\ContentsEmpty', 'Odigos\Cake\TestSuite\Constraint\Console\ContentsEmpty');
 // phpcs:enable

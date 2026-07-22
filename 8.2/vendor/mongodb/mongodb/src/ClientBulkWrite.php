@@ -15,15 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB;
+namespace Odigos\MongoDB;
 
 use MongoDB\BSON\Document;
 use MongoDB\BSON\PackedArray;
-use MongoDB\Codec\DocumentCodec;
-use MongoDB\Codec\Encoder;
+use Odigos\MongoDB\Codec\DocumentCodec;
+use Odigos\MongoDB\Codec\Encoder;
 use MongoDB\Driver\BulkWriteCommand;
 use MongoDB\Driver\Manager;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use NoDiscard;
 use stdClass;
 use function is_array;
@@ -42,7 +42,7 @@ final class ClientBulkWrite
     {
     }
     #[NoDiscard]
-    public static function createWithCollection(\MongoDB\Collection $collection, array $options = []): self
+    public static function createWithCollection(Collection $collection, array $options = []): self
     {
         $options += ['ordered' => \true];
         if (isset($options['bypassDocumentValidation']) && !is_bool($options['bypassDocumentValidation'])) {
@@ -172,7 +172,7 @@ final class ClientBulkWrite
         return $this;
     }
     #[NoDiscard]
-    public function withCollection(\MongoDB\Collection $collection): self
+    public function withCollection(Collection $collection): self
     {
         /* Prohibit mixing Collections associated with different Manager
          * objects. This is not technically necessary, since the Collection is

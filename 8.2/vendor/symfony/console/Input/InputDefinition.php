@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Input;
+namespace Odigos\Symfony\Component\Console\Input;
 
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Exception\LogicException;
+use Odigos\Symfony\Component\Console\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Console\Exception\LogicException;
 /**
  * A InputDefinition represents a set of valid command line arguments and options.
  *
@@ -28,8 +28,8 @@ class InputDefinition
 {
     private array $arguments = [];
     private int $requiredCount = 0;
-    private ?\Symfony\Component\Console\Input\InputArgument $lastArrayArgument = null;
-    private ?\Symfony\Component\Console\Input\InputArgument $lastOptionalArgument = null;
+    private ?InputArgument $lastArrayArgument = null;
+    private ?InputArgument $lastOptionalArgument = null;
     private array $options = [];
     private array $negations = [];
     private array $shortcuts = [];
@@ -48,7 +48,7 @@ class InputDefinition
         $arguments = [];
         $options = [];
         foreach ($definition as $item) {
-            if ($item instanceof \Symfony\Component\Console\Input\InputOption) {
+            if ($item instanceof InputOption) {
                 $options[] = $item;
             } else {
                 $arguments[] = $item;
@@ -86,7 +86,7 @@ class InputDefinition
     /**
      * @throws LogicException When incorrect argument is given
      */
-    public function addArgument(\Symfony\Component\Console\Input\InputArgument $argument): void
+    public function addArgument(InputArgument $argument): void
     {
         if (isset($this->arguments[$argument->getName()])) {
             throw new LogicException(\sprintf('An argument with name "%s" already exists.', $argument->getName()));
@@ -112,7 +112,7 @@ class InputDefinition
      *
      * @throws InvalidArgumentException When argument given doesn't exist
      */
-    public function getArgument(string|int $name): \Symfony\Component\Console\Input\InputArgument
+    public function getArgument(string|int $name): InputArgument
     {
         if (!$this->hasArgument($name)) {
             throw new InvalidArgumentException(\sprintf('The "%s" argument does not exist.', $name));
@@ -188,7 +188,7 @@ class InputDefinition
     /**
      * @throws LogicException When option given already exist
      */
-    public function addOption(\Symfony\Component\Console\Input\InputOption $option): void
+    public function addOption(InputOption $option): void
     {
         if (isset($this->options[$option->getName()]) && !$option->equals($this->options[$option->getName()])) {
             throw new LogicException(\sprintf('An option named "%s" already exists.', $option->getName()));
@@ -222,7 +222,7 @@ class InputDefinition
      *
      * @throws InvalidArgumentException When option given doesn't exist
      */
-    public function getOption(string $name): \Symfony\Component\Console\Input\InputOption
+    public function getOption(string $name): InputOption
     {
         if (!$this->hasOption($name)) {
             throw new InvalidArgumentException(\sprintf('The "--%s" option does not exist.', $name));
@@ -265,7 +265,7 @@ class InputDefinition
     /**
      * Gets an InputOption by shortcut.
      */
-    public function getOptionForShortcut(string $shortcut): \Symfony\Component\Console\Input\InputOption
+    public function getOptionForShortcut(string $shortcut): InputOption
     {
         return $this->getOption($this->shortcutToName($shortcut));
     }

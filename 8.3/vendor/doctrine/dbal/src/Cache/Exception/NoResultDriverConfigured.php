@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Cache\Exception;
+namespace Odigos\Doctrine\DBAL\Cache\Exception;
 
-use Doctrine\DBAL\Cache\CacheException;
+use Odigos\Doctrine\DBAL\Cache\CacheException;
 final class NoResultDriverConfigured extends CacheException
 {
     public static function new(): self

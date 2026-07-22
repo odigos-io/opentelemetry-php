@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\View;
+namespace Odigos\Illuminate\View;
 
-use Illuminate\Container\Container;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\View\Compilers\BladeCompiler;
-use Illuminate\View\Engines\CompilerEngine;
-use Illuminate\View\Engines\EngineResolver;
-use Illuminate\View\Engines\FileEngine;
-use Illuminate\View\Engines\PhpEngine;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\View\Compilers\BladeCompiler;
+use Odigos\Illuminate\View\Engines\CompilerEngine;
+use Odigos\Illuminate\View\Engines\EngineResolver;
+use Odigos\Illuminate\View\Engines\FileEngine;
+use Odigos\Illuminate\View\Engines\PhpEngine;
 class ViewServiceProvider extends ServiceProvider
 {
     /**
@@ -23,7 +23,7 @@ class ViewServiceProvider extends ServiceProvider
         $this->registerBladeCompiler();
         $this->registerEngineResolver();
         $this->app->terminating(static function () {
-            \Illuminate\View\Component::flushCache();
+            Component::flushCache();
         });
     }
     /**
@@ -46,7 +46,7 @@ class ViewServiceProvider extends ServiceProvider
             $factory->setContainer($app);
             $factory->share('app', $app);
             $app->terminating(static function () {
-                \Illuminate\View\Component::forgetFactory();
+                Component::forgetFactory();
             });
             return $factory;
         });
@@ -61,7 +61,7 @@ class ViewServiceProvider extends ServiceProvider
      */
     protected function createFactory($resolver, $finder, $events)
     {
-        return new \Illuminate\View\Factory($resolver, $finder, $events);
+        return new Factory($resolver, $finder, $events);
     }
     /**
      * Register the view finder implementation.
@@ -71,7 +71,7 @@ class ViewServiceProvider extends ServiceProvider
     public function registerViewFinder()
     {
         $this->app->bind('view.finder', function ($app) {
-            return new \Illuminate\View\FileViewFinder($app['files'], $app['config']['view.paths']);
+            return new FileViewFinder($app['files'], $app['config']['view.paths']);
         });
     }
     /**
@@ -83,7 +83,7 @@ class ViewServiceProvider extends ServiceProvider
     {
         $this->app->singleton('blade.compiler', function ($app) {
             return tap(new BladeCompiler($app['files'], $app['config']['view.compiled'], $app['config']->get('view.relative_hash', \false) ? $app->basePath() : '', $app['config']->get('view.cache', \true), $app['config']->get('view.compiled_extension', 'php'), $app['config']->get('view.check_cache_timestamps', \true)), function ($blade) {
-                $blade->component('dynamic-component', \Illuminate\View\DynamicComponent::class);
+                $blade->component('dynamic-component', DynamicComponent::class);
             });
         });
     }

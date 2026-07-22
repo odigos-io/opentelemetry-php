@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Crypto;
+namespace Odigos\Symfony\Component\Mime\Crypto;
 
-use Symfony\Component\Mime\Exception\InvalidArgumentException;
-use Symfony\Component\Mime\Exception\RuntimeException;
-use Symfony\Component\Mime\Header\UnstructuredHeader;
-use Symfony\Component\Mime\Message;
-use Symfony\Component\Mime\Part\AbstractPart;
+use Odigos\Symfony\Component\Mime\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Mime\Exception\RuntimeException;
+use Odigos\Symfony\Component\Mime\Header\UnstructuredHeader;
+use Odigos\Symfony\Component\Mime\Message;
+use Odigos\Symfony\Component\Mime\Part\AbstractPart;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  *

@@ -1,24 +1,24 @@
 <?php
 
-namespace Illuminate\Session;
+namespace Odigos\Illuminate\Session;
 
 use BackedEnum;
 use Closure;
-use Illuminate\Contracts\Session\Session;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Date;
-use Illuminate\Support\MessageBag;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Uri;
-use Illuminate\Support\ViewErrorBag;
+use Odigos\Illuminate\Contracts\Session\Session;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Facades\Cache;
+use Odigos\Illuminate\Support\Facades\Date;
+use Odigos\Illuminate\Support\MessageBag;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Uri;
+use Odigos\Illuminate\Support\ViewErrorBag;
 use RuntimeException;
 use SessionHandlerInterface;
 use stdClass;
 use UnitEnum;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 class Store implements Session
 {
     use Macroable;
@@ -632,7 +632,7 @@ class Store implements Session
      */
     public function setExists($value)
     {
-        if ($this->handler instanceof \Illuminate\Session\ExistenceAwareInterface) {
+        if ($this->handler instanceof ExistenceAwareInterface) {
             $this->handler->setExists($value);
         }
     }
@@ -750,7 +750,7 @@ class Store implements Session
      */
     public function handlerNeedsRequest()
     {
-        return $this->handler instanceof \Illuminate\Session\CookieSessionHandler;
+        return $this->handler instanceof CookieSessionHandler;
     }
     /**
      * Set the request on the handler instance.

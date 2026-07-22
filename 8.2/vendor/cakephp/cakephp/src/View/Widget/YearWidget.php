@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Widget;
+namespace Odigos\Cake\View\Widget;
 
-use Cake\Chronos\ChronosDate;
-use Cake\View\Form\ContextInterface;
-use Cake\View\StringTemplate;
+use Odigos\Cake\Chronos\ChronosDate;
+use Odigos\Cake\View\Form\ContextInterface;
+use Odigos\Cake\View\StringTemplate;
 use DateTimeInterface;
 use InvalidArgumentException;
 /**
@@ -27,7 +27,7 @@ use InvalidArgumentException;
  * This class is usually used internally by `Cake\View\Helper\FormHelper`,
  * it but can be used to generate standalone calendar year select boxes.
  */
-class YearWidget extends \Cake\View\Widget\BasicWidget
+class YearWidget extends BasicWidget
 {
     /**
      * Data defaults.
@@ -40,14 +40,14 @@ class YearWidget extends \Cake\View\Widget\BasicWidget
      *
      * @var \Cake\View\Widget\SelectBoxWidget
      */
-    protected \Cake\View\Widget\SelectBoxWidget $_select;
+    protected SelectBoxWidget $_select;
     /**
      * Constructor
      *
      * @param \Cake\View\StringTemplate $templates Templates list.
      * @param \Cake\View\Widget\SelectBoxWidget $selectBox Selectbox widget instance.
      */
-    public function __construct(StringTemplate $templates, \Cake\View\Widget\SelectBoxWidget $selectBox)
+    public function __construct(StringTemplate $templates, SelectBoxWidget $selectBox)
     {
         parent::__construct($templates);
         $this->_select = $selectBox;

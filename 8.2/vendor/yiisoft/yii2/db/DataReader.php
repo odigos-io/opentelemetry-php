@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
-use yii\base\InvalidCallException;
+use Odigos\yii\base\InvalidCallException;
 /**
  * DataReader represents a forward-only stream of rows from a query result set.
  *
@@ -49,7 +49,7 @@ use yii\base\InvalidCallException;
  *
  * @implements \Iterator<int, mixed>
  */
-class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
+class DataReader extends \Odigos\yii\base\BaseObject implements \Iterator, \Countable
 {
     /**
      * @var \PDOStatement the PDOStatement associated with the command
@@ -63,7 +63,7 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
      * @param Command $command the command generating the query result
      * @param array $config name-value pairs that will be used to initialize the object properties
      */
-    public function __construct(\yii\db\Command $command, $config = [])
+    public function __construct(Command $command, $config = [])
     {
         $this->_statement = $command->pdoStatement;
         $this->_statement->setFetchMode(\PDO::FETCH_ASSOC);

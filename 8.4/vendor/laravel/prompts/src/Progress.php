@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
 use InvalidArgumentException;
@@ -9,7 +9,7 @@ use Throwable;
 /**
  * @template TSteps of iterable<mixed>|int
  */
-class Progress extends \Laravel\Prompts\Prompt
+class Progress extends Prompt
 {
     /**
      * The current progress bar item count.

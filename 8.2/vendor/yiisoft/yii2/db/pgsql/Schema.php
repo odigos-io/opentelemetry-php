@@ -5,21 +5,21 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\pgsql;
+namespace Odigos\yii\db\pgsql;
 
 use Odigos\Yii;
-use yii\base\NotSupportedException;
-use yii\db\CheckConstraint;
-use yii\db\Constraint;
-use yii\db\ConstraintFinderInterface;
-use yii\db\ConstraintFinderTrait;
-use yii\db\Expression;
-use yii\db\ForeignKeyConstraint;
-use yii\db\IndexConstraint;
-use yii\db\TableSchema;
-use yii\db\ViewFinderTrait;
-use yii\helpers\ArrayHelper;
-use yii\db\Schema as BaseSchema;
+use Odigos\yii\base\NotSupportedException;
+use Odigos\yii\db\CheckConstraint;
+use Odigos\yii\db\Constraint;
+use Odigos\yii\db\ConstraintFinderInterface;
+use Odigos\yii\db\ConstraintFinderTrait;
+use Odigos\yii\db\Expression;
+use Odigos\yii\db\ForeignKeyConstraint;
+use Odigos\yii\db\IndexConstraint;
+use Odigos\yii\db\TableSchema;
+use Odigos\yii\db\ViewFinderTrait;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\db\Schema as BaseSchema;
 /**
  * Schema is the class for retrieving metadata from a PostgreSQL database
  * (version 9.x and above).
@@ -42,7 +42,7 @@ class Schema extends BaseSchema implements ConstraintFinderInterface
     /**
      * {@inheritdoc}
      */
-    public $columnSchemaClass = 'yii\db\pgsql\ColumnSchema';
+    public $columnSchemaClass = 'Odigos\yii\db\pgsql\ColumnSchema';
     /**
      * @var array mapping from physical column types (keys) to abstract
      * column types (values)
@@ -253,7 +253,7 @@ SQL;
      */
     public function createQueryBuilder()
     {
-        return Yii::createObject(\yii\db\pgsql\QueryBuilder::className(), [$this->db]);
+        return Yii::createObject(QueryBuilder::className(), [$this->db]);
     }
     /**
      * Resolves the table name and schema name (if any).

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Http\Middleware;
+namespace Odigos\Illuminate\Http\Middleware;
 
-use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Vite;
+use Odigos\Illuminate\Http\Response;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Facades\Vite;
 class AddLinkHeadersForPreloadedAssets
 {
     /**

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation;
+namespace Odigos\Symfony\Component\HttpFoundation;
 
 // Help opcache.preload discover always-needed symbols
-class_exists(\Symfony\Component\HttpFoundation\ResponseHeaderBag::class);
+class_exists(ResponseHeaderBag::class);
 /**
  * Response represents an HTTP response.
  *
@@ -256,7 +256,7 @@ class Response
      */
     public function __construct(?string $content = '', int $status = 200, array $headers = [])
     {
-        $this->headers = new \Symfony\Component\HttpFoundation\ResponseHeaderBag($headers);
+        $this->headers = new ResponseHeaderBag($headers);
         $this->setContent($content);
         $this->setStatusCode($status);
         $this->setProtocolVersion('1.0');
@@ -290,7 +290,7 @@ class Response
      *
      * @return $this
      */
-    public function prepare(\Symfony\Component\HttpFoundation\Request $request): static
+    public function prepare(Request $request): static
     {
         $headers = $this->headers;
         if ($this->isInformational() || $this->isEmpty()) {
@@ -1054,7 +1054,7 @@ class Response
      *
      * @final
      */
-    public function isNotModified(\Symfony\Component\HttpFoundation\Request $request): bool
+    public function isNotModified(Request $request): bool
     {
         if (!$request->isMethodCacheable()) {
             return \false;
@@ -1226,7 +1226,7 @@ class Response
      *
      * @final
      */
-    protected function ensureIEOverSSLCompatibility(\Symfony\Component\HttpFoundation\Request $request): void
+    protected function ensureIEOverSSLCompatibility(Request $request): void
     {
         if (\false !== stripos($this->headers->get('Content-Disposition') ?? '', 'attachment') && 1 == preg_match('/MSIE (.*?);/i', $request->server->get('HTTP_USER_AGENT') ?? '', $match) && \true === $request->isSecure()) {
             if ((int) preg_replace('/(MSIE )(.*?);/', '$2', $match[0]) < 9) {

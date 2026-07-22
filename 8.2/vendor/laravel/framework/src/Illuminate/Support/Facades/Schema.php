@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static void defaultStringLength(int $length)
@@ -56,7 +56,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Database\Schema\Builder
  */
-class Schema extends \Illuminate\Support\Facades\Facade
+class Schema extends Facade
 {
     /**
      * Indicates if the resolved facade should be cached.

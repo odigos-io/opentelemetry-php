@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Auth;
+namespace Odigos\Illuminate\Auth;
 
 use InvalidArgumentException;
 trait CreatesUserProviders
@@ -53,7 +53,7 @@ trait CreatesUserProviders
      */
     protected function createDatabaseProvider($config)
     {
-        return new \Illuminate\Auth\DatabaseUserProvider($this->app['db']->connection($config['connection'] ?? null), $this->app['hash'], $config['table']);
+        return new DatabaseUserProvider($this->app['db']->connection($config['connection'] ?? null), $this->app['hash'], $config['table']);
     }
     /**
      * Create an instance of the Eloquent user provider.
@@ -63,7 +63,7 @@ trait CreatesUserProviders
      */
     protected function createEloquentProvider($config)
     {
-        return new \Illuminate\Auth\EloquentUserProvider($this->app['hash'], $config['model']);
+        return new EloquentUserProvider($this->app['hash'], $config['model']);
     }
     /**
      * Get the default user provider name.

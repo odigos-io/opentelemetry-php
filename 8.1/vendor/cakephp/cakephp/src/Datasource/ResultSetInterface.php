@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource;
+namespace Odigos\Cake\Datasource;
 
-use Cake\Collection\CollectionInterface;
+use Odigos\Cake\Collection\CollectionInterface;
 /**
  * Describes how a collection of datasource results should look like
  *

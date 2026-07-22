@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Concerns;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Date;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Facades\Date;
 trait HasTimestamps
 {
     /**

@@ -15,29 +15,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
-use MongoDB\Codec\DocumentCodec;
+use Odigos\MongoDB\Codec\DocumentCodec;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnsupportedException;
 use function array_key_exists;
 use function is_integer;
-use function MongoDB\is_document;
-use function MongoDB\is_first_key_operator;
-use function MongoDB\is_pipeline;
+use function Odigos\MongoDB\is_document;
+use function Odigos\MongoDB\is_first_key_operator;
+use function Odigos\MongoDB\is_pipeline;
 /**
  * Operation for replacing a document with the findAndModify command.
  *
  * @see \MongoDB\Collection::findOneAndReplace()
  * @see https://mongodb.com/docs/manual/reference/command/findAndModify/
  */
-final class FindOneAndReplace implements \MongoDB\Operation\Explainable
+final class FindOneAndReplace implements Explainable
 {
     public const RETURN_DOCUMENT_BEFORE = 1;
     public const RETURN_DOCUMENT_AFTER = 2;
-    private \MongoDB\Operation\FindAndModify $findAndModify;
+    private FindAndModify $findAndModify;
     /**
      * Constructs a findAndModify command for replacing a document.
      *
@@ -123,7 +123,7 @@ final class FindOneAndReplace implements \MongoDB\Operation\Explainable
         }
         unset($options['projection'], $options['returnDocument']);
         $replacement = $this->validateReplacement($replacement, $options['codec'] ?? null);
-        $this->findAndModify = new \MongoDB\Operation\FindAndModify($databaseName, $collectionName, ['query' => $filter, 'update' => $replacement] + $options);
+        $this->findAndModify = new FindAndModify($databaseName, $collectionName, ['query' => $filter, 'update' => $replacement] + $options);
     }
     /**
      * Execute the operation.

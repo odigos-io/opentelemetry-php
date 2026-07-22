@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Broadcasting;
+namespace Odigos\Illuminate\Broadcasting;
 
-use Illuminate\Contracts\Broadcasting\Broadcaster as BroadcasterContract;
-use Illuminate\Contracts\Broadcasting\Factory as BroadcastingFactory;
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Broadcasting\Broadcaster as BroadcasterContract;
+use Odigos\Illuminate\Contracts\Broadcasting\Factory as BroadcastingFactory;
+use Odigos\Illuminate\Contracts\Support\DeferrableProvider;
+use Odigos\Illuminate\Support\ServiceProvider;
 class BroadcastServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
@@ -15,11 +15,11 @@ class BroadcastServiceProvider extends ServiceProvider implements DeferrableProv
      */
     public function register()
     {
-        $this->app->singleton(\Illuminate\Broadcasting\BroadcastManager::class, fn($app) => new \Illuminate\Broadcasting\BroadcastManager($app));
+        $this->app->singleton(BroadcastManager::class, fn($app) => new BroadcastManager($app));
         $this->app->singleton(BroadcasterContract::class, function ($app) {
-            return $app->make(\Illuminate\Broadcasting\BroadcastManager::class)->connection();
+            return $app->make(BroadcastManager::class)->connection();
         });
-        $this->app->alias(\Illuminate\Broadcasting\BroadcastManager::class, BroadcastingFactory::class);
+        $this->app->alias(BroadcastManager::class, BroadcastingFactory::class);
     }
     /**
      * Get the services provided by the provider.
@@ -28,6 +28,6 @@ class BroadcastServiceProvider extends ServiceProvider implements DeferrableProv
      */
     public function provides()
     {
-        return [\Illuminate\Broadcasting\BroadcastManager::class, BroadcastingFactory::class, BroadcasterContract::class];
+        return [BroadcastManager::class, BroadcastingFactory::class, BroadcasterContract::class];
     }
 }

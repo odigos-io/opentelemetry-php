@@ -11,7 +11,7 @@ declare (strict_types=1);
  * @link          https://cakephp.org CakePHP(tm) Project
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Chronos;
+namespace Odigos\Cake\Chronos;
 
 use DatePeriod;
 use Iterator;
@@ -40,9 +40,9 @@ class ChronosPeriod implements Iterator
     /**
      * @return \Cake\Chronos\Chronos
      */
-    public function current(): \Cake\Chronos\Chronos
+    public function current(): Chronos
     {
-        return new \Cake\Chronos\Chronos($this->iterator->current());
+        return new Chronos($this->iterator->current());
     }
     /**
      * @return int

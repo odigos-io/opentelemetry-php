@@ -8,29 +8,29 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Command;
+namespace Odigos\Symfony\Component\Translation\Command;
 
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Completion\CompletionInput;
-use Symfony\Component\Console\Completion\CompletionSuggestions;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Translation\Catalogue\TargetOperation;
-use Symfony\Component\Translation\MessageCatalogue;
-use Symfony\Component\Translation\Provider\TranslationProviderCollection;
-use Symfony\Component\Translation\Reader\TranslationReaderInterface;
-use Symfony\Component\Translation\Writer\TranslationWriterInterface;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Completion\CompletionInput;
+use Odigos\Symfony\Component\Console\Completion\CompletionSuggestions;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Style\SymfonyStyle;
+use Odigos\Symfony\Component\Translation\Catalogue\TargetOperation;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Translation\Provider\TranslationProviderCollection;
+use Odigos\Symfony\Component\Translation\Reader\TranslationReaderInterface;
+use Odigos\Symfony\Component\Translation\Writer\TranslationWriterInterface;
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
  */
 #[AsCommand(name: 'translation:pull', description: 'Pull translations from a given provider.')]
 final class TranslationPullCommand extends Command
 {
-    use \Symfony\Component\Translation\Command\TranslationTrait;
+    use TranslationTrait;
     public function __construct(private TranslationProviderCollection $providerCollection, private TranslationWriterInterface $writer, private TranslationReaderInterface $reader, private string $defaultLocale, private array $transPaths = [], private array $enabledLocales = [])
     {
         parent::__construct();

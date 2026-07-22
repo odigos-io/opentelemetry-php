@@ -1,14 +1,14 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\FineTunesContract;
-use OpenAI\Resources\FineTunes;
-use OpenAI\Responses\FineTunes\ListEventsResponse;
-use OpenAI\Responses\FineTunes\ListResponse;
-use OpenAI\Responses\FineTunes\RetrieveResponse;
-use OpenAI\Responses\StreamResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\FineTunesContract;
+use Odigos\OpenAI\Resources\FineTunes;
+use Odigos\OpenAI\Responses\FineTunes\ListEventsResponse;
+use Odigos\OpenAI\Responses\FineTunes\ListResponse;
+use Odigos\OpenAI\Responses\FineTunes\RetrieveResponse;
+use Odigos\OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class FineTunesTestResource implements FineTunesContract
 {
     use Testable;

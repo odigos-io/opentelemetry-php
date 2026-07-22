@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
 use Odigos\Yii;
 /**
@@ -146,7 +146,7 @@ class BaseInflector
             return (string) $words;
         }
         $words = static::humanize(static::underscore($words), $ucAll);
-        return $ucAll ? \yii\helpers\StringHelper::mb_ucwords($words, self::encoding()) : \yii\helpers\StringHelper::mb_ucfirst($words, self::encoding());
+        return $ucAll ? StringHelper::mb_ucwords($words, self::encoding()) : StringHelper::mb_ucfirst($words, self::encoding());
     }
     /**
      * Returns given word as CamelCased.
@@ -163,7 +163,7 @@ class BaseInflector
         if (empty($word)) {
             return (string) $word;
         }
-        return str_replace(' ', '', \yii\helpers\StringHelper::mb_ucwords(preg_replace('/[^\pL\pN]+/u', ' ', $word), self::encoding()));
+        return str_replace(' ', '', StringHelper::mb_ucwords(preg_replace('/[^\pL\pN]+/u', ' ', $word), self::encoding()));
     }
     /**
      * Converts a CamelCase name into space-separated words.
@@ -181,7 +181,7 @@ class BaseInflector
         // and any uppercase letter preceded by an uppercase letter and followed by a lowercase letter (XYz => X Yz)
         $label = preg_replace('/(?<=\p{Ll})\p{Lu}|(?<=\p{L})\p{Lu}(?=\p{Ll})/u', ' \0', $name);
         $label = mb_strtolower(trim(str_replace(['-', '_', '.'], ' ', $label)), self::encoding());
-        return $ucwords ? \yii\helpers\StringHelper::mb_ucwords($label, self::encoding()) : $label;
+        return $ucwords ? StringHelper::mb_ucwords($label, self::encoding()) : $label;
     }
     /**
      * Converts a CamelCase name into an ID in lowercase.
@@ -216,7 +216,7 @@ class BaseInflector
         if (empty($id)) {
             return (string) $id;
         }
-        return str_replace(' ', '', \yii\helpers\StringHelper::mb_ucwords(str_replace($separator, ' ', $id), self::encoding()));
+        return str_replace(' ', '', StringHelper::mb_ucwords(str_replace($separator, ' ', $id), self::encoding()));
     }
     /**
      * Converts any "CamelCased" into an "underscored_word".
@@ -243,7 +243,7 @@ class BaseInflector
         }
         $word = str_replace('_', ' ', preg_replace('/_id$/', '', $word));
         $encoding = self::encoding();
-        return $ucAll ? \yii\helpers\StringHelper::mb_ucwords($word, $encoding) : \yii\helpers\StringHelper::mb_ucfirst($word, $encoding);
+        return $ucAll ? StringHelper::mb_ucwords($word, $encoding) : StringHelper::mb_ucfirst($word, $encoding);
     }
     /**
      * Same as camelize but first char is in lowercase.

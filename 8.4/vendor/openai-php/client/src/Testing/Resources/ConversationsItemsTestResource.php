@@ -1,13 +1,13 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\ConversationsItemsContract;
-use OpenAI\Resources\ConversationsItems;
-use OpenAI\Responses\Conversations\ConversationItem;
-use OpenAI\Responses\Conversations\ConversationItemList;
-use OpenAI\Responses\Conversations\ConversationResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\ConversationsItemsContract;
+use Odigos\OpenAI\Resources\ConversationsItems;
+use Odigos\OpenAI\Responses\Conversations\ConversationItem;
+use Odigos\OpenAI\Responses\Conversations\ConversationItemList;
+use Odigos\OpenAI\Responses\Conversations\ConversationResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class ConversationsItemsTestResource implements ConversationsItemsContract
 {
     use Testable;

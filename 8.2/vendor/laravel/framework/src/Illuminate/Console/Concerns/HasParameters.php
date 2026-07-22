@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Console\Concerns;
+namespace Odigos\Illuminate\Console\Concerns;
 
-use Symfony\Component\Console\Completion\CompletionInput;
-use Symfony\Component\Console\Completion\CompletionSuggestions;
-use Symfony\Component\Console\Completion\Suggestion;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Completion\CompletionInput;
+use Odigos\Symfony\Component\Console\Completion\CompletionSuggestions;
+use Odigos\Symfony\Component\Console\Completion\Suggestion;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 trait HasParameters
 {
     /**

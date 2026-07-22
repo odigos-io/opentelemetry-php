@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Http\Resources\JsonApi;
+namespace Odigos\Illuminate\Http\Resources\JsonApi;
 
-use Illuminate\Container\Container;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-class AnonymousResourceCollection extends \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Http\JsonResponse;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Support\Arr;
+class AnonymousResourceCollection extends \Odigos\Illuminate\Http\Resources\Json\AnonymousResourceCollection
 {
-    use \Illuminate\Http\Resources\JsonApi\Concerns\ResolvesJsonApiRequest;
+    use Concerns\ResolvesJsonApiRequest;
     /**
      * Get any additional data that should be returned with the resource array.
      *
@@ -18,7 +18,7 @@ class AnonymousResourceCollection extends \Illuminate\Http\Resources\Json\Anonym
     #[\Override]
     public function with($request)
     {
-        return array_filter(['included' => $this->collection->map(fn($resource) => $resource->resolveIncludedResourceObjects($request))->flatten(depth: 1)->uniqueStrict('_uniqueKey')->map(fn($included) => Arr::except($included, ['_uniqueKey']))->values()->all(), ...($implementation = \Illuminate\Http\Resources\JsonApi\JsonApiResource::$jsonApiInformation) ? ['jsonapi' => $implementation] : []]);
+        return array_filter(['included' => $this->collection->map(fn($resource) => $resource->resolveIncludedResourceObjects($request))->flatten(depth: 1)->uniqueStrict('_uniqueKey')->map(fn($included) => Arr::except($included, ['_uniqueKey']))->values()->all(), ...($implementation = JsonApiResource::$jsonApiInformation) ? ['jsonapi' => $implementation] : []]);
     }
     /**
      * Transform the resource into a JSON array.

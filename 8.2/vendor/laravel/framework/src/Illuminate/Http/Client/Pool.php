@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Http\Client;
+namespace Odigos\Illuminate\Http\Client;
 
-use GuzzleHttp\Utils;
+use Odigos\GuzzleHttp\Utils;
 /**
  * @mixin \Illuminate\Http\Client\Factory
  */
@@ -31,9 +31,9 @@ class Pool
      *
      * @param  \Illuminate\Http\Client\Factory|null  $factory
      */
-    public function __construct(?\Illuminate\Http\Client\Factory $factory = null)
+    public function __construct(?Factory $factory = null)
     {
-        $this->factory = $factory ?: new \Illuminate\Http\Client\Factory();
+        $this->factory = $factory ?: new Factory();
         $this->handler = Utils::chooseHandler();
     }
     /**

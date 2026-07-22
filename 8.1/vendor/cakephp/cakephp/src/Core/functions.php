@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core;
+namespace Odigos\Cake\Core;
 
 use JsonException;
 use Stringable;
@@ -27,7 +27,7 @@ if (!defined('DS')) {
 if (!defined('CAKE_DATE_RFC7231')) {
     define('CAKE_DATE_RFC7231', 'D, d M Y H:i:s \G\M\T');
 }
-if (!function_exists('Cake\Core\pathCombine')) {
+if (!function_exists('Odigos\Cake\Core\pathCombine')) {
     /**
      * Combines parts with a forward-slash `/`.
      *
@@ -79,7 +79,7 @@ if (!function_exists('Cake\Core\pathCombine')) {
         return $path;
     }
 }
-if (!function_exists('Cake\Core\h')) {
+if (!function_exists('Odigos\Cake\Core\h')) {
     /**
      * Convenience method for htmlspecialchars.
      *
@@ -119,7 +119,7 @@ if (!function_exists('Cake\Core\h')) {
         return htmlspecialchars($text, \ENT_QUOTES | \ENT_SUBSTITUTE, $charset ?: $defaultCharset, $double);
     }
 }
-if (!function_exists('Cake\Core\pluginSplit')) {
+if (!function_exists('Odigos\Cake\Core\pluginSplit')) {
     /**
      * Splits a dot syntax plugin name into its plugin and class name.
      * If $name does not have a dot, then index 0 will be null.
@@ -149,7 +149,7 @@ if (!function_exists('Cake\Core\pluginSplit')) {
         return [$plugin, $name];
     }
 }
-if (!function_exists('Cake\Core\namespaceSplit')) {
+if (!function_exists('Odigos\Cake\Core\namespaceSplit')) {
     /**
      * Split the namespace from the classname.
      *
@@ -167,7 +167,7 @@ if (!function_exists('Cake\Core\namespaceSplit')) {
         return [substr($class, 0, $pos), substr($class, $pos + 1)];
     }
 }
-if (!function_exists('Cake\Core\pr')) {
+if (!function_exists('Odigos\Cake\Core\pr')) {
     /**
      * print_r() convenience function.
      *
@@ -183,7 +183,7 @@ if (!function_exists('Cake\Core\pr')) {
      */
     function pr(mixed $var): mixed
     {
-        if (!\Cake\Core\Configure::read('debug')) {
+        if (!Configure::read('debug')) {
             return $var;
         }
         $template = \PHP_SAPI !== 'cli' && \PHP_SAPI !== 'phpdbg' ? '<pre class="pr">%s</pre>' : "\n%s\n\n";
@@ -191,7 +191,7 @@ if (!function_exists('Cake\Core\pr')) {
         return $var;
     }
 }
-if (!function_exists('Cake\Core\pj')) {
+if (!function_exists('Odigos\Cake\Core\pj')) {
     /**
      * JSON pretty print convenience function.
      *
@@ -207,7 +207,7 @@ if (!function_exists('Cake\Core\pj')) {
      */
     function pj(mixed $var): mixed
     {
-        if (!\Cake\Core\Configure::read('debug')) {
+        if (!Configure::read('debug')) {
             return $var;
         }
         $template = \PHP_SAPI !== 'cli' && \PHP_SAPI !== 'phpdbg' ? '<pre class="pj">%s</pre>' : "\n%s\n\n";
@@ -216,7 +216,7 @@ if (!function_exists('Cake\Core\pj')) {
         return $var;
     }
 }
-if (!function_exists('Cake\Core\env')) {
+if (!function_exists('Odigos\Cake\Core\env')) {
     /**
      * Gets an environment variable from available sources, and provides emulation
      * for unsupported or inconsistent environment variables (i.e. DOCUMENT_ROOT on
@@ -270,7 +270,7 @@ if (!function_exists('Cake\Core\env')) {
         return $default;
     }
 }
-if (!function_exists('Cake\Core\triggerWarning')) {
+if (!function_exists('Odigos\Cake\Core\triggerWarning')) {
     /**
      * Triggers an E_USER_WARNING.
      *
@@ -282,7 +282,7 @@ if (!function_exists('Cake\Core\triggerWarning')) {
         trigger_error($message, \E_USER_WARNING);
     }
 }
-if (!function_exists('Cake\Core\deprecationWarning')) {
+if (!function_exists('Odigos\Cake\Core\deprecationWarning')) {
     /**
      * Helper method for outputting deprecation warnings
      *
@@ -307,7 +307,7 @@ if (!function_exists('Cake\Core\deprecationWarning')) {
                 $root = ROOT;
             }
             $relative = str_replace(\DIRECTORY_SEPARATOR, '/', substr($frame['file'], strlen($root) + 1));
-            $patterns = (array) \Cake\Core\Configure::read('Error.ignoredDeprecationPaths');
+            $patterns = (array) Configure::read('Error.ignoredDeprecationPaths');
             foreach ($patterns as $pattern) {
                 $pattern = str_replace(\DIRECTORY_SEPARATOR, '/', $pattern);
                 if (fnmatch($pattern, $relative)) {
@@ -318,7 +318,7 @@ if (!function_exists('Cake\Core\deprecationWarning')) {
         }
         static $errors = [];
         $checksum = hash('xxh128', $message);
-        $duplicate = (bool) \Cake\Core\Configure::read('Error.allowDuplicateDeprecations', \false);
+        $duplicate = (bool) Configure::read('Error.allowDuplicateDeprecations', \false);
         if (isset($errors[$checksum]) && !$duplicate) {
             return;
         }
@@ -328,7 +328,7 @@ if (!function_exists('Cake\Core\deprecationWarning')) {
         trigger_error($message, \E_USER_DEPRECATED);
     }
 }
-if (!function_exists('Cake\Core\toString')) {
+if (!function_exists('Odigos\Cake\Core\toString')) {
     /**
      * Converts the given value to a string.
      *
@@ -371,7 +371,7 @@ if (!function_exists('Cake\Core\toString')) {
         return null;
     }
 }
-if (!function_exists('Cake\Core\toInt')) {
+if (!function_exists('Odigos\Cake\Core\toInt')) {
     /**
      * Converts a value to an integer.
      *
@@ -410,7 +410,7 @@ if (!function_exists('Cake\Core\toInt')) {
         return null;
     }
 }
-if (!function_exists('Cake\Core\toFloat')) {
+if (!function_exists('Odigos\Cake\Core\toFloat')) {
     /**
      * Converts a value to a float.
      *
@@ -449,7 +449,7 @@ if (!function_exists('Cake\Core\toFloat')) {
         return null;
     }
 }
-if (!function_exists('Cake\Core\toBool')) {
+if (!function_exists('Odigos\Cake\Core\toBool')) {
     /**
      * Converts a value to boolean.
      *

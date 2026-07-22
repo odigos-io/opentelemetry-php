@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Bus;
+namespace Odigos\Illuminate\Bus;
 
 class UpdatedBatchJobCounts
 {

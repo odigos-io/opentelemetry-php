@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static \Illuminate\Pipeline\Pipeline send(mixed $passable)
@@ -21,7 +21,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Pipeline\Pipeline
  */
-class Pipeline extends \Illuminate\Support\Facades\Facade
+class Pipeline extends Facade
 {
     /**
      * Indicates if the resolved instance should be cached.

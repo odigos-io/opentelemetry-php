@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Generator;
+namespace Odigos\Symfony\Component\Routing\Generator;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\Routing\RequestContext;
+use Odigos\Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Odigos\Symfony\Component\Routing\RequestContext;
 /**
  * Generates URLs based on rules dumped by CompiledUrlGeneratorDumper.
  */
-class CompiledUrlGenerator extends \Symfony\Component\Routing\Generator\UrlGenerator
+class CompiledUrlGenerator extends UrlGenerator
 {
     private array $compiledRoutes = [];
     public function __construct(array $compiledRoutes, RequestContext $context, ?LoggerInterface $logger = null, private ?string $defaultLocale = null)

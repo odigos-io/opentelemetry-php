@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
-use Illuminate\Support\Fluent;
+use Odigos\Illuminate\Support\Fluent;
 class ConditionalRules
 {
     /**

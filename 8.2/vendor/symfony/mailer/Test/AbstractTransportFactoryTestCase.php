@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Test;
+namespace Odigos\Symfony\Component\Mailer\Test;
 
 use Odigos\PHPUnit\Framework\Attributes\DataProvider;
 use Odigos\PHPUnit\Framework\TestCase;
-use Symfony\Component\Mailer\Exception\UnsupportedSchemeException;
-use Symfony\Component\Mailer\Transport\Dsn;
-use Symfony\Component\Mailer\Transport\TransportFactoryInterface;
-use Symfony\Component\Mailer\Transport\TransportInterface;
+use Odigos\Symfony\Component\Mailer\Exception\UnsupportedSchemeException;
+use Odigos\Symfony\Component\Mailer\Transport\Dsn;
+use Odigos\Symfony\Component\Mailer\Transport\TransportFactoryInterface;
+use Odigos\Symfony\Component\Mailer\Transport\TransportInterface;
 abstract class AbstractTransportFactoryTestCase extends TestCase
 {
     protected const USER = 'u$er';

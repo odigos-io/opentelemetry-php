@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.3.12
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\I18n;
+namespace Odigos\Cake\I18n;
 
 /**
  * Translator to translate the message.
@@ -32,13 +32,13 @@ class Translator
      *
      * @var \Cake\I18n\Translator|null
      */
-    protected ?\Cake\I18n\Translator $fallback = null;
+    protected ?Translator $fallback = null;
     /**
      * The formatter to use when translating messages.
      *
      * @var \Cake\I18n\FormatterInterface
      */
-    protected \Cake\I18n\FormatterInterface $formatter;
+    protected FormatterInterface $formatter;
     /**
      * The locale being used for translations.
      *
@@ -50,7 +50,7 @@ class Translator
      *
      * @var \Cake\I18n\Package
      */
-    protected \Cake\I18n\Package $package;
+    protected Package $package;
     /**
      * Constructor
      *
@@ -59,7 +59,7 @@ class Translator
      * @param \Cake\I18n\FormatterInterface $formatter A message formatter.
      * @param \Cake\I18n\Translator|null $fallback A fallback translator.
      */
-    public function __construct(string $locale, \Cake\I18n\Package $package, \Cake\I18n\FormatterInterface $formatter, ?\Cake\I18n\Translator $fallback = null)
+    public function __construct(string $locale, Package $package, FormatterInterface $formatter, ?Translator $fallback = null)
     {
         $this->locale = $locale;
         $this->package = $package;
@@ -131,7 +131,7 @@ class Translator
         // Resolve plural form.
         if (is_array($message)) {
             $count = $tokensValues['_count'] ?? 0;
-            $form = \Cake\I18n\PluralRules::calculate($this->locale, (int) $count);
+            $form = PluralRules::calculate($this->locale, (int) $count);
             $message = $message[$form] ?? (string) end($message);
         }
         if ($message === '') {
@@ -175,7 +175,7 @@ class Translator
      *
      * @return \Cake\I18n\Package
      */
-    public function getPackage(): \Cake\I18n\Package
+    public function getPackage(): Package
     {
         return $this->package;
     }

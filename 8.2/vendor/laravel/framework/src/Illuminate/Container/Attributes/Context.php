@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Container\Attributes;
+namespace Odigos\Illuminate\Container\Attributes;
 
 use Attribute;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Container\ContextualAttribute;
-use Illuminate\Log\Context\Repository;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Container\ContextualAttribute;
+use Odigos\Illuminate\Log\Context\Repository;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Context implements ContextualAttribute
 {

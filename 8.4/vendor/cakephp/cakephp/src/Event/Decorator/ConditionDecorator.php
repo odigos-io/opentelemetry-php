@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Event\Decorator;
+namespace Odigos\Cake\Event\Decorator;
 
-use Cake\Event\EventInterface;
+use Odigos\Cake\Event\EventInterface;
 use InvalidArgumentException;
 /**
  * Event Condition Decorator
@@ -24,7 +24,7 @@ use InvalidArgumentException;
  * Use this decorator to allow your event listener to only
  * be invoked if the `if` and/or `unless` conditions pass.
  */
-class ConditionDecorator extends \Cake\Event\Decorator\AbstractDecorator
+class ConditionDecorator extends AbstractDecorator
 {
     /**
      * @inheritDoc

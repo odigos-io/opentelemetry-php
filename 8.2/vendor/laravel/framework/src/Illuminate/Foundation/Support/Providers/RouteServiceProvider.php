@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Foundation\Support\Providers;
+namespace Odigos\Illuminate\Foundation\Support\Providers;
 
 use Closure;
-use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Routing\Router;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Contracts\Routing\UrlGenerator;
+use Odigos\Illuminate\Routing\Router;
+use Odigos\Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
 /**
  * @mixin \Illuminate\Routing\Router
  */

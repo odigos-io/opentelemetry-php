@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * FileDependency represents a dependency based on a file's last modification time.
  *
@@ -20,7 +20,7 @@ use yii\base\InvalidConfigException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class FileDependency extends \yii\caching\Dependency
+class FileDependency extends Dependency
 {
     /**
      * @var string the file path or [path alias](guide:concept-aliases) whose last modification time is used to

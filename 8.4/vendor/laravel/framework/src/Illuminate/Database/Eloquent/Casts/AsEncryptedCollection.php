@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Casts;
+namespace Odigos\Illuminate\Database\Eloquent\Casts;
 
-use Illuminate\Contracts\Database\Eloquent\Castable;
-use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Database\Eloquent\Castable;
+use Odigos\Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Facades\Crypt;
+use Odigos\Illuminate\Support\Str;
 use InvalidArgumentException;
 class AsEncryptedCollection implements Castable
 {
@@ -33,7 +33,7 @@ class AsEncryptedCollection implements Castable
                 if (!isset($attributes[$key])) {
                     return null;
                 }
-                $instance = new $collectionClass(\Illuminate\Database\Eloquent\Casts\Json::decode(Crypt::decryptString($attributes[$key])));
+                $instance = new $collectionClass(Json::decode(Crypt::decryptString($attributes[$key])));
                 if (!isset($this->arguments[1]) || !$this->arguments[1]) {
                     return $instance;
                 }
@@ -45,7 +45,7 @@ class AsEncryptedCollection implements Castable
             public function set($model, $key, $value, $attributes)
             {
                 if (!is_null($value)) {
-                    return [$key => Crypt::encryptString(\Illuminate\Database\Eloquent\Casts\Json::encode($value))];
+                    return [$key => Crypt::encryptString(Json::encode($value))];
                 }
                 return null;
             }

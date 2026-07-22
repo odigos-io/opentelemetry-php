@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
-use Cake\Database\Driver;
+use Odigos\Cake\Database\Driver;
 /**
  * Denotes type objects capable of converting many values from their original
  * database representation to php values.

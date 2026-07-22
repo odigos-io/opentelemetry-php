@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport\Smtp;
+namespace Odigos\Symfony\Component\Mailer\Transport\Smtp;
 
-use Symfony\Component\Mailer\Exception\UnsupportedSchemeException;
-use Symfony\Component\Mailer\Transport\AbstractTransportFactory;
-use Symfony\Component\Mailer\Transport\Dsn;
-use Symfony\Component\Mailer\Transport\Smtp\Stream\SocketStream;
-use Symfony\Component\Mailer\Transport\TransportInterface;
+use Odigos\Symfony\Component\Mailer\Exception\UnsupportedSchemeException;
+use Odigos\Symfony\Component\Mailer\Transport\AbstractTransportFactory;
+use Odigos\Symfony\Component\Mailer\Transport\Dsn;
+use Odigos\Symfony\Component\Mailer\Transport\Smtp\Stream\SocketStream;
+use Odigos\Symfony\Component\Mailer\Transport\TransportInterface;
 /**
  * @author Konstantin Myakshin <molodchick@gmail.com>
  */
@@ -29,7 +29,7 @@ final class EsmtpTransportFactory extends AbstractTransportFactory
         $tls = 'smtps' === $dsn->getScheme() ? \true : ($autoTls ? null : \false);
         $port = $dsn->getPort(0);
         $host = $dsn->getHost();
-        $transport = new \Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport($host, $port, $tls, $this->dispatcher, $this->logger);
+        $transport = new EsmtpTransport($host, $port, $tls, $this->dispatcher, $this->logger);
         $transport->setAutoTls($autoTls);
         $transport->setRequireTls($dsn->getBooleanOption('require_tls'));
         /** @var SocketStream $stream */

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
-use Illuminate\Contracts\Database\Query\Expression;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Database\Query\Expression;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use RuntimeException;
 abstract class Grammar
 {
@@ -20,7 +20,7 @@ abstract class Grammar
      *
      * @param  \Illuminate\Database\Connection  $connection
      */
-    public function __construct(\Illuminate\Database\Connection $connection)
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }

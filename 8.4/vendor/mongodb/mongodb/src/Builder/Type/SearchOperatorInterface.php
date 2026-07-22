@@ -1,6 +1,6 @@
 <?php
 
-namespace MongoDB\Builder\Type;
+namespace Odigos\MongoDB\Builder\Type;
 
 interface SearchOperatorInterface
 {

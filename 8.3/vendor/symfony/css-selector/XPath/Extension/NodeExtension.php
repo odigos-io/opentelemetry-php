@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\XPath\Extension;
+namespace Odigos\Symfony\Component\CssSelector\XPath\Extension;
 
-use Symfony\Component\CssSelector\Node;
-use Symfony\Component\CssSelector\XPath\Translator;
-use Symfony\Component\CssSelector\XPath\XPathExpr;
+use Odigos\Symfony\Component\CssSelector\Node;
+use Odigos\Symfony\Component\CssSelector\XPath\Translator;
+use Odigos\Symfony\Component\CssSelector\XPath\XPathExpr;
 /**
  * XPath expression translator node extension.
  *
@@ -23,7 +23,7 @@ use Symfony\Component\CssSelector\XPath\XPathExpr;
  *
  * @internal
  */
-class NodeExtension extends \Symfony\Component\CssSelector\XPath\Extension\AbstractExtension
+class NodeExtension extends AbstractExtension
 {
     public const ELEMENT_NAME_IN_LOWER_CASE = 1;
     public const ATTRIBUTE_NAME_IN_LOWER_CASE = 2;

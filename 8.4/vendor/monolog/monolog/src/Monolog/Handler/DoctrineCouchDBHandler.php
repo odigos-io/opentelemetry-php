@@ -14,7 +14,7 @@ namespace Odigos\Monolog\Handler;
 use Odigos\Monolog\Level;
 use Odigos\Monolog\Formatter\NormalizerFormatter;
 use Odigos\Monolog\Formatter\FormatterInterface;
-use Doctrine\CouchDB\CouchDBClient;
+use Odigos\Doctrine\CouchDB\CouchDBClient;
 use Odigos\Monolog\LogRecord;
 /**
  * CouchDB handler for Doctrine CouchDB ODM

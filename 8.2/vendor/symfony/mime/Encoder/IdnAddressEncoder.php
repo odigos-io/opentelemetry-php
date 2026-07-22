@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Encoder;
+namespace Odigos\Symfony\Component\Mime\Encoder;
 
 /**
  * An IDN email address encoder.
@@ -21,7 +21,7 @@ namespace Symfony\Component\Mime\Encoder;
  *
  * @author Christian Schmidt
  */
-final class IdnAddressEncoder implements \Symfony\Component\Mime\Encoder\AddressEncoderInterface
+final class IdnAddressEncoder implements AddressEncoderInterface
 {
     /**
      * Encodes the domain part of an address using IDN.

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Process;
+namespace Odigos\Symfony\Component\Process;
 
 /**
  * An executable finder specifically designed for the PHP executable.
@@ -18,10 +18,10 @@ namespace Symfony\Component\Process;
  */
 class PhpExecutableFinder
 {
-    private \Symfony\Component\Process\ExecutableFinder $executableFinder;
+    private ExecutableFinder $executableFinder;
     public function __construct()
     {
-        $this->executableFinder = new \Symfony\Component\Process\ExecutableFinder();
+        $this->executableFinder = new ExecutableFinder();
     }
     /**
      * Finds The PHP executable.

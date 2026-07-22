@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation;
+namespace Odigos\Symfony\Component\Translation;
 
-use Symfony\Contracts\Translation\TranslatableInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatableInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
 final class StaticMessage implements TranslatableInterface
 {
     public function __construct(private string $message)

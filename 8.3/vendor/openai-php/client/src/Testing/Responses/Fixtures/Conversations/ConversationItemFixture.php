@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\Conversations;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\Conversations;
 
 final class ConversationItemFixture
 {

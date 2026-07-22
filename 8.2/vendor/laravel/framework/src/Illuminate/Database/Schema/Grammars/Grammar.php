@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Database\Schema\Grammars;
+namespace Odigos\Illuminate\Database\Schema\Grammars;
 
-use Illuminate\Contracts\Database\Query\Expression;
-use Illuminate\Database\Concerns\CompilesJsonPaths;
-use Illuminate\Database\Grammar as BaseGrammar;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Fluent;
+use Odigos\Illuminate\Contracts\Database\Query\Expression;
+use Odigos\Illuminate\Database\Concerns\CompilesJsonPaths;
+use Odigos\Illuminate\Database\Grammar as BaseGrammar;
+use Odigos\Illuminate\Database\Schema\Blueprint;
+use Odigos\Illuminate\Support\Fluent;
 use RuntimeException;
 use UnitEnum;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 abstract class Grammar extends BaseGrammar
 {
     use CompilesJsonPaths;

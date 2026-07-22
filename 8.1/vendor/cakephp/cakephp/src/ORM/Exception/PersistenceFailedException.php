@@ -12,11 +12,11 @@ declare (strict_types=1);
  * @since         3.4.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Exception;
+namespace Odigos\Cake\ORM\Exception;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Datasource\EntityInterface;
-use Cake\Utility\Hash;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Utility\Hash;
 use Throwable;
 /**
  * Used when a strict save or delete fails

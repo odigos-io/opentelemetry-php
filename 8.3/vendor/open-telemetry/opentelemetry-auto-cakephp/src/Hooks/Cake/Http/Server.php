@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks\Cake\Http;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks\Cake\Http;
 
-use Cake\Routing\Exception\MissingRouteException;
-use Cake\Routing\Router;
+use Odigos\Cake\Routing\Exception\MissingRouteException;
+use Odigos\Cake\Routing\Router;
 use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\Context\Context;
-use OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks\CakeHook;
-use OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks\CakeHookTrait;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks\CakeHook;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks\CakeHookTrait;
 use function OpenTelemetry\Instrumentation\hook;
 use OpenTelemetry\SemConv\TraceAttributes;
 use Psr\Http\Message\ResponseInterface;
@@ -19,12 +19,12 @@ class Server implements CakeHook
     use CakeHookTrait;
     public function instrument(): void
     {
-        hook(\Cake\Http\Server::class, 'run', pre: function (\Cake\Http\Server $server, array $params, string $class, string $function, ?string $filename, ?int $lineno) {
+        hook('Cake\\Http\\Server', 'run', pre: function (object $server, array $params, string $class, string $function, ?string $filename, ?int $lineno) {
             $request = $params[0] ?? null;
             assert($request === null || $request instanceof ServerRequestInterface);
             $request = $this->buildSpan($request, $class, $function, $filename, $lineno);
             return [$request];
-        }, post: function (\Cake\Http\Server $server, array $params, ?ResponseInterface $response, ?Throwable $exception) {
+        }, post: function (object $server, array $params, ?ResponseInterface $response, ?Throwable $exception) {
             $scope = Context::storage()->scope();
             if (!$scope) {
                 return;

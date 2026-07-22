@@ -1,33 +1,33 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
 use BackedEnum;
 use Closure;
-use Illuminate\Container\Container;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Contracts\CallableDispatcher;
-use Illuminate\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Routing\Matching\HostValidator;
-use Illuminate\Routing\Matching\MethodValidator;
-use Illuminate\Routing\Matching\SchemeValidator;
-use Illuminate\Routing\Matching\UriValidator;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Http\Exceptions\HttpResponseException;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Routing\Contracts\CallableDispatcher;
+use Odigos\Illuminate\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
+use Odigos\Illuminate\Routing\Controllers\HasMiddleware;
+use Odigos\Illuminate\Routing\Controllers\Middleware;
+use Odigos\Illuminate\Routing\Matching\HostValidator;
+use Odigos\Illuminate\Routing\Matching\MethodValidator;
+use Odigos\Illuminate\Routing\Matching\SchemeValidator;
+use Odigos\Illuminate\Routing\Matching\UriValidator;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
-use Laravel\SerializableClosure\SerializableClosure;
+use Odigos\Laravel\SerializableClosure\SerializableClosure;
 use LogicException;
-use Symfony\Component\Routing\Route as SymfonyRoute;
-use function Illuminate\Support\enum_value;
+use Odigos\Symfony\Component\Routing\Route as SymfonyRoute;
+use function Odigos\Illuminate\Support\enum_value;
 class Route
 {
-    use Conditionable, \Illuminate\Routing\CreatesRegularExpressionRouteConstraints, \Illuminate\Routing\FiltersControllerMiddleware, Macroable, \Illuminate\Routing\ResolvesRouteDependencies;
+    use Conditionable, CreatesRegularExpressionRouteConstraints, FiltersControllerMiddleware, Macroable, ResolvesRouteDependencies;
     /**
      * The URI pattern the route responds to.
      *
@@ -169,7 +169,7 @@ class Route
      */
     protected function parseAction($action)
     {
-        return \Illuminate\Routing\RouteAction::parse($this->uri, $action);
+        return RouteAction::parse($this->uri, $action);
     }
     /**
      * Run the route action and return the response.
@@ -217,7 +217,7 @@ class Route
      */
     protected function isSerializedClosure()
     {
-        return \Illuminate\Routing\RouteAction::containsSerializedClosure($this->action);
+        return RouteAction::containsSerializedClosure($this->action);
     }
     /**
      * Run the route action and return the response.
@@ -326,7 +326,7 @@ class Route
     public function bind(Request $request)
     {
         $this->compileRoute();
-        $this->parameters = (new \Illuminate\Routing\RouteParameterBinder($this))->parameters($request);
+        $this->parameters = (new RouteParameterBinder($this))->parameters($request);
         $this->originalParameters = $this->parameters;
         return $this;
     }
@@ -467,7 +467,7 @@ class Route
         if (is_string($conditions)) {
             $conditions = ['subClass' => $conditions];
         }
-        return \Illuminate\Routing\RouteSignatureParameters::fromAction($this->action, $conditions);
+        return RouteSignatureParameters::fromAction($this->action, $conditions);
     }
     /**
      * Get the binding field for the given parameter.
@@ -668,7 +668,7 @@ class Route
         if ($domain instanceof BackedEnum && !is_string($domain = $domain->value)) {
             throw new InvalidArgumentException('Enum must be string backed.');
         }
-        $parsed = \Illuminate\Routing\RouteUri::parse($domain);
+        $parsed = RouteUri::parse($domain);
         $this->action['domain'] = $parsed->uri;
         $this->bindingFields = array_merge($this->bindingFields, $parsed->bindingFields);
         return $this;
@@ -745,7 +745,7 @@ class Route
     protected function parseUri($uri)
     {
         $this->bindingFields = [];
-        return tap(\Illuminate\Routing\RouteUri::parse($uri), function ($uri) {
+        return tap(RouteUri::parse($uri), function ($uri) {
             $this->bindingFields = $uri->bindingFields;
         })->uri;
     }
@@ -899,7 +899,7 @@ class Route
             return $this->computedMiddleware;
         }
         $this->computedMiddleware = [];
-        return $this->computedMiddleware = \Illuminate\Routing\Router::uniqueMiddleware(array_merge($this->middleware(), $this->controllerMiddleware()));
+        return $this->computedMiddleware = Router::uniqueMiddleware(array_merge($this->middleware(), $this->controllerMiddleware()));
     }
     /**
      * Get or set the middlewares attached to the route.
@@ -1077,7 +1077,7 @@ class Route
         if ($this->container->bound(ControllerDispatcherContract::class)) {
             return $this->container->make(ControllerDispatcherContract::class);
         }
-        return new \Illuminate\Routing\ControllerDispatcher($this->container);
+        return new ControllerDispatcher($this->container);
     }
     /**
      * Get the route validators for the instance.
@@ -1128,7 +1128,7 @@ class Route
      * @param  \Illuminate\Routing\Router  $router
      * @return $this
      */
-    public function setRouter(\Illuminate\Routing\Router $router)
+    public function setRouter(Router $router)
     {
         $this->router = $router;
         return $this;

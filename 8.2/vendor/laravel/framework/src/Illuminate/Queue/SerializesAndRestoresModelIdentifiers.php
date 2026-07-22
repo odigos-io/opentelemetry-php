@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
-use Illuminate\Contracts\Database\ModelIdentifier;
-use Illuminate\Contracts\Queue\QueueableCollection;
-use Illuminate\Contracts\Queue\QueueableEntity;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
-use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Database\ModelIdentifier;
+use Odigos\Illuminate\Contracts\Queue\QueueableCollection;
+use Odigos\Illuminate\Contracts\Queue\QueueableEntity;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
+use Odigos\Illuminate\Database\Eloquent\Relations\Pivot;
+use Odigos\Illuminate\Support\Collection;
 trait SerializesAndRestoresModelIdentifiers
 {
     /**

@@ -14,17 +14,17 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Database\ExpressionInterface;
-use Cake\Database\ValueBinder;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\ValueBinder;
 use Closure;
 use InvalidArgumentException;
 /**
  * This expression represents SQL fragments that are used for comparing one tuple
  * to another, one tuple to a set of other tuples or one tuple to an expression
  */
-class TupleComparison extends \Cake\Database\Expression\ComparisonExpression
+class TupleComparison extends ComparisonExpression
 {
     /**
      * The type to be used for casting the value to a database representation

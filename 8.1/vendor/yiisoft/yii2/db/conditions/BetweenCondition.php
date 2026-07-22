@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\conditions;
+namespace Odigos\yii\db\conditions;
 
-use yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidArgumentException;
 /**
  * Class BetweenCondition represents a `BETWEEN` condition.
  *
@@ -15,7 +15,7 @@ use yii\base\InvalidArgumentException;
  * @since 2.0.14
  * @phpcs:disable Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore
  */
-class BetweenCondition implements \yii\db\conditions\ConditionInterface
+class BetweenCondition implements ConditionInterface
 {
     /**
      * @var string $operator the operator to use (e.g. `BETWEEN` or `NOT BETWEEN`)

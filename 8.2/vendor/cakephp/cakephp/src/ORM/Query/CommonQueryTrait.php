@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         5.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Query;
+namespace Odigos\Cake\ORM\Query;
 
-use Cake\Datasource\RepositoryInterface;
-use Cake\ORM\Table;
+use Odigos\Cake\Datasource\RepositoryInterface;
+use Odigos\Cake\ORM\Table;
 /**
  * Trait with common methods used by all ORM query classes.
  */

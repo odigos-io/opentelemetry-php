@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Test;
+namespace Odigos\Symfony\Component\Translation\Test;
 
 use Odigos\PHPUnit\Framework\Attributes\DataProvider;
-use Symfony\Component\Translation\Exception\IncompleteDsnException;
-use Symfony\Component\Translation\Provider\Dsn;
+use Odigos\Symfony\Component\Translation\Exception\IncompleteDsnException;
+use Odigos\Symfony\Component\Translation\Provider\Dsn;
 trait IncompleteDsnTestTrait
 {
     /**

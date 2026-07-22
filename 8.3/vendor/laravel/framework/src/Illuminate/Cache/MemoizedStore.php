@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
 use BadMethodCallException;
-use Illuminate\Contracts\Cache\LockProvider;
-use Illuminate\Contracts\Cache\Store;
+use Odigos\Illuminate\Contracts\Cache\LockProvider;
+use Odigos\Illuminate\Contracts\Cache\Store;
 class MemoizedStore implements LockProvider, Store
 {
     /**

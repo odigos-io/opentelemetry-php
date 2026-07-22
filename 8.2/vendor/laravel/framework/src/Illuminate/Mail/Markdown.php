@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Mail;
+namespace Odigos\Illuminate\Mail;
 
-use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\Support\EncodedHtmlString;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\View\Factory as ViewFactory;
+use Odigos\Illuminate\Support\EncodedHtmlString;
+use Odigos\Illuminate\Support\HtmlString;
+use Odigos\Illuminate\Support\Str;
 use Odigos\League\CommonMark\Environment\Environment;
 use Odigos\League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use Odigos\League\CommonMark\Extension\Table\TableExtension;

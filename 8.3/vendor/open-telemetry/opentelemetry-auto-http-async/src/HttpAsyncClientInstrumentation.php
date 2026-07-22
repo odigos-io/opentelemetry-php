@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\HttpAsyncClient;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\HttpAsyncClient;
 
-use Http\Client\HttpAsyncClient;
-use Http\Promise\Promise;
+use Odigos\Http\Client\HttpAsyncClient;
+use Odigos\Http\Promise\Promise;
 use OpenTelemetry\API\Globals;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Trace\Span;
@@ -24,7 +24,7 @@ class HttpAsyncClientInstrumentation
     {
         $instrumentation = new CachedInstrumentation('io.opentelemetry.contrib.php.http-async-client', schemaUrl: 'https://opentelemetry.io/schemas/1.32.0');
         /** @psalm-suppress UnusedFunctionCall */
-        hook(HttpAsyncClient::class, 'sendAsyncRequest', pre: static function (HttpAsyncClient $client, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation): ?array {
+        hook('Http\\Client\\HttpAsyncClient', 'sendAsyncRequest', pre: static function (object $client, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation): ?array {
             $request = $params[0] ?? null;
             if (!$request instanceof RequestInterface) {
                 Context::storage()->attach(Context::getCurrent());
@@ -44,10 +44,10 @@ class HttpAsyncClientInstrumentation
             }
             $span = $spanBuilder->startSpan();
             $context = $span->storeInContext($parentContext);
-            $propagator->inject($request, \OpenTelemetry\Contrib\Instrumentation\HttpAsyncClient\HeadersPropagator::instance(), $context);
+            $propagator->inject($request, HeadersPropagator::instance(), $context);
             Context::storage()->attach($context);
             return [$request];
-        }, post: static function (HttpAsyncClient $client, array $params, Promise $promise, ?Throwable $exception): void {
+        }, post: static function (object $client, array $params, object $promise, ?Throwable $exception): void {
             $scope = Context::storage()->scope();
             $scope?->detach();
             if (!$scope || $scope->context() === Context::getCurrent()) {

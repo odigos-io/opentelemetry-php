@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
-use Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * @author Jan Schädlich <jan.schaedlich@sensiolabs.de>
  *
@@ -24,7 +24,7 @@ class MemcachedCaster
     private static array $defaultOptions;
     public static function castMemcached(\Memcached $c, array $a, Stub $stub, bool $isNested): array
     {
-        $a += [\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'servers' => $c->getServerList(), \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'options' => new \Symfony\Component\VarDumper\Caster\EnumStub(self::getNonDefaultOptions($c))];
+        $a += [Caster::PREFIX_VIRTUAL . 'servers' => $c->getServerList(), Caster::PREFIX_VIRTUAL . 'options' => new EnumStub(self::getNonDefaultOptions($c))];
         return $a;
     }
     private static function getNonDefaultOptions(\Memcached $c): array

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\XPath;
+namespace Odigos\Symfony\Component\CssSelector\XPath;
 
-use Symfony\Component\CssSelector\Node\SelectorNode;
+use Odigos\Symfony\Component\CssSelector\Node\SelectorNode;
 /**
  * XPath expression translator interface.
  *

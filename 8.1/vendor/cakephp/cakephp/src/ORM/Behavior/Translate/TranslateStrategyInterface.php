@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Behavior\Translate;
+namespace Odigos\Cake\ORM\Behavior\Translate;
 
 use ArrayObject;
-use Cake\Collection\CollectionInterface;
-use Cake\Datasource\EntityInterface;
-use Cake\Datasource\ResultSetInterface;
-use Cake\Event\EventInterface;
-use Cake\ORM\PropertyMarshalInterface;
-use Cake\ORM\Query\SelectQuery;
-use Cake\ORM\Table;
+use Odigos\Cake\Collection\CollectionInterface;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Datasource\ResultSetInterface;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\ORM\PropertyMarshalInterface;
+use Odigos\Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\ORM\Table;
 /**
  * This interface describes the methods for translate behavior strategies.
  */

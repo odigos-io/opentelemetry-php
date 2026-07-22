@@ -4,13 +4,13 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 use DateTimeInterface;
 use MongoDB\BSON\Type;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\ExpressionInterface;
-use MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\ExpressionInterface;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
 use stdClass;
 /**
  * Returns 0 if the two values are equivalent, 1 if the first value is greater than the second, and -1 if the first value is less than the second.
@@ -18,7 +18,7 @@ use stdClass;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/cmp/
  * @internal
  */
-final class CmpOperator implements \MongoDB\Builder\Expression\ResolvesToInt, OperatorInterface
+final class CmpOperator implements ResolvesToInt, OperatorInterface
 {
     public const ENCODE = Encode::Array;
     public const NAME = '$cmp';

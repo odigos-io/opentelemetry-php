@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\DependencyInjection;
+namespace Odigos\Symfony\Component\Translation\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Translation\TranslatorBagInterface;
+use Odigos\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Odigos\Symfony\Component\DependencyInjection\ContainerBuilder;
+use Odigos\Symfony\Component\Translation\TranslatorBagInterface;
 /**
  * @author Christian Flothmann <christian.flothmann@sensiolabs.de>
  */

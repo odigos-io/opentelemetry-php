@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.2.12
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource;
+namespace Odigos\Cake\Datasource;
 
 use Closure;
 /**
@@ -104,7 +104,7 @@ class RuleInvoker
      * @param array $scope The rule's scope/options.
      * @return bool Whether the rule passed.
      */
-    public function __invoke(\Cake\Datasource\EntityInterface $entity, array $scope): bool
+    public function __invoke(EntityInterface $entity, array $scope): bool
     {
         $rule = $this->rule;
         $pass = $rule($entity, $this->options + $scope);
@@ -125,7 +125,7 @@ class RuleInvoker
         }
         $errorField = $this->options['errorField'] ?? $this->name ?? '_rule';
         $entity->setError($errorField, $message);
-        if ($entity instanceof \Cake\Datasource\InvalidPropertyInterface && isset($entity->{$errorField})) {
+        if ($entity instanceof InvalidPropertyInterface && isset($entity->{$errorField})) {
             $invalidValue = $entity->{$errorField};
             $entity->setInvalidField($errorField, $invalidValue);
         }

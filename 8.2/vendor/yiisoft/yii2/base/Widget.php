@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 use ReflectionClass;
 use Odigos\Yii;
@@ -23,7 +23,7 @@ use Odigos\Yii;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Widget extends \yii\base\Component implements \yii\base\ViewContextInterface
+class Widget extends Component implements ViewContextInterface
 {
     /**
      * @event Event an event that is triggered when the widget is initialized via [[init()]].
@@ -111,9 +111,9 @@ class Widget extends \yii\base\Component implements \yii\base\ViewContextInterfa
                 }
                 return $widget;
             }
-            throw new \yii\base\InvalidCallException('Expecting end() of ' . get_class($widget) . ', found ' . get_called_class());
+            throw new InvalidCallException('Expecting end() of ' . get_class($widget) . ', found ' . get_called_class());
         }
-        throw new \yii\base\InvalidCallException('Unexpected ' . get_called_class() . '::end() call. A matching begin() is not found.');
+        throw new InvalidCallException('Unexpected ' . get_called_class() . '::end() call. A matching begin() is not found.');
     }
     /**
      * Creates a widget instance and runs it.
@@ -273,7 +273,7 @@ class Widget extends \yii\base\Component implements \yii\base\ViewContextInterfa
      */
     public function beforeRun()
     {
-        $event = new \yii\base\WidgetEvent();
+        $event = new WidgetEvent();
         $this->trigger(self::EVENT_BEFORE_RUN, $event);
         return $event->isValid;
     }
@@ -300,7 +300,7 @@ class Widget extends \yii\base\Component implements \yii\base\ViewContextInterfa
      */
     public function afterRun($result)
     {
-        $event = new \yii\base\WidgetEvent();
+        $event = new WidgetEvent();
         $event->result = $result;
         $this->trigger(self::EVENT_AFTER_RUN, $event);
         return $event->result;

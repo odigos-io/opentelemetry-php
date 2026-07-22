@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\View\Engines;
+namespace Odigos\Illuminate\View\Engines;
 
-use Illuminate\Database\RecordNotFoundException;
-use Illuminate\Database\RecordsNotFoundException;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Str;
-use Illuminate\View\Compilers\CompilerInterface;
-use Illuminate\View\ViewException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Odigos\Illuminate\Database\RecordNotFoundException;
+use Odigos\Illuminate\Database\RecordsNotFoundException;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Http\Exceptions\HttpResponseException;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\View\Compilers\CompilerInterface;
+use Odigos\Illuminate\View\ViewException;
+use Odigos\Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
-class CompilerEngine extends \Illuminate\View\Engines\PhpEngine
+class CompilerEngine extends PhpEngine
 {
     /**
      * The Blade compiler instance.

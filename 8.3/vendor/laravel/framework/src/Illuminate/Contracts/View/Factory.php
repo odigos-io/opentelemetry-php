@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\View;
+namespace Odigos\Illuminate\Contracts\View;
 
 interface Factory
 {

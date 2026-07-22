@@ -15,20 +15,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use MongoDB\Driver\Command;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use function is_array;
 use function is_bool;
 use function is_integer;
 use function is_string;
-use function MongoDB\is_document;
-use function MongoDB\is_pipeline;
+use function Odigos\MongoDB\is_document;
+use function Odigos\MongoDB\is_pipeline;
 /**
  * Operation for the create command.
  *

@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\captcha;
+namespace Odigos\yii\captcha;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\helpers\Json;
-use yii\validators\ValidationAsset;
-use yii\validators\Validator;
-use yii\web\Controller;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\Json;
+use Odigos\yii\validators\ValidationAsset;
+use Odigos\yii\validators\Validator;
+use Odigos\yii\web\Controller;
 /**
  * CaptchaValidator validates that the attribute value is the same as the verification code displayed in the CAPTCHA.
  *

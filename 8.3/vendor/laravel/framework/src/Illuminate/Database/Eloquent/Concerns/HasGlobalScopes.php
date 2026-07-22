@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Concerns;
 
 use Closure;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
-use Illuminate\Database\Eloquent\Scope;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Odigos\Illuminate\Database\Eloquent\Scope;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 use InvalidArgumentException;
 use ReflectionAttribute;
 use ReflectionClass;

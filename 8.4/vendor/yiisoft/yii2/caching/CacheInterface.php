@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
 /**
  * CacheInterface is the base interface for cache.

@@ -8,20 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Finder;
+namespace Odigos\Symfony\Component\Finder;
 
-use Symfony\Component\Finder\Comparator\DateComparator;
-use Symfony\Component\Finder\Comparator\NumberComparator;
-use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
-use Symfony\Component\Finder\Iterator\CustomFilterIterator;
-use Symfony\Component\Finder\Iterator\DateRangeFilterIterator;
-use Symfony\Component\Finder\Iterator\DepthRangeFilterIterator;
-use Symfony\Component\Finder\Iterator\ExcludeDirectoryFilterIterator;
-use Symfony\Component\Finder\Iterator\FilecontentFilterIterator;
-use Symfony\Component\Finder\Iterator\FilenameFilterIterator;
-use Symfony\Component\Finder\Iterator\LazyIterator;
-use Symfony\Component\Finder\Iterator\SizeRangeFilterIterator;
-use Symfony\Component\Finder\Iterator\SortableIterator;
+use Odigos\Symfony\Component\Finder\Comparator\DateComparator;
+use Odigos\Symfony\Component\Finder\Comparator\NumberComparator;
+use Odigos\Symfony\Component\Finder\Exception\DirectoryNotFoundException;
+use Odigos\Symfony\Component\Finder\Iterator\CustomFilterIterator;
+use Odigos\Symfony\Component\Finder\Iterator\DateRangeFilterIterator;
+use Odigos\Symfony\Component\Finder\Iterator\DepthRangeFilterIterator;
+use Odigos\Symfony\Component\Finder\Iterator\ExcludeDirectoryFilterIterator;
+use Odigos\Symfony\Component\Finder\Iterator\FilecontentFilterIterator;
+use Odigos\Symfony\Component\Finder\Iterator\FilenameFilterIterator;
+use Odigos\Symfony\Component\Finder\Iterator\LazyIterator;
+use Odigos\Symfony\Component\Finder\Iterator\SizeRangeFilterIterator;
+use Odigos\Symfony\Component\Finder\Iterator\SortableIterator;
 /**
  * Finder allows to build rules to find files and directories.
  *
@@ -83,7 +83,7 @@ class Finder implements \IteratorAggregate, \Countable
      */
     public function directories(): static
     {
-        $this->mode = \Symfony\Component\Finder\Iterator\FileTypeFilterIterator::ONLY_DIRECTORIES;
+        $this->mode = Iterator\FileTypeFilterIterator::ONLY_DIRECTORIES;
         return $this;
     }
     /**
@@ -93,7 +93,7 @@ class Finder implements \IteratorAggregate, \Countable
      */
     public function files(): static
     {
-        $this->mode = \Symfony\Component\Finder\Iterator\FileTypeFilterIterator::ONLY_FILES;
+        $this->mode = Iterator\FileTypeFilterIterator::ONLY_FILES;
         return $this;
     }
     /**
@@ -612,8 +612,8 @@ class Finder implements \IteratorAggregate, \Countable
                             $file = new \SplFileInfo($file);
                         }
                         $key = $file->getPathname();
-                        if (!$file instanceof \Symfony\Component\Finder\SplFileInfo) {
-                            $file = new \Symfony\Component\Finder\SplFileInfo($key, $file->getPath(), $key);
+                        if (!$file instanceof SplFileInfo) {
+                            $file = new SplFileInfo($key, $file->getPath(), $key);
                         }
                         yield $key => $file;
                     }
@@ -693,7 +693,7 @@ class Finder implements \IteratorAggregate, \Countable
         if ($this->followLinks) {
             $flags |= \RecursiveDirectoryIterator::FOLLOW_SYMLINKS;
         }
-        $iterator = new \Symfony\Component\Finder\Iterator\RecursiveDirectoryIterator($dir, $flags, $this->ignoreUnreadableDirs);
+        $iterator = new Iterator\RecursiveDirectoryIterator($dir, $flags, $this->ignoreUnreadableDirs);
         if ($exclude) {
             $iterator = new ExcludeDirectoryFilterIterator($iterator, $exclude);
         }
@@ -702,7 +702,7 @@ class Finder implements \IteratorAggregate, \Countable
             $iterator = new DepthRangeFilterIterator($iterator, $minDepth, $maxDepth);
         }
         if ($this->mode) {
-            $iterator = new \Symfony\Component\Finder\Iterator\FileTypeFilterIterator($iterator, $this->mode);
+            $iterator = new Iterator\FileTypeFilterIterator($iterator, $this->mode);
         }
         if ($this->names || $this->notNames) {
             $iterator = new FilenameFilterIterator($iterator, $this->names, $this->notNames);
@@ -720,10 +720,10 @@ class Finder implements \IteratorAggregate, \Countable
             $iterator = new CustomFilterIterator($iterator, $this->filters);
         }
         if ($this->paths || $notPaths) {
-            $iterator = new \Symfony\Component\Finder\Iterator\PathFilterIterator($iterator, $this->paths, $notPaths);
+            $iterator = new Iterator\PathFilterIterator($iterator, $this->paths, $notPaths);
         }
         if (static::IGNORE_VCS_IGNORED_FILES === (static::IGNORE_VCS_IGNORED_FILES & $this->ignore)) {
-            $iterator = new \Symfony\Component\Finder\Iterator\VcsIgnoredFilterIterator($iterator, $dir);
+            $iterator = new Iterator\VcsIgnoredFilterIterator($iterator, $dir);
         }
         return $iterator;
     }

@@ -14,19 +14,19 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
-use Cake\Chronos\ChronosDate;
-use Cake\Database\Driver;
-use Cake\Database\Exception\DatabaseException;
-use Cake\I18n\Date;
+use Odigos\Cake\Chronos\ChronosDate;
+use Odigos\Cake\Database\Driver;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\I18n\Date;
 use DateTimeInterface;
 use Exception;
 use InvalidArgumentException;
 /**
  * Class DateType
  */
-class DateType extends \Cake\Database\Type\BaseType implements \Cake\Database\Type\BatchCastingInterface
+class DateType extends BaseType implements BatchCastingInterface
 {
     /**
      * @var string

@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use App\Http\Middleware\PreventRequestsDuringMaintenance as AppPreventRequestsDuringMaintenance;
+use Odigos\App\Http\Middleware\PreventRequestsDuringMaintenance as AppPreventRequestsDuringMaintenance;
 use DateTimeInterface;
 use Exception;
-use Illuminate\Console\Command;
-use Illuminate\Foundation\Events\MaintenanceModeEnabled;
-use Illuminate\Foundation\Exceptions\RegisterErrorViewPaths;
-use Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Foundation\Events\MaintenanceModeEnabled;
+use Odigos\Illuminate\Foundation\Exceptions\RegisterErrorViewPaths;
+use Odigos\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 use Throwable;
 #[AsCommand(name: 'down')]
 class DownCommand extends Command

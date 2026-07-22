@@ -15,17 +15,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use ArrayIterator;
 use Iterator;
-use MongoDB\Command\ListDatabases as ListDatabasesCommand;
+use Odigos\MongoDB\Command\ListDatabases as ListDatabasesCommand;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnexpectedValueException;
-use MongoDB\Model\CallbackIterator;
-use MongoDB\Model\DatabaseInfo;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnexpectedValueException;
+use Odigos\MongoDB\Model\CallbackIterator;
+use Odigos\MongoDB\Model\DatabaseInfo;
 /**
  * Operation for the ListDatabases command.
  *

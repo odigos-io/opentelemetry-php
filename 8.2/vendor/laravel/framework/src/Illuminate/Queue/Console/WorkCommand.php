@@ -1,21 +1,21 @@
 <?php
 
-namespace Illuminate\Queue\Console;
+namespace Odigos\Illuminate\Queue\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Contracts\Queue\Job;
-use Illuminate\Queue\Events\JobFailed;
-use Illuminate\Queue\Events\JobProcessed;
-use Illuminate\Queue\Events\JobProcessing;
-use Illuminate\Queue\Events\JobReleasedAfterException;
-use Illuminate\Queue\Worker;
-use Illuminate\Queue\WorkerOptions;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\InteractsWithTime;
-use Illuminate\Support\Stringable;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Terminal;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Contracts\Queue\Job;
+use Odigos\Illuminate\Queue\Events\JobFailed;
+use Odigos\Illuminate\Queue\Events\JobProcessed;
+use Odigos\Illuminate\Queue\Events\JobProcessing;
+use Odigos\Illuminate\Queue\Events\JobReleasedAfterException;
+use Odigos\Illuminate\Queue\Worker;
+use Odigos\Illuminate\Queue\WorkerOptions;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Support\Stringable;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Terminal;
 use Throwable;
 use function Odigos\Termwind\terminal;
 #[AsCommand(name: 'queue:work')]

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
 use InvalidArgumentException;
 class InvalidPayloadException extends InvalidArgumentException

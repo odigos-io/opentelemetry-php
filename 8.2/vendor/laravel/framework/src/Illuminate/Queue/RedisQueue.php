@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
-use Illuminate\Contracts\Queue\ClearableQueue;
-use Illuminate\Contracts\Queue\Queue as QueueContract;
-use Illuminate\Contracts\Redis\Factory as Redis;
-use Illuminate\Queue\Jobs\RedisJob;
-use Illuminate\Redis\Connections\PhpRedisClusterConnection;
-use Illuminate\Redis\Connections\PredisClusterConnection;
-use Illuminate\Support\Str;
-class RedisQueue extends \Illuminate\Queue\Queue implements QueueContract, ClearableQueue
+use Odigos\Illuminate\Contracts\Queue\ClearableQueue;
+use Odigos\Illuminate\Contracts\Queue\Queue as QueueContract;
+use Odigos\Illuminate\Contracts\Redis\Factory as Redis;
+use Odigos\Illuminate\Queue\Jobs\RedisJob;
+use Odigos\Illuminate\Redis\Connections\PhpRedisClusterConnection;
+use Odigos\Illuminate\Redis\Connections\PredisClusterConnection;
+use Odigos\Illuminate\Support\Str;
+class RedisQueue extends Queue implements QueueContract, ClearableQueue
 {
     /**
      * The Redis factory implementation.
@@ -87,7 +87,7 @@ class RedisQueue extends \Illuminate\Queue\Queue implements QueueContract, Clear
     public function size($queue = null)
     {
         $queue = $this->getQueue($queue);
-        return $this->getConnection()->eval(\Illuminate\Queue\LuaScripts::size(), 3, $queue, $queue . ':delayed', $queue . ':reserved');
+        return $this->getConnection()->eval(LuaScripts::size(), 3, $queue, $queue . ':delayed', $queue . ':reserved');
     }
     /**
      * Get the number of pending jobs.
@@ -186,7 +186,7 @@ class RedisQueue extends \Illuminate\Queue\Queue implements QueueContract, Clear
      */
     public function pushRaw($payload, $queue = null, array $options = [])
     {
-        $this->getConnection()->eval(\Illuminate\Queue\LuaScripts::push(), 2, $this->getQueue($queue), $this->getQueue($queue) . ':notify', $payload);
+        $this->getConnection()->eval(LuaScripts::push(), 2, $this->getQueue($queue), $this->getQueue($queue) . ':notify', $payload);
         return json_decode($payload, \true)['id'] ?? null;
     }
     /**
@@ -214,7 +214,7 @@ class RedisQueue extends \Illuminate\Queue\Queue implements QueueContract, Clear
      */
     protected function laterRaw($delay, $payload, $queue = null)
     {
-        $this->getConnection()->eval(\Illuminate\Queue\LuaScripts::later(), 1, $this->getQueue($queue) . ':delayed', $this->availableAt($delay), $payload);
+        $this->getConnection()->eval(LuaScripts::later(), 1, $this->getQueue($queue) . ':delayed', $this->availableAt($delay), $payload);
         return json_decode($payload, \true)['id'] ?? null;
     }
     /**
@@ -273,7 +273,7 @@ class RedisQueue extends \Illuminate\Queue\Queue implements QueueContract, Clear
      */
     public function migrateExpiredJobs($from, $to)
     {
-        return $this->getConnection()->eval(\Illuminate\Queue\LuaScripts::migrateExpiredJobs(), 3, $from, $to, $to . ':notify', $this->currentTime(), $this->migrationBatchSize);
+        return $this->getConnection()->eval(LuaScripts::migrateExpiredJobs(), 3, $from, $to, $to . ':notify', $this->currentTime(), $this->migrationBatchSize);
     }
     /**
      * Retrieve the next job from the queue.
@@ -284,7 +284,7 @@ class RedisQueue extends \Illuminate\Queue\Queue implements QueueContract, Clear
      */
     protected function retrieveNextJob($queue, $block = \true)
     {
-        $nextJob = $this->getConnection()->eval(\Illuminate\Queue\LuaScripts::pop(), 3, $queue, $queue . ':reserved', $queue . ':notify', $this->availableAt($this->retryAfter));
+        $nextJob = $this->getConnection()->eval(LuaScripts::pop(), 3, $queue, $queue . ':reserved', $queue . ':notify', $this->availableAt($this->retryAfter));
         if (empty($nextJob)) {
             return [null, null];
         }
@@ -316,7 +316,7 @@ class RedisQueue extends \Illuminate\Queue\Queue implements QueueContract, Clear
     public function deleteAndRelease($queue, $job, $delay)
     {
         $queue = $this->getQueue($queue);
-        $this->getConnection()->eval(\Illuminate\Queue\LuaScripts::release(), 2, $queue . ':delayed', $queue . ':reserved', $job->getReservedJob(), $this->availableAt($delay));
+        $this->getConnection()->eval(LuaScripts::release(), 2, $queue . ':delayed', $queue . ':reserved', $job->getReservedJob(), $this->availableAt($delay));
     }
     /**
      * Delete all of the jobs from the queue.
@@ -327,7 +327,7 @@ class RedisQueue extends \Illuminate\Queue\Queue implements QueueContract, Clear
     public function clear($queue)
     {
         $queue = $this->getQueue($queue);
-        return $this->getConnection()->eval(\Illuminate\Queue\LuaScripts::clear(), 4, $queue, $queue . ':delayed', $queue . ':reserved', $queue . ':notify');
+        return $this->getConnection()->eval(LuaScripts::clear(), 4, $queue, $queue . ':delayed', $queue . ':reserved', $queue . ':notify');
     }
     /**
      * Get a random ID string.

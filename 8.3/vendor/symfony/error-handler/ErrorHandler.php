@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\ErrorHandler;
+namespace Odigos\Symfony\Component\ErrorHandler;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Symfony\Component\ErrorHandler\Error\FatalError;
-use Symfony\Component\ErrorHandler\Error\OutOfMemoryError;
-use Symfony\Component\ErrorHandler\ErrorEnhancer\ClassNotFoundErrorEnhancer;
-use Symfony\Component\ErrorHandler\ErrorEnhancer\ErrorEnhancerInterface;
-use Symfony\Component\ErrorHandler\ErrorEnhancer\UndefinedFunctionErrorEnhancer;
-use Symfony\Component\ErrorHandler\ErrorEnhancer\UndefinedMethodErrorEnhancer;
-use Symfony\Component\ErrorHandler\ErrorRenderer\CliErrorRenderer;
-use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
-use Symfony\Component\ErrorHandler\Exception\SilencedErrorContext;
+use Odigos\Symfony\Component\ErrorHandler\Error\FatalError;
+use Odigos\Symfony\Component\ErrorHandler\Error\OutOfMemoryError;
+use Odigos\Symfony\Component\ErrorHandler\ErrorEnhancer\ClassNotFoundErrorEnhancer;
+use Odigos\Symfony\Component\ErrorHandler\ErrorEnhancer\ErrorEnhancerInterface;
+use Odigos\Symfony\Component\ErrorHandler\ErrorEnhancer\UndefinedFunctionErrorEnhancer;
+use Odigos\Symfony\Component\ErrorHandler\ErrorEnhancer\UndefinedMethodErrorEnhancer;
+use Odigos\Symfony\Component\ErrorHandler\ErrorRenderer\CliErrorRenderer;
+use Odigos\Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
+use Odigos\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext;
 /**
  * A generic ErrorHandler for the PHP engine.
  *
@@ -64,7 +64,7 @@ class ErrorHandler
     private bool $isRoot = \false;
     /** @var callable|null */
     private $exceptionHandler;
-    private ?\Symfony\Component\ErrorHandler\BufferingLogger $bootstrappingLogger = null;
+    private ?BufferingLogger $bootstrappingLogger = null;
     private static ?string $reservedMemory = null;
     private static array $silencedErrorCache = [];
     private static int $silencedErrorCount = 0;
@@ -135,7 +135,7 @@ class ErrorHandler
             restore_error_handler();
         }
     }
-    public function __construct(?\Symfony\Component\ErrorHandler\BufferingLogger $bootstrappingLogger = null, private bool $debug = \false)
+    public function __construct(?BufferingLogger $bootstrappingLogger = null, private bool $debug = \false)
     {
         if (\PHP_VERSION_ID < 80400) {
             $this->levels[\E_STRICT] = 'Runtime Notice';
@@ -217,7 +217,7 @@ class ErrorHandler
         $this->reRegister($prevLogged | $this->thrownErrors);
         if ($flush) {
             foreach ($this->bootstrappingLogger->cleanLogs() as $log) {
-                $type = \Symfony\Component\ErrorHandler\ThrowableUtils::getSeverity($log[2]['exception']);
+                $type = ThrowableUtils::getSeverity($log[2]['exception']);
                 if (!isset($flush[$type])) {
                     $this->bootstrappingLogger->log($log[0], $log[1], $log[2]);
                 } elseif ($this->loggers[$type][0]) {
@@ -415,7 +415,7 @@ class ErrorHandler
         $handlerException = null;
         if (!$exception instanceof FatalError) {
             self::$exitCode = 255;
-            $type = \Symfony\Component\ErrorHandler\ThrowableUtils::getSeverity($exception);
+            $type = ThrowableUtils::getSeverity($exception);
         } else {
             $type = $exception->getError()['type'];
         }
@@ -607,9 +607,9 @@ class ErrorHandler
                 }
             }
         }
-        if (class_exists(\Symfony\Component\ErrorHandler\DebugClassLoader::class, \false)) {
+        if (class_exists(DebugClassLoader::class, \false)) {
             for ($i = \count($lightTrace) - 2; 0 < $i; --$i) {
-                if (\Symfony\Component\ErrorHandler\DebugClassLoader::class === ($lightTrace[$i]['class'] ?? null)) {
+                if (DebugClassLoader::class === ($lightTrace[$i]['class'] ?? null)) {
                     array_splice($lightTrace, --$i, 2);
                 }
             }

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Contracts;
+namespace Odigos\OpenAI\Contracts;
 
-use OpenAI\Exceptions\ErrorException;
-use OpenAI\Exceptions\TransporterException;
-use OpenAI\Exceptions\UnserializableResponse;
-use OpenAI\ValueObjects\Transporter\AdaptableResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Exceptions\ErrorException;
+use Odigos\OpenAI\Exceptions\TransporterException;
+use Odigos\OpenAI\Exceptions\UnserializableResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\AdaptableResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 use Psr\Http\Message\ResponseInterface;
 /**
  * @internal

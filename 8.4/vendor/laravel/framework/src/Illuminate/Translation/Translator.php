@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Translation;
+namespace Odigos\Illuminate\Translation;
 
 use Closure;
-use Illuminate\Contracts\Translation\Loader;
-use Illuminate\Contracts\Translation\Translator as TranslatorContract;
-use Illuminate\Support\Arr;
-use Illuminate\Support\NamespacedItemResolver;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\Contracts\Translation\Loader;
+use Odigos\Illuminate\Contracts\Translation\Translator as TranslatorContract;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\NamespacedItemResolver;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
 use InvalidArgumentException;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 class Translator extends NamespacedItemResolver implements TranslatorContract
 {
     use Macroable, ReflectsClosures;
@@ -392,7 +392,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     public function getSelector()
     {
         if (!isset($this->selector)) {
-            $this->selector = new \Illuminate\Translation\MessageSelector();
+            $this->selector = new MessageSelector();
         }
         return $this->selector;
     }
@@ -402,7 +402,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
      * @param  \Illuminate\Translation\MessageSelector  $selector
      * @return void
      */
-    public function setSelector(\Illuminate\Translation\MessageSelector $selector)
+    public function setSelector(MessageSelector $selector)
     {
         $this->selector = $selector;
     }

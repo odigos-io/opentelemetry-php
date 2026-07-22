@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
-use Illuminate\Contracts\Queue\Queue as QueueContract;
-class NullQueue extends \Illuminate\Queue\Queue implements QueueContract
+use Odigos\Illuminate\Contracts\Queue\Queue as QueueContract;
+class NullQueue extends Queue implements QueueContract
 {
     /**
      * Get the size of the queue.

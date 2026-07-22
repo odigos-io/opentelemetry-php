@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Concurrency\ConcurrencyManager;
+use Odigos\Illuminate\Concurrency\ConcurrencyManager;
 /**
  * @method static mixed driver(string|null $name = null)
  * @method static \Illuminate\Concurrency\ProcessDriver createProcessDriver()
@@ -21,7 +21,7 @@ use Illuminate\Concurrency\ConcurrencyManager;
  *
  * @see \Illuminate\Concurrency\ConcurrencyManager
  */
-class Concurrency extends \Illuminate\Support\Facades\Facade
+class Concurrency extends Facade
 {
     /**
      * Get the registered name of the component.

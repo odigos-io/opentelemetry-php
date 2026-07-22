@@ -13,13 +13,13 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console\Exception;
+namespace Odigos\Cake\Console\Exception;
 
 use Throwable;
 /**
  * Exception raised with suggestions
  */
-class MissingOptionException extends \Cake\Console\Exception\ConsoleException
+class MissingOptionException extends ConsoleException
 {
     /**
      * The requested thing that was not found.

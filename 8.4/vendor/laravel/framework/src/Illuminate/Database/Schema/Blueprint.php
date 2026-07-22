@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Database\Schema;
+namespace Odigos\Illuminate\Database\Schema;
 
 use Closure;
-use Illuminate\Database\Connection;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use Illuminate\Database\Query\Expression;
-use Illuminate\Database\Schema\Grammars\Grammar;
-use Illuminate\Database\Schema\Grammars\MySqlGrammar;
-use Illuminate\Database\Schema\Grammars\SQLiteGrammar;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Fluent;
-use Illuminate\Support\Traits\Macroable;
-use function Illuminate\Support\enum_value;
+use Odigos\Illuminate\Database\Connection;
+use Odigos\Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Odigos\Illuminate\Database\Query\Expression;
+use Odigos\Illuminate\Database\Schema\Grammars\Grammar;
+use Odigos\Illuminate\Database\Schema\Grammars\MySqlGrammar;
+use Odigos\Illuminate\Database\Schema\Grammars\SQLiteGrammar;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Fluent;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use function Odigos\Illuminate\Support\enum_value;
 class Blueprint
 {
     use Macroable;
@@ -167,7 +167,7 @@ class Blueprint
         $this->addFluentIndexes();
         $this->addFluentCommands();
         if (!$this->creating()) {
-            $this->commands = array_map(fn($command) => $command instanceof \Illuminate\Database\Schema\ColumnDefinition ? $this->createCommand($command->change ? 'change' : 'add', ['column' => $command]) : $command, $this->commands);
+            $this->commands = array_map(fn($command) => $command instanceof ColumnDefinition ? $this->createCommand($command->change ? 'change' : 'add', ['column' => $command]) : $command, $this->commands);
             $this->addAlterCommands();
         }
     }
@@ -246,7 +246,7 @@ class Blueprint
             $commands[] = $this->createCommand('alter');
         }
         if ($hasAlterCommand) {
-            $this->state = new \Illuminate\Database\Schema\BlueprintState($this, $this->connection);
+            $this->state = new BlueprintState($this, $this->connection);
         }
         $this->commands = $commands;
     }
@@ -257,7 +257,7 @@ class Blueprint
      */
     public function creating()
     {
-        return (new Collection($this->commands))->contains(fn($command) => !$command instanceof \Illuminate\Database\Schema\ColumnDefinition && $command->name === 'create');
+        return (new Collection($this->commands))->contains(fn($command) => !$command instanceof ColumnDefinition && $command->name === 'create');
     }
     /**
      * Indicate that the table needs to be created.
@@ -626,7 +626,7 @@ class Blueprint
      */
     public function foreign($columns, $name = null)
     {
-        $command = new \Illuminate\Database\Schema\ForeignKeyDefinition($this->indexCommand('foreign', $columns, $name)->getAttributes());
+        $command = new ForeignKeyDefinition($this->indexCommand('foreign', $columns, $name)->getAttributes());
         $this->commands[count($this->commands) - 1] = $command;
         return $command;
     }
@@ -709,7 +709,7 @@ class Blueprint
      */
     public function char($column, $length = null)
     {
-        $length = !is_null($length) ? $length : \Illuminate\Database\Schema\Builder::$defaultStringLength;
+        $length = !is_null($length) ? $length : Builder::$defaultStringLength;
         return $this->addColumn('char', $column, compact('length'));
     }
     /**
@@ -721,7 +721,7 @@ class Blueprint
      */
     public function string($column, $length = null)
     {
-        $length = $length ?: \Illuminate\Database\Schema\Builder::$defaultStringLength;
+        $length = $length ?: Builder::$defaultStringLength;
         return $this->addColumn('string', $column, compact('length'));
     }
     /**
@@ -892,7 +892,7 @@ class Blueprint
      */
     public function foreignId($column)
     {
-        return $this->addColumnDefinition(new \Illuminate\Database\Schema\ForeignIdColumnDefinition($this, ['type' => 'bigInteger', 'name' => $column, 'autoIncrement' => \false, 'unsigned' => \true]));
+        return $this->addColumnDefinition(new ForeignIdColumnDefinition($this, ['type' => 'bigInteger', 'name' => $column, 'autoIncrement' => \false, 'unsigned' => \true]));
     }
     /**
      * Create a foreign ID column for the given model.
@@ -1211,7 +1211,7 @@ class Blueprint
      */
     public function foreignUuid($column)
     {
-        return $this->addColumnDefinition(new \Illuminate\Database\Schema\ForeignIdColumnDefinition($this, ['type' => 'uuid', 'name' => $column]));
+        return $this->addColumnDefinition(new ForeignIdColumnDefinition($this, ['type' => 'uuid', 'name' => $column]));
     }
     /**
      * Create a new ULID column on the table.
@@ -1233,7 +1233,7 @@ class Blueprint
      */
     public function foreignUlid($column, $length = 26)
     {
-        return $this->addColumnDefinition(new \Illuminate\Database\Schema\ForeignIdColumnDefinition($this, ['type' => 'char', 'name' => $column, 'length' => $length]));
+        return $this->addColumnDefinition(new ForeignIdColumnDefinition($this, ['type' => 'char', 'name' => $column, 'length' => $length]));
     }
     /**
      * Create a new IP address column on the table.
@@ -1322,9 +1322,9 @@ class Blueprint
      */
     public function morphs($name, $indexName = null, $after = null)
     {
-        if (\Illuminate\Database\Schema\Builder::$defaultMorphKeyType === 'uuid') {
+        if (Builder::$defaultMorphKeyType === 'uuid') {
             $this->uuidMorphs($name, $indexName, $after);
-        } elseif (\Illuminate\Database\Schema\Builder::$defaultMorphKeyType === 'ulid') {
+        } elseif (Builder::$defaultMorphKeyType === 'ulid') {
             $this->ulidMorphs($name, $indexName, $after);
         } else {
             $this->numericMorphs($name, $indexName, $after);
@@ -1340,9 +1340,9 @@ class Blueprint
      */
     public function nullableMorphs($name, $indexName = null, $after = null)
     {
-        if (\Illuminate\Database\Schema\Builder::$defaultMorphKeyType === 'uuid') {
+        if (Builder::$defaultMorphKeyType === 'uuid') {
             $this->nullableUuidMorphs($name, $indexName, $after);
-        } elseif (\Illuminate\Database\Schema\Builder::$defaultMorphKeyType === 'ulid') {
+        } elseif (Builder::$defaultMorphKeyType === 'ulid') {
             $this->nullableUlidMorphs($name, $indexName, $after);
         } else {
             $this->nullableNumericMorphs($name, $indexName, $after);
@@ -1526,7 +1526,7 @@ class Blueprint
      */
     public function addColumn($type, $name, array $parameters = [])
     {
-        return $this->addColumnDefinition(new \Illuminate\Database\Schema\ColumnDefinition(array_merge(compact('type', 'name'), $parameters)));
+        return $this->addColumnDefinition(new ColumnDefinition(array_merge(compact('type', 'name'), $parameters)));
     }
     /**
      * Add a new column definition to the blueprint.
@@ -1571,7 +1571,7 @@ class Blueprint
             return $c['name'] != $name;
         }));
         $this->commands = array_values(array_filter($this->commands, function ($c) use ($name) {
-            return !$c instanceof \Illuminate\Database\Schema\ColumnDefinition || $c['name'] != $name;
+            return !$c instanceof ColumnDefinition || $c['name'] != $name;
         }));
         return $this;
     }

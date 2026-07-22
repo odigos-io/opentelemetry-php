@@ -4,13 +4,13 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
-use MongoDB\Builder\Type\FieldPathInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Type\FieldPathInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use function sprintf;
 use function str_starts_with;
-class ObjectFieldPath implements FieldPathInterface, \MongoDB\Builder\Expression\ResolvesToObject
+class ObjectFieldPath implements FieldPathInterface, ResolvesToObject
 {
     public readonly string $name;
     public function __construct(string $name)

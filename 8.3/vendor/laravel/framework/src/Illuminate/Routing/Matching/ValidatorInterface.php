@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Routing\Matching;
+namespace Odigos\Illuminate\Routing\Matching;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Routing\Route;
 interface ValidatorInterface
 {
     /**

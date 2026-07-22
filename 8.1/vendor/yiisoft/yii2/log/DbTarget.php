@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\log;
+namespace Odigos\yii\log;
 
-use yii\base\InvalidConfigException;
-use yii\db\Connection;
-use yii\db\Exception;
-use yii\di\Instance;
-use yii\helpers\VarDumper;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\db\Connection;
+use Odigos\yii\db\Exception;
+use Odigos\yii\di\Instance;
+use Odigos\yii\helpers\VarDumper;
 /**
  * DbTarget stores log messages in a database table.
  *
@@ -28,7 +28,7 @@ use yii\helpers\VarDumper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class DbTarget extends \yii\log\Target
+class DbTarget extends Target
 {
     /**
      * @var Connection|array|string the DB connection object or the application component ID of the DB connection.
@@ -80,7 +80,7 @@ class DbTarget extends \yii\log\Target
             if ($command->bindValues([':level' => $level, ':category' => $category, ':log_time' => $timestamp, ':prefix' => $this->getMessagePrefix($message), ':message' => $text])->execute() > 0) {
                 continue;
             }
-            throw new \yii\log\LogRuntimeException('Unable to export log through database!');
+            throw new LogRuntimeException('Unable to export log through database!');
         }
     }
 }

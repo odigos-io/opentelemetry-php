@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Uid;
+namespace Odigos\Symfony\Component\Uid;
 
 /**
  * Interface to describe UIDs that contain a DateTimeImmutable as part of their behaviour.

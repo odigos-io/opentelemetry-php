@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Controller;
+namespace Odigos\Symfony\Component\HttpKernel\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Stopwatch\Stopwatch;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\Stopwatch\Stopwatch;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class TraceableArgumentResolver implements \Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface
+class TraceableArgumentResolver implements ArgumentResolverInterface
 {
-    public function __construct(private \Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface $resolver, private Stopwatch $stopwatch)
+    public function __construct(private ArgumentResolverInterface $resolver, private Stopwatch $stopwatch)
     {
     }
     public function getArguments(Request $request, callable $controller, ?\ReflectionFunctionAbstract $reflector = null): array

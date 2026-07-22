@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Exception;
+namespace Odigos\Doctrine\DBAL\Schema\Exception;
 
-use Doctrine\DBAL\Schema\Collections\Exception\ObjectAlreadyExists;
-use Doctrine\DBAL\Schema\Collections\Exception\ObjectDoesNotExist;
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\DBAL\Schema\SchemaException;
+use Odigos\Doctrine\DBAL\Schema\Collections\Exception\ObjectAlreadyExists;
+use Odigos\Doctrine\DBAL\Schema\Collections\Exception\ObjectDoesNotExist;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\SchemaException;
 use LogicException;
 use function sprintf;
 /** @internal */

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Node;
+namespace Odigos\Symfony\Component\CssSelector\Node;
 
 /**
  * Represents a "<selector>(::|:)<pseudoElement>" node.
@@ -20,14 +20,14 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-class SelectorNode extends \Symfony\Component\CssSelector\Node\AbstractNode
+class SelectorNode extends AbstractNode
 {
     private ?string $pseudoElement;
-    public function __construct(private \Symfony\Component\CssSelector\Node\NodeInterface $tree, ?string $pseudoElement = null)
+    public function __construct(private NodeInterface $tree, ?string $pseudoElement = null)
     {
         $this->pseudoElement = $pseudoElement ? strtolower($pseudoElement) : null;
     }
-    public function getTree(): \Symfony\Component\CssSelector\Node\NodeInterface
+    public function getTree(): NodeInterface
     {
         return $this->tree;
     }
@@ -35,9 +35,9 @@ class SelectorNode extends \Symfony\Component\CssSelector\Node\AbstractNode
     {
         return $this->pseudoElement;
     }
-    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
+    public function getSpecificity(): Specificity
     {
-        return $this->tree->getSpecificity()->plus(new \Symfony\Component\CssSelector\Node\Specificity(0, 0, $this->pseudoElement ? 1 : 0));
+        return $this->tree->getSpecificity()->plus(new Specificity(0, 0, $this->pseudoElement ? 1 : 0));
     }
     public function __toString(): string
     {

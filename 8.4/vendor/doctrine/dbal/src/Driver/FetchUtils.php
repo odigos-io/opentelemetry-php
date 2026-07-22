@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver;
+namespace Odigos\Doctrine\DBAL\Driver;
 
 /** @internal */
 final class FetchUtils
 {
     /** @throws Exception */
-    public static function fetchOne(\Doctrine\DBAL\Driver\Result $result): mixed
+    public static function fetchOne(Result $result): mixed
     {
         $row = $result->fetchNumeric();
         if ($row === \false) {
@@ -20,7 +20,7 @@ final class FetchUtils
      *
      * @throws Exception
      */
-    public static function fetchAllNumeric(\Doctrine\DBAL\Driver\Result $result): array
+    public static function fetchAllNumeric(Result $result): array
     {
         $rows = [];
         while (($row = $result->fetchNumeric()) !== \false) {
@@ -33,7 +33,7 @@ final class FetchUtils
      *
      * @throws Exception
      */
-    public static function fetchAllAssociative(\Doctrine\DBAL\Driver\Result $result): array
+    public static function fetchAllAssociative(Result $result): array
     {
         $rows = [];
         while (($row = $result->fetchAssociative()) !== \false) {
@@ -46,7 +46,7 @@ final class FetchUtils
      *
      * @throws Exception
      */
-    public static function fetchFirstColumn(\Doctrine\DBAL\Driver\Result $result): array
+    public static function fetchFirstColumn(Result $result): array
     {
         $rows = [];
         while (($row = $result->fetchOne()) !== \false) {

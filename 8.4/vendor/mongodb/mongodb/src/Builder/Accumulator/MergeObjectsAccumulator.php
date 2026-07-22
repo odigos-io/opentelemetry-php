@@ -4,15 +4,15 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Accumulator;
+namespace Odigos\MongoDB\Builder\Accumulator;
 
 use MongoDB\BSON\Document;
 use MongoDB\BSON\Serializable;
-use MongoDB\Builder\Expression\ResolvesToObject;
-use MongoDB\Builder\Type\AccumulatorInterface;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Expression\ResolvesToObject;
+use Odigos\MongoDB\Builder\Type\AccumulatorInterface;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function is_string;
 use function str_starts_with;

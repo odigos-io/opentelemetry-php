@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\MySQL\CollationMetadataProvider;
+namespace Odigos\Doctrine\DBAL\Platforms\MySQL\CollationMetadataProvider;
 
-use Doctrine\DBAL\Platforms\MySQL\CollationMetadataProvider;
+use Odigos\Doctrine\DBAL\Platforms\MySQL\CollationMetadataProvider;
 use function array_key_exists;
 /** @internal */
 final class CachingCollationMetadataProvider implements CollationMetadataProvider

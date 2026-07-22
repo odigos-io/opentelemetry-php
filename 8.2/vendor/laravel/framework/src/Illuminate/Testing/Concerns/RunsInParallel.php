@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Testing\Concerns;
+namespace Odigos\Illuminate\Testing\Concerns;
 
-use Illuminate\Contracts\Console\Kernel;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\ParallelTesting;
-use Illuminate\Testing\ParallelConsoleOutput;
+use Odigos\Illuminate\Contracts\Console\Kernel;
+use Odigos\Illuminate\Foundation\Application;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Facades\ParallelTesting;
+use Odigos\Illuminate\Testing\ParallelConsoleOutput;
 use Odigos\PHPUnit\TextUI\Configuration\PhpHandler;
 use RuntimeException;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutput;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 trait RunsInParallel
 {
     /**

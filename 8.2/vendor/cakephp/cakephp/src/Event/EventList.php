@@ -14,14 +14,14 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Event;
+namespace Odigos\Cake\Event;
 
 use ArrayAccess;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
 use Traversable;
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * The Event List
  *
@@ -52,7 +52,7 @@ class EventList implements ArrayAccess, Countable, IteratorAggregate
      * @param \Cake\Event\EventInterface<Tsubject> $event An event to the list of dispatched events.
      * @return void
      */
-    public function add(\Cake\Event\EventInterface $event): void
+    public function add(EventInterface $event): void
     {
         $this->_events[] = $event;
     }
@@ -77,7 +77,7 @@ class EventList implements ArrayAccess, Countable, IteratorAggregate
      * @param mixed $offset The offset to retrieve.
      * @return \Cake\Event\EventInterface<Tsubject>|null
      */
-    public function offsetGet(mixed $offset): ?\Cake\Event\EventInterface
+    public function offsetGet(mixed $offset): ?EventInterface
     {
         deprecationWarning('5.3.0', 'Array access for `EventList` is deprecated, you can iterate the instance instead.');
         return $this->_events[$offset] ?? null;

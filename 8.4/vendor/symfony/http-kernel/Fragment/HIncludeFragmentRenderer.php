@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Fragment;
+namespace Odigos\Symfony\Component\HttpKernel\Fragment;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\UriSigner;
-use Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpFoundation\UriSigner;
+use Odigos\Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Odigos\Twig\Environment;
 /**
  * Implements the Hinclude rendering strategy.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class HIncludeFragmentRenderer extends \Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer
+class HIncludeFragmentRenderer extends RoutableFragmentRenderer
 {
     /**
      * @param string|null $globalDefaultTemplate The global default content (it can be a template name or the content)
@@ -45,7 +45,7 @@ class HIncludeFragmentRenderer extends \Symfony\Component\HttpKernel\Fragment\Ro
     public function render(string|ControllerReference $uri, Request $request, array $options = []): Response
     {
         if ($uri instanceof ControllerReference) {
-            $uri = (new \Symfony\Component\HttpKernel\Fragment\FragmentUriGenerator($this->fragmentPath, $this->signer))->generate($uri, $request);
+            $uri = (new FragmentUriGenerator($this->fragmentPath, $this->signer))->generate($uri, $request);
         }
         // We need to replace ampersands in the URI with the encoded form in order to return valid html/xml content.
         $uri = str_replace('&', '&amp;', $uri);

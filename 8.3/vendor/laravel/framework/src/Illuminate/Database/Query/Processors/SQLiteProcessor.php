@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Query\Processors;
+namespace Odigos\Illuminate\Database\Query\Processors;
 
-class SQLiteProcessor extends \Illuminate\Database\Query\Processors\Processor
+class SQLiteProcessor extends Processor
 {
     /** @inheritDoc */
     public function processColumns($results, $sql = '')

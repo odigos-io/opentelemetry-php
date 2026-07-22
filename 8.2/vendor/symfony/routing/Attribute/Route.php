@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Attribute;
+namespace Odigos\Symfony\Component\Routing\Attribute;
 
-use Symfony\Component\Routing\Exception\LogicException;
+use Odigos\Symfony\Component\Routing\Exception\LogicException;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Alexander M. Turek <me@derrabus.de>
@@ -44,7 +44,7 @@ class Route
      * @param string|string[]|null                              $env          The env(s) in which the route is defined (i.e. "dev", "test", "prod", ["dev", "test"])
      * @param string|DeprecatedAlias|(string|DeprecatedAlias)[] $alias        The list of aliases for this route
      */
-    public function __construct(public string|array|null $path = null, public ?string $name = null, public array $requirements = [], public array $options = [], public array $defaults = [], public ?string $host = null, array|string $methods = [], array|string $schemes = [], public ?string $condition = null, public ?int $priority = null, ?string $locale = null, ?string $format = null, ?bool $utf8 = null, ?bool $stateless = null, string|array|null $env = null, string|\Symfony\Component\Routing\Attribute\DeprecatedAlias|array $alias = [])
+    public function __construct(public string|array|null $path = null, public ?string $name = null, public array $requirements = [], public array $options = [], public array $defaults = [], public ?string $host = null, array|string $methods = [], array|string $schemes = [], public ?string $condition = null, public ?int $priority = null, ?string $locale = null, ?string $format = null, ?bool $utf8 = null, ?bool $stateless = null, string|array|null $env = null, string|DeprecatedAlias|array $alias = [])
     {
         $this->path = $path;
         $this->methods = (array) $methods;
@@ -202,11 +202,11 @@ class Route
      * @param string|DeprecatedAlias|(string|DeprecatedAlias)[] $aliases
      */
     #[\Deprecated('Use the "aliases" property instead', 'symfony/routing:7.4')]
-    public function setAliases(string|\Symfony\Component\Routing\Attribute\DeprecatedAlias|array $aliases): void
+    public function setAliases(string|DeprecatedAlias|array $aliases): void
     {
         $this->aliases = \is_array($aliases) ? $aliases : [$aliases];
     }
 }
-if (!class_exists(\Symfony\Component\Routing\Annotation\Route::class, \false)) {
-    class_alias(\Symfony\Component\Routing\Attribute\Route::class, \Symfony\Component\Routing\Annotation\Route::class);
+if (!class_exists(\Odigos\Symfony\Component\Routing\Annotation\Route::class, \false)) {
+    class_alias(Route::class, \Odigos\Symfony\Component\Routing\Annotation\Route::class);
 }

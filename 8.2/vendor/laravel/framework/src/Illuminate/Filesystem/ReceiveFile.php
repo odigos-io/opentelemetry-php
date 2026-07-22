@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Filesystem;
+namespace Odigos\Illuminate\Filesystem;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Http\Response;
+use Odigos\Illuminate\Support\Facades\Storage;
 use Odigos\League\Flysystem\PathTraversalDetected;
 class ReceiveFile
 {

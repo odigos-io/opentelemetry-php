@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Migrations;
+namespace Odigos\Illuminate\Database\Migrations;
 
 abstract class Migration
 {

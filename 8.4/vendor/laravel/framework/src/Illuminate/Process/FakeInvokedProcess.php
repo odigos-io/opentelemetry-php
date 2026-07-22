@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Process;
+namespace Odigos\Illuminate\Process;
 
-use Illuminate\Contracts\Process\InvokedProcess as InvokedProcessContract;
+use Odigos\Illuminate\Contracts\Process\InvokedProcess as InvokedProcessContract;
 class FakeInvokedProcess implements InvokedProcessContract
 {
     /**
@@ -53,7 +53,7 @@ class FakeInvokedProcess implements InvokedProcessContract
      * @param  string  $command
      * @param  \Illuminate\Process\FakeProcessDescription  $process
      */
-    public function __construct(string $command, \Illuminate\Process\FakeProcessDescription $process)
+    public function __construct(string $command, FakeProcessDescription $process)
     {
         $this->command = $command;
         $this->process = $process;

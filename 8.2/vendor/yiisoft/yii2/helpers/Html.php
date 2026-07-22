@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
 /**
  * Html provides a set of static methods for generating commonly used HTML tags.
@@ -19,6 +19,6 @@ namespace yii\helpers;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Html extends \yii\helpers\BaseHtml
+class Html extends BaseHtml
 {
 }

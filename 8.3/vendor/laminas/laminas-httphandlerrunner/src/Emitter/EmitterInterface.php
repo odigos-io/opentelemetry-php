@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Laminas\HttpHandlerRunner\Emitter;
+namespace Odigos\Laminas\HttpHandlerRunner\Emitter;
 
 use Psr\Http\Message\ResponseInterface;
 interface EmitterInterface

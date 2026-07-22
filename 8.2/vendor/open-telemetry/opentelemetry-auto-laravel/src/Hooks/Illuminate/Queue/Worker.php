@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\Illuminate\Queue;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\Illuminate\Queue;
 
-use Illuminate\Contracts\Queue\Job;
-use Illuminate\Queue\Worker as QueueWorker;
+use Odigos\Illuminate\Contracts\Queue\Job;
+use Odigos\Illuminate\Queue\Worker as QueueWorker;
 use OpenTelemetry\API\Trace\Propagation\TraceContextPropagator;
 use OpenTelemetry\API\Trace\Span;
 use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\Context\Context;
-use OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHook;
-use OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHookTrait;
-use OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\PostHookTrait;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHook;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHookTrait;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\PostHookTrait;
 use function OpenTelemetry\Instrumentation\hook;
 use OpenTelemetry\SemConv\TraceAttributes;
 use OpenTelemetry\SemConv\TraceAttributeValues;
 use Throwable;
 class Worker implements LaravelHook
 {
-    use \OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\Illuminate\Queue\AttributesBuilder;
+    use AttributesBuilder;
     use LaravelHookTrait;
     use PostHookTrait;
     public function instrument(): void
@@ -29,9 +29,9 @@ class Worker implements LaravelHook
     /** @psalm-suppress UnusedReturnValue */
     private function hookWorkerProcess(): bool
     {
-        return hook(QueueWorker::class, 'process', pre: function (QueueWorker $worker, array $params, string $_class, string $_function, ?string $_filename, ?int $_lineno) {
+        return hook('Illuminate\\Queue\\Worker', 'process', pre: function (object $worker, array $params, string $_class, string $_function, ?string $_filename, ?int $_lineno) {
             $connectionName = $params[0];
-            /** @var Job $job */
+            /** @var object $job */
             $job = $params[1];
             $parent = TraceContextPropagator::getInstance()->extract($job->payload());
             $queue = $worker->getManager()->connection($connectionName);
@@ -40,7 +40,7 @@ class Worker implements LaravelHook
             $span = $this->instrumentation->tracer()->spanBuilder(vsprintf('%s %s', [TraceAttributeValues::MESSAGING_OPERATION_TYPE_PROCESS, $attributes[TraceAttributes::MESSAGING_DESTINATION_NAME]]))->setSpanKind(SpanKind::KIND_CONSUMER)->setParent($parent)->setAttributes($attributes)->startSpan();
             Context::storage()->attach($span->storeInContext($parent));
             return $params;
-        }, post: function (QueueWorker $worker, array $params, $returnValue, ?Throwable $exception) {
+        }, post: function (object $worker, array $params, $returnValue, ?Throwable $exception) {
             $scope = Context::storage()->scope();
             if (!$scope) {
                 return;
@@ -54,8 +54,8 @@ class Worker implements LaravelHook
     /** @psalm-suppress UnusedReturnValue */
     private function hookWorkerGetNextJob(): bool
     {
-        return hook(QueueWorker::class, 'getNextJob', pre: function (QueueWorker $_worker, array $params, string $_class, string $_function, ?string $_filename, ?int $_lineno) {
-            /** @var \Illuminate\Contracts\Queue\Queue $connection */
+        return hook('Illuminate\\Queue\\Worker', 'getNextJob', pre: function (object $_worker, array $params, string $_class, string $_function, ?string $_filename, ?int $_lineno) {
+            /** @var object $connection */
             $connection = $params[0];
             $queue = $params[1];
             $attributes = $this->buildMessageAttributes($connection, '', $queue);
@@ -63,7 +63,7 @@ class Worker implements LaravelHook
             $span = $this->instrumentation->tracer()->spanBuilder(vsprintf('%s %s', [TraceAttributeValues::MESSAGING_OPERATION_TYPE_RECEIVE, $attributes[TraceAttributes::MESSAGING_DESTINATION_NAME]]))->setSpanKind(SpanKind::KIND_CONSUMER)->setAttributes($attributes)->startSpan();
             Context::storage()->attach($span->storeInContext(Context::getCurrent()));
             return $params;
-        }, post: function (QueueWorker $_worker, array $params, ?Job $job, ?Throwable $exception) {
+        }, post: function (object $_worker, array $params, ?object $job, ?Throwable $exception) {
             $scope = Context::storage()->scope();
             if (!$scope) {
                 return;
@@ -73,7 +73,7 @@ class Worker implements LaravelHook
                 $scope->detach();
                 return;
             }
-            /** @var \Illuminate\Contracts\Queue\Queue $connection */
+            /** @var object $connection */
             $connection = $params[0];
             /** @var string $queue */
             $queue = $params[1];

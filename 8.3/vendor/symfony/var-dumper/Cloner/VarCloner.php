@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Cloner;
+namespace Odigos\Symfony\Component\VarDumper\Cloner;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class VarCloner extends \Symfony\Component\VarDumper\Cloner\AbstractCloner
+class VarCloner extends AbstractCloner
 {
     private static array $arrayCache = [];
     protected function doClone(mixed $var): array
@@ -48,8 +48,8 @@ class VarCloner extends \Symfony\Component\VarDumper\Cloner\AbstractCloner
         $stub = null;
         // Stub capturing the main properties of an original item value
         // or null if the original value is used directly
-        $arrayStub = new \Symfony\Component\VarDumper\Cloner\Stub();
-        $arrayStub->type = \Symfony\Component\VarDumper\Cloner\Stub::TYPE_ARRAY;
+        $arrayStub = new Stub();
+        $arrayStub->type = Stub::TYPE_ARRAY;
         for ($i = 0; $i < $len; ++$i) {
             // Detect when we move on to the next tree depth
             if ($i > $currentDepthFinalIndex) {
@@ -70,13 +70,13 @@ class VarCloner extends \Symfony\Component\VarDumper\Cloner\AbstractCloner
                     // independent from the original structure
                     if (null !== $vals[$k] = $hardRefs[$zvalRef] ?? null) {
                         $v = $vals[$k];
-                        if ($v->value instanceof \Symfony\Component\VarDumper\Cloner\Stub && (\Symfony\Component\VarDumper\Cloner\Stub::TYPE_OBJECT === $v->value->type || \Symfony\Component\VarDumper\Cloner\Stub::TYPE_RESOURCE === $v->value->type)) {
+                        if ($v->value instanceof Stub && (Stub::TYPE_OBJECT === $v->value->type || Stub::TYPE_RESOURCE === $v->value->type)) {
                             ++$v->value->refCount;
                         }
                         ++$v->refCount;
                         continue;
                     }
-                    $vals[$k] = new \Symfony\Component\VarDumper\Cloner\Stub();
+                    $vals[$k] = new Stub();
                     $vals[$k]->value = $v;
                     $vals[$k]->handle = ++$refsCounter;
                     $hardRefs[$zvalRef] = $vals[$k];
@@ -94,9 +94,9 @@ class VarCloner extends \Symfony\Component\VarDumper\Cloner\AbstractCloner
                             continue 2;
                         }
                         if (!preg_match('//u', $v)) {
-                            $stub = new \Symfony\Component\VarDumper\Cloner\Stub();
-                            $stub->type = \Symfony\Component\VarDumper\Cloner\Stub::TYPE_STRING;
-                            $stub->class = \Symfony\Component\VarDumper\Cloner\Stub::STRING_BINARY;
+                            $stub = new Stub();
+                            $stub->type = Stub::TYPE_STRING;
+                            $stub->class = Stub::STRING_BINARY;
                             if (0 <= $maxString && 0 < $cut = \strlen($v) - $maxString) {
                                 $stub->cut = $cut;
                                 $stub->value = substr($v, 0, -$cut);
@@ -104,9 +104,9 @@ class VarCloner extends \Symfony\Component\VarDumper\Cloner\AbstractCloner
                                 $stub->value = $v;
                             }
                         } elseif (0 <= $maxString && isset($v[1 + ($maxString >> 2)]) && 0 < $cut = mb_strlen($v, 'UTF-8') - $maxString) {
-                            $stub = new \Symfony\Component\VarDumper\Cloner\Stub();
-                            $stub->type = \Symfony\Component\VarDumper\Cloner\Stub::TYPE_STRING;
-                            $stub->class = \Symfony\Component\VarDumper\Cloner\Stub::STRING_UTF8;
+                            $stub = new Stub();
+                            $stub->type = Stub::TYPE_STRING;
+                            $stub->class = Stub::STRING_UTF8;
                             $stub->cut = $cut;
                             $stub->value = mb_substr($v, 0, $maxString, 'UTF-8');
                         } else {
@@ -119,19 +119,19 @@ class VarCloner extends \Symfony\Component\VarDumper\Cloner\AbstractCloner
                             continue 2;
                         }
                         $stub = $arrayStub;
-                        $stub->class = array_is_list($v) ? \Symfony\Component\VarDumper\Cloner\Stub::ARRAY_INDEXED : \Symfony\Component\VarDumper\Cloner\Stub::ARRAY_ASSOC;
+                        $stub->class = array_is_list($v) ? Stub::ARRAY_INDEXED : Stub::ARRAY_ASSOC;
                         $a = $v;
                         break;
                     case \is_object($v):
                         if (empty($objRefs[$h = spl_object_id($v)])) {
-                            $stub = new \Symfony\Component\VarDumper\Cloner\Stub();
-                            $stub->type = \Symfony\Component\VarDumper\Cloner\Stub::TYPE_OBJECT;
+                            $stub = new Stub();
+                            $stub->type = Stub::TYPE_OBJECT;
                             $stub->class = $v::class;
                             $stub->value = $v;
                             $stub->handle = $h;
                             $a = $this->castObject($stub, 0 < $i);
                             if ($v !== $stub->value) {
-                                if (\Symfony\Component\VarDumper\Cloner\Stub::TYPE_OBJECT !== $stub->type || null === $stub->value) {
+                                if (Stub::TYPE_OBJECT !== $stub->type || null === $stub->value) {
                                     break;
                                 }
                                 $stub->handle = $h = spl_object_id($stub->value);
@@ -154,8 +154,8 @@ class VarCloner extends \Symfony\Component\VarDumper\Cloner\AbstractCloner
                     default:
                         // resource
                         if (empty($resRefs[$h = (int) $v])) {
-                            $stub = new \Symfony\Component\VarDumper\Cloner\Stub();
-                            $stub->type = \Symfony\Component\VarDumper\Cloner\Stub::TYPE_RESOURCE;
+                            $stub = new Stub();
+                            $stub->type = Stub::TYPE_RESOURCE;
                             if ('Unknown' === $stub->class = @get_resource_type($v)) {
                                 $stub->class = 'Closed';
                             }

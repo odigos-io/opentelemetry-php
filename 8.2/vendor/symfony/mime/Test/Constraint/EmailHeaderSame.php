@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Test\Constraint;
+namespace Odigos\Symfony\Component\Mime\Test\Constraint;
 
 use Odigos\PHPUnit\Framework\Constraint\Constraint;
-use Symfony\Component\Mime\Header\UnstructuredHeader;
-use Symfony\Component\Mime\RawMessage;
+use Odigos\Symfony\Component\Mime\Header\UnstructuredHeader;
+use Odigos\Symfony\Component\Mime\RawMessage;
 final class EmailHeaderSame extends Constraint
 {
     public function __construct(private string $headerName, private string $expectedValue)

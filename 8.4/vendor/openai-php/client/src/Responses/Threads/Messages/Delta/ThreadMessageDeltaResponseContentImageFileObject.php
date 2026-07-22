@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Threads\Messages\Delta;
+namespace Odigos\OpenAI\Responses\Threads\Messages\Delta;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Threads\Messages\ThreadMessageResponseContentImageFile;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Threads\Messages\ThreadMessageResponseContentImageFile;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{index: int, type: 'image_file', image_file: array{file_id: string, detail?: string}}>
  */

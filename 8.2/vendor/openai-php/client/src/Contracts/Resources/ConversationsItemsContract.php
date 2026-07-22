@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Conversations\ConversationItem;
-use OpenAI\Responses\Conversations\ConversationItemList;
-use OpenAI\Responses\Conversations\ConversationResponse;
+use Odigos\OpenAI\Responses\Conversations\ConversationItem;
+use Odigos\OpenAI\Responses\Conversations\ConversationItemList;
+use Odigos\OpenAI\Responses\Conversations\ConversationResponse;
 interface ConversationsItemsContract
 {
     /**

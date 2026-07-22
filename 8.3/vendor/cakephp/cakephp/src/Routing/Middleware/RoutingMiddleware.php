@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing\Middleware;
+namespace Odigos\Cake\Routing\Middleware;
 
-use Cake\Core\ContainerApplicationInterface;
-use Cake\Core\PluginApplicationInterface;
-use Cake\Http\Exception\RedirectException;
-use Cake\Http\MiddlewareQueue;
-use Cake\Http\Runner;
-use Cake\Http\ServerRequest;
-use Cake\Routing\Router;
-use Cake\Routing\RoutingApplicationInterface;
+use Odigos\Cake\Core\ContainerApplicationInterface;
+use Odigos\Cake\Core\PluginApplicationInterface;
+use Odigos\Cake\Http\Exception\RedirectException;
+use Odigos\Cake\Http\MiddlewareQueue;
+use Odigos\Cake\Http\Runner;
+use Odigos\Cake\Http\ServerRequest;
+use Odigos\Cake\Routing\Router;
+use Odigos\Cake\Routing\RoutingApplicationInterface;
 use Odigos\Laminas\Diactoros\Response\RedirectResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

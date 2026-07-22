@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
-use Doctrine\Common\Proxy\Proxy as CommonProxy;
-use Doctrine\ORM\PersistentCollection;
-use Doctrine\ORM\Proxy\Proxy as OrmProxy;
-use Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Doctrine\Common\Proxy\Proxy as CommonProxy;
+use Odigos\Doctrine\ORM\PersistentCollection;
+use Odigos\Doctrine\ORM\Proxy\Proxy as OrmProxy;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * Casts Doctrine related classes to array representation.
  *
@@ -49,7 +49,7 @@ class DoctrineCaster
     {
         foreach (['snapshot', 'association', 'typeClass'] as $k) {
             if (\array_key_exists($k = "\x00Doctrine\\ORM\\PersistentCollection\x00" . $k, $a)) {
-                $a[$k] = new \Symfony\Component\VarDumper\Caster\CutStub($a[$k]);
+                $a[$k] = new CutStub($a[$k]);
             }
         }
         return $a;

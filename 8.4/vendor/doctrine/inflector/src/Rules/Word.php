@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\Inflector\Rules;
+namespace Odigos\Doctrine\Inflector\Rules;
 
 class Word
 {

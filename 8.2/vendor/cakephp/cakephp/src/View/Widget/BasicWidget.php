@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Widget;
+namespace Odigos\Cake\View\Widget;
 
-use Cake\View\Form\ContextInterface;
-use Cake\View\StringTemplate;
+use Odigos\Cake\View\Form\ContextInterface;
+use Odigos\Cake\View\StringTemplate;
 /**
  * Basic input class.
  *
@@ -25,7 +25,7 @@ use Cake\View\StringTemplate;
  * input elements like hidden, text, email, tel and other
  * types.
  */
-class BasicWidget implements \Cake\View\Widget\WidgetInterface
+class BasicWidget implements WidgetInterface
 {
     /**
      * StringTemplate instance.

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Casts;
+namespace Odigos\Illuminate\Database\Eloquent\Casts;
 
 use ArrayObject as BaseArrayObject;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Support\Collection;
 use JsonSerializable;
 /**
  * @template TKey of array-key

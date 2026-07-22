@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Index;
+namespace Odigos\Doctrine\DBAL\Schema\Index;
 
-use Doctrine\DBAL\Schema\Exception\InvalidIndexDefinition;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidIndexDefinition;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
 final readonly class IndexedColumn
 {
     /**

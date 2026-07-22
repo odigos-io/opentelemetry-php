@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Queue\Console;
+namespace Odigos\Illuminate\Queue\Console;
 
-use Illuminate\Bus\BatchRepository;
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Console\Isolatable;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Bus\BatchRepository;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Contracts\Console\Isolatable;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'queue:retry-batch')]
 class RetryBatchCommand extends Command implements Isolatable
 {

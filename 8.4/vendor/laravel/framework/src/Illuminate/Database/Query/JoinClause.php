@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Query;
+namespace Odigos\Illuminate\Database\Query;
 
 use Closure;
-class JoinClause extends \Illuminate\Database\Query\Builder
+class JoinClause extends Builder
 {
     /**
      * The type of join being performed.
@@ -48,7 +48,7 @@ class JoinClause extends \Illuminate\Database\Query\Builder
      * @param  string  $type
      * @param  string  $table
      */
-    public function __construct(\Illuminate\Database\Query\Builder $parentQuery, $type, $table)
+    public function __construct(Builder $parentQuery, $type, $table)
     {
         $this->type = $type;
         $this->table = $table;

@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
 use Exception;
-use Illuminate\Contracts\Cache\LockProvider;
-use Illuminate\Contracts\Cache\Store;
-use Illuminate\Contracts\Filesystem\LockTimeoutException;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Filesystem\LockableFile;
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Contracts\Cache\LockProvider;
+use Odigos\Illuminate\Contracts\Cache\Store;
+use Odigos\Illuminate\Contracts\Filesystem\LockTimeoutException;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Filesystem\LockableFile;
+use Odigos\Illuminate\Support\InteractsWithTime;
 class FileStore implements Store, LockProvider
 {
-    use InteractsWithTime, \Illuminate\Cache\RetrievesMultipleKeys;
+    use InteractsWithTime, RetrievesMultipleKeys;
     /**
      * The Illuminate Filesystem instance.
      *
@@ -188,7 +188,7 @@ class FileStore implements Store, LockProvider
     public function lock($name, $seconds = 0, $owner = null)
     {
         $this->ensureCacheDirectoryExists($this->lockDirectory ?? $this->directory);
-        return new \Illuminate\Cache\FileLock(new static($this->files, $this->lockDirectory ?? $this->directory, $this->filePermission, $this->serializableClasses), "file-store-lock:{$name}", $seconds, $owner);
+        return new FileLock(new static($this->files, $this->lockDirectory ?? $this->directory, $this->filePermission, $this->serializableClasses), "file-store-lock:{$name}", $seconds, $owner);
     }
     /**
      * Restore a lock instance using the owner identifier.

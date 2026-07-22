@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
 use DateTimeInterface;
-use Illuminate\Contracts\Queue\Job as JobContract;
-use Illuminate\Queue\Jobs\FakeJob;
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Contracts\Queue\Job as JobContract;
+use Odigos\Illuminate\Queue\Jobs\FakeJob;
+use Odigos\Illuminate\Support\InteractsWithTime;
 use InvalidArgumentException;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 use RuntimeException;
@@ -48,7 +48,7 @@ trait InteractsWithQueue
     public function fail($exception = null)
     {
         if (is_string($exception)) {
-            $exception = new \Illuminate\Queue\ManuallyFailedException($exception);
+            $exception = new ManuallyFailedException($exception);
         }
         if ($exception instanceof Throwable || is_null($exception)) {
             if ($this->job) {
@@ -128,7 +128,7 @@ trait InteractsWithQueue
             return $this;
         }
         if (is_string($exception)) {
-            $exception = new \Illuminate\Queue\ManuallyFailedException($exception);
+            $exception = new ManuallyFailedException($exception);
         }
         if ($exception instanceof Throwable) {
             PHPUnit::assertInstanceOf(get_class($exception), $this->job->failedWith, 'Expected job to be manually failed with [' . get_class($exception) . '] but job failed with [' . get_class($this->job->failedWith) . '].');

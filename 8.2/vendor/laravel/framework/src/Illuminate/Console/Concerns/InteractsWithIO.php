@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Console\Concerns;
+namespace Odigos\Illuminate\Console\Concerns;
 
 use Closure;
-use Illuminate\Console\OutputStyle;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Str;
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Question\Question;
+use Odigos\Illuminate\Console\OutputStyle;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Odigos\Symfony\Component\Console\Helper\Table;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Question\ChoiceQuestion;
+use Odigos\Symfony\Component\Console\Question\Question;
 trait InteractsWithIO
 {
     /**

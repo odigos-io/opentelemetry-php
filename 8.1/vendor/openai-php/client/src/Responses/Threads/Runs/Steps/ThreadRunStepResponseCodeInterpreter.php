@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Threads\Runs\Steps;
+namespace Odigos\OpenAI\Responses\Threads\Runs\Steps;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{input?: string, outputs?: array<int, array{type: 'image', image: array{file_id: string}}|array{type: 'logs', logs: string}>}>
  */
@@ -29,9 +29,9 @@ final class ThreadRunStepResponseCodeInterpreter implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        $outputs = array_map(fn(array $output): \OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeInterpreterOutputImage|\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeInterpreterOutputLogs => match ($output['type']) {
-            'image' => \OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeInterpreterOutputImage::from($output),
-            'logs' => \OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeInterpreterOutputLogs::from($output),
+        $outputs = array_map(fn(array $output): \Odigos\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeInterpreterOutputImage|\Odigos\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeInterpreterOutputLogs => match ($output['type']) {
+            'image' => ThreadRunStepResponseCodeInterpreterOutputImage::from($output),
+            'logs' => ThreadRunStepResponseCodeInterpreterOutputLogs::from($output),
         }, $attributes['outputs'] ?? []);
         return new self($attributes['input'] ?? null, $outputs);
     }
@@ -45,7 +45,7 @@ final class ThreadRunStepResponseCodeInterpreter implements ResponseContract
             $response['input'] = $this->input;
         }
         if ($this->outputs) {
-            $response['outputs'] = array_map(fn(\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeInterpreterOutputImage|\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeInterpreterOutputLogs $output): array => $output->toArray(), $this->outputs);
+            $response['outputs'] = array_map(fn(ThreadRunStepResponseCodeInterpreterOutputImage|ThreadRunStepResponseCodeInterpreterOutputLogs $output): array => $output->toArray(), $this->outputs);
         }
         return $response;
     }

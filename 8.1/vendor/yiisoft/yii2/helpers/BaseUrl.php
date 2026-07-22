@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
 use Odigos\Yii;
-use yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidArgumentException;
 /**
  * BaseUrl provides concrete implementation for [[Url]].
  *

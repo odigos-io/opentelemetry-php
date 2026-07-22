@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Controller;
+namespace Odigos\Cake\Controller;
 
-use Cake\Controller\Exception\InvalidParameterException;
-use Cake\Core\App;
-use Cake\Core\ContainerInterface;
-use Cake\Http\ControllerFactoryInterface;
-use Cake\Http\Exception\MissingControllerException;
-use Cake\Http\MiddlewareQueue;
-use Cake\Http\Runner;
-use Cake\Http\ServerRequest;
+use Odigos\Cake\Controller\Exception\InvalidParameterException;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\ContainerInterface;
+use Odigos\Cake\Http\ControllerFactoryInterface;
+use Odigos\Cake\Http\Exception\MissingControllerException;
+use Odigos\Cake\Http\MiddlewareQueue;
+use Odigos\Cake\Http\Runner;
+use Odigos\Cake\Http\ServerRequest;
 use Closure;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -31,9 +31,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 use ReflectionClass;
 use ReflectionFunction;
 use ReflectionNamedType;
-use function Cake\Core\toBool;
-use function Cake\Core\toFloat;
-use function Cake\Core\toInt;
+use function Odigos\Cake\Core\toBool;
+use function Odigos\Cake\Core\toFloat;
+use function Odigos\Cake\Core\toInt;
 /**
  * Factory method for building controllers for request.
  *
@@ -48,7 +48,7 @@ class ControllerFactory implements ControllerFactoryInterface, RequestHandlerInt
     /**
      * @var \Cake\Controller\Controller
      */
-    protected \Cake\Controller\Controller $controller;
+    protected Controller $controller;
     /**
      * Constructor
      *
@@ -65,7 +65,7 @@ class ControllerFactory implements ControllerFactoryInterface, RequestHandlerInt
      * @return \Cake\Controller\Controller
      * @throws \Cake\Http\Exception\MissingControllerException
      */
-    public function create(ServerRequestInterface $request): \Cake\Controller\Controller
+    public function create(ServerRequestInterface $request): Controller
     {
         assert($request instanceof ServerRequest);
         $className = $this->getControllerClass($request);
@@ -76,20 +76,20 @@ class ControllerFactory implements ControllerFactoryInterface, RequestHandlerInt
         if ($reflection->isAbstract()) {
             throw $this->missingController($request);
         }
-        $this->container->addShared(\Cake\Controller\ComponentRegistry::class, new \Cake\Controller\ComponentRegistry(container: $this->container));
+        $this->container->addShared(ComponentRegistry::class, new ComponentRegistry(container: $this->container));
         // Get the controller from the container if defined.
         // The request is in the container by default.
         if ($this->container->has($className)) {
             $controller = $this->container->get($className);
         } else {
-            $components = $this->container->get(\Cake\Controller\ComponentRegistry::class);
+            $components = $this->container->get(ComponentRegistry::class);
             $constructor = $reflection->getConstructor();
             assert($constructor !== null);
             $hasComponents = \false;
             foreach ($constructor->getParameters() as $parameter) {
                 $paramType = $parameter->getType();
                 // TODO: In a future minor release it would be good to start requiring the components parameter
-                if ($parameter->getName() === 'components' && $paramType !== null && $paramType->getName() == \Cake\Controller\ComponentRegistry::class) {
+                if ($parameter->getName() === 'components' && $paramType !== null && $paramType->getName() == ComponentRegistry::class) {
                     $hasComponents = \true;
                     break;
                 }
@@ -263,5 +263,5 @@ class ControllerFactory implements ControllerFactoryInterface, RequestHandlerInt
     }
 }
 // phpcs:disable
-class_alias('Cake\Controller\ControllerFactory', 'Cake\Http\ControllerFactory');
+class_alias('Odigos\Cake\Controller\ControllerFactory', 'Odigos\Cake\Http\ControllerFactory');
 // phpcs:enable

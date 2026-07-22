@@ -14,21 +14,21 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Query;
-use Cake\Database\Type\ExpressionTypeCasterTrait;
-use Cake\Database\TypedResultInterface;
-use Cake\Database\TypedResultTrait;
-use Cake\Database\ValueBinder;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\Query;
+use Odigos\Cake\Database\Type\ExpressionTypeCasterTrait;
+use Odigos\Cake\Database\TypedResultInterface;
+use Odigos\Cake\Database\TypedResultTrait;
+use Odigos\Cake\Database\ValueBinder;
 /**
  * This class represents a function call string in a SQL statement. Calls can be
  * constructed by passing the name of the function and a list of params.
  * For security reasons, all params passed are quoted by default unless
  * explicitly told otherwise.
  */
-class FunctionExpression extends \Cake\Database\Expression\QueryExpression implements TypedResultInterface
+class FunctionExpression extends QueryExpression implements TypedResultInterface
 {
     use ExpressionTypeCasterTrait;
     use TypedResultTrait;
@@ -111,7 +111,7 @@ class FunctionExpression extends \Cake\Database\Expression\QueryExpression imple
                 continue;
             }
             if ($p === 'identifier') {
-                $put($this->_conditions, new \Cake\Database\Expression\IdentifierExpression($k));
+                $put($this->_conditions, new IdentifierExpression($k));
                 continue;
             }
             $type = $typeMap->type($k);

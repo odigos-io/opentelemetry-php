@@ -5,15 +5,15 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters;
+namespace Odigos\yii\filters;
 
 use Odigos\Yii;
-use yii\base\Action;
-use yii\base\ActionFilter;
-use yii\base\Component;
-use yii\base\Controller;
-use yii\helpers\StringHelper;
-use yii\web\NotFoundHttpException;
+use Odigos\yii\base\Action;
+use Odigos\yii\base\ActionFilter;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\Controller;
+use Odigos\yii\helpers\StringHelper;
+use Odigos\yii\web\NotFoundHttpException;
 /**
  * HostControl provides simple control over requested host name.
  *

@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Loader;
+namespace Odigos\Symfony\Component\Translation\Loader;
 
-use Symfony\Component\Translation\Exception\InvalidResourceException;
+use Odigos\Symfony\Component\Translation\Exception\InvalidResourceException;
 /**
  * @copyright Copyright (c) 2010, Union of RAD http://union-of-rad.org (http://lithify.me/)
  */
-class MoFileLoader extends \Symfony\Component\Translation\Loader\FileLoader
+class MoFileLoader extends FileLoader
 {
     /**
      * Magic used for validating the format of an MO file as well as

@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Foundation\Testing\Concerns;
+namespace Odigos\Illuminate\Foundation\Testing\Concerns;
 
 use BackedEnum;
-use Illuminate\Contracts\Http\Kernel as HttpKernel;
-use Illuminate\Cookie\CookieValuePrefix;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Uri;
-use Illuminate\Testing\LoggedExceptionCollection;
-use Illuminate\Testing\TestResponse;
-use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Odigos\Illuminate\Contracts\Http\Kernel as HttpKernel;
+use Odigos\Illuminate\Cookie\CookieValuePrefix;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Uri;
+use Odigos\Illuminate\Testing\LoggedExceptionCollection;
+use Odigos\Illuminate\Testing\TestResponse;
+use Odigos\Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
+use Odigos\Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 trait MakesHttpRequests
 {
     /**

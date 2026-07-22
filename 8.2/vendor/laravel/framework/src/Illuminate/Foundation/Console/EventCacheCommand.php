@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Foundation\Support\Providers\EventServiceProvider;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'event:cache')]
 class EventCacheCommand extends Command
 {

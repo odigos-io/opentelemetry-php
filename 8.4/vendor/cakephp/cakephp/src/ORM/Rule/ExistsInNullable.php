@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Rule;
+namespace Odigos\Cake\ORM\Rule;
 
-use Cake\ORM\Association;
-use Cake\ORM\Table;
+use Odigos\Cake\ORM\Association;
+use Odigos\Cake\ORM\Table;
 /**
  * ExistsIn rule with allowNullableNulls enabled by default.
  *
  * This rule accepts composite foreign keys where one or more nullable columns are null.
  */
-class ExistsInNullable extends \Cake\ORM\Rule\ExistsIn
+class ExistsInNullable extends ExistsIn
 {
     /**
      * Constructor.

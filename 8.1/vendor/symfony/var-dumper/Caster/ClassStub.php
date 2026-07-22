@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
-use Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * Represents a PHP class identifier.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ClassStub extends \Symfony\Component\VarDumper\Caster\ConstStub
+class ClassStub extends ConstStub
 {
     /**
      * @param string   $identifier A PHP identifier, e.g. a class, method, interface, etc. name
@@ -54,8 +54,8 @@ class ClassStub extends \Symfony\Component\VarDumper\Caster\ConstStub
                 $this->value = $identifier = preg_replace_callback('/[a-zA-Z_\x7f-\xff][\\\\a-zA-Z0-9_\x7f-\xff]*+@anonymous\x00.*?\.php(?:0x?|:[0-9]++\$)?[0-9a-fA-F]++/', fn($m) => class_exists($m[0], \false) ? ((get_parent_class($m[0]) ?: key(class_implements($m[0]))) ?: 'class') . '@anonymous' : $m[0], $identifier);
             }
             if (null !== $callable && $r instanceof \ReflectionFunctionAbstract) {
-                $s = \Symfony\Component\VarDumper\Caster\ReflectionCaster::castFunctionAbstract($r, [], new Stub(), \true, \Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE);
-                $s = \Symfony\Component\VarDumper\Caster\ReflectionCaster::getSignature($s);
+                $s = ReflectionCaster::castFunctionAbstract($r, [], new Stub(), \true, Caster::EXCLUDE_VERBOSE);
+                $s = ReflectionCaster::getSignature($s);
                 if (str_ends_with($identifier, '()')) {
                     $this->value = substr_replace($identifier, $s, -2);
                 } else {

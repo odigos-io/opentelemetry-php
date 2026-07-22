@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Conversations;
+namespace Odigos\OpenAI\Responses\Conversations;
 
-use OpenAI\Actions\Conversations\ItemObjects;
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Contracts\ResponseHasMetaInformationContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Concerns\HasMetaInformation;
-use OpenAI\Responses\Meta\MetaInformation;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Actions\Conversations\ItemObjects;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Contracts\ResponseHasMetaInformationContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Concerns\HasMetaInformation;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type ConversationItemObjectTypes from ItemObjects
  *
@@ -37,7 +37,7 @@ final class ConversationItemList implements ResponseContract, ResponseHasMetaInf
      */
     public static function from(array $attributes, MetaInformation $meta): self
     {
-        $items = array_map(fn(array $item): \OpenAI\Responses\Conversations\ConversationItem => \OpenAI\Responses\Conversations\ConversationItem::from($item), $attributes['data']);
+        $items = array_map(fn(array $item): ConversationItem => ConversationItem::from($item), $attributes['data']);
         return new self(object: $attributes['object'], data: $items, firstId: $attributes['first_id'] ?? null, lastId: $attributes['last_id'] ?? null, hasMore: $attributes['has_more'], meta: $meta);
     }
     /**
@@ -45,6 +45,6 @@ final class ConversationItemList implements ResponseContract, ResponseHasMetaInf
      */
     public function toArray(): array
     {
-        return ['object' => $this->object, 'data' => array_map(fn(\OpenAI\Responses\Conversations\ConversationItem $item): array => $item->toArray(), $this->data), 'first_id' => $this->firstId, 'last_id' => $this->lastId, 'has_more' => $this->hasMore];
+        return ['object' => $this->object, 'data' => array_map(fn(ConversationItem $item): array => $item->toArray(), $this->data), 'first_id' => $this->firstId, 'last_id' => $this->lastId, 'has_more' => $this->hasMore];
     }
 }

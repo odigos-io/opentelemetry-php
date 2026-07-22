@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 /**
  * MultiFieldSession is the base class for session storage implementations with multi-field data storage support.
@@ -27,7 +27,7 @@ namespace yii\web;
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 2.0.6
  */
-abstract class MultiFieldSession extends \yii\web\Session
+abstract class MultiFieldSession extends Session
 {
     /**
      * @var callable a callback that will be called during session data reading.

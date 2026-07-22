@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\ParameterType;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
 use function assert;
 use function is_int;
 use function is_numeric;
@@ -14,7 +14,7 @@ use function is_string;
  *
  * If the presented value is outside of PHP's integer range, the value is returned as-is (usually a string).
  */
-class BigIntType extends \Doctrine\DBAL\Types\Type implements \Doctrine\DBAL\Types\PhpIntegerMappingType
+class BigIntType extends Type implements PhpIntegerMappingType
 {
     /**
      * {@inheritDoc}

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Foundation\Auth\Access;
+namespace Odigos\Illuminate\Foundation\Auth\Access;
 
-use Illuminate\Contracts\Auth\Access\Gate;
-use Illuminate\Support\Str;
-use function Illuminate\Support\enum_value;
+use Odigos\Illuminate\Contracts\Auth\Access\Gate;
+use Odigos\Illuminate\Support\Str;
+use function Odigos\Illuminate\Support\enum_value;
 trait AuthorizesRequests
 {
     /**

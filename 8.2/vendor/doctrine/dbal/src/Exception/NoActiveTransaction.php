@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
-use Doctrine\DBAL\ConnectionException;
+use Odigos\Doctrine\DBAL\ConnectionException;
 final class NoActiveTransaction extends ConnectionException
 {
     public static function new(): self

@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\data;
+namespace Odigos\yii\data;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\InvalidArgumentException;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidArgumentException;
 /**
  * BaseDataProvider provides a base class that implements the [[DataProviderInterface]].
  *
@@ -30,7 +30,7 @@ use yii\base\InvalidArgumentException;
  * @since 2.0
  * @phpcs:disable Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore
  */
-abstract class BaseDataProvider extends Component implements \yii\data\DataProviderInterface
+abstract class BaseDataProvider extends Component implements DataProviderInterface
 {
     /**
      * @var int Number of data providers on the current page. Used to generate unique IDs.
@@ -191,13 +191,13 @@ abstract class BaseDataProvider extends Component implements \yii\data\DataProvi
     public function setPagination($value)
     {
         if (is_array($value)) {
-            $config = ['class' => \yii\data\Pagination::className()];
+            $config = ['class' => Pagination::className()];
             if ($this->id !== null) {
                 $config['pageParam'] = $this->id . '-page';
                 $config['pageSizeParam'] = $this->id . '-per-page';
             }
             $this->_pagination = Yii::createObject(array_merge($config, $value));
-        } elseif ($value instanceof \yii\data\Pagination || $value === \false) {
+        } elseif ($value instanceof Pagination || $value === \false) {
             $this->_pagination = $value;
         } else {
             throw new InvalidArgumentException('Only Pagination instance, configuration array or false is allowed.');
@@ -229,12 +229,12 @@ abstract class BaseDataProvider extends Component implements \yii\data\DataProvi
     public function setSort($value)
     {
         if (is_array($value)) {
-            $config = ['class' => \yii\data\Sort::className()];
+            $config = ['class' => Sort::className()];
             if ($this->id !== null) {
                 $config['sortParam'] = $this->id . '-sort';
             }
             $this->_sort = Yii::createObject(array_merge($config, $value));
-        } elseif ($value instanceof \yii\data\Sort || $value === \false) {
+        } elseif ($value instanceof Sort || $value === \false) {
             $this->_sort = $value;
         } else {
             throw new InvalidArgumentException('Only Sort instance, configuration array or false is allowed.');

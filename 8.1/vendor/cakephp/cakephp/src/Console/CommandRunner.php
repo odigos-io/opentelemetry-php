@@ -14,23 +14,23 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
-use Cake\Command\VersionCommand;
-use Cake\Console\Command\HelpCommand;
-use Cake\Console\Exception\MissingOptionException;
-use Cake\Console\Exception\StopException;
-use Cake\Core\ConsoleApplicationInterface;
-use Cake\Core\ContainerApplicationInterface;
-use Cake\Core\EventAwareApplicationInterface;
-use Cake\Core\PluginApplicationInterface;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
-use Cake\Event\EventManager;
-use Cake\Event\EventManagerInterface;
-use Cake\Routing\Router;
-use Cake\Routing\RoutingApplicationInterface;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Command\VersionCommand;
+use Odigos\Cake\Console\Command\HelpCommand;
+use Odigos\Cake\Console\Exception\MissingOptionException;
+use Odigos\Cake\Console\Exception\StopException;
+use Odigos\Cake\Core\ConsoleApplicationInterface;
+use Odigos\Cake\Core\ContainerApplicationInterface;
+use Odigos\Cake\Core\EventAwareApplicationInterface;
+use Odigos\Cake\Core\PluginApplicationInterface;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Event\EventManager;
+use Odigos\Cake\Event\EventManagerInterface;
+use Odigos\Cake\Routing\Router;
+use Odigos\Cake\Routing\RoutingApplicationInterface;
+use Odigos\Cake\Utility\Inflector;
 /**
  * Run CLI commands for the provided application.
  *
@@ -53,7 +53,7 @@ class CommandRunner implements EventDispatcherInterface
      *
      * @var \Cake\Console\CommandFactoryInterface|null
      */
-    protected ?\Cake\Console\CommandFactoryInterface $factory = null;
+    protected ?CommandFactoryInterface $factory = null;
     /**
      * The root command name. Defaults to `cake`.
      *
@@ -73,7 +73,7 @@ class CommandRunner implements EventDispatcherInterface
      * @param string $root The root command name to be removed from argv.
      * @param \Cake\Console\CommandFactoryInterface|null $factory Command factory instance.
      */
-    public function __construct(ConsoleApplicationInterface $app, string $root = 'cake', ?\Cake\Console\CommandFactoryInterface $factory = null)
+    public function __construct(ConsoleApplicationInterface $app, string $root = 'cake', ?CommandFactoryInterface $factory = null)
     {
         $this->app = $app;
         $this->root = $root;
@@ -114,7 +114,7 @@ class CommandRunner implements EventDispatcherInterface
      * @param \Cake\Console\ConsoleIo|null $io The ConsoleIo instance. Used primarily for testing.
      * @return int The exit code of the command.
      */
-    public function run(array $argv, ?\Cake\Console\ConsoleIo $io = null): int
+    public function run(array $argv, ?ConsoleIo $io = null): int
     {
         assert($argv !== [], 'Cannot run any commands. No arguments received.');
         $this->bootstrap();
@@ -124,7 +124,7 @@ class CommandRunner implements EventDispatcherInterface
             $eventManager = $this->app->pluginEvents($eventManager);
             $this->setEventManager($eventManager);
         }
-        $commands = new \Cake\Console\CommandCollection(['help' => HelpCommand::class]);
+        $commands = new CommandCollection(['help' => HelpCommand::class]);
         if (class_exists(VersionCommand::class)) {
             $commands->add('version', VersionCommand::class);
         }
@@ -136,23 +136,23 @@ class CommandRunner implements EventDispatcherInterface
         $this->loadRoutes();
         // Remove the root executable segment
         array_shift($argv);
-        $io = $io ?: new \Cake\Console\ConsoleIo();
+        $io = $io ?: new ConsoleIo();
         try {
             [$name, $argv] = $this->longestCommandName($commands, $argv);
             $name = $this->resolveName($commands, $io, $name);
         } catch (MissingOptionException $e) {
             $io->error($e->getFullMessage());
-            return \Cake\Console\CommandInterface::CODE_ERROR;
+            return CommandInterface::CODE_ERROR;
         }
         $command = $this->getCommand($io, $commands, $name);
         $result = $this->runCommand($command, $argv, $io);
         if ($result === null) {
-            return \Cake\Console\CommandInterface::CODE_SUCCESS;
+            return CommandInterface::CODE_SUCCESS;
         }
         if ($result >= 0 && $result <= 255) {
             return $result;
         }
-        return \Cake\Console\CommandInterface::CODE_ERROR;
+        return CommandInterface::CODE_ERROR;
     }
     /**
      * Application bootstrap wrapper.
@@ -202,14 +202,14 @@ class CommandRunner implements EventDispatcherInterface
      * @param string $name The command name to find
      * @return \Cake\Console\CommandInterface
      */
-    protected function getCommand(\Cake\Console\ConsoleIo $io, \Cake\Console\CommandCollection $commands, string $name): \Cake\Console\CommandInterface
+    protected function getCommand(ConsoleIo $io, CommandCollection $commands, string $name): CommandInterface
     {
         $instance = $commands->get($name);
         if (is_string($instance)) {
             $instance = $this->createCommand($instance);
         }
         $instance->setName("{$this->root} {$name}");
-        if ($instance instanceof \Cake\Console\CommandCollectionAwareInterface) {
+        if ($instance instanceof CommandCollectionAwareInterface) {
             $instance->setCommandCollection($commands);
         }
         return $instance;
@@ -224,7 +224,7 @@ class CommandRunner implements EventDispatcherInterface
      * @param array $argv The CLI arguments.
      * @return array An array of the resolved name and modified argv.
      */
-    protected function longestCommandName(\Cake\Console\CommandCollection $commands, array $argv): array
+    protected function longestCommandName(CommandCollection $commands, array $argv): array
     {
         for ($i = 3; $i > 1; $i--) {
             $parts = array_slice($argv, 0, $i);
@@ -257,7 +257,7 @@ class CommandRunner implements EventDispatcherInterface
      * @return string The resolved name.
      * @throws \Cake\Console\Exception\MissingOptionException
      */
-    protected function resolveName(\Cake\Console\CommandCollection $commands, \Cake\Console\ConsoleIo $io, ?string $name): string
+    protected function resolveName(CommandCollection $commands, ConsoleIo $io, ?string $name): string
     {
         if (!$name) {
             $io->err('<error>No command provided. Choose one of the available commands.</error>', 2);
@@ -280,7 +280,7 @@ class CommandRunner implements EventDispatcherInterface
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null Exit code
      */
-    protected function runCommand(\Cake\Console\CommandInterface $command, array $argv, \Cake\Console\ConsoleIo $io): ?int
+    protected function runCommand(CommandInterface $command, array $argv, ConsoleIo $io): ?int
     {
         try {
             if ($command instanceof EventDispatcherInterface) {
@@ -297,15 +297,15 @@ class CommandRunner implements EventDispatcherInterface
      * @param string $className Command class name.
      * @return \Cake\Console\CommandInterface
      */
-    protected function createCommand(string $className): \Cake\Console\CommandInterface
+    protected function createCommand(string $className): CommandInterface
     {
         if (!$this->factory) {
             $container = null;
             if ($this->app instanceof ContainerApplicationInterface) {
                 $container = $this->app->getContainer();
             }
-            $this->factory = new \Cake\Console\CommandFactory($container);
-            $container?->add(\Cake\Console\CommandFactoryInterface::class, $this->factory);
+            $this->factory = new CommandFactory($container);
+            $container?->add(CommandFactoryInterface::class, $this->factory);
         }
         return $this->factory->create($className);
     }

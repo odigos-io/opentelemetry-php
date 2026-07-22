@@ -1,23 +1,23 @@
 <?php
 
-namespace Illuminate\Broadcasting;
+namespace Odigos\Illuminate\Broadcasting;
 
 use Odigos\Ably\AblyRest;
 use Closure;
-use GuzzleHttp\Client as GuzzleClient;
-use Illuminate\Broadcasting\Broadcasters\AblyBroadcaster;
-use Illuminate\Broadcasting\Broadcasters\LogBroadcaster;
-use Illuminate\Broadcasting\Broadcasters\NullBroadcaster;
-use Illuminate\Broadcasting\Broadcasters\PusherBroadcaster;
-use Illuminate\Broadcasting\Broadcasters\RedisBroadcaster;
-use Illuminate\Bus\UniqueLock;
-use Illuminate\Contracts\Broadcasting\Factory as FactoryContract;
-use Illuminate\Contracts\Broadcasting\ShouldBeUnique;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
-use Illuminate\Contracts\Broadcasting\ShouldRescue;
-use Illuminate\Contracts\Bus\Dispatcher as BusDispatcherContract;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Contracts\Foundation\CachesRoutes;
+use Odigos\GuzzleHttp\Client as GuzzleClient;
+use Odigos\Illuminate\Broadcasting\Broadcasters\AblyBroadcaster;
+use Odigos\Illuminate\Broadcasting\Broadcasters\LogBroadcaster;
+use Odigos\Illuminate\Broadcasting\Broadcasters\NullBroadcaster;
+use Odigos\Illuminate\Broadcasting\Broadcasters\PusherBroadcaster;
+use Odigos\Illuminate\Broadcasting\Broadcasters\RedisBroadcaster;
+use Odigos\Illuminate\Bus\UniqueLock;
+use Odigos\Illuminate\Contracts\Broadcasting\Factory as FactoryContract;
+use Odigos\Illuminate\Contracts\Broadcasting\ShouldBeUnique;
+use Odigos\Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use Odigos\Illuminate\Contracts\Broadcasting\ShouldRescue;
+use Odigos\Illuminate\Contracts\Bus\Dispatcher as BusDispatcherContract;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Contracts\Foundation\CachesRoutes;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Odigos\Pusher\Pusher;
@@ -68,7 +68,7 @@ class BroadcastManager implements FactoryContract
         }
         $attributes = $attributes ?: ['middleware' => ['web']];
         $this->app['router']->group($attributes, function ($router) {
-            $router->match(['get', 'post'], '/broadcasting/auth', '\\' . \Illuminate\Broadcasting\BroadcastController::class . '@authenticate')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+            $router->match(['get', 'post'], '/broadcasting/auth', '\\' . BroadcastController::class . '@authenticate')->withoutMiddleware([\Odigos\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
         });
     }
     /**
@@ -84,7 +84,7 @@ class BroadcastManager implements FactoryContract
         }
         $attributes = $attributes ?: ['middleware' => ['web']];
         $this->app['router']->group($attributes, function ($router) {
-            $router->match(['get', 'post'], '/broadcasting/user-auth', '\\' . \Illuminate\Broadcasting\BroadcastController::class . '@authenticateUser')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+            $router->match(['get', 'post'], '/broadcasting/user-auth', '\\' . BroadcastController::class . '@authenticateUser')->withoutMiddleware([\Odigos\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
         });
     }
     /**
@@ -116,23 +116,23 @@ class BroadcastManager implements FactoryContract
     /**
      * Begin sending an anonymous broadcast to the given channels.
      */
-    public function on(\Illuminate\Broadcasting\Channel|string|array $channels): \Illuminate\Broadcasting\AnonymousEvent
+    public function on(Channel|string|array $channels): AnonymousEvent
     {
-        return new \Illuminate\Broadcasting\AnonymousEvent($channels);
+        return new AnonymousEvent($channels);
     }
     /**
      * Begin sending an anonymous broadcast to the given private channels.
      */
-    public function private(string $channel): \Illuminate\Broadcasting\AnonymousEvent
+    public function private(string $channel): AnonymousEvent
     {
-        return $this->on(new \Illuminate\Broadcasting\PrivateChannel($channel));
+        return $this->on(new PrivateChannel($channel));
     }
     /**
      * Begin sending an anonymous broadcast to the given presence channels.
      */
-    public function presence(string $channel): \Illuminate\Broadcasting\AnonymousEvent
+    public function presence(string $channel): AnonymousEvent
     {
-        return $this->on(new \Illuminate\Broadcasting\PresenceChannel($channel));
+        return $this->on(new PresenceChannel($channel));
     }
     /**
      * Begin broadcasting an event.
@@ -142,7 +142,7 @@ class BroadcastManager implements FactoryContract
      */
     public function event($event = null)
     {
-        return new \Illuminate\Broadcasting\PendingBroadcast($this->app->make('events'), $event);
+        return new PendingBroadcast($this->app->make('events'), $event);
     }
     /**
      * Queue the given event for broadcast.
@@ -153,7 +153,7 @@ class BroadcastManager implements FactoryContract
     public function queue($event)
     {
         if ($event instanceof ShouldBroadcastNow || is_object($event) && method_exists($event, 'shouldBroadcastNow') && $event->shouldBroadcastNow()) {
-            $dispatch = fn() => $this->app->make(BusDispatcherContract::class)->dispatchNow(new \Illuminate\Broadcasting\BroadcastEvent(clone $event));
+            $dispatch = fn() => $this->app->make(BusDispatcherContract::class)->dispatchNow(new BroadcastEvent(clone $event));
             return $event instanceof ShouldRescue ? $this->rescue($dispatch) : $dispatch();
         }
         $queue = match (\true) {
@@ -162,9 +162,9 @@ class BroadcastManager implements FactoryContract
             isset($event->queue) => $event->queue,
             default => null,
         };
-        $broadcastEvent = new \Illuminate\Broadcasting\BroadcastEvent(clone $event);
+        $broadcastEvent = new BroadcastEvent(clone $event);
         if ($event instanceof ShouldBeUnique) {
-            $broadcastEvent = new \Illuminate\Broadcasting\UniqueBroadcastEvent(clone $event);
+            $broadcastEvent = new UniqueBroadcastEvent(clone $event);
             if ($this->mustBeUniqueAndCannotAcquireLock($broadcastEvent)) {
                 return;
             }

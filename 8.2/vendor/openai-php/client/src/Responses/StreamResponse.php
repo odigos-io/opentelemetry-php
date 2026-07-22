@@ -1,12 +1,12 @@
 <?php
 
-namespace OpenAI\Responses;
+namespace Odigos\OpenAI\Responses;
 
 use Generator;
-use OpenAI\Contracts\ResponseHasMetaInformationContract;
-use OpenAI\Contracts\ResponseStreamContract;
-use OpenAI\Exceptions\ErrorException;
-use OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Contracts\ResponseHasMetaInformationContract;
+use Odigos\OpenAI\Contracts\ResponseStreamContract;
+use Odigos\OpenAI\Exceptions\ErrorException;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 /**

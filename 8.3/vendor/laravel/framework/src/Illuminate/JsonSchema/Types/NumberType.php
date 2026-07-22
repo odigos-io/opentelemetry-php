@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\JsonSchema\Types;
+namespace Odigos\Illuminate\JsonSchema\Types;
 
-class NumberType extends \Illuminate\JsonSchema\Types\Type
+class NumberType extends Type
 {
     /**
      * The minimum value (inclusive).

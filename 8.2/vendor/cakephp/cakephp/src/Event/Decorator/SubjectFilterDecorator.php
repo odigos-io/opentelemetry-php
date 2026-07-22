@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Event\Decorator;
+namespace Odigos\Cake\Event\Decorator;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Event\EventInterface;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Event\EventInterface;
 /**
  * Event Subject Filter Decorator
  *
@@ -27,7 +27,7 @@ use Cake\Event\EventInterface;
  * The `allowedSubject` option can be a list of class names, if you want
  * to check multiple classes.
  */
-class SubjectFilterDecorator extends \Cake\Event\Decorator\AbstractDecorator
+class SubjectFilterDecorator extends AbstractDecorator
 {
     /**
      * @inheritDoc

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Redis\Connections\PhpRedisConnection;
-class PhpRedisLock extends \Illuminate\Cache\RedisLock
+use Odigos\Illuminate\Redis\Connections\PhpRedisConnection;
+class PhpRedisLock extends RedisLock
 {
     /**
      * Create a new phpredis lock instance.
@@ -22,6 +22,6 @@ class PhpRedisLock extends \Illuminate\Cache\RedisLock
      */
     public function release()
     {
-        return (bool) $this->redis->eval(\Illuminate\Cache\LuaScripts::releaseLock(), 1, $this->name, ...$this->redis->pack([$this->owner]));
+        return (bool) $this->redis->eval(LuaScripts::releaseLock(), 1, $this->name, ...$this->redis->pack([$this->owner]));
     }
 }

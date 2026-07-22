@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Contracts\Mail;
+namespace Odigos\Illuminate\Contracts\Mail;
 
-use Illuminate\Contracts\Queue\Factory as Queue;
+use Odigos\Illuminate\Contracts\Queue\Factory as Queue;
 interface Mailable
 {
     /**

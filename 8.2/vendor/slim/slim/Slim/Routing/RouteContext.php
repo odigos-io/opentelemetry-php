@@ -6,12 +6,12 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Routing;
+namespace Odigos\Slim\Routing;
 
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
-use Slim\Interfaces\RouteInterface;
-use Slim\Interfaces\RouteParserInterface;
+use Odigos\Slim\Interfaces\RouteInterface;
+use Odigos\Slim\Interfaces\RouteParserInterface;
 /** @api */
 final class RouteContext
 {
@@ -36,9 +36,9 @@ final class RouteContext
     }
     private ?RouteInterface $route;
     private RouteParserInterface $routeParser;
-    private \Slim\Routing\RoutingResults $routingResults;
+    private RoutingResults $routingResults;
     private ?string $basePath;
-    private function __construct(?RouteInterface $route, RouteParserInterface $routeParser, \Slim\Routing\RoutingResults $routingResults, ?string $basePath = null)
+    private function __construct(?RouteInterface $route, RouteParserInterface $routeParser, RoutingResults $routingResults, ?string $basePath = null)
     {
         $this->route = $route;
         $this->routeParser = $routeParser;
@@ -53,7 +53,7 @@ final class RouteContext
     {
         return $this->routeParser;
     }
-    public function getRoutingResults(): \Slim\Routing\RoutingResults
+    public function getRoutingResults(): RoutingResults
     {
         return $this->routingResults;
     }

@@ -1,11 +1,11 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\StreamResponse;
-use OpenAI\Responses\Threads\Runs\ThreadRunListResponse;
-use OpenAI\Responses\Threads\Runs\ThreadRunResponse;
-use OpenAI\Responses\Threads\Runs\ThreadRunStreamResponse;
+use Odigos\OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\ThreadRunListResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\ThreadRunResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\ThreadRunStreamResponse;
 interface ThreadsRunsContract
 {
     /**
@@ -76,5 +76,5 @@ interface ThreadsRunsContract
      *
      * @see https://platform.openai.com/docs/api-reference/runs/step-object
      */
-    public function steps(): \OpenAI\Contracts\Resources\ThreadsRunsStepsContract;
+    public function steps(): ThreadsRunsStepsContract;
 }

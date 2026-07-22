@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\EventDispatcher;
+namespace Odigos\Symfony\Component\EventDispatcher;
 
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
+use Odigos\Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 /**
  * The EventDispatcherInterface is the central point of Symfony's event listener system.
  * Listeners are registered on the manager and events are dispatched through the
@@ -33,12 +33,12 @@ interface EventDispatcherInterface extends ContractsEventDispatcherInterface
      * The subscriber is asked for all the events it is
      * interested in and added as a listener for these events.
      */
-    public function addSubscriber(\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber): void;
+    public function addSubscriber(EventSubscriberInterface $subscriber): void;
     /**
      * Removes an event listener from the specified events.
      */
     public function removeListener(string $eventName, callable $listener): void;
-    public function removeSubscriber(\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber): void;
+    public function removeSubscriber(EventSubscriberInterface $subscriber): void;
     /**
      * Gets the listeners of a specific event or all listeners sorted by descending priority.
      *

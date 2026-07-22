@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core;
+namespace Odigos\Cake\Core;
 
 use Odigos\League\Container\Container as LeagueContainer;
 /**
@@ -22,6 +22,6 @@ use Odigos\League\Container\Container as LeagueContainer;
  *
  * Based on the container out of League\Container
  */
-class Container extends LeagueContainer implements \Cake\Core\ContainerInterface
+class Container extends LeagueContainer implements ContainerInterface
 {
 }

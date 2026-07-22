@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Collection\Iterator;
+namespace Odigos\Cake\Collection\Iterator;
 
-use Cake\Collection\CollectionInterface;
-use Cake\Collection\CollectionTrait;
+use Odigos\Cake\Collection\CollectionInterface;
+use Odigos\Cake\Collection\CollectionTrait;
 use RecursiveIterator;
 use RecursiveIteratorIterator;
 /**

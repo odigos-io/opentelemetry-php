@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\API\OCI;
+namespace Odigos\Doctrine\DBAL\Driver\API\OCI;
 
-use Doctrine\DBAL\Driver\API\ExceptionConverter as ExceptionConverterInterface;
-use Doctrine\DBAL\Driver\Exception;
-use Doctrine\DBAL\Driver\OCI8\Exception\Error;
-use Doctrine\DBAL\Driver\PDO\Exception as DriverPDOException;
-use Doctrine\DBAL\Exception\ConnectionException;
-use Doctrine\DBAL\Exception\DatabaseDoesNotExist;
-use Doctrine\DBAL\Exception\DatabaseObjectNotFoundException;
-use Doctrine\DBAL\Exception\DriverException;
-use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
-use Doctrine\DBAL\Exception\InvalidFieldNameException;
-use Doctrine\DBAL\Exception\NonUniqueFieldNameException;
-use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
-use Doctrine\DBAL\Exception\SyntaxErrorException;
-use Doctrine\DBAL\Exception\TableExistsException;
-use Doctrine\DBAL\Exception\TableNotFoundException;
-use Doctrine\DBAL\Exception\TransactionRolledBack;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Doctrine\DBAL\Query;
+use Odigos\Doctrine\DBAL\Driver\API\ExceptionConverter as ExceptionConverterInterface;
+use Odigos\Doctrine\DBAL\Driver\Exception;
+use Odigos\Doctrine\DBAL\Driver\OCI8\Exception\Error;
+use Odigos\Doctrine\DBAL\Driver\PDO\Exception as DriverPDOException;
+use Odigos\Doctrine\DBAL\Exception\ConnectionException;
+use Odigos\Doctrine\DBAL\Exception\DatabaseDoesNotExist;
+use Odigos\Doctrine\DBAL\Exception\DatabaseObjectNotFoundException;
+use Odigos\Doctrine\DBAL\Exception\DriverException;
+use Odigos\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Odigos\Doctrine\DBAL\Exception\InvalidFieldNameException;
+use Odigos\Doctrine\DBAL\Exception\NonUniqueFieldNameException;
+use Odigos\Doctrine\DBAL\Exception\NotNullConstraintViolationException;
+use Odigos\Doctrine\DBAL\Exception\SyntaxErrorException;
+use Odigos\Doctrine\DBAL\Exception\TableExistsException;
+use Odigos\Doctrine\DBAL\Exception\TableNotFoundException;
+use Odigos\Doctrine\DBAL\Exception\TransactionRolledBack;
+use Odigos\Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Odigos\Doctrine\DBAL\Query;
 use function assert;
 use function count;
 use function explode;

@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         0.2.9
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
-use Cake\Core\InstanceConfigTrait;
-use Cake\Event\EventListenerInterface;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Event\EventListenerInterface;
 /**
  * Abstract base class for all other Helpers in CakePHP.
  * Provides common methods and features.
@@ -65,14 +65,14 @@ class Helper implements EventListenerInterface
      *
      * @var \Cake\View\View
      */
-    protected \Cake\View\View $_View;
+    protected View $_View;
     /**
      * Default Constructor
      *
      * @param \Cake\View\View $view The View this helper is being attached to.
      * @param array<string, mixed> $config Configuration settings for the helper.
      */
-    public function __construct(\Cake\View\View $view, array $config = [])
+    public function __construct(View $view, array $config = [])
     {
         $this->_View = $view;
         $this->setConfig($config);
@@ -87,7 +87,7 @@ class Helper implements EventListenerInterface
      * @param string $name Name of the property being accessed.
      * @return \Cake\View\Helper|null Helper instance if helper with provided name exists
      */
-    public function __get(string $name): ?\Cake\View\Helper
+    public function __get(string $name): ?Helper
     {
         if (isset($this->helperInstances[$name])) {
             return $this->helperInstances[$name];
@@ -103,7 +103,7 @@ class Helper implements EventListenerInterface
      *
      * @return \Cake\View\View The bound view instance.
      */
-    public function getView(): \Cake\View\View
+    public function getView(): View
     {
         return $this->_View;
     }

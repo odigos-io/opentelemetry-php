@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
-use Doctrine\DBAL\Schema\Name\Parser\OptionallyQualifiedNameParser;
-use Doctrine\DBAL\Schema\Name\Parsers;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\OptionallyQualifiedNameParser;
+use Odigos\Doctrine\DBAL\Schema\Name\Parsers;
 /**
  * Representation of a Database View.
  *
  * @final
  * @extends AbstractNamedObject<OptionallyQualifiedName>
  */
-class View extends \Doctrine\DBAL\Schema\AbstractNamedObject
+class View extends AbstractNamedObject
 {
     /** @internal Use {@link View::editor()} to instantiate an editor and {@link ViewEditor::create()} to create a view. */
     public function __construct(string $name, private readonly string $sql)
@@ -30,14 +30,14 @@ class View extends \Doctrine\DBAL\Schema\AbstractNamedObject
     /**
      * Instantiates a new view editor.
      */
-    public static function editor(): \Doctrine\DBAL\Schema\ViewEditor
+    public static function editor(): ViewEditor
     {
-        return new \Doctrine\DBAL\Schema\ViewEditor();
+        return new ViewEditor();
     }
     /**
      * Instantiates a new view editor and initializes it with the view's properties.
      */
-    public function edit(): \Doctrine\DBAL\Schema\ViewEditor
+    public function edit(): ViewEditor
     {
         return self::editor()->setName($this->getObjectName())->setSQL($this->sql);
     }

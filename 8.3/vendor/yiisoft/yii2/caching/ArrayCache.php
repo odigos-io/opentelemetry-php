@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
 /**
  * ArrayCache provides caching for the current request only by storing the values in an array.
@@ -22,7 +22,7 @@ namespace yii\caching;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class ArrayCache extends \yii\caching\Cache
+class ArrayCache extends Cache
 {
     private $_cache = [];
     /**

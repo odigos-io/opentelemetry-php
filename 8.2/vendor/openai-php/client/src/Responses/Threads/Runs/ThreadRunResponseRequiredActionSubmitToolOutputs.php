@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Threads\Runs;
+namespace Odigos\OpenAI\Responses\Threads\Runs;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{tool_calls: array<int, array{id: string, type: string, function: array{name: string, arguments: string}}>}>
  */
@@ -29,7 +29,7 @@ final class ThreadRunResponseRequiredActionSubmitToolOutputs implements Response
      */
     public static function from(array $attributes): self
     {
-        $toolCalls = array_map(fn(array $toolCall): \OpenAI\Responses\Threads\Runs\ThreadRunResponseRequiredActionFunctionToolCall => \OpenAI\Responses\Threads\Runs\ThreadRunResponseRequiredActionFunctionToolCall::from($toolCall), $attributes['tool_calls']);
+        $toolCalls = array_map(fn(array $toolCall): ThreadRunResponseRequiredActionFunctionToolCall => ThreadRunResponseRequiredActionFunctionToolCall::from($toolCall), $attributes['tool_calls']);
         return new self($toolCalls);
     }
     /**
@@ -37,6 +37,6 @@ final class ThreadRunResponseRequiredActionSubmitToolOutputs implements Response
      */
     public function toArray(): array
     {
-        return ['tool_calls' => array_map(fn(\OpenAI\Responses\Threads\Runs\ThreadRunResponseRequiredActionFunctionToolCall $toolCall): array => $toolCall->toArray(), $this->toolCalls)];
+        return ['tool_calls' => array_map(fn(ThreadRunResponseRequiredActionFunctionToolCall $toolCall): array => $toolCall->toArray(), $this->toolCalls)];
     }
 }

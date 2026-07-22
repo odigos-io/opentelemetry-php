@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation\Auth\Access;
+namespace Odigos\Illuminate\Foundation\Auth\Access;
 
-use Illuminate\Contracts\Auth\Access\Gate;
+use Odigos\Illuminate\Contracts\Auth\Access\Gate;
 trait Authorizable
 {
     /**

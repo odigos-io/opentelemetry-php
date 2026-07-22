@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers\RedisCommand;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers\RedisCommand;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Redis\Connections\Connection;
-use Illuminate\Redis\Connections\PhpRedisConnection;
-use Illuminate\Redis\Connections\PredisConnection;
-use Illuminate\Redis\Events\CommandExecuted;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Redis\Connections\Connection;
+use Odigos\Illuminate\Redis\Connections\PhpRedisConnection;
+use Odigos\Illuminate\Redis\Connections\PredisConnection;
+use Odigos\Illuminate\Redis\Events\CommandExecuted;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Trace\SpanKind;
-use OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers\Watcher;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers\Watcher;
 use OpenTelemetry\SemConv\TraceAttributes;
 use OpenTelemetry\SemConv\TraceAttributeValues;
 use Throwable;
@@ -25,7 +25,7 @@ class RedisCommandWatcher extends Watcher
     {
     }
     /** @psalm-suppress UndefinedInterfaceMethod */
-    public function register(Application $app): void
+    public function register(object $app): void
     {
         /** @phan-suppress-next-line PhanTypeArraySuspicious */
         $app['events']->listen(CommandExecuted::class, [$this, 'recordRedisCommand']);
@@ -34,14 +34,14 @@ class RedisCommandWatcher extends Watcher
      * Record a Redis command.
      * @psalm-suppress PossiblyUnusedMethod
      */
-    public function recordRedisCommand(CommandExecuted $event): void
+    public function recordRedisCommand(object $event): void
     {
         $nowInNs = (int) (microtime(\true) * 1000000000.0);
         $operationName = strtoupper($event->command);
         /** @psalm-suppress ArgumentTypeCoercion */
         $span = $this->instrumentation->tracer()->spanBuilder($operationName)->setSpanKind(SpanKind::KIND_CLIENT)->setStartTimestamp($this->calculateQueryStartTime($nowInNs, $event->time))->startSpan();
         // See https://opentelemetry.io/docs/specs/semconv/database/redis/
-        $attributes = [TraceAttributes::DB_SYSTEM_NAME => TraceAttributeValues::DB_SYSTEM_REDIS, TraceAttributes::DB_NAMESPACE => $this->fetchDbIndex($event->connection), TraceAttributes::DB_OPERATION_NAME => $operationName, TraceAttributes::DB_QUERY_TEXT => \OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers\RedisCommand\Serializer::serializeCommand($event->command, $event->parameters), TraceAttributes::SERVER_ADDRESS => $this->fetchDbHost($event->connection)];
+        $attributes = [TraceAttributes::DB_SYSTEM_NAME => TraceAttributeValues::DB_SYSTEM_REDIS, TraceAttributes::DB_NAMESPACE => $this->fetchDbIndex($event->connection), TraceAttributes::DB_OPERATION_NAME => $operationName, TraceAttributes::DB_QUERY_TEXT => Serializer::serializeCommand($event->command, $event->parameters), TraceAttributes::SERVER_ADDRESS => $this->fetchDbHost($event->connection)];
         /** @psalm-suppress PossiblyInvalidArgument */
         $span->setAttributes($attributes);
         $span->end($nowInNs);
@@ -50,12 +50,12 @@ class RedisCommandWatcher extends Watcher
     {
         return (int) ($nowInNs - $queryTimeMs * 1000000.0);
     }
-    private function fetchDbIndex(Connection $connection): ?int
+    private function fetchDbIndex(object $connection): ?int
     {
         try {
-            if ($connection instanceof PhpRedisConnection) {
+            if (is_a($connection, 'Illuminate\\Redis\\Connections\\PhpRedisConnection')) {
                 return $connection->client()->getDbNum();
-            } elseif ($connection instanceof PredisConnection) {
+            } elseif (is_a($connection, 'Illuminate\\Redis\\Connections\\PredisConnection')) {
                 /** @psalm-suppress PossiblyUndefinedMethod */
                 return $connection->client()->getConnection()->getParameters()->database;
             }
@@ -64,12 +64,12 @@ class RedisCommandWatcher extends Watcher
             return null;
         }
     }
-    private function fetchDbHost(Connection $connection): ?string
+    private function fetchDbHost(object $connection): ?string
     {
         try {
-            if ($connection instanceof PhpRedisConnection) {
+            if (is_a($connection, 'Illuminate\\Redis\\Connections\\PhpRedisConnection')) {
                 return $connection->client()->getHost();
-            } elseif ($connection instanceof PredisConnection) {
+            } elseif (is_a($connection, 'Illuminate\\Redis\\Connections\\PredisConnection')) {
                 /** @psalm-suppress PossiblyUndefinedMethod */
                 return $connection->client()->getConnection()->getParameters()->host;
             }

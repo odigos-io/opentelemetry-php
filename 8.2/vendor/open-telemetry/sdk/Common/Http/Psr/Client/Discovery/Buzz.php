@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery;
 
 use Odigos\Buzz\Client\FileGetContents;
-use Http\Discovery\Psr17FactoryDiscovery;
+use Odigos\Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Client\ClientInterface;
 class Buzz implements \OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery\DiscoveryInterface
 {

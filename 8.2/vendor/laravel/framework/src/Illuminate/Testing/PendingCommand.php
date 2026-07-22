@@ -1,29 +1,29 @@
 <?php
 
-namespace Illuminate\Testing;
+namespace Odigos\Illuminate\Testing;
 
-use Illuminate\Console\OutputStyle;
-use Illuminate\Console\PromptValidationException;
-use Illuminate\Contracts\Console\Kernel;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Traits\Tappable;
-use Laravel\Prompts\Note as PromptsNote;
-use Laravel\Prompts\Prompt as BasePrompt;
-use Laravel\Prompts\Table as PromptsTable;
+use Odigos\Illuminate\Console\OutputStyle;
+use Odigos\Illuminate\Console\PromptValidationException;
+use Odigos\Illuminate\Contracts\Console\Kernel;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\Tappable;
+use Odigos\Laravel\Prompts\Note as PromptsNote;
+use Odigos\Laravel\Prompts\Prompt as BasePrompt;
+use Odigos\Laravel\Prompts\Table as PromptsTable;
 use Odigos\Mockery;
 use Odigos\Mockery\Exception\NoMatchingExpectationException;
 use Odigos\PHPUnit\Framework\TestCase as PHPUnitTestCase;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Question\ChoiceQuestion;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Helper\Table;
+use Odigos\Symfony\Component\Console\Input\ArrayInput;
+use Odigos\Symfony\Component\Console\Output\BufferedOutput;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutput;
+use Odigos\Symfony\Component\Console\Question\ChoiceQuestion;
 class PendingCommand
 {
     use Conditionable, Macroable, Tappable;

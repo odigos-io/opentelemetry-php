@@ -14,28 +14,28 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database;
+namespace Odigos\Cake\Database;
 
-use Cake\Core\App;
-use Cake\Core\Exception\CakeException;
-use Cake\Core\Retry\CommandRetry;
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\Exception\MissingConnectionException;
-use Cake\Database\Exception\QueryException;
-use Cake\Database\Expression\ComparisonExpression;
-use Cake\Database\Expression\IdentifierExpression;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Database\Log\LoggedQuery;
-use Cake\Database\Log\QueryLogger;
-use Cake\Database\Query\DeleteQuery;
-use Cake\Database\Query\InsertQuery;
-use Cake\Database\Query\SelectQuery;
-use Cake\Database\Query\UpdateQuery;
-use Cake\Database\Retry\ErrorCodeWaitStrategy;
-use Cake\Database\Schema\SchemaDialect;
-use Cake\Database\Schema\TableSchema;
-use Cake\Database\Schema\TableSchemaInterface;
-use Cake\Database\Statement\Statement;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Retry\CommandRetry;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\Exception\MissingConnectionException;
+use Odigos\Cake\Database\Exception\QueryException;
+use Odigos\Cake\Database\Expression\ComparisonExpression;
+use Odigos\Cake\Database\Expression\IdentifierExpression;
+use Odigos\Cake\Database\Expression\QueryExpression;
+use Odigos\Cake\Database\Log\LoggedQuery;
+use Odigos\Cake\Database\Log\QueryLogger;
+use Odigos\Cake\Database\Query\DeleteQuery;
+use Odigos\Cake\Database\Query\InsertQuery;
+use Odigos\Cake\Database\Query\SelectQuery;
+use Odigos\Cake\Database\Query\UpdateQuery;
+use Odigos\Cake\Database\Retry\ErrorCodeWaitStrategy;
+use Odigos\Cake\Database\Schema\SchemaDialect;
+use Odigos\Cake\Database\Schema\TableSchema;
+use Odigos\Cake\Database\Schema\TableSchemaInterface;
+use Odigos\Cake\Database\Statement\Statement;
 use InvalidArgumentException;
 use PDO;
 use PDOException;
@@ -105,7 +105,7 @@ abstract class Driver implements LoggerAwareInterface
      *
      * @var \Cake\Database\IdentifierQuoter|null
      */
-    protected ?\Cake\Database\IdentifierQuoter $quoter = null;
+    protected ?IdentifierQuoter $quoter = null;
     /**
      * The server version
      *
@@ -248,7 +248,7 @@ abstract class Driver implements LoggerAwareInterface
      * @param array $types List or associative array of types to be used for casting values in query.
      * @return \Cake\Database\StatementInterface Executed statement
      */
-    public function execute(string $sql, array $params = [], array $types = []): \Cake\Database\StatementInterface
+    public function execute(string $sql, array $params = [], array $types = []): StatementInterface
     {
         $statement = $this->prepare($sql);
         if ($params) {
@@ -264,7 +264,7 @@ abstract class Driver implements LoggerAwareInterface
      * @param \Cake\Database\Query $query The query to be executed.
      * @return \Cake\Database\StatementInterface Executed statement
      */
-    public function run(\Cake\Database\Query $query): \Cake\Database\StatementInterface
+    public function run(Query $query): StatementInterface
     {
         $statement = $this->prepare($query);
         $query->getValueBinder()->attachTo($statement);
@@ -278,7 +278,7 @@ abstract class Driver implements LoggerAwareInterface
      * @param array|null $params List of values to be bound to query.
      * @return void
      */
-    protected function executeStatement(\Cake\Database\StatementInterface $statement, ?array $params = null): void
+    protected function executeStatement(StatementInterface $statement, ?array $params = null): void
     {
         if ($this->logger === null) {
             try {
@@ -315,7 +315,7 @@ abstract class Driver implements LoggerAwareInterface
      * @param array|null $params
      * @return \Cake\Database\Exception\QueryException
      */
-    protected function createQueryException(PDOException $exception, \Cake\Database\StatementInterface $statement, ?array $params = null): QueryException
+    protected function createQueryException(PDOException $exception, StatementInterface $statement, ?array $params = null): QueryException
     {
         $loggedQuery = new LoggedQuery();
         $loggedQuery->setContext(['query' => $statement->queryString(), 'driver' => $this, 'params' => $params ?? $statement->getBoundParams()]);
@@ -327,12 +327,12 @@ abstract class Driver implements LoggerAwareInterface
      * @param \Cake\Database\Query|string $query The query to turn into a prepared statement.
      * @return \Cake\Database\StatementInterface
      */
-    public function prepare(\Cake\Database\Query|string $query): \Cake\Database\StatementInterface
+    public function prepare(Query|string $query): StatementInterface
     {
         try {
-            $statement = $this->getPdo()->prepare($query instanceof \Cake\Database\Query ? $query->sql() : $query);
+            $statement = $this->getPdo()->prepare($query instanceof Query ? $query->sql() : $query);
         } catch (PDOException $e) {
-            throw new QueryException($query instanceof \Cake\Database\Query ? $query->sql() : $query, $e);
+            throw new QueryException($query instanceof Query ? $query->sql() : $query, $e);
         }
         /** @var \Cake\Database\StatementInterface */
         return new (static::STATEMENT_CLASS)($statement, $this, $this->getResultSetDecorators($query));
@@ -343,12 +343,12 @@ abstract class Driver implements LoggerAwareInterface
      * @param \Cake\Database\Query|string $query The query to be decorated.
      * @return array<\Closure>
      */
-    protected function getResultSetDecorators(\Cake\Database\Query|string $query): array
+    protected function getResultSetDecorators(Query|string $query): array
     {
         if ($query instanceof SelectQuery) {
             $decorators = $query->getResultDecorators();
             if ($query->isResultsCastingEnabled()) {
-                $typeConverter = new \Cake\Database\FieldTypeConverter($query->getSelectTypeMap(), $this);
+                $typeConverter = new FieldTypeConverter($query->getSelectTypeMap(), $this);
                 array_unshift($decorators, $typeConverter(...));
             }
             return $decorators;
@@ -453,7 +453,7 @@ abstract class Driver implements LoggerAwareInterface
      * @param \Cake\Database\Query $query Query to transform.
      * @return \Cake\Database\Query
      */
-    protected function transformQuery(\Cake\Database\Query $query): \Cake\Database\Query
+    protected function transformQuery(Query $query): Query
     {
         if ($this->isAutoQuotingEnabled()) {
             $query = $this->quoter()->quote($query);
@@ -576,7 +576,7 @@ abstract class Driver implements LoggerAwareInterface
             throw new DatabaseException('Aliases are being removed from conditions for UPDATE/DELETE queries, ' . 'this can break references to joined tables.');
         }
         $conditions = $query->clause('where');
-        assert($conditions === null || $conditions instanceof \Cake\Database\ExpressionInterface);
+        assert($conditions === null || $conditions instanceof ExpressionInterface);
         if ($conditions) {
             $conditions->traverse(function ($expression) {
                 if ($expression instanceof ComparisonExpression) {
@@ -656,9 +656,9 @@ abstract class Driver implements LoggerAwareInterface
      *
      * @return \Cake\Database\IdentifierQuoter
      */
-    public function quoter(): \Cake\Database\IdentifierQuoter
+    public function quoter(): IdentifierQuoter
     {
-        return $this->quoter ??= new \Cake\Database\IdentifierQuoter($this->_startQuote, $this->_endQuote);
+        return $this->quoter ??= new IdentifierQuoter($this->_startQuote, $this->_endQuote);
     }
     /**
      * Escapes values for use in schema definitions.
@@ -684,7 +684,7 @@ abstract class Driver implements LoggerAwareInterface
             return (string) $value;
         }
         if ($value instanceof QueryExpression) {
-            return $value->sql(new \Cake\Database\ValueBinder());
+            return $value->sql(new ValueBinder());
         }
         return $this->getPdo()->quote((string) $value, PDO::PARAM_STR);
     }
@@ -763,7 +763,7 @@ abstract class Driver implements LoggerAwareInterface
      * @param \Cake\Database\DriverFeatureEnum $feature Driver feature
      * @return bool
      */
-    abstract public function supports(\Cake\Database\DriverFeatureEnum $feature): bool;
+    abstract public function supports(DriverFeatureEnum $feature): bool;
     /**
      * Transforms the passed query to this Driver's dialect and returns an instance
      * of the transformed query and the full compiled SQL string.
@@ -772,7 +772,7 @@ abstract class Driver implements LoggerAwareInterface
      * @param \Cake\Database\ValueBinder $binder The value binder to use.
      * @return string The compiled SQL.
      */
-    public function compileQuery(\Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    public function compileQuery(Query $query, ValueBinder $binder): string
     {
         $processor = $this->newCompiler();
         $query = $this->transformQuery($query);
@@ -781,9 +781,9 @@ abstract class Driver implements LoggerAwareInterface
     /**
      * @return \Cake\Database\QueryCompiler
      */
-    public function newCompiler(): \Cake\Database\QueryCompiler
+    public function newCompiler(): QueryCompiler
     {
-        return new \Cake\Database\QueryCompiler();
+        return new QueryCompiler();
     }
     /**
      * Constructs new TableSchema.
@@ -859,7 +859,7 @@ abstract class Driver implements LoggerAwareInterface
      */
     public function getRole(): string
     {
-        return $this->_config['_role'] ?? \Cake\Database\Connection::ROLE_WRITE;
+        return $this->_config['_role'] ?? Connection::ROLE_WRITE;
     }
     /**
      * Enable query logging.

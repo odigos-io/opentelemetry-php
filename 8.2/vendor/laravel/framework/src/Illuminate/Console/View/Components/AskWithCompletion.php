@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Console\View\Components;
+namespace Odigos\Illuminate\Console\View\Components;
 
-use Symfony\Component\Console\Question\Question;
-class AskWithCompletion extends \Illuminate\Console\View\Components\Component
+use Odigos\Symfony\Component\Console\Question\Question;
+class AskWithCompletion extends Component
 {
     /**
      * Renders the component using the given arguments.

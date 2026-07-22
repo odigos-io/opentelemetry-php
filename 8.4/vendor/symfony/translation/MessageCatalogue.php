@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation;
+namespace Odigos\Symfony\Component\Translation;
 
-use Symfony\Component\Config\Resource\ResourceInterface;
-use Symfony\Component\Translation\Exception\LogicException;
+use Odigos\Symfony\Component\Config\Resource\ResourceInterface;
+use Odigos\Symfony\Component\Translation\Exception\LogicException;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class MessageCatalogue implements \Symfony\Component\Translation\MessageCatalogueInterface, \Symfony\Component\Translation\MetadataAwareInterface, \Symfony\Component\Translation\CatalogueMetadataAwareInterface
+class MessageCatalogue implements MessageCatalogueInterface, MetadataAwareInterface, CatalogueMetadataAwareInterface
 {
     private array $metadata = [];
     private array $catalogueMetadata = [];
     private array $resources = [];
-    private ?\Symfony\Component\Translation\MessageCatalogueInterface $fallbackCatalogue = null;
+    private ?MessageCatalogueInterface $fallbackCatalogue = null;
     private ?self $parent = null;
     /**
      * @param array $messages An array of messages classified by domain
@@ -110,7 +110,7 @@ class MessageCatalogue implements \Symfony\Component\Translation\MessageCatalogu
             unset($this->messages[$altDomain]);
         }
     }
-    public function addCatalogue(\Symfony\Component\Translation\MessageCatalogueInterface $catalogue): void
+    public function addCatalogue(MessageCatalogueInterface $catalogue): void
     {
         if ($catalogue->getLocale() !== $this->locale) {
             throw new LogicException(\sprintf('Cannot add a catalogue for locale "%s" as the current locale for this catalogue is "%s".', $catalogue->getLocale(), $this->locale));
@@ -125,16 +125,16 @@ class MessageCatalogue implements \Symfony\Component\Translation\MessageCatalogu
         foreach ($catalogue->getResources() as $resource) {
             $this->addResource($resource);
         }
-        if ($catalogue instanceof \Symfony\Component\Translation\MetadataAwareInterface) {
+        if ($catalogue instanceof MetadataAwareInterface) {
             $metadata = $catalogue->getMetadata('', '');
             $this->addMetadata($metadata);
         }
-        if ($catalogue instanceof \Symfony\Component\Translation\CatalogueMetadataAwareInterface) {
+        if ($catalogue instanceof CatalogueMetadataAwareInterface) {
             $catalogueMetadata = $catalogue->getCatalogueMetadata('', '');
             $this->addCatalogueMetadata($catalogueMetadata);
         }
     }
-    public function addFallbackCatalogue(\Symfony\Component\Translation\MessageCatalogueInterface $catalogue): void
+    public function addFallbackCatalogue(MessageCatalogueInterface $catalogue): void
     {
         // detect circular references
         $c = $catalogue;
@@ -158,7 +158,7 @@ class MessageCatalogue implements \Symfony\Component\Translation\MessageCatalogu
             $this->addResource($resource);
         }
     }
-    public function getFallbackCatalogue(): ?\Symfony\Component\Translation\MessageCatalogueInterface
+    public function getFallbackCatalogue(): ?MessageCatalogueInterface
     {
         return $this->fallbackCatalogue;
     }

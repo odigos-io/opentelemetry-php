@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
 use DateTime;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Exception\InvalidFormat;
-use Doctrine\DBAL\Types\Exception\InvalidType;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Types\Exception\InvalidFormat;
+use Odigos\Doctrine\DBAL\Types\Exception\InvalidType;
 use Exception;
 /**
  * Type that maps an SQL DATETIME/TIMESTAMP to a PHP DateTime object.
  */
-class DateTimeType extends \Doctrine\DBAL\Types\Type implements \Doctrine\DBAL\Types\PhpDateTimeMappingType
+class DateTimeType extends Type implements PhpDateTimeMappingType
 {
     /**
      * {@inheritDoc}

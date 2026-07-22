@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Test;
+namespace Odigos\Symfony\Component\Mailer\Test;
 
 use Odigos\PHPUnit\Framework\Attributes\DataProvider;
-use Symfony\Component\Mailer\Exception\IncompleteDsnException;
-use Symfony\Component\Mailer\Transport\Dsn;
+use Odigos\Symfony\Component\Mailer\Exception\IncompleteDsnException;
+use Odigos\Symfony\Component\Mailer\Transport\Dsn;
 trait IncompleteDsnTestTrait
 {
     /**

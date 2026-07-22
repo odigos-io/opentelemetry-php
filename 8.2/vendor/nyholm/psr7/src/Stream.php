@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Nyholm\Psr7;
+namespace Odigos\Nyholm\Psr7;
 
 use Psr\Http\Message\StreamInterface;
 /**
@@ -13,7 +13,7 @@ use Psr\Http\Message\StreamInterface;
  */
 class Stream implements StreamInterface
 {
-    use \Nyholm\Psr7\StreamTrait;
+    use StreamTrait;
     /** @var resource|null A resource reference */
     private $stream;
     /** @var bool */

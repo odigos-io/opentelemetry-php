@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\View\Concerns;
+namespace Odigos\Illuminate\View\Concerns;
 
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Arr;
-use Illuminate\View\ComponentSlot;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Contracts\View\View;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\View\ComponentSlot;
 trait ManagesComponents
 {
     /**

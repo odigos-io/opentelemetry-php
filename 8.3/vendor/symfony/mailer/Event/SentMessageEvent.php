@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Event;
+namespace Odigos\Symfony\Component\Mailer\Event;
 
-use Symfony\Component\Mailer\SentMessage;
-use Symfony\Contracts\EventDispatcher\Event;
+use Odigos\Symfony\Component\Mailer\SentMessage;
+use Odigos\Symfony\Contracts\EventDispatcher\Event;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */

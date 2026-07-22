@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Foundation\Http\Middleware;
+namespace Odigos\Illuminate\Foundation\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Contracts\Encryption\Encrypter;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Cookie\CookieValuePrefix;
-use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Foundation\Http\Middleware\Concerns\ExcludesPaths;
-use Illuminate\Session\TokenMismatchException;
-use Illuminate\Support\Arr;
-use Illuminate\Support\InteractsWithTime;
-use Symfony\Component\HttpFoundation\Cookie;
+use Odigos\Illuminate\Contracts\Encryption\DecryptException;
+use Odigos\Illuminate\Contracts\Encryption\Encrypter;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Contracts\Support\Responsable;
+use Odigos\Illuminate\Cookie\CookieValuePrefix;
+use Odigos\Illuminate\Cookie\Middleware\EncryptCookies;
+use Odigos\Illuminate\Foundation\Http\Middleware\Concerns\ExcludesPaths;
+use Odigos\Illuminate\Session\TokenMismatchException;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\InteractsWithTime;
+use Odigos\Symfony\Component\HttpFoundation\Cookie;
 class VerifyCsrfToken
 {
     use InteractsWithTime, ExcludesPaths;

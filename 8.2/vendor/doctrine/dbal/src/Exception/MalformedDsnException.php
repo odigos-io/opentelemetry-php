@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
-class MalformedDsnException extends \Doctrine\DBAL\Exception\InvalidArgumentException
+class MalformedDsnException extends InvalidArgumentException
 {
     public static function new(): self
     {

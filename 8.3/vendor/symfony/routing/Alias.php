@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing;
+namespace Odigos\Symfony\Component\Routing;
 
-use Symfony\Component\Routing\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Routing\Exception\InvalidArgumentException;
 class Alias
 {
     private array $deprecation = [];

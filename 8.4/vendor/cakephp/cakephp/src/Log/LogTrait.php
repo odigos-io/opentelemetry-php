@@ -13,7 +13,7 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Log;
+namespace Odigos\Cake\Log;
 
 use Psr\Log\LogLevel;
 use Stringable;
@@ -34,6 +34,6 @@ trait LogTrait
      */
     public function log(Stringable|string $message, string|int $level = LogLevel::ERROR, array|string $context = []): bool
     {
-        return \Cake\Log\Log::write($level, $message, $context);
+        return Log::write($level, $message, $context);
     }
 }

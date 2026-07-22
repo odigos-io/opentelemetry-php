@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
-use Cake\Core\Configure;
-use Cake\Utility\Hash;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Utility\Hash;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use function Odigos\Laminas\Diactoros\normalizeServer;
@@ -45,13 +45,13 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * @return \Cake\Http\ServerRequest
      * @throws \InvalidArgumentException for invalid file values
      */
-    public static function fromGlobals(?array $server = null, ?array $query = null, ?array $parsedBody = null, ?array $cookies = null, ?array $files = null): \Cake\Http\ServerRequest
+    public static function fromGlobals(?array $server = null, ?array $query = null, ?array $parsedBody = null, ?array $cookies = null, ?array $files = null): ServerRequest
     {
         $server = normalizeServer($server ?? $_SERVER);
-        ['uri' => $uri, 'base' => $base, 'webroot' => $webroot] = \Cake\Http\UriFactory::marshalUriAndBaseFromSapi($server);
+        ['uri' => $uri, 'base' => $base, 'webroot' => $webroot] = UriFactory::marshalUriAndBaseFromSapi($server);
         $sessionConfig = (array) Configure::read('Session') + ['defaults' => 'php', 'cookiePath' => $webroot];
-        $session = \Cake\Http\Session::create($sessionConfig);
-        $request = new \Cake\Http\ServerRequest(['environment' => $server, 'uri' => $uri, 'cookies' => $cookies ?? $_COOKIE, 'query' => $query ?? $_GET, 'webroot' => $webroot, 'base' => $base, 'session' => $session, 'input' => $server['CAKEPHP_INPUT'] ?? null]);
+        $session = Session::create($sessionConfig);
+        $request = new ServerRequest(['environment' => $server, 'uri' => $uri, 'cookies' => $cookies ?? $_COOKIE, 'query' => $query ?? $_GET, 'webroot' => $webroot, 'base' => $base, 'session' => $session, 'input' => $server['CAKEPHP_INPUT'] ?? null]);
         $request = static::marshalBodyAndRequestMethod($parsedBody ?? $_POST, $request);
         // This is required as `ServerRequest::scheme()` ignores the value of
         // `HTTP_X_FORWARDED_PROTO` unless `trustProxy` is enabled, while the
@@ -73,7 +73,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * @param \Cake\Http\ServerRequest $request Request instance.
      * @return \Cake\Http\ServerRequest
      */
-    protected static function marshalBodyAndRequestMethod(array $parsedBody, \Cake\Http\ServerRequest $request): \Cake\Http\ServerRequest
+    protected static function marshalBodyAndRequestMethod(array $parsedBody, ServerRequest $request): ServerRequest
     {
         $method = $request->getMethod();
         $override = \false;
@@ -103,7 +103,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * @param \Cake\Http\ServerRequest $request Request instance.
      * @return \Cake\Http\ServerRequest
      */
-    protected static function marshalFiles(array $files, \Cake\Http\ServerRequest $request): \Cake\Http\ServerRequest
+    protected static function marshalFiles(array $files, ServerRequest $request): ServerRequest
     {
         $files = normalizeUploadedFiles($files);
         $request = $request->withUploadedFiles($files);
@@ -135,9 +135,9 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $serverParams['REQUEST_METHOD'] = $method;
         $options = ['environment' => $serverParams];
         if (is_string($uri)) {
-            $uri = (new \Cake\Http\UriFactory())->createUri($uri);
+            $uri = (new UriFactory())->createUri($uri);
         }
         $options['uri'] = $uri;
-        return new \Cake\Http\ServerRequest($options);
+        return new ServerRequest($options);
     }
 }

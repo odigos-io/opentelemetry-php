@@ -16,14 +16,14 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Schema;
+namespace Odigos\Cake\Database\Schema;
 
 /**
  * UniqueKey class
  *
  * Models a unique key constraint, and provides methods to set driver specific attributes.
  */
-class UniqueKey extends \Cake\Database\Schema\Constraint
+class UniqueKey extends Constraint
 {
     /**
      * Constructor

@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Images\CreateResponse;
-use OpenAI\Responses\Images\EditResponse;
-use OpenAI\Responses\Images\VariationResponse;
+use Odigos\OpenAI\Responses\Images\CreateResponse;
+use Odigos\OpenAI\Responses\Images\EditResponse;
+use Odigos\OpenAI\Responses\Images\VariationResponse;
 interface ImagesContract
 {
     /**

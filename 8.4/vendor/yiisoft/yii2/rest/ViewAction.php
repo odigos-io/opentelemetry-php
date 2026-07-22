@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rest;
+namespace Odigos\yii\rest;
 
 /**
  * ViewAction implements the API endpoint for returning the detailed information about a model.
@@ -18,7 +18,7 @@ namespace yii\rest;
  * @template T of Controller = Controller
  * @extends Action<T>
  */
-class ViewAction extends \yii\rest\Action
+class ViewAction extends Action
 {
     /**
      * Displays a model.

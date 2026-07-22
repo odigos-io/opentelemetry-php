@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
-use Doctrine\Inflector\InflectorFactory;
+use Odigos\Doctrine\Inflector\InflectorFactory;
 class Pluralizer
 {
     /**

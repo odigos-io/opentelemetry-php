@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Foundation\Exceptions\Renderer;
+namespace Odigos\Illuminate\Foundation\Exceptions\Renderer;
 
 use Closure;
 use Composer\Autoload\ClassLoader;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Bootstrap\HandleExceptions;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Symfony\Component\ErrorHandler\Exception\FlattenException;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Foundation\Bootstrap\HandleExceptions;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Symfony\Component\ErrorHandler\Exception\FlattenException;
 class Exception
 {
     /**
@@ -43,7 +43,7 @@ class Exception
      * @param  \Illuminate\Foundation\Exceptions\Renderer\Listener  $listener
      * @param  string  $basePath
      */
-    public function __construct(FlattenException $exception, Request $request, \Illuminate\Foundation\Exceptions\Renderer\Listener $listener, string $basePath)
+    public function __construct(FlattenException $exception, Request $request, Listener $listener, string $basePath)
     {
         $this->exception = $exception;
         $this->request = $request;
@@ -121,7 +121,7 @@ class Exception
             $frames = [];
             $previousFrame = null;
             foreach (array_reverse($trace) as $frameData) {
-                $frame = new \Illuminate\Foundation\Exceptions\Renderer\Frame($this->exception, $classMap, $frameData, $this->basePath, $previousFrame);
+                $frame = new Frame($this->exception, $classMap, $frameData, $this->basePath, $previousFrame);
                 $frames[] = $frame;
                 $previousFrame = $frame;
             }

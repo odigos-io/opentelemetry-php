@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Session;
+namespace Odigos\Illuminate\Session;
 
-use Illuminate\Support\Manager;
+use Odigos\Illuminate\Support\Manager;
 /**
  * @mixin \Illuminate\Session\Store
  */
@@ -25,7 +25,7 @@ class SessionManager extends Manager
      */
     protected function createNullDriver()
     {
-        return $this->buildSession(new \Illuminate\Session\NullSessionHandler());
+        return $this->buildSession(new NullSessionHandler());
     }
     /**
      * Create an instance of the "array" session driver.
@@ -34,7 +34,7 @@ class SessionManager extends Manager
      */
     protected function createArrayDriver()
     {
-        return $this->buildSession(new \Illuminate\Session\ArraySessionHandler($this->config->get('session.lifetime')));
+        return $this->buildSession(new ArraySessionHandler($this->config->get('session.lifetime')));
     }
     /**
      * Create an instance of the "cookie" session driver.
@@ -43,7 +43,7 @@ class SessionManager extends Manager
      */
     protected function createCookieDriver()
     {
-        return $this->buildSession(new \Illuminate\Session\CookieSessionHandler($this->container->make('cookie'), $this->config->get('session.lifetime'), $this->config->get('session.expire_on_close')));
+        return $this->buildSession(new CookieSessionHandler($this->container->make('cookie'), $this->config->get('session.lifetime'), $this->config->get('session.expire_on_close')));
     }
     /**
      * Create an instance of the file session driver.
@@ -62,7 +62,7 @@ class SessionManager extends Manager
     protected function createNativeDriver()
     {
         $lifetime = $this->config->get('session.lifetime');
-        return $this->buildSession(new \Illuminate\Session\FileSessionHandler($this->container->make('files'), $this->config->get('session.files'), $lifetime));
+        return $this->buildSession(new FileSessionHandler($this->container->make('files'), $this->config->get('session.files'), $lifetime));
     }
     /**
      * Create an instance of the database session driver.
@@ -73,7 +73,7 @@ class SessionManager extends Manager
     {
         $table = $this->config->get('session.table');
         $lifetime = $this->config->get('session.lifetime');
-        return $this->buildSession(new \Illuminate\Session\DatabaseSessionHandler($this->getDatabaseConnection(), $table, $lifetime, $this->container));
+        return $this->buildSession(new DatabaseSessionHandler($this->getDatabaseConnection(), $table, $lifetime, $this->container));
     }
     /**
      * Get the database connection for the database driver.
@@ -142,7 +142,7 @@ class SessionManager extends Manager
     protected function createCacheHandler($driver)
     {
         $store = $this->config->get('session.store') ?: $driver;
-        return new \Illuminate\Session\CacheBasedSessionHandler(clone $this->container->make('cache')->store($store), $this->config->get('session.lifetime'));
+        return new CacheBasedSessionHandler(clone $this->container->make('cache')->store($store), $this->config->get('session.lifetime'));
     }
     /**
      * Build the session instance.
@@ -152,7 +152,7 @@ class SessionManager extends Manager
      */
     protected function buildSession($handler)
     {
-        return $this->config->get('session.encrypt') ? $this->buildEncryptedSession($handler) : new \Illuminate\Session\Store($this->config->get('session.cookie'), $handler, $id = null, $this->config->get('session.serialization', 'php'));
+        return $this->config->get('session.encrypt') ? $this->buildEncryptedSession($handler) : new Store($this->config->get('session.cookie'), $handler, $id = null, $this->config->get('session.serialization', 'php'));
     }
     /**
      * Build the encrypted session instance.
@@ -162,7 +162,7 @@ class SessionManager extends Manager
      */
     protected function buildEncryptedSession($handler)
     {
-        return new \Illuminate\Session\EncryptedStore($this->config->get('session.cookie'), $handler, $this->container['encrypter'], $id = null, $this->config->get('session.serialization', 'php'));
+        return new EncryptedStore($this->config->get('session.cookie'), $handler, $this->container['encrypter'], $id = null, $this->config->get('session.serialization', 'php'));
     }
     /**
      * Determine if requests for the same session should wait for each to finish before executing.

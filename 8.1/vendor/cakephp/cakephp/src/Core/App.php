@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core;
+namespace Odigos\Cake\Core;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 /**
  * App is responsible for resource location, and path management.
  *
@@ -59,7 +59,7 @@ class App
         }
         [$plugin, $name] = pluginSplit($class);
         $fullname = '\\' . str_replace('/', '\\', $type . '\\' . $name) . $suffix;
-        $base = $plugin ?: \Cake\Core\Configure::read('App.namespace');
+        $base = $plugin ?: Configure::read('App.namespace');
         if ($base !== null) {
             $base = str_replace('/', '\\', rtrim($base, '\\'));
             if (static::_classExistsInBase($fullname, $base)) {
@@ -126,7 +126,7 @@ class App
         if ($suffix) {
             $name = substr($name, 0, -strlen($suffix));
         }
-        $nonPluginNamespaces = ['Cake', str_replace('\\', '/', (string) \Cake\Core\Configure::read('App.namespace'))];
+        $nonPluginNamespaces = ['Cake', str_replace('\\', '/', (string) Configure::read('App.namespace'))];
         if (in_array($pluginName, $nonPluginNamespaces, \true)) {
             return $name;
         }
@@ -173,11 +173,11 @@ class App
     public static function path(string $type, ?string $plugin = null): array
     {
         if ($plugin === null) {
-            return (array) \Cake\Core\Configure::read('App.paths.' . $type);
+            return (array) Configure::read('App.paths.' . $type);
         }
         return match ($type) {
-            'templates' => [\Cake\Core\Plugin::templatePath($plugin)],
-            'locales' => [\Cake\Core\Plugin::path($plugin) . 'resources' . \DIRECTORY_SEPARATOR . 'locales' . \DIRECTORY_SEPARATOR],
+            'templates' => [Plugin::templatePath($plugin)],
+            'locales' => [Plugin::path($plugin) . 'resources' . \DIRECTORY_SEPARATOR . 'locales' . \DIRECTORY_SEPARATOR],
             default => throw new CakeException(sprintf('Invalid type `%s`. Only path types `templates` and `locales` are supported for plugins.', $type)),
         };
     }
@@ -205,7 +205,7 @@ class App
     public static function classPath(string $type, ?string $plugin = null): array
     {
         if ($plugin !== null) {
-            return [\Cake\Core\Plugin::classPath($plugin) . $type . \DIRECTORY_SEPARATOR];
+            return [Plugin::classPath($plugin) . $type . \DIRECTORY_SEPARATOR];
         }
         return [APP . $type . \DIRECTORY_SEPARATOR];
     }

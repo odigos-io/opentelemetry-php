@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Matcher;
+namespace Odigos\Symfony\Component\Routing\Matcher;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\ExceptionInterface;
-use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\RouteCollection;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\Routing\Exception\ExceptionInterface;
+use Odigos\Symfony\Component\Routing\Route;
+use Odigos\Symfony\Component\Routing\RouteCollection;
 /**
  * TraceableUrlMatcher helps debug path info matching by tracing the match.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class TraceableUrlMatcher extends \Symfony\Component\Routing\Matcher\UrlMatcher
+class TraceableUrlMatcher extends UrlMatcher
 {
     public const ROUTE_DOES_NOT_MATCH = 0;
     public const ROUTE_ALMOST_MATCHES = 1;
@@ -47,7 +47,7 @@ class TraceableUrlMatcher extends \Symfony\Component\Routing\Matcher\UrlMatcher
         if ('HEAD' === $method = $this->context->getMethod()) {
             $method = 'GET';
         }
-        $supportsTrailingSlash = 'GET' === $method && $this instanceof \Symfony\Component\Routing\Matcher\RedirectableUrlMatcherInterface;
+        $supportsTrailingSlash = 'GET' === $method && $this instanceof RedirectableUrlMatcherInterface;
         $trimmedPathinfo = '' === ($trimmedPathinfo = rtrim($pathinfo, '/')) ? '/' : $trimmedPathinfo;
         foreach ($routes as $name => $route) {
             $compiledRoute = $route->compile();

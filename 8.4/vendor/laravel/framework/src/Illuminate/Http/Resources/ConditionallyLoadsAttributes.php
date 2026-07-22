@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http\Resources;
+namespace Odigos\Illuminate\Http\Resources;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Stringable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Stringable;
 trait ConditionallyLoadsAttributes
 {
     /**
@@ -21,7 +21,7 @@ trait ConditionallyLoadsAttributes
                 $data[$key] = $this->filter($value);
                 continue;
             }
-            if (is_numeric($key) && $value instanceof \Illuminate\Http\Resources\MergeValue) {
+            if (is_numeric($key) && $value instanceof MergeValue) {
                 return $this->mergeData($data, $index, $this->filter($value->data), array_values($value->data) === $value->data);
             }
             if ($value instanceof self && is_null($value->resource)) {
@@ -56,7 +56,7 @@ trait ConditionallyLoadsAttributes
     {
         $numericKeys = \true;
         foreach ($data as $key => $value) {
-            if ($value instanceof \Illuminate\Http\Resources\PotentiallyMissing && $value->isMissing() || $value instanceof self && $value->resource instanceof \Illuminate\Http\Resources\PotentiallyMissing && $value->isMissing()) {
+            if ($value instanceof PotentiallyMissing && $value->isMissing() || $value instanceof self && $value->resource instanceof PotentiallyMissing && $value->isMissing()) {
                 unset($data[$key]);
             } else {
                 $numericKeys = $numericKeys && is_numeric($key);
@@ -75,7 +75,7 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return \Illuminate\Http\Resources\MissingValue|mixed
      */
-    protected function when($condition, $value, $default = new \Illuminate\Http\Resources\MissingValue())
+    protected function when($condition, $value, $default = new MissingValue())
     {
         if ($condition) {
             return value($value);
@@ -90,7 +90,7 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return \Illuminate\Http\Resources\MissingValue|mixed
      */
-    public function unless($condition, $value, $default = new \Illuminate\Http\Resources\MissingValue())
+    public function unless($condition, $value, $default = new MissingValue())
     {
         $arguments = func_num_args() === 2 ? [$value] : [$value, $default];
         return $this->when(!$condition, ...$arguments);
@@ -113,12 +113,12 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return \Illuminate\Http\Resources\MergeValue|mixed
      */
-    protected function mergeWhen($condition, $value, $default = new \Illuminate\Http\Resources\MissingValue())
+    protected function mergeWhen($condition, $value, $default = new MissingValue())
     {
         if ($condition) {
-            return new \Illuminate\Http\Resources\MergeValue(value($value));
+            return new MergeValue(value($value));
         }
-        return func_num_args() === 3 ? new \Illuminate\Http\Resources\MergeValue(value($default)) : $default;
+        return func_num_args() === 3 ? new MergeValue(value($default)) : $default;
     }
     /**
      * Merge a value unless the given condition is truthy.
@@ -128,7 +128,7 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return \Illuminate\Http\Resources\MergeValue|mixed
      */
-    protected function mergeUnless($condition, $value, $default = new \Illuminate\Http\Resources\MissingValue())
+    protected function mergeUnless($condition, $value, $default = new MissingValue())
     {
         $arguments = func_num_args() === 2 ? [$value] : [$value, $default];
         return $this->mergeWhen(!$condition, ...$arguments);
@@ -141,7 +141,7 @@ trait ConditionallyLoadsAttributes
      */
     protected function attributes($attributes)
     {
-        return new \Illuminate\Http\Resources\MergeValue(Arr::only($this->resource->toArray(), $attributes));
+        return new MergeValue(Arr::only($this->resource->toArray(), $attributes));
     }
     /**
      * Retrieve an attribute if it exists on the resource.
@@ -151,7 +151,7 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return \Illuminate\Http\Resources\MissingValue|mixed
      */
-    public function whenHas($attribute, $value = null, $default = new \Illuminate\Http\Resources\MissingValue())
+    public function whenHas($attribute, $value = null, $default = new MissingValue())
     {
         if (!array_key_exists($attribute, $this->resource->getAttributes())) {
             return value($default);
@@ -165,7 +165,7 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return \Illuminate\Http\Resources\MissingValue|mixed
      */
-    protected function whenNull($value, $default = new \Illuminate\Http\Resources\MissingValue())
+    protected function whenNull($value, $default = new MissingValue())
     {
         $arguments = func_num_args() == 1 ? [$value] : [$value, $default];
         return $this->when(is_null($value), ...$arguments);
@@ -177,7 +177,7 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return \Illuminate\Http\Resources\MissingValue|mixed
      */
-    protected function whenNotNull($value, $default = new \Illuminate\Http\Resources\MissingValue())
+    protected function whenNotNull($value, $default = new MissingValue())
     {
         $arguments = func_num_args() == 1 ? [$value] : [$value, $default];
         return $this->when(!is_null($value), ...$arguments);
@@ -190,7 +190,7 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return \Illuminate\Http\Resources\MissingValue|mixed
      */
-    protected function whenAppended($attribute, $value = null, $default = new \Illuminate\Http\Resources\MissingValue())
+    protected function whenAppended($attribute, $value = null, $default = new MissingValue())
     {
         if ($this->resource->hasAppended($attribute)) {
             return func_num_args() >= 2 ? value($value) : $this->resource->{$attribute};
@@ -205,7 +205,7 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return \Illuminate\Http\Resources\MissingValue|mixed
      */
-    protected function whenLoaded($relationship, $value = null, $default = new \Illuminate\Http\Resources\MissingValue())
+    protected function whenLoaded($relationship, $value = null, $default = new MissingValue())
     {
         if (!$this->resource->relationLoaded($relationship)) {
             return value($default);
@@ -230,7 +230,7 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return \Illuminate\Http\Resources\MissingValue|mixed
      */
-    public function whenCounted($relationship, $value = null, $default = new \Illuminate\Http\Resources\MissingValue())
+    public function whenCounted($relationship, $value = null, $default = new MissingValue())
     {
         $attribute = (new Stringable($relationship))->snake()->finish('_count')->value();
         if (!array_key_exists($attribute, $this->resource->getAttributes())) {
@@ -257,7 +257,7 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return \Illuminate\Http\Resources\MissingValue|mixed
      */
-    public function whenAggregated($relationship, $column, $aggregate, $value = null, $default = new \Illuminate\Http\Resources\MissingValue())
+    public function whenAggregated($relationship, $column, $aggregate, $value = null, $default = new MissingValue())
     {
         $attribute = (new Stringable($relationship))->snake()->append('_')->append($aggregate)->append('_')->finish($column)->value();
         if (!array_key_exists($attribute, $this->resource->getAttributes())) {
@@ -282,7 +282,7 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return \Illuminate\Http\Resources\MissingValue|mixed
      */
-    public function whenExistsLoaded($relationship, $value = null, $default = new \Illuminate\Http\Resources\MissingValue())
+    public function whenExistsLoaded($relationship, $value = null, $default = new MissingValue())
     {
         $attribute = (new Stringable($relationship))->snake()->finish('_exists')->value();
         if (!array_key_exists($attribute, $this->resource->getAttributes())) {
@@ -304,7 +304,7 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return \Illuminate\Http\Resources\MissingValue|mixed
      */
-    protected function whenPivotLoaded($table, $value, $default = new \Illuminate\Http\Resources\MissingValue())
+    protected function whenPivotLoaded($table, $value, $default = new MissingValue())
     {
         return $this->whenPivotLoadedAs('pivot', ...func_get_args());
     }
@@ -317,7 +317,7 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return \Illuminate\Http\Resources\MissingValue|mixed
      */
-    protected function whenPivotLoadedAs($accessor, $table, $value, $default = new \Illuminate\Http\Resources\MissingValue())
+    protected function whenPivotLoadedAs($accessor, $table, $value, $default = new MissingValue())
     {
         return $this->when($this->hasPivotLoadedAs($accessor, $table), $value, $default);
     }
@@ -350,7 +350,7 @@ trait ConditionallyLoadsAttributes
      * @param  mixed  $default
      * @return mixed
      */
-    protected function transform($value, callable $callback, $default = new \Illuminate\Http\Resources\MissingValue())
+    protected function transform($value, callable $callback, $default = new MissingValue())
     {
         return transform($value, $callback, $default);
     }

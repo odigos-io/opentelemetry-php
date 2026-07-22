@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Foundation\Support\Providers;
+namespace Odigos\Illuminate\Foundation\Support\Providers;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
-use Illuminate\Foundation\Events\DiscoverEvents;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\LazyCollection;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Auth\Events\Registered;
+use Odigos\Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use Odigos\Illuminate\Foundation\Events\DiscoverEvents;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Facades\Event;
+use Odigos\Illuminate\Support\LazyCollection;
+use Odigos\Illuminate\Support\ServiceProvider;
 class EventServiceProvider extends ServiceProvider
 {
     /**

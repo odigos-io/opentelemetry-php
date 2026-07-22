@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Parser\Tokenizer;
+namespace Odigos\Symfony\Component\CssSelector\Parser\Tokenizer;
 
 /**
  * CSS selector tokenizer escaping applier.
@@ -22,7 +22,7 @@ namespace Symfony\Component\CssSelector\Parser\Tokenizer;
  */
 class TokenizerEscaping
 {
-    public function __construct(private \Symfony\Component\CssSelector\Parser\Tokenizer\TokenizerPatterns $patterns)
+    public function __construct(private TokenizerPatterns $patterns)
     {
     }
     public function escapeUnicode(string $value): string

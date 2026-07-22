@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Provider;
+namespace Odigos\Symfony\Component\Translation\Provider;
 
-use Symfony\Component\Translation\TranslatorBag;
-use Symfony\Component\Translation\TranslatorBagInterface;
+use Odigos\Symfony\Component\Translation\TranslatorBag;
+use Odigos\Symfony\Component\Translation\TranslatorBagInterface;
 /**
  * Filters domains and locales between the Translator config values and those specific to each provider.
  *
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
  */
-class FilteringProvider implements \Symfony\Component\Translation\Provider\ProviderInterface
+class FilteringProvider implements ProviderInterface
 {
-    public function __construct(private \Symfony\Component\Translation\Provider\ProviderInterface $provider, private array $locales, private array $domains = [])
+    public function __construct(private ProviderInterface $provider, private array $locales, private array $domains = [])
     {
     }
     public function __toString(): string

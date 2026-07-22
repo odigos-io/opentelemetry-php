@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use ReflectionAttribute;
 use ReflectionClass;
@@ -74,9 +74,9 @@ class Reflector
         $reflectionClass = new ReflectionClass($objectOrClass);
         $attributes = [];
         do {
-            $attributes[$reflectionClass->name] = new \Illuminate\Support\Collection(array_map(fn(ReflectionAttribute $reflectionAttribute) => $reflectionAttribute->newInstance(), $reflectionClass->getAttributes($attribute)));
+            $attributes[$reflectionClass->name] = new Collection(array_map(fn(ReflectionAttribute $reflectionAttribute) => $reflectionAttribute->newInstance(), $reflectionClass->getAttributes($attribute)));
         } while ($includeParents && \false !== $reflectionClass = $reflectionClass->getParentClass());
-        return $includeParents ? new \Illuminate\Support\Collection($attributes) : array_first($attributes);
+        return $includeParents ? new Collection($attributes) : array_first($attributes);
     }
     /**
      * Get the class name of the given parameter's type, if possible.

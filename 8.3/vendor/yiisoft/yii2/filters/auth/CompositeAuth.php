@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters\auth;
+namespace Odigos\yii\filters\auth;
 
 use Odigos\Yii;
-use yii\base\ActionFilter;
-use yii\base\Component;
-use yii\base\Controller;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\ActionFilter;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\Controller;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * CompositeAuth is an action filter that supports multiple authentication methods at the same time.
  *
@@ -41,7 +41,7 @@ use yii\base\InvalidConfigException;
  * @template T of Component = Component
  * @extends AuthMethod<T>
  */
-class CompositeAuth extends \yii\filters\auth\AuthMethod
+class CompositeAuth extends AuthMethod
 {
     /**
      * @var list<(class-string<AuthInterface>|array{class: class-string<AuthInterface>})> the supported authentication methods. This property should take a list of supported
@@ -65,30 +65,30 @@ class CompositeAuth extends \yii\filters\auth\AuthMethod
     public function authenticate($user, $request, $response)
     {
         foreach ($this->authMethods as $i => $auth) {
-            if (!$auth instanceof \yii\filters\auth\AuthInterface) {
+            if (!$auth instanceof AuthInterface) {
                 $this->authMethods[$i] = $auth = Yii::createObject($auth);
-                if (!$auth instanceof \yii\filters\auth\AuthInterface) {
+                if (!$auth instanceof AuthInterface) {
                     throw new InvalidConfigException(get_class($auth) . ' must implement yii\filters\auth\AuthInterface');
                 }
             }
             if ($this->owner instanceof Controller && (!isset($this->owner->action) || $auth instanceof ActionFilter && !$auth->isActive($this->owner->action))) {
                 continue;
             }
-            if ($auth instanceof \yii\filters\auth\AuthMethod) {
+            if ($auth instanceof AuthMethod) {
                 $authUser = $auth->user;
-                if ($authUser != null && !$authUser instanceof \yii\web\User) {
+                if ($authUser != null && !$authUser instanceof \Odigos\yii\web\User) {
                     throw new InvalidConfigException(get_class($authUser) . ' must implement yii\web\User');
                 } elseif ($authUser != null) {
                     $user = $authUser;
                 }
                 $authRequest = $auth->request ?? null;
-                if ($authRequest != null && !$authRequest instanceof \yii\web\Request) {
+                if ($authRequest != null && !$authRequest instanceof \Odigos\yii\web\Request) {
                     throw new InvalidConfigException(get_class($authRequest) . ' must implement yii\web\Request');
                 } elseif ($authRequest != null) {
                     $request = $authRequest;
                 }
                 $authResponse = $auth->response;
-                if ($authResponse != null && !$authResponse instanceof \yii\web\Response) {
+                if ($authResponse != null && !$authResponse instanceof \Odigos\yii\web\Response) {
                     throw new InvalidConfigException(get_class($authResponse) . ' must implement yii\web\Response');
                 } elseif ($authResponse != null) {
                     $response = $authResponse;

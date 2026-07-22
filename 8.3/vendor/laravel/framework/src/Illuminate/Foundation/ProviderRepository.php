@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Foundation;
+namespace Odigos\Illuminate\Foundation;
 
 use Exception;
-use Illuminate\Contracts\Foundation\Application as ApplicationContract;
-use Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Contracts\Foundation\Application as ApplicationContract;
+use Odigos\Illuminate\Filesystem\Filesystem;
 class ProviderRepository
 {
     /**

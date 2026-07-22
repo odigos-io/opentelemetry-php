@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Broadcasting;
+namespace Odigos\Illuminate\Broadcasting;
 
-class EncryptedPrivateChannel extends \Illuminate\Broadcasting\Channel
+class EncryptedPrivateChannel extends Channel
 {
     /**
      * Create a new channel instance.

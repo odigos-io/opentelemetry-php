@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Mail\Mailables;
+namespace Odigos\Illuminate\Mail\Mailables;
 
-use Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Conditionable;
 class Content
 {
     use Conditionable;

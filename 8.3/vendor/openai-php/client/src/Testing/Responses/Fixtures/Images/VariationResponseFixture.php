@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\Images;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\Images;
 
 final class VariationResponseFixture
 {

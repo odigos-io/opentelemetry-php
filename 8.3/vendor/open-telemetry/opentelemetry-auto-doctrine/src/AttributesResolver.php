@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Doctrine;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Doctrine;
 
 use Exception;
 final class AttributesResolver
@@ -21,7 +21,7 @@ final class AttributesResolver
     public static function get(string $attributeName, array $params): string|int|null
     {
         $method = 'get' . str_replace('.', '', ucwords($attributeName, '.'));
-        if (!method_exists(\OpenTelemetry\Contrib\Instrumentation\Doctrine\AttributesResolver::class, $method)) {
+        if (!method_exists(AttributesResolver::class, $method)) {
             throw new Exception(sprintf('Attribute %s not supported by Doctrine', $attributeName));
         }
         return self::$method($params);

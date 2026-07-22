@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Helper;
+namespace Odigos\Cake\View\Helper;
 
-use Cake\View\Helper;
+use Odigos\Cake\View\Helper;
 /**
  * FlashHelper class to render flash messages.
  *

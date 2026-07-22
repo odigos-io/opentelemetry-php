@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver;
+namespace Odigos\Doctrine\DBAL\Driver;
 
-use Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\ParameterType;
 /**
  * Driver-level statement
  */
@@ -32,5 +32,5 @@ interface Statement
      *
      * @throws Exception
      */
-    public function execute(): \Doctrine\DBAL\Driver\Result;
+    public function execute(): Result;
 }

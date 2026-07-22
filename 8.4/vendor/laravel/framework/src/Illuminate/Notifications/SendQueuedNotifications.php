@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Notifications;
+namespace Odigos\Illuminate\Notifications;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeEncrypted;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Bus\Queueable;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueue;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Queue\InteractsWithQueue;
+use Odigos\Illuminate\Queue\SerializesModels;
+use Odigos\Illuminate\Support\Collection;
 class SendQueuedNotifications implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
@@ -99,7 +99,7 @@ class SendQueuedNotifications implements ShouldQueue
      * @param  \Illuminate\Notifications\ChannelManager  $manager
      * @return void
      */
-    public function handle(\Illuminate\Notifications\ChannelManager $manager)
+    public function handle(ChannelManager $manager)
     {
         $manager->sendNow($this->notifiables, $this->notification, $this->channels);
     }

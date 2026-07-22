@@ -14,19 +14,19 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource\Paging;
+namespace Odigos\Cake\Datasource\Paging;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Core\InstanceConfigTrait;
-use Cake\Datasource\Paging\Exception\PageOutOfBoundsException;
-use Cake\Datasource\QueryInterface;
-use Cake\Datasource\RepositoryInterface;
-use Cake\Datasource\ResultSetInterface;
-use function Cake\Core\triggerWarning;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Datasource\Paging\Exception\PageOutOfBoundsException;
+use Odigos\Cake\Datasource\QueryInterface;
+use Odigos\Cake\Datasource\RepositoryInterface;
+use Odigos\Cake\Datasource\ResultSetInterface;
+use function Odigos\Cake\Core\triggerWarning;
 /**
  * This class is used to handle automatic model data pagination.
  */
-class NumericPaginator implements \Cake\Datasource\Paging\PaginatorInterface
+class NumericPaginator implements PaginatorInterface
 {
     use InstanceConfigTrait;
     /**
@@ -168,7 +168,7 @@ class NumericPaginator implements \Cake\Datasource\Paging\PaginatorInterface
      * @return \Cake\Datasource\Paging\PaginatedInterface
      * @throws \Cake\Datasource\Paging\Exception\PageOutOfBoundsException
      */
-    public function paginate(mixed $target, array $params = [], array $settings = []): \Cake\Datasource\Paging\PaginatedInterface
+    public function paginate(mixed $target, array $params = [], array $settings = []): PaginatedInterface
     {
         $query = null;
         if ($target instanceof QueryInterface) {
@@ -198,9 +198,9 @@ class NumericPaginator implements \Cake\Datasource\Paging\PaginatorInterface
      * @param array $pagingParams
      * @return \Cake\Datasource\Paging\PaginatedInterface
      */
-    protected function buildPaginated(ResultSetInterface $items, array $pagingParams): \Cake\Datasource\Paging\PaginatedInterface
+    protected function buildPaginated(ResultSetInterface $items, array $pagingParams): PaginatedInterface
     {
-        return new \Cake\Datasource\Paging\PaginatedResultSet($items, $pagingParams);
+        return new PaginatedResultSet($items, $pagingParams);
     }
     /**
      * Get query for fetching paginated results.

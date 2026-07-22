@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\View;
+namespace Odigos\Illuminate\View;
 
 use ArrayIterator;
 use Closure;
-use Illuminate\Contracts\Support\DeferringDisplayableValue;
-use Illuminate\Support\Enumerable;
+use Odigos\Illuminate\Contracts\Support\DeferringDisplayableValue;
+use Odigos\Illuminate\Support\Enumerable;
 use IteratorAggregate;
 use Stringable;
 use Traversable;

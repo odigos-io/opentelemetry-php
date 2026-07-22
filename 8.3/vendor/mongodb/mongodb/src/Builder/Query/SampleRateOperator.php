@@ -4,14 +4,14 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Query;
+namespace Odigos\MongoDB\Builder\Query;
 
 use MongoDB\BSON\Int64;
-use MongoDB\Builder\Expression\ResolvesToDouble;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Builder\Type\QueryInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Expression\ResolvesToDouble;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\QueryInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use function is_string;
 use function str_starts_with;
 /**

@@ -8,20 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Helper;
+namespace Odigos\Symfony\Component\Console\Helper;
 
-use Symfony\Component\Console\Formatter\OutputFormatter;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatter;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Question\ChoiceQuestion;
+use Odigos\Symfony\Component\Console\Question\ConfirmationQuestion;
+use Odigos\Symfony\Component\Console\Question\Question;
+use Odigos\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Symfony Style Guide compliant question helper.
  *
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-class SymfonyQuestionHelper extends \Symfony\Component\Console\Helper\QuestionHelper
+class SymfonyQuestionHelper extends QuestionHelper
 {
     protected function writePrompt(OutputInterface $output, Question $question): void
     {

@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         0.10.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Helper;
+namespace Odigos\Cake\View\Helper;
 
-use Cake\Utility\Security;
-use Cake\Utility\Text;
-use Cake\View\Helper;
-use function Cake\Core\h;
+use Odigos\Cake\Utility\Security;
+use Odigos\Cake\Utility\Text;
+use Odigos\Cake\View\Helper;
+use function Odigos\Cake\Core\h;
 /**
  * Text helper library.
  *

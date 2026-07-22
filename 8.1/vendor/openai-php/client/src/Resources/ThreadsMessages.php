@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\ThreadsMessagesContract;
-use OpenAI\Responses\Threads\Messages\ThreadMessageDeleteResponse;
-use OpenAI\Responses\Threads\Messages\ThreadMessageListResponse;
-use OpenAI\Responses\Threads\Messages\ThreadMessageResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\ThreadsMessagesContract;
+use Odigos\OpenAI\Responses\Threads\Messages\ThreadMessageDeleteResponse;
+use Odigos\OpenAI\Responses\Threads\Messages\ThreadMessageListResponse;
+use Odigos\OpenAI\Responses\Threads\Messages\ThreadMessageResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 final class ThreadsMessages implements ThreadsMessagesContract
 {
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Transportable;
     /**
      * Create a message.
      *

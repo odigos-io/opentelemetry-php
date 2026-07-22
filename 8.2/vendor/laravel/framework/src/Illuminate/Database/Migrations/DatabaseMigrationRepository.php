@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Migrations;
+namespace Odigos\Illuminate\Database\Migrations;
 
-use Illuminate\Database\ConnectionResolverInterface as Resolver;
-class DatabaseMigrationRepository implements \Illuminate\Database\Migrations\MigrationRepositoryInterface
+use Odigos\Illuminate\Database\ConnectionResolverInterface as Resolver;
+class DatabaseMigrationRepository implements MigrationRepositoryInterface
 {
     /**
      * The database connection resolver instance.

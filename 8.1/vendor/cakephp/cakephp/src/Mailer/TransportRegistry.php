@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Mailer;
+namespace Odigos\Cake\Mailer;
 
 use BadMethodCallException;
-use Cake\Core\App;
-use Cake\Core\ObjectRegistry;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\ObjectRegistry;
 /**
  * An object registry for mailer transports.
  *
@@ -63,7 +63,7 @@ class TransportRegistry extends ObjectRegistry
      * @param array<string, mixed> $config An array of settings to use for the cache engine.
      * @return \Cake\Mailer\AbstractTransport The constructed transport class.
      */
-    protected function _create(object|string $class, string $alias, array $config): \Cake\Mailer\AbstractTransport
+    protected function _create(object|string $class, string $alias, array $config): AbstractTransport
     {
         if (is_object($class)) {
             return $class;

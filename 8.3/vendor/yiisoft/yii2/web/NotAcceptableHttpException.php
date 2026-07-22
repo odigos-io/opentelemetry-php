@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 /**
  * NotAcceptableHttpException represents a "Not Acceptable" HTTP exception with status code 406.
@@ -18,7 +18,7 @@ namespace yii\web;
  * @author Dan Schmidt <danschmidt5189@gmail.com>
  * @since 2.0
  */
-class NotAcceptableHttpException extends \yii\web\HttpException
+class NotAcceptableHttpException extends HttpException
 {
     /**
      * Constructor.

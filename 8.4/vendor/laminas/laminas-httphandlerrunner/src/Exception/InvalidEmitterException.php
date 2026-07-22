@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Laminas\HttpHandlerRunner\Exception;
+namespace Odigos\Laminas\HttpHandlerRunner\Exception;
 
 use InvalidArgumentException;
-use Laminas\HttpHandlerRunner\Emitter;
+use Odigos\Laminas\HttpHandlerRunner\Emitter;
 use function get_debug_type;
 use function sprintf;
 /** @final */
-class InvalidEmitterException extends InvalidArgumentException implements \Laminas\HttpHandlerRunner\Exception\ExceptionInterface
+class InvalidEmitterException extends InvalidArgumentException implements ExceptionInterface
 {
     /**
      * @param mixed $emitter Invalid emitter type

@@ -1,8 +1,8 @@
 <?php
 
-namespace GuzzleHttp;
+namespace Odigos\GuzzleHttp;
 
-use GuzzleHttp\Promise\PromiseInterface;
+use Odigos\GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 /**
@@ -42,11 +42,11 @@ class HandlerStack
      */
     public static function create(?callable $handler = null): self
     {
-        $stack = new self($handler ?: \GuzzleHttp\Utils::chooseHandler());
-        $stack->push(\GuzzleHttp\Middleware::httpErrors(), 'http_errors');
-        $stack->push(\GuzzleHttp\Middleware::redirect(), 'allow_redirects');
-        $stack->push(\GuzzleHttp\Middleware::cookies(), 'cookies');
-        $stack->push(\GuzzleHttp\Middleware::prepareBody(), 'prepare_body');
+        $stack = new self($handler ?: Utils::chooseHandler());
+        $stack->push(Middleware::httpErrors(), 'http_errors');
+        $stack->push(Middleware::redirect(), 'allow_redirects');
+        $stack->push(Middleware::cookies(), 'cookies');
+        $stack->push(Middleware::prepareBody(), 'prepare_body');
         return $stack;
     }
     /**

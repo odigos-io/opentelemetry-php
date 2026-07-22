@@ -14,24 +14,24 @@ declare (strict_types=1);
  * @since         4.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Query;
+namespace Odigos\Cake\ORM\Query;
 
 use ArrayObject;
-use Cake\Collection\Iterator\MapReduce;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Query\SelectQuery as DbSelectQuery;
-use Cake\Database\TypedResultInterface;
-use Cake\Database\TypeMap;
-use Cake\Database\ValueBinder;
-use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Datasource\QueryCacher;
-use Cake\Datasource\QueryInterface;
-use Cake\Datasource\ResultSetInterface;
-use Cake\ORM\Association;
-use Cake\ORM\EagerLoader;
-use Cake\ORM\ResultSetFactory;
-use Cake\ORM\Table;
+use Odigos\Cake\Collection\Iterator\MapReduce;
+use Odigos\Cake\Database\Expression\QueryExpression;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\Query\SelectQuery as DbSelectQuery;
+use Odigos\Cake\Database\TypedResultInterface;
+use Odigos\Cake\Database\TypeMap;
+use Odigos\Cake\Database\ValueBinder;
+use Odigos\Cake\Datasource\Exception\RecordNotFoundException;
+use Odigos\Cake\Datasource\QueryCacher;
+use Odigos\Cake\Datasource\QueryInterface;
+use Odigos\Cake\Datasource\ResultSetInterface;
+use Odigos\Cake\ORM\Association;
+use Odigos\Cake\ORM\EagerLoader;
+use Odigos\Cake\ORM\ResultSetFactory;
+use Odigos\Cake\ORM\Table;
 use Closure;
 use InvalidArgumentException;
 use JsonSerializable;
@@ -48,7 +48,7 @@ use Psr\SimpleCache\CacheInterface;
  */
 class SelectQuery extends DbSelectQuery implements JsonSerializable, QueryInterface
 {
-    use \Cake\ORM\Query\CommonQueryTrait;
+    use CommonQueryTrait;
     /**
      * Indicates that the operation should append to the list
      *
@@ -1619,5 +1619,5 @@ class SelectQuery extends DbSelectQuery implements JsonSerializable, QueryInterf
     }
 }
 // phpcs:disable
-class_exists(\Cake\ORM\Query::class);
+class_exists(\Odigos\Cake\ORM\Query::class);
 // phpcs:enable

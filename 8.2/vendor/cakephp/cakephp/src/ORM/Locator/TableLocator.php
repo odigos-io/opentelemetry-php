@@ -14,25 +14,25 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Locator;
+namespace Odigos\Cake\ORM\Locator;
 
-use Cake\Core\App;
-use Cake\Database\Exception\DatabaseException;
-use Cake\Datasource\ConnectionManager;
-use Cake\Datasource\Locator\AbstractLocator;
-use Cake\Datasource\RepositoryInterface;
-use Cake\ORM\AssociationCollection;
-use Cake\ORM\Exception\MissingTableClassException;
-use Cake\ORM\Query\QueryFactory;
-use Cake\ORM\Table;
-use Cake\Utility\Inflector;
-use function Cake\Core\pluginSplit;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Datasource\ConnectionManager;
+use Odigos\Cake\Datasource\Locator\AbstractLocator;
+use Odigos\Cake\Datasource\RepositoryInterface;
+use Odigos\Cake\ORM\AssociationCollection;
+use Odigos\Cake\ORM\Exception\MissingTableClassException;
+use Odigos\Cake\ORM\Query\QueryFactory;
+use Odigos\Cake\ORM\Table;
+use Odigos\Cake\Utility\Inflector;
+use function Odigos\Cake\Core\pluginSplit;
 /**
  * Provides a default registry/factory for Table objects.
  *
  * @extends \Cake\Datasource\Locator\AbstractLocator<\Cake\ORM\Table>
  */
-class TableLocator extends AbstractLocator implements \Cake\ORM\Locator\LocatorInterface
+class TableLocator extends AbstractLocator implements LocatorInterface
 {
     /**
      * Contains a list of locations where table classes should be looked for.

@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\Illuminate\Contracts\Queue;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\Illuminate\Contracts\Queue;
 
 use DateInterval;
 use DateTimeInterface;
-use Illuminate\Contracts\Queue\Queue as QueueContract;
+use Odigos\Illuminate\Contracts\Queue\Queue as QueueContract;
 use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\Context\Context;
-use OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\Illuminate\Queue\AttributesBuilder;
-use OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHook;
-use OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHookTrait;
-use OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\PostHookTrait;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\Illuminate\Queue\AttributesBuilder;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHook;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHookTrait;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\PostHookTrait;
 use function OpenTelemetry\Instrumentation\hook;
 use OpenTelemetry\SemConv\TraceAttributes;
 use OpenTelemetry\SemConv\TraceAttributeValues;
@@ -30,7 +30,7 @@ class Queue implements LaravelHook
     /** @psalm-suppress PossiblyUnusedReturnValue  */
     protected function hookBulk(): bool
     {
-        return hook(QueueContract::class, 'bulk', pre: function (QueueContract $queue, array $params, string $class, string $function, ?string $filename, ?int $lineno) {
+        return hook('Illuminate\\Contracts\\Queue\\Queue', 'bulk', pre: function (object $queue, array $params, string $class, string $function, ?string $filename, ?int $lineno) {
             $attributes = array_merge([TraceAttributes::CODE_FUNCTION_NAME => sprintf('%s::%s', $class, $function), TraceAttributes::CODE_FILE_PATH => $filename, TraceAttributes::CODE_LINE_NUMBER => $lineno, TraceAttributes::MESSAGING_BATCH_MESSAGE_COUNT => count($params[0] ?? [])], $this->contextualMessageSystemAttributes($queue, []));
             /** @psalm-suppress ArgumentTypeCoercion */
             $span = $this->instrumentation->tracer()->spanBuilder(vsprintf('%s %s', [
@@ -40,14 +40,14 @@ class Queue implements LaravelHook
             ]))->setSpanKind(SpanKind::KIND_PRODUCER)->setAttributes($attributes)->startSpan();
             Context::storage()->attach($span->storeInContext(Context::getCurrent()));
             return $params;
-        }, post: function (QueueContract $queue, array $params, $returnValue, ?Throwable $exception) {
+        }, post: function (object $queue, array $params, $returnValue, ?Throwable $exception) {
             $this->endSpan($exception);
         });
     }
     /** @psalm-suppress PossiblyUnusedReturnValue  */
     protected function hookLater(): bool
     {
-        return hook(QueueContract::class, 'later', pre: function (QueueContract $queue, array $params, string $class, string $function, ?string $filename, ?int $lineno) {
+        return hook('Illuminate\\Contracts\\Queue\\Queue', 'later', pre: function (object $queue, array $params, string $class, string $function, ?string $filename, ?int $lineno) {
             $estimateDeliveryTimestamp = match (\true) {
                 is_int($params[0]) => (new \DateTimeImmutable())->add(new DateInterval("PT{$params[0]}S"))->getTimestamp(),
                 $params[0] instanceof DateInterval => (new \DateTimeImmutable())->add($params[0])->getTimestamp(),
@@ -63,14 +63,14 @@ class Queue implements LaravelHook
             ]))->setSpanKind(SpanKind::KIND_PRODUCER)->setAttributes($attributes)->startSpan();
             Context::storage()->attach($span->storeInContext(Context::getCurrent()));
             return $params;
-        }, post: function (QueueContract $queue, array $params, $returnValue, ?Throwable $exception) {
+        }, post: function (object $queue, array $params, $returnValue, ?Throwable $exception) {
             $this->endSpan($exception);
         });
     }
     /** @psalm-suppress PossiblyUnusedReturnValue  */
     protected function hookPushRaw(): bool
     {
-        return hook(QueueContract::class, 'pushRaw', pre: function (QueueContract $queue, array $params, string $_class, string $_function, ?string $_filename, ?int $_lineno) {
+        return hook('Illuminate\\Contracts\\Queue\\Queue', 'pushRaw', pre: function (object $queue, array $params, string $_class, string $_function, ?string $_filename, ?int $_lineno) {
             /** @phan-suppress-next-line PhanParamTooFewUnpack */
             $attributes = $this->buildMessageAttributes($queue, ...$params);
             $parent = Context::getCurrent();
@@ -78,7 +78,7 @@ class Queue implements LaravelHook
             $span = $this->instrumentation->tracer()->spanBuilder(vsprintf('%s %s', [TraceAttributeValues::MESSAGING_OPERATION_TYPE_CREATE, $attributes[TraceAttributes::MESSAGING_DESTINATION_NAME]]))->setSpanKind(SpanKind::KIND_PRODUCER)->setAttributes($attributes)->startSpan();
             Context::storage()->attach($span->storeInContext($parent));
             return $params;
-        }, post: function (QueueContract $queue, array $params, $returnValue, ?Throwable $exception) {
+        }, post: function (object $queue, array $params, $returnValue, ?Throwable $exception) {
             $this->endSpan($exception);
         });
     }

@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource\Paging;
+namespace Odigos\Cake\Datasource\Paging;
 
 use Closure;
 use InvalidArgumentException;
@@ -109,7 +109,7 @@ class SortableFieldsBuilder
      * @param \Cake\Datasource\Paging\SortField|string ...$fields The sort fields to add
      * @return $this
      */
-    public function add(string $sortKey, \Cake\Datasource\Paging\SortField|string ...$fields)
+    public function add(string $sortKey, SortField|string ...$fields)
     {
         if ($fields === []) {
             // If no fields provided, use the key as the field name
@@ -133,7 +133,7 @@ class SortableFieldsBuilder
     {
         if (is_string($value)) {
             $this->map[$sortKey] = $value;
-        } elseif ($value instanceof \Cake\Datasource\Paging\SortField) {
+        } elseif ($value instanceof SortField) {
             $this->map[$sortKey] = [$value];
         } elseif (is_array($value)) {
             $this->add($sortKey, ...$value);
@@ -203,9 +203,9 @@ class SortableFieldsBuilder
     protected function resolveArrayMapping(array $fields, string $direction, bool $directionSpecified): array
     {
         $order = [];
-        $shouldInvert = $directionSpecified && $direction === \Cake\Datasource\Paging\SortField::DESC;
+        $shouldInvert = $directionSpecified && $direction === SortField::DESC;
         foreach ($fields as $key => $value) {
-            if ($value instanceof \Cake\Datasource\Paging\SortField) {
+            if ($value instanceof SortField) {
                 // SortField object with locked/default directions
                 $field = $value->getField();
                 $fieldDirection = $value->getDirection($direction, $directionSpecified);
@@ -219,7 +219,7 @@ class SortableFieldsBuilder
                 $defaultDirection = strtolower($value);
                 if ($shouldInvert) {
                     // Invert the direction when toggling to desc
-                    $fieldDirection = $defaultDirection === \Cake\Datasource\Paging\SortField::ASC ? \Cake\Datasource\Paging\SortField::DESC : \Cake\Datasource\Paging\SortField::ASC;
+                    $fieldDirection = $defaultDirection === SortField::ASC ? SortField::DESC : SortField::ASC;
                 } else {
                     // Use default direction (for asc or no direction specified)
                     $fieldDirection = $defaultDirection;

@@ -1,9 +1,9 @@
 <?php
 
-namespace GuzzleHttp\Handler;
+namespace Odigos\GuzzleHttp\Handler;
 
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\RequestOptions;
+use Odigos\GuzzleHttp\Promise\PromiseInterface;
+use Odigos\GuzzleHttp\RequestOptions;
 use Psr\Http\Message\RequestInterface;
 /**
  * Provides basic proxies for handlers.

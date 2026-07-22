@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\EventListener;
+namespace Odigos\Symfony\Component\HttpKernel\EventListener;
 
-use Symfony\Component\Console\ConsoleEvents;
-use Symfony\Component\Console\Event\ConsoleCommandEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\VarDumper\Cloner\ClonerInterface;
-use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
-use Symfony\Component\VarDumper\Server\Connection;
-use Symfony\Component\VarDumper\VarDumper;
+use Odigos\Symfony\Component\Console\ConsoleEvents;
+use Odigos\Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Odigos\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Odigos\Symfony\Component\VarDumper\Cloner\ClonerInterface;
+use Odigos\Symfony\Component\VarDumper\Dumper\DataDumperInterface;
+use Odigos\Symfony\Component\VarDumper\Server\Connection;
+use Odigos\Symfony\Component\VarDumper\VarDumper;
 /**
  * Configures dump() handler.
  *

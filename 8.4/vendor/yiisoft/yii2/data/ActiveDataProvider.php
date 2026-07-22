@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\data;
+namespace Odigos\yii\data;
 
-use yii\base\InvalidConfigException;
-use yii\base\Model;
-use yii\db\ActiveQueryInterface;
-use yii\db\Connection;
-use yii\db\QueryInterface;
-use yii\di\Instance;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\Model;
+use Odigos\yii\db\ActiveQueryInterface;
+use Odigos\yii\db\Connection;
+use Odigos\yii\db\QueryInterface;
+use Odigos\yii\di\Instance;
 /**
  * ActiveDataProvider implements a data provider based on [[\yii\db\Query]] and [[\yii\db\ActiveQuery]].
  *
@@ -52,7 +52,7 @@ use yii\di\Instance;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ActiveDataProvider extends \yii\data\BaseDataProvider
+class ActiveDataProvider extends BaseDataProvider
 {
     /**
      * @var QueryInterface|null the query that is used to fetch data models and [[totalCount]] if it is not explicitly set.

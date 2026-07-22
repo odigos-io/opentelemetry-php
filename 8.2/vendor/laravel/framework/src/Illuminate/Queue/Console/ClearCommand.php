@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Queue\Console;
+namespace Odigos\Illuminate\Queue\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Console\ConfirmableTrait;
-use Illuminate\Contracts\Queue\ClearableQueue;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Console\ConfirmableTrait;
+use Odigos\Illuminate\Contracts\Queue\ClearableQueue;
+use Odigos\Illuminate\Support\Str;
 use ReflectionClass;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'queue:clear')]
 class ClearCommand extends Command
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\JsonSchema\Types;
+namespace Odigos\Illuminate\JsonSchema\Types;
 
-class BooleanType extends \Illuminate\JsonSchema\Types\Type
+class BooleanType extends Type
 {
     /**
      * Set the type's default value.

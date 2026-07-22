@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Chat;
+namespace Odigos\OpenAI\Responses\Chat;
 
 final class CreateStreamedResponseToolCall
 {
-    private function __construct(public readonly ?int $index, public readonly ?string $id, public readonly ?string $type, public readonly \OpenAI\Responses\Chat\CreateStreamedResponseToolCallFunction $function)
+    private function __construct(public readonly ?int $index, public readonly ?string $id, public readonly ?string $type, public readonly CreateStreamedResponseToolCallFunction $function)
     {
     }
     /**
@@ -13,7 +13,7 @@ final class CreateStreamedResponseToolCall
      */
     public static function from(array $attributes): self
     {
-        return new self($attributes['index'] ?? null, $attributes['id'] ?? null, $attributes['type'] ?? null, \OpenAI\Responses\Chat\CreateStreamedResponseToolCallFunction::from($attributes['function']));
+        return new self($attributes['index'] ?? null, $attributes['id'] ?? null, $attributes['type'] ?? null, CreateStreamedResponseToolCallFunction::from($attributes['function']));
     }
     /**
      * @return array{index?: int, id?: string, type?: string, function?: array{name?: string, arguments: string}}

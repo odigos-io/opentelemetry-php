@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Polyfill\Intl\Idn;
+namespace Odigos\Symfony\Polyfill\Intl\Idn;
 
-use Symfony\Polyfill\Intl\Idn\Resources\unidata\DisallowedRanges;
-use Symfony\Polyfill\Intl\Idn\Resources\unidata\Regex;
+use Odigos\Symfony\Polyfill\Intl\Idn\Resources\unidata\DisallowedRanges;
+use Odigos\Symfony\Polyfill\Intl\Idn\Resources\unidata\Regex;
 /**
  * @see https://www.unicode.org/reports/tr46/
  *
@@ -112,7 +112,7 @@ final class Idn
             @trigger_error('idn_to_ascii(): INTL_IDNA_VARIANT_2003 is deprecated', \E_USER_DEPRECATED);
         }
         $options = ['CheckHyphens' => \true, 'CheckBidi' => self::INTL_IDNA_VARIANT_2003 === $variant || 0 !== ($options & self::IDNA_CHECK_BIDI), 'CheckJoiners' => self::INTL_IDNA_VARIANT_UTS46 === $variant && 0 !== ($options & self::IDNA_CHECK_CONTEXTJ), 'UseSTD3ASCIIRules' => 0 !== ($options & self::IDNA_USE_STD3_RULES), 'Transitional_Processing' => self::INTL_IDNA_VARIANT_2003 === $variant || 0 === ($options & self::IDNA_NONTRANSITIONAL_TO_ASCII), 'VerifyDnsLength' => \true];
-        $info = new \Symfony\Polyfill\Intl\Idn\Info();
+        $info = new Info();
         $labels = self::process((string) $domainName, $options, $info);
         foreach ($labels as $i => $label) {
             // Only convert labels to punycode that contain non-ASCII code points
@@ -149,7 +149,7 @@ final class Idn
         if (self::INTL_IDNA_VARIANT_2003 === $variant) {
             @trigger_error('idn_to_utf8(): INTL_IDNA_VARIANT_2003 is deprecated', \E_USER_DEPRECATED);
         }
-        $info = new \Symfony\Polyfill\Intl\Idn\Info();
+        $info = new Info();
         $labels = self::process((string) $domainName, ['CheckHyphens' => \true, 'CheckBidi' => self::INTL_IDNA_VARIANT_2003 === $variant || 0 !== ($options & self::IDNA_CHECK_BIDI), 'CheckJoiners' => self::INTL_IDNA_VARIANT_UTS46 === $variant && 0 !== ($options & self::IDNA_CHECK_CONTEXTJ), 'UseSTD3ASCIIRules' => 0 !== ($options & self::IDNA_USE_STD3_RULES), 'Transitional_Processing' => self::INTL_IDNA_VARIANT_2003 === $variant || 0 === ($options & self::IDNA_NONTRANSITIONAL_TO_UNICODE)], $info);
         $idna_info = ['result' => implode('.', $labels), 'isTransitionalDifferent' => $info->transitionalDifferent, 'errors' => $info->errors];
         return 0 === $info->errors ? $idna_info['result'] : \false;
@@ -195,7 +195,7 @@ final class Idn
      *
      * @return string
      */
-    private static function mapCodePoints($input, array $options, \Symfony\Polyfill\Intl\Idn\Info $info)
+    private static function mapCodePoints($input, array $options, Info $info)
     {
         $str = '';
         $useSTD3ASCIIRules = $options['UseSTD3ASCIIRules'];
@@ -229,7 +229,7 @@ final class Idn
      *
      * @return array<int, string>
      */
-    private static function process($domain, array $options, \Symfony\Polyfill\Intl\Idn\Info $info)
+    private static function process($domain, array $options, Info $info)
     {
         // If VerifyDnsLength is not set, we are doing ToUnicode otherwise we are doing ToASCII and
         // we need to respect the VerifyDnsLength option.
@@ -291,7 +291,7 @@ final class Idn
      *
      * @param string $label
      */
-    private static function validateBidiLabel($label, \Symfony\Polyfill\Intl\Idn\Info $info)
+    private static function validateBidiLabel($label, Info $info)
     {
         if (1 === preg_match(Regex::RTL_LABEL, $label)) {
             $info->bidiDomain = \true;
@@ -343,7 +343,7 @@ final class Idn
     /**
      * @param array<int, string> $labels
      */
-    private static function validateDomainAndLabelLength(array $labels, \Symfony\Polyfill\Intl\Idn\Info $info)
+    private static function validateDomainAndLabelLength(array $labels, Info $info)
     {
         $maxDomainSize = self::MAX_DOMAIN_SIZE;
         $length = \count($labels);
@@ -375,7 +375,7 @@ final class Idn
      * @param array<string, bool> $options
      * @param bool                $canBeEmpty
      */
-    private static function validateLabel($label, \Symfony\Polyfill\Intl\Idn\Info $info, array $options, $canBeEmpty)
+    private static function validateLabel($label, Info $info, array $options, $canBeEmpty)
     {
         if ('' === $label) {
             if (!$canBeEmpty && (!isset($options['VerifyDnsLength']) || $options['VerifyDnsLength'])) {

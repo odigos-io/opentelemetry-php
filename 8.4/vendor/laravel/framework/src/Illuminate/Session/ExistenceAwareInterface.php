@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Session;
+namespace Odigos\Illuminate\Session;
 
 interface ExistenceAwareInterface
 {

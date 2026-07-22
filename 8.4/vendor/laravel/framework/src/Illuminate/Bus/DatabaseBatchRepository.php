@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Bus;
+namespace Odigos\Illuminate\Bus;
 
 use Odigos\Carbon\CarbonImmutable;
 use Closure;
 use DateTimeInterface;
-use Illuminate\Database\Connection;
-use Illuminate\Database\PostgresConnection;
-use Illuminate\Database\Query\Expression;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Database\Connection;
+use Odigos\Illuminate\Database\PostgresConnection;
+use Odigos\Illuminate\Database\Query\Expression;
+use Odigos\Illuminate\Support\Str;
 use Throwable;
-class DatabaseBatchRepository implements \Illuminate\Bus\PrunableBatchRepository
+class DatabaseBatchRepository implements PrunableBatchRepository
 {
     /**
      * The batch factory instance.
@@ -37,7 +37,7 @@ class DatabaseBatchRepository implements \Illuminate\Bus\PrunableBatchRepository
      * @param  \Illuminate\Database\Connection  $connection
      * @param  string  $table
      */
-    public function __construct(\Illuminate\Bus\BatchFactory $factory, Connection $connection, string $table)
+    public function __construct(BatchFactory $factory, Connection $connection, string $table)
     {
         $this->factory = $factory;
         $this->connection = $connection;
@@ -75,7 +75,7 @@ class DatabaseBatchRepository implements \Illuminate\Bus\PrunableBatchRepository
      * @param  \Illuminate\Bus\PendingBatch  $batch
      * @return \Illuminate\Bus\Batch
      */
-    public function store(\Illuminate\Bus\PendingBatch $batch)
+    public function store(PendingBatch $batch)
     {
         $id = (string) Str::orderedUuid();
         $this->connection->table($this->table)->insert(['id' => $id, 'name' => $batch->name, 'total_jobs' => 0, 'pending_jobs' => 0, 'failed_jobs' => 0, 'failed_job_ids' => '[]', 'options' => $this->serialize($batch->options), 'created_at' => time(), 'cancelled_at' => null, 'finished_at' => null]);
@@ -104,7 +104,7 @@ class DatabaseBatchRepository implements \Illuminate\Bus\PrunableBatchRepository
         $values = $this->updateAtomicValues($batchId, function ($batch) use ($jobId) {
             return ['pending_jobs' => $batch->pending_jobs - 1, 'failed_jobs' => $batch->failed_jobs, 'failed_job_ids' => json_encode(array_values(array_diff((array) json_decode($batch->failed_job_ids, \true), [$jobId])))];
         });
-        return new \Illuminate\Bus\UpdatedBatchJobCounts($values['pending_jobs'], $values['failed_jobs']);
+        return new UpdatedBatchJobCounts($values['pending_jobs'], $values['failed_jobs']);
     }
     /**
      * Increment the total number of failed jobs for the batch.
@@ -118,7 +118,7 @@ class DatabaseBatchRepository implements \Illuminate\Bus\PrunableBatchRepository
         $values = $this->updateAtomicValues($batchId, function ($batch) use ($jobId) {
             return ['pending_jobs' => $batch->pending_jobs, 'failed_jobs' => $batch->failed_jobs + 1, 'failed_job_ids' => json_encode(array_values(array_unique(array_merge((array) json_decode($batch->failed_job_ids, \true), [$jobId]))))];
         });
-        return new \Illuminate\Bus\UpdatedBatchJobCounts($values['pending_jobs'], $values['failed_jobs']);
+        return new UpdatedBatchJobCounts($values['pending_jobs'], $values['failed_jobs']);
     }
     /**
      * Update an atomic value within the batch.

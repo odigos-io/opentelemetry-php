@@ -4,16 +4,16 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Search;
+namespace Odigos\MongoDB\Builder\Search;
 
 use MongoDB\BSON\Document;
 use MongoDB\BSON\PackedArray;
 use MongoDB\BSON\Serializable;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Builder\Type\Optional;
-use MongoDB\Builder\Type\SearchOperatorInterface;
-use MongoDB\Model\BSONArray;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\Optional;
+use Odigos\MongoDB\Builder\Type\SearchOperatorInterface;
+use Odigos\MongoDB\Model\BSONArray;
 use stdClass;
 /**
  * The moreLikeThis operator returns documents similar to input documents.

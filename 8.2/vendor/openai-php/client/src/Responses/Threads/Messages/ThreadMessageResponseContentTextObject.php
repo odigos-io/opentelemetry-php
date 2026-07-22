@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Threads\Messages;
+namespace Odigos\OpenAI\Responses\Threads\Messages;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{type: 'text', text: array{value: string, annotations: array<int, array{type: 'file_citation', text: string, file_citation: array{file_id: string, quote?: string}, start_index: int, end_index: int}|array{type: 'file_path', text: string, file_path: array{file_id: string}, start_index: int, end_index: int}>}}>
  */
@@ -19,7 +19,7 @@ final class ThreadMessageResponseContentTextObject implements ResponseContract
     /**
      * @param  'text'  $type
      */
-    private function __construct(public string $type, public \OpenAI\Responses\Threads\Messages\ThreadMessageResponseContentText $text)
+    private function __construct(public string $type, public ThreadMessageResponseContentText $text)
     {
     }
     /**
@@ -29,7 +29,7 @@ final class ThreadMessageResponseContentTextObject implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        return new self($attributes['type'], \OpenAI\Responses\Threads\Messages\ThreadMessageResponseContentText::from($attributes['text']));
+        return new self($attributes['type'], ThreadMessageResponseContentText::from($attributes['text']));
     }
     /**
      * {@inheritDoc}

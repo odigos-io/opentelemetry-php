@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\EventListener;
+namespace Odigos\Symfony\Component\Mailer\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Mailer\Event\MessageEvent;
-use Symfony\Component\Mime\Crypto\DkimSigner;
-use Symfony\Component\Mime\Message;
+use Odigos\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Odigos\Symfony\Component\Mailer\Event\MessageEvent;
+use Odigos\Symfony\Component\Mime\Crypto\DkimSigner;
+use Odigos\Symfony\Component\Mime\Message;
 /**
  * Signs messages using DKIM.
  *

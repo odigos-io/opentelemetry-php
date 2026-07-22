@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Loader;
+namespace Odigos\Symfony\Component\Translation\Loader;
 
-use Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
 /**
  * ArrayLoader loads translations from a PHP array.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ArrayLoader implements \Symfony\Component\Translation\Loader\LoaderInterface
+class ArrayLoader implements LoaderInterface
 {
     public function load(mixed $resource, string $locale, string $domain = 'messages'): MessageCatalogue
     {

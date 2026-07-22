@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-class ApcStore extends \Illuminate\Cache\TaggableStore
+class ApcStore extends TaggableStore
 {
-    use \Illuminate\Cache\RetrievesMultipleKeys;
+    use RetrievesMultipleKeys;
     /**
      * The APC wrapper instance.
      *
@@ -23,7 +23,7 @@ class ApcStore extends \Illuminate\Cache\TaggableStore
      * @param  \Illuminate\Cache\ApcWrapper  $apc
      * @param  string  $prefix
      */
-    public function __construct(\Illuminate\Cache\ApcWrapper $apc, $prefix = '')
+    public function __construct(ApcWrapper $apc, $prefix = '')
     {
         $this->apc = $apc;
         $this->prefix = $prefix;

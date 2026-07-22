@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Filesystem;
+namespace Odigos\Illuminate\Filesystem;
 
 use Closure;
-use Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Conditionable;
 use RuntimeException;
-class LocalFilesystemAdapter extends \Illuminate\Filesystem\FilesystemAdapter
+class LocalFilesystemAdapter extends FilesystemAdapter
 {
     use Conditionable;
     /**

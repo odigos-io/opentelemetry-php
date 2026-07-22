@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\DependencyInjection;
+namespace Odigos\Symfony\Component\HttpKernel\DependencyInjection;
 
 use Odigos\ProxyManager\Proxy\LazyLoadingInterface;
-use Symfony\Component\VarExporter\LazyObjectInterface;
+use Odigos\Symfony\Component\VarExporter\LazyObjectInterface;
 /**
  * Resets provided services.
  *
@@ -20,7 +20,7 @@ use Symfony\Component\VarExporter\LazyObjectInterface;
  *
  * @final since Symfony 7.2
  */
-class ServicesResetter implements \Symfony\Component\HttpKernel\DependencyInjection\ServicesResetterInterface
+class ServicesResetter implements ServicesResetterInterface
 {
     /**
      * @param \Traversable<string, object>   $resettableServices

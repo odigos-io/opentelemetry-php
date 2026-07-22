@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Auth\Access;
+namespace Odigos\Illuminate\Auth\Access;
 
 use Exception;
 use Throwable;
@@ -95,6 +95,6 @@ class AuthorizationException extends Exception
      */
     public function toResponse()
     {
-        return \Illuminate\Auth\Access\Response::deny($this->message, $this->code)->withStatus($this->status);
+        return Response::deny($this->message, $this->code)->withStatus($this->status);
     }
 }

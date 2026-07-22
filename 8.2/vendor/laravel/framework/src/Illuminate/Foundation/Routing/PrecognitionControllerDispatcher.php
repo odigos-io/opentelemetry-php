@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Routing;
+namespace Odigos\Illuminate\Foundation\Routing;
 
-use Illuminate\Routing\ControllerDispatcher;
-use Illuminate\Routing\Route;
+use Odigos\Illuminate\Routing\ControllerDispatcher;
+use Odigos\Illuminate\Routing\Route;
 use RuntimeException;
 class PrecognitionControllerDispatcher extends ControllerDispatcher
 {

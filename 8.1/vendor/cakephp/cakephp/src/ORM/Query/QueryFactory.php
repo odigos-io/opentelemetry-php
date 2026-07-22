@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         5.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Query;
+namespace Odigos\Cake\ORM\Query;
 
-use Cake\ORM\Table;
+use Odigos\Cake\ORM\Table;
 /**
  * Factory class for generating instances of Select, Insert, Update, Delete queries.
  */
@@ -28,9 +28,9 @@ class QueryFactory
      * @param \Cake\ORM\Table $table The table this query is starting on.
      * @return \Cake\ORM\Query\SelectQuery
      */
-    public function select(Table $table): \Cake\ORM\Query\SelectQuery
+    public function select(Table $table): SelectQuery
     {
-        return new \Cake\ORM\Query\SelectQuery($table);
+        return new SelectQuery($table);
     }
     /**
      * Create a new InsertQuery instance.
@@ -38,9 +38,9 @@ class QueryFactory
      * @param \Cake\ORM\Table $table The table this query is starting on.
      * @return \Cake\ORM\Query\InsertQuery
      */
-    public function insert(Table $table): \Cake\ORM\Query\InsertQuery
+    public function insert(Table $table): InsertQuery
     {
-        return new \Cake\ORM\Query\InsertQuery($table);
+        return new InsertQuery($table);
     }
     /**
      * Create a new UpdateQuery instance.
@@ -48,9 +48,9 @@ class QueryFactory
      * @param \Cake\ORM\Table $table The table this query is starting on.
      * @return \Cake\ORM\Query\UpdateQuery
      */
-    public function update(Table $table): \Cake\ORM\Query\UpdateQuery
+    public function update(Table $table): UpdateQuery
     {
-        return new \Cake\ORM\Query\UpdateQuery($table);
+        return new UpdateQuery($table);
     }
     /**
      * Create a new DeleteQuery instance.
@@ -58,8 +58,8 @@ class QueryFactory
      * @param \Cake\ORM\Table $table The table this query is starting on.
      * @return \Cake\ORM\Query\DeleteQuery
      */
-    public function delete(Table $table): \Cake\ORM\Query\DeleteQuery
+    public function delete(Table $table): DeleteQuery
     {
-        return new \Cake\ORM\Query\DeleteQuery($table);
+        return new DeleteQuery($table);
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Auth\Passwords;
+namespace Odigos\Illuminate\Auth\Passwords;
 
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Support\DeferrableProvider;
+use Odigos\Illuminate\Support\ServiceProvider;
 class PasswordResetServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
@@ -23,7 +23,7 @@ class PasswordResetServiceProvider extends ServiceProvider implements Deferrable
     protected function registerPasswordBroker()
     {
         $this->app->singleton('auth.password', function ($app) {
-            return new \Illuminate\Auth\Passwords\PasswordBrokerManager($app);
+            return new PasswordBrokerManager($app);
         });
         $this->app->bind('auth.password.broker', function ($app) {
             return $app->make('auth.password')->broker();

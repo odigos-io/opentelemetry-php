@@ -1,21 +1,21 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Odigos\Illuminate\Database\Eloquent\Relations;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Concerns\ComparesRelatedModels;
-use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
-use Illuminate\Database\Eloquent\Relations\Concerns\SupportsDefaultModels;
-use function Illuminate\Support\enum_value;
+use Odigos\Illuminate\Database\Eloquent\Builder;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\ComparesRelatedModels;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\SupportsDefaultModels;
+use function Odigos\Illuminate\Support\enum_value;
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
  * @extends \Illuminate\Database\Eloquent\Relations\Relation<TRelatedModel, TDeclaringModel, ?TRelatedModel>
  */
-class BelongsTo extends \Illuminate\Database\Eloquent\Relations\Relation
+class BelongsTo extends Relation
 {
     use ComparesRelatedModels, InteractsWithDictionary, SupportsDefaultModels;
     /**

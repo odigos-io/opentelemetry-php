@@ -15,12 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\GridFS;
+namespace Odigos\MongoDB\GridFS;
 
 use MongoDB\BSON\Binary;
 use MongoDB\Driver\CursorInterface;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\GridFS\Exception\CorruptFileException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\GridFS\Exception\CorruptFileException;
 use function assert;
 use function ceil;
 use function floor;
@@ -52,7 +52,7 @@ final class ReadableStream
      * @param object            $file              GridFS file document
      * @throws CorruptFileException
      */
-    public function __construct(private \MongoDB\GridFS\CollectionWrapper $collectionWrapper, private object $file)
+    public function __construct(private CollectionWrapper $collectionWrapper, private object $file)
     {
         if (!isset($file->chunkSize) || !is_integer($file->chunkSize) || $file->chunkSize < 1) {
             throw new CorruptFileException('file.chunkSize is not an integer >= 1');

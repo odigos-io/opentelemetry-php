@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\ErrorHandler\ErrorRenderer;
+namespace Odigos\Symfony\Component\ErrorHandler\ErrorRenderer;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\RequestStack;
+use Odigos\Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Formats debug file links.
  *
@@ -33,7 +33,7 @@ class FileLinkFormatter
     {
         $fileLinkFormat ??= $_ENV['SYMFONY_IDE'] ?? $_SERVER['SYMFONY_IDE'] ?? '';
         if (!\is_array($f = $fileLinkFormat)) {
-            $f = ((\Symfony\Component\ErrorHandler\ErrorRenderer\ErrorRendererInterface::IDE_LINK_FORMATS[$f] ?? $f ?: \ini_get('xdebug.file_link_format')) ?: get_cfg_var('xdebug.file_link_format')) ?: 'file://%f#L%l';
+            $f = ((ErrorRendererInterface::IDE_LINK_FORMATS[$f] ?? $f ?: \ini_get('xdebug.file_link_format')) ?: get_cfg_var('xdebug.file_link_format')) ?: 'file://%f#L%l';
             $i = strpos($f, '&', max(strrpos($f, '%f'), strrpos($f, '%l'))) ?: \strlen($f);
             $fileLinkFormat = [substr($f, 0, $i)] + preg_split('/&([^>]++)>/', substr($f, $i), -1, \PREG_SPLIT_DELIM_CAPTURE);
         }
@@ -88,6 +88,6 @@ class FileLinkFormatter
         return \false;
     }
 }
-if (!class_exists(\Symfony\Component\HttpKernel\Debug\FileLinkFormatter::class, \false)) {
-    class_alias(\Symfony\Component\ErrorHandler\ErrorRenderer\FileLinkFormatter::class, \Symfony\Component\HttpKernel\Debug\FileLinkFormatter::class);
+if (!class_exists(\Odigos\Symfony\Component\HttpKernel\Debug\FileLinkFormatter::class, \false)) {
+    class_alias(FileLinkFormatter::class, \Odigos\Symfony\Component\HttpKernel\Debug\FileLinkFormatter::class);
 }

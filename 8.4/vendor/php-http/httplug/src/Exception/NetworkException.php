@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Client\Exception;
+namespace Odigos\Http\Client\Exception;
 
 use Psr\Http\Client\NetworkExceptionInterface as PsrNetworkException;
 use Psr\Http\Message\RequestInterface;
@@ -11,9 +11,9 @@ use Psr\Http\Message\RequestInterface;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class NetworkException extends \Http\Client\Exception\TransferException implements PsrNetworkException
+class NetworkException extends TransferException implements PsrNetworkException
 {
-    use \Http\Client\Exception\RequestAwareTrait;
+    use RequestAwareTrait;
     /**
      * @param string $message
      */

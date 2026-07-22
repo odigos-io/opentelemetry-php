@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Queue\Jobs;
+namespace Odigos\Illuminate\Queue\Jobs;
 
-use Illuminate\Bus\Batchable;
-use Illuminate\Bus\BatchRepository;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Queue\Events\JobFailed;
-use Illuminate\Queue\ManuallyFailedException;
-use Illuminate\Queue\TimeoutExceededException;
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Bus\Batchable;
+use Odigos\Illuminate\Bus\BatchRepository;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Queue\Events\JobFailed;
+use Odigos\Illuminate\Queue\ManuallyFailedException;
+use Odigos\Illuminate\Queue\TimeoutExceededException;
+use Odigos\Illuminate\Support\InteractsWithTime;
 use Throwable;
 abstract class Job
 {
@@ -84,7 +84,7 @@ abstract class Job
     public function fire()
     {
         $payload = $this->payload();
-        [$class, $method] = \Illuminate\Queue\Jobs\JobName::parse($payload['job']);
+        [$class, $method] = JobName::parse($payload['job']);
         ($this->instance = $this->resolve($class))->{$method}($this, $payload['data']);
     }
     /**
@@ -207,7 +207,7 @@ abstract class Job
     protected function failed($e)
     {
         $payload = $this->payload();
-        [$class] = \Illuminate\Queue\Jobs\JobName::parse($payload['job']);
+        [$class] = JobName::parse($payload['job']);
         if (method_exists($this->instance = $this->resolve($class), 'failed')) {
             $this->instance->failed($payload['data'], $e, $payload['uuid'] ?? '', $this);
         }
@@ -312,7 +312,7 @@ abstract class Job
      */
     public function resolveName()
     {
-        return \Illuminate\Queue\Jobs\JobName::resolve($this->getName(), $this->payload());
+        return JobName::resolve($this->getName(), $this->payload());
     }
     /**
      * Get the class of the queued job.
@@ -323,7 +323,7 @@ abstract class Job
      */
     public function resolveQueuedJobClass()
     {
-        return \Illuminate\Queue\Jobs\JobName::resolveClassName($this->getName(), $this->payload());
+        return JobName::resolveClassName($this->getName(), $this->payload());
     }
     /**
      * Get the name of the connection the job belongs to.

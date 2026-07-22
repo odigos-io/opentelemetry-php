@@ -10,7 +10,7 @@
  */
 namespace Odigos\Random;
 
-use Symfony\Polyfill\Php82\NoDynamicProperties;
+use Odigos\Symfony\Polyfill\Php82\NoDynamicProperties;
 if (\PHP_VERSION_ID < 80200) {
     class RandomException extends \Exception
     {

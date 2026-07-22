@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Cookie;
+namespace Odigos\Illuminate\Cookie;
 
-use Illuminate\Contracts\Cookie\QueueingFactory as JarContract;
-use Illuminate\Support\Arr;
-use Illuminate\Support\InteractsWithTime;
-use Illuminate\Support\Traits\Macroable;
-use Symfony\Component\HttpFoundation\Cookie;
+use Odigos\Illuminate\Contracts\Cookie\QueueingFactory as JarContract;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Symfony\Component\HttpFoundation\Cookie;
 class CookieJar implements JarContract
 {
     use InteractsWithTime, Macroable;

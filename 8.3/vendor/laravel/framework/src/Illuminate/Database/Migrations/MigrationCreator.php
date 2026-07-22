@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Migrations;
+namespace Odigos\Illuminate\Database\Migrations;
 
 use Closure;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Str;
 use InvalidArgumentException;
 class MigrationCreator
 {

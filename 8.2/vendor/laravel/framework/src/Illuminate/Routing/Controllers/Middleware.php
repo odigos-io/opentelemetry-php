@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Routing\Controllers;
+namespace Odigos\Illuminate\Routing\Controllers;
 
 use Closure;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Arr;
 class Middleware
 {
     /**

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks;
 
 use OpenTelemetry\API\Globals;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
@@ -12,13 +12,13 @@ use OpenTelemetry\SemConv\TraceAttributes;
 use Psr\Http\Message\ServerRequestInterface;
 trait CakeHookTrait
 {
-    private static \OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks\CakeHook $instance;
+    private static CakeHook $instance;
     private bool $isRoot;
     protected function __construct(protected CachedInstrumentation $instrumentation)
     {
     }
     abstract public function instrument(): void;
-    public static function hook(CachedInstrumentation $instrumentation): \OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks\CakeHook
+    public static function hook(CachedInstrumentation $instrumentation): CakeHook
     {
         /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (!isset(self::$instance)) {

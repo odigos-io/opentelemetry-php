@@ -16,9 +16,9 @@ declare (strict_types=1);
  * @since         4.0.5
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite;
+namespace Odigos\Cake\TestSuite;
 
-use Cake\Utility\Hash;
+use Odigos\Cake\Utility\Hash;
 /**
  * Read only access to the session during testing.
  */

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http\Middleware;
+namespace Odigos\Illuminate\Http\Middleware;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Http\Request;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Http\Request;
 class TrustHosts
 {
     /**

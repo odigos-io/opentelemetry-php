@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         4.4.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Controller\Component;
+namespace Odigos\Cake\Controller\Component;
 
-use Cake\Controller\Component;
-use Cake\Event\EventInterface;
+use Odigos\Cake\Controller\Component;
+use Odigos\Cake\Event\EventInterface;
 /**
  * Use HTTP caching headers to see if rendering can be skipped.
  *

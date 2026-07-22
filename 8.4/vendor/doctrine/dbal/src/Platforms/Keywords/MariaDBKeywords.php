@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\Keywords;
+namespace Odigos\Doctrine\DBAL\Platforms\Keywords;
 
 /** @deprecated */
-class MariaDBKeywords extends \Doctrine\DBAL\Platforms\Keywords\MySQLKeywords
+class MariaDBKeywords extends MySQLKeywords
 {
     /**
      * {@inheritDoc}

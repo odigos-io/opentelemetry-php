@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource;
+namespace Odigos\Cake\Datasource;
 
-use Cake\Collection\Collection;
-use Cake\Core\Configure;
+use Odigos\Cake\Collection\Collection;
+use Odigos\Cake\Core\Configure;
 /**
  * Generic ResultSet decorator. This will make any traversable object appear to
  * be a database result
@@ -27,7 +27,7 @@ use Cake\Core\Configure;
  * @extends \Cake\Collection\Collection<TKey, TValue>
  * @implements \Cake\Datasource\ResultSetInterface<TKey, TValue>
  */
-class ResultSetDecorator extends Collection implements \Cake\Datasource\ResultSetInterface
+class ResultSetDecorator extends Collection implements ResultSetInterface
 {
     /**
      * @inheritDoc

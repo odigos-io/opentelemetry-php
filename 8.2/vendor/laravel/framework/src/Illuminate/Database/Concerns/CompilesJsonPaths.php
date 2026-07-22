@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Concerns;
+namespace Odigos\Illuminate\Database\Concerns;
 
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
 trait CompilesJsonPaths
 {
     /**

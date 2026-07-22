@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\ErrorHandler\ErrorEnhancer;
+namespace Odigos\Symfony\Component\ErrorHandler\ErrorEnhancer;
 
-use Symfony\Component\ErrorHandler\Error\FatalError;
-use Symfony\Component\ErrorHandler\Error\UndefinedFunctionError;
+use Odigos\Symfony\Component\ErrorHandler\Error\FatalError;
+use Odigos\Symfony\Component\ErrorHandler\Error\UndefinedFunctionError;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class UndefinedFunctionErrorEnhancer implements \Symfony\Component\ErrorHandler\ErrorEnhancer\ErrorEnhancerInterface
+class UndefinedFunctionErrorEnhancer implements ErrorEnhancerInterface
 {
     public function enhance(\Throwable $error): ?\Throwable
     {

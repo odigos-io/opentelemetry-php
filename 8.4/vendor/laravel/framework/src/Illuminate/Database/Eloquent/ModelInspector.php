@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Support\Collection as BaseCollection;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Database\Eloquent\Relations\Relation;
+use Odigos\Illuminate\Support\Collection as BaseCollection;
+use Odigos\Illuminate\Support\Facades\Gate;
+use Odigos\Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
 use SplFileObject;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 class ModelInspector
 {
     /**
@@ -72,7 +72,7 @@ class ModelInspector
     protected function getVirtualAttributes($model, $columns)
     {
         $class = new ReflectionClass($model);
-        return (new BaseCollection($class->getMethods()))->reject(fn(ReflectionMethod $method) => $method->isStatic() || $method->isAbstract() || $method->getDeclaringClass()->getName() === \Illuminate\Database\Eloquent\Model::class)->mapWithKeys(function (ReflectionMethod $method) use ($model) {
+        return (new BaseCollection($class->getMethods()))->reject(fn(ReflectionMethod $method) => $method->isStatic() || $method->isAbstract() || $method->getDeclaringClass()->getName() === Model::class)->mapWithKeys(function (ReflectionMethod $method) use ($model) {
             if (preg_match('/^get(.+)Attribute$/', $method->getName(), $matches) === 1) {
                 return [Str::snake($matches[1]) => 'accessor'];
             } elseif ($model->hasAttributeMutator($method->getName())) {
@@ -90,7 +90,7 @@ class ModelInspector
      */
     protected function getRelations($model)
     {
-        return (new BaseCollection(get_class_methods($model)))->map(fn($method) => new ReflectionMethod($model, $method))->reject(fn(ReflectionMethod $method) => $method->isStatic() || $method->isAbstract() || $method->getDeclaringClass()->getName() === \Illuminate\Database\Eloquent\Model::class || $method->getNumberOfParameters() > 0)->filter(function (ReflectionMethod $method) {
+        return (new BaseCollection(get_class_methods($model)))->map(fn($method) => new ReflectionMethod($model, $method))->reject(fn(ReflectionMethod $method) => $method->isStatic() || $method->isAbstract() || $method->getDeclaringClass()->getName() === Model::class || $method->getNumberOfParameters() > 0)->filter(function (ReflectionMethod $method) {
             if ($method->getReturnType() instanceof ReflectionNamedType && is_subclass_of($method->getReturnType()->getName(), Relation::class)) {
                 return \true;
             }

@@ -1,22 +1,22 @@
 <?php
 
-namespace OpenAI\Contracts;
+namespace Odigos\OpenAI\Contracts;
 
-use OpenAI\Contracts\Resources\AssistantsContract;
-use OpenAI\Contracts\Resources\AudioContract;
-use OpenAI\Contracts\Resources\BatchesContract;
-use OpenAI\Contracts\Resources\ChatContract;
-use OpenAI\Contracts\Resources\CompletionsContract;
-use OpenAI\Contracts\Resources\EditsContract;
-use OpenAI\Contracts\Resources\EmbeddingsContract;
-use OpenAI\Contracts\Resources\FilesContract;
-use OpenAI\Contracts\Resources\FineTunesContract;
-use OpenAI\Contracts\Resources\FineTuningContract;
-use OpenAI\Contracts\Resources\ImagesContract;
-use OpenAI\Contracts\Resources\ModelsContract;
-use OpenAI\Contracts\Resources\ModerationsContract;
-use OpenAI\Contracts\Resources\ThreadsContract;
-use OpenAI\Contracts\Resources\VectorStoresContract;
+use Odigos\OpenAI\Contracts\Resources\AssistantsContract;
+use Odigos\OpenAI\Contracts\Resources\AudioContract;
+use Odigos\OpenAI\Contracts\Resources\BatchesContract;
+use Odigos\OpenAI\Contracts\Resources\ChatContract;
+use Odigos\OpenAI\Contracts\Resources\CompletionsContract;
+use Odigos\OpenAI\Contracts\Resources\EditsContract;
+use Odigos\OpenAI\Contracts\Resources\EmbeddingsContract;
+use Odigos\OpenAI\Contracts\Resources\FilesContract;
+use Odigos\OpenAI\Contracts\Resources\FineTunesContract;
+use Odigos\OpenAI\Contracts\Resources\FineTuningContract;
+use Odigos\OpenAI\Contracts\Resources\ImagesContract;
+use Odigos\OpenAI\Contracts\Resources\ModelsContract;
+use Odigos\OpenAI\Contracts\Resources\ModerationsContract;
+use Odigos\OpenAI\Contracts\Resources\ThreadsContract;
+use Odigos\OpenAI\Contracts\Resources\VectorStoresContract;
 interface ClientContract
 {
     /**

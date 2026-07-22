@@ -5,18 +5,18 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters;
+namespace Odigos\yii\filters;
 
 use Closure;
-use yii\base\Action;
-use yii\base\Component;
-use yii\base\Controller;
-use yii\base\InvalidConfigException;
-use yii\base\Module;
-use yii\helpers\IpHelper;
-use yii\helpers\StringHelper;
-use yii\web\Request;
-use yii\web\User;
+use Odigos\yii\base\Action;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\Controller;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\Module;
+use Odigos\yii\helpers\IpHelper;
+use Odigos\yii\helpers\StringHelper;
+use Odigos\yii\web\Request;
+use Odigos\yii\web\User;
 /**
  * This class represents an access rule defined by the [[AccessControl]] action filter.
  *

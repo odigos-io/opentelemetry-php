@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Schema\Exception\NamespaceAlreadyExists;
-use Doctrine\DBAL\Schema\Exception\SequenceAlreadyExists;
-use Doctrine\DBAL\Schema\Exception\SequenceDoesNotExist;
-use Doctrine\DBAL\Schema\Exception\TableAlreadyExists;
-use Doctrine\DBAL\Schema\Exception\TableDoesNotExist;
-use Doctrine\DBAL\Schema\Name\Parser\UnqualifiedNameParser;
-use Doctrine\DBAL\Schema\Name\Parsers;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\DBAL\SQL\Builder\CreateSchemaObjectsSQLBuilder;
-use Doctrine\DBAL\SQL\Builder\DropSchemaObjectsSQLBuilder;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Schema\Exception\NamespaceAlreadyExists;
+use Odigos\Doctrine\DBAL\Schema\Exception\SequenceAlreadyExists;
+use Odigos\Doctrine\DBAL\Schema\Exception\SequenceDoesNotExist;
+use Odigos\Doctrine\DBAL\Schema\Exception\TableAlreadyExists;
+use Odigos\Doctrine\DBAL\Schema\Exception\TableDoesNotExist;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\UnqualifiedNameParser;
+use Odigos\Doctrine\DBAL\Schema\Name\Parsers;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\SQL\Builder\CreateSchemaObjectsSQLBuilder;
+use Odigos\Doctrine\DBAL\SQL\Builder\DropSchemaObjectsSQLBuilder;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use function array_values;
 use function count;
 use function strtolower;
@@ -52,7 +52,7 @@ use function strtolower;
  * @final
  * @extends AbstractAsset<UnqualifiedName>
  */
-class Schema extends \Doctrine\DBAL\Schema\AbstractAsset
+class Schema extends AbstractAsset
 {
     /**
      * The namespaces in this schema.
@@ -64,7 +64,7 @@ class Schema extends \Doctrine\DBAL\Schema\AbstractAsset
     protected array $_tables = [];
     /** @var array<string, Sequence> */
     protected array $_sequences = [];
-    protected \Doctrine\DBAL\Schema\SchemaConfig $_schemaConfig;
+    protected SchemaConfig $_schemaConfig;
     /**
      * Indicates whether the schema uses unqualified names for its objects. Once this flag is set to true, it won't be
      * unset even after the objects with unqualified names have been dropped from the schema.
@@ -75,12 +75,12 @@ class Schema extends \Doctrine\DBAL\Schema\AbstractAsset
      * @param array<Sequence> $sequences
      * @param array<string>   $namespaces
      */
-    public function __construct(array $tables = [], array $sequences = [], ?\Doctrine\DBAL\Schema\SchemaConfig $schemaConfig = null, array $namespaces = [])
+    public function __construct(array $tables = [], array $sequences = [], ?SchemaConfig $schemaConfig = null, array $namespaces = [])
     {
         if (count($namespaces) > 0) {
             Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/7186', 'Passing the $namespaces argument to the Schema constructor is deprecated.');
         }
-        $schemaConfig ??= new \Doctrine\DBAL\Schema\SchemaConfig();
+        $schemaConfig ??= new SchemaConfig();
         $this->_schemaConfig = $schemaConfig;
         $name = $schemaConfig->getName();
         parent::__construct($name ?? '');
@@ -111,10 +111,10 @@ class Schema extends \Doctrine\DBAL\Schema\AbstractAsset
      * This method implements the abstract method in the parent class and will be removed once {@see Schema} stops
      * extending {@see AbstractAsset}.
      */
-    protected function setName(?\Doctrine\DBAL\Schema\Name $name): void
+    protected function setName(?Name $name): void
     {
     }
-    protected function _addTable(\Doctrine\DBAL\Schema\Table $table): void
+    protected function _addTable(Table $table): void
     {
         $resolvedName = $this->resolveName($table);
         $key = $this->getKeyFromResolvedName($resolvedName);
@@ -131,7 +131,7 @@ class Schema extends \Doctrine\DBAL\Schema\AbstractAsset
         }
         $this->_tables[$key] = $table;
     }
-    protected function _addSequence(\Doctrine\DBAL\Schema\Sequence $sequence): void
+    protected function _addSequence(Sequence $sequence): void
     {
         $resolvedName = $this->resolveName($sequence);
         $key = $this->getKeyFromResolvedName($resolvedName);
@@ -166,7 +166,7 @@ class Schema extends \Doctrine\DBAL\Schema\AbstractAsset
     {
         return array_values($this->_tables);
     }
-    public function getTable(string $name): \Doctrine\DBAL\Schema\Table
+    public function getTable(string $name): Table
     {
         $key = $this->getKeyFromName($name);
         if (!isset($this->_tables[$key])) {
@@ -189,7 +189,7 @@ class Schema extends \Doctrine\DBAL\Schema\AbstractAsset
      *
      * @template N of Name
      */
-    private function getKeyFromResolvedName(\Doctrine\DBAL\Schema\AbstractAsset $asset): string
+    private function getKeyFromResolvedName(AbstractAsset $asset): string
     {
         $key = $asset->getName();
         if ($asset->getNamespaceName() !== null) {
@@ -210,7 +210,7 @@ class Schema extends \Doctrine\DBAL\Schema\AbstractAsset
      */
     private function getKeyFromName(string $name): string
     {
-        return $this->getKeyFromResolvedName($this->resolveName(new \Doctrine\DBAL\Schema\Identifier($name)));
+        return $this->getKeyFromResolvedName($this->resolveName(new Identifier($name)));
     }
     /**
      * Resolves the qualified or unqualified name against the current schema name and returns a qualified name.
@@ -219,12 +219,12 @@ class Schema extends \Doctrine\DBAL\Schema\AbstractAsset
      *
      * @template N of Name
      */
-    private function resolveName(\Doctrine\DBAL\Schema\AbstractAsset $asset): \Doctrine\DBAL\Schema\AbstractAsset
+    private function resolveName(AbstractAsset $asset): AbstractAsset
     {
         if ($asset->getNamespaceName() === null) {
             $defaultNamespaceName = $this->getName();
             if ($defaultNamespaceName !== '') {
-                return new \Doctrine\DBAL\Schema\Identifier($defaultNamespaceName . '.' . $asset->getName());
+                return new Identifier($defaultNamespaceName . '.' . $asset->getName());
             }
         }
         return $asset;
@@ -260,7 +260,7 @@ class Schema extends \Doctrine\DBAL\Schema\AbstractAsset
         $key = $this->getKeyFromName($name);
         return isset($this->_sequences[$key]);
     }
-    public function getSequence(string $name): \Doctrine\DBAL\Schema\Sequence
+    public function getSequence(string $name): Sequence
     {
         $key = $this->getKeyFromName($name);
         if (!isset($this->_sequences[$key])) {
@@ -294,9 +294,9 @@ class Schema extends \Doctrine\DBAL\Schema\AbstractAsset
     /**
      * Creates a new table.
      */
-    public function createTable(string $name): \Doctrine\DBAL\Schema\Table
+    public function createTable(string $name): Table
     {
-        $table = new \Doctrine\DBAL\Schema\Table($name, [], [], [], [], [], $this->_schemaConfig->toTableConfiguration());
+        $table = new Table($name, [], [], [], [], [], $this->_schemaConfig->toTableConfiguration());
         $this->_addTable($table);
         foreach ($this->_schemaConfig->getDefaultTableOptions() as $option => $value) {
             $table->addOption($option, $value);
@@ -311,7 +311,7 @@ class Schema extends \Doctrine\DBAL\Schema\AbstractAsset
     public function renameTable(string $oldName, string $newName): self
     {
         $table = $this->getTable($oldName);
-        $identifier = new \Doctrine\DBAL\Schema\Identifier($newName);
+        $identifier = new Identifier($newName);
         $table->_name = $identifier->_name;
         $table->_namespace = $identifier->_namespace;
         $table->_quoted = $identifier->_quoted;
@@ -336,9 +336,9 @@ class Schema extends \Doctrine\DBAL\Schema\AbstractAsset
     /**
      * Creates a new sequence.
      */
-    public function createSequence(string $name, int $allocationSize = 1, int $initialValue = 1): \Doctrine\DBAL\Schema\Sequence
+    public function createSequence(string $name, int $allocationSize = 1, int $initialValue = 1): Sequence
     {
-        $seq = new \Doctrine\DBAL\Schema\Sequence($name, $allocationSize, $initialValue);
+        $seq = new Sequence($name, $allocationSize, $initialValue);
         $this->_addSequence($seq);
         return $seq;
     }

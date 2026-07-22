@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Process;
-use Symfony\Component\Console\Attribute\AsCommand;
-use function Illuminate\Support\artisan_binary;
-use function Illuminate\Support\php_binary;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Facades\Process;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use function Odigos\Illuminate\Support\artisan_binary;
+use function Odigos\Illuminate\Support\php_binary;
 #[AsCommand(name: 'install:api')]
 class ApiInstallCommand extends Command
 {
-    use \Illuminate\Foundation\Console\InteractsWithComposerPackages;
+    use InteractsWithComposerPackages;
     /**
      * The name and signature of the console command.
      *
@@ -93,7 +93,7 @@ class ApiInstallCommand extends Command
             return preg_match('/\d{4}_\d{2}_\d{2}_\d{6}_create_personal_access_tokens_table.php/', $migration);
         });
         if (!$migrationPublished) {
-            Process::run([php_binary(), artisan_binary(), 'vendor:publish', '--provider', 'Laravel\Sanctum\SanctumServiceProvider']);
+            Process::run([php_binary(), artisan_binary(), 'vendor:publish', '--provider', 'Odigos\Laravel\Sanctum\SanctumServiceProvider']);
         }
     }
     /**

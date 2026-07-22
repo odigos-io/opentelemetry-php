@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Extractor\Visitor;
+namespace Odigos\Symfony\Component\Translation\Extractor\Visitor;
 
 use Odigos\PhpParser\Node;
-use Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
  */

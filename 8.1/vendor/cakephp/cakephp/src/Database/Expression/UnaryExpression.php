@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Database\ExpressionInterface;
-use Cake\Database\ValueBinder;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\ValueBinder;
 use Closure;
 /**
  * An expression object that represents an expression with only a single operand.

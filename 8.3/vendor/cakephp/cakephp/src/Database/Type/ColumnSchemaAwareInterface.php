@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
-use Cake\Database\Driver;
-use Cake\Database\Schema\TableSchemaInterface;
+use Odigos\Cake\Database\Driver;
+use Odigos\Cake\Database\Schema\TableSchemaInterface;
 interface ColumnSchemaAwareInterface
 {
     /**

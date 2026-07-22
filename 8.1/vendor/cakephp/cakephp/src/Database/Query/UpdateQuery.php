@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         4.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Query;
+namespace Odigos\Cake\Database\Query;
 
-use Cake\Database\Expression\ComparisonExpression;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Query;
+use Odigos\Cake\Database\Expression\ComparisonExpression;
+use Odigos\Cake\Database\Expression\QueryExpression;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\Query;
 use Closure;
 /**
  * This class is used to generate UPDATE queries for the relational database.

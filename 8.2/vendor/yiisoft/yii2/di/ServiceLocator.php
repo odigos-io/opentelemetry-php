@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\di;
+namespace Odigos\yii\di;
 
 use Closure;
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * ServiceLocator implements a [service locator](https://en.wikipedia.org/wiki/Service_locator_pattern).
  *

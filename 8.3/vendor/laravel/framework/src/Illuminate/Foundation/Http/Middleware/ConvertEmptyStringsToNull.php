@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Http\Middleware;
+namespace Odigos\Illuminate\Foundation\Http\Middleware;
 
 use Closure;
-class ConvertEmptyStringsToNull extends \Illuminate\Foundation\Http\Middleware\TransformsRequest
+class ConvertEmptyStringsToNull extends TransformsRequest
 {
     /**
      * All of the registered skip callbacks.

@@ -14,17 +14,17 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database;
+namespace Odigos\Cake\Database;
 
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\Expression\FunctionExpression;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\Expression\FunctionExpression;
 /**
  * Responsible for compiling a Query object into its SQL representation
  * for SQL Server
  *
  * @internal
  */
-class SqlserverCompiler extends \Cake\Database\QueryCompiler
+class SqlserverCompiler extends QueryCompiler
 {
     /**
      * {@inheritDoc}
@@ -48,7 +48,7 @@ class SqlserverCompiler extends \Cake\Database\QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildWithPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildWithPart(array $parts, Query $query, ValueBinder $binder): string
     {
         $expressions = [];
         foreach ($parts as $cte) {
@@ -68,7 +68,7 @@ class SqlserverCompiler extends \Cake\Database\QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildInsertPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildInsertPart(array $parts, Query $query, ValueBinder $binder): string
     {
         if (!isset($parts[0])) {
             throw new DatabaseException('Could not compile insert query. No table was specified. ' . 'Use `into()` to define a table.');
@@ -85,7 +85,7 @@ class SqlserverCompiler extends \Cake\Database\QueryCompiler
      * @param \Cake\Database\Query $query The query that is being compiled
      * @return string
      */
-    protected function _buildLimitPart(int $limit, \Cake\Database\Query $query): string
+    protected function _buildLimitPart(int $limit, Query $query): string
     {
         if ($query->clause('offset') === null) {
             return '';
@@ -102,7 +102,7 @@ class SqlserverCompiler extends \Cake\Database\QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildHavingPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildHavingPart(array $parts, Query $query, ValueBinder $binder): string
     {
         $selectParts = $query->clause('select');
         foreach ($selectParts as $selectKey => $selectPart) {

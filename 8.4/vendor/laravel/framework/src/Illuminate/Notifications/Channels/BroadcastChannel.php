@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Notifications\Channels;
+namespace Odigos\Illuminate\Notifications\Channels;
 
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Notifications\Events\BroadcastNotificationCreated;
-use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Notification;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Notifications\Events\BroadcastNotificationCreated;
+use Odigos\Illuminate\Notifications\Messages\BroadcastMessage;
+use Odigos\Illuminate\Notifications\Notification;
 use RuntimeException;
 class BroadcastChannel
 {

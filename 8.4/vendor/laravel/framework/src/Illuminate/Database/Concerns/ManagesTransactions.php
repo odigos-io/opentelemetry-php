@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Concerns;
+namespace Odigos\Illuminate\Database\Concerns;
 
 use Closure;
-use Illuminate\Database\DeadlockException;
+use Odigos\Illuminate\Database\DeadlockException;
 use RuntimeException;
 use Throwable;
 /**

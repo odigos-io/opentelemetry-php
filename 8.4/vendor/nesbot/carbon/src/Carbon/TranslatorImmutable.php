@@ -12,8 +12,8 @@ declare (strict_types=1);
 namespace Odigos\Carbon;
 
 use Odigos\Carbon\Exceptions\ImmutableException;
-use Symfony\Component\Config\ConfigCacheFactoryInterface;
-use Symfony\Component\Translation\Formatter\MessageFormatterInterface;
+use Odigos\Symfony\Component\Config\ConfigCacheFactoryInterface;
+use Odigos\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
 class TranslatorImmutable extends Translator
 {
     private bool $constructed = \false;

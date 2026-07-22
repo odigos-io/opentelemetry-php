@@ -14,14 +14,14 @@ declare (strict_types=1);
  * @since         2.4.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Log\Engine;
+namespace Odigos\Cake\Log\Engine;
 
-use Cake\Log\Formatter\DefaultFormatter;
+use Odigos\Cake\Log\Formatter\DefaultFormatter;
 use Stringable;
 /**
  * Syslog stream for Logging. Writes logs to the system logger
  */
-class SyslogLog extends \Cake\Log\Engine\BaseLog
+class SyslogLog extends BaseLog
 {
     /**
      * Default config for this class

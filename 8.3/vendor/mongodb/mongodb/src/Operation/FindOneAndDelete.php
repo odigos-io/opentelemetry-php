@@ -15,22 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnsupportedException;
-use function MongoDB\is_document;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnsupportedException;
+use function Odigos\MongoDB\is_document;
 /**
  * Operation for deleting a document with the findAndModify command.
  *
  * @see \MongoDB\Collection::findOneAndDelete()
  * @see https://mongodb.com/docs/manual/reference/command/findAndModify/
  */
-final class FindOneAndDelete implements \MongoDB\Operation\Explainable
+final class FindOneAndDelete implements Explainable
 {
-    private \MongoDB\Operation\FindAndModify $findAndModify;
+    private FindAndModify $findAndModify;
     /**
      * Constructs a findAndModify command for deleting a document.
      *
@@ -90,7 +90,7 @@ final class FindOneAndDelete implements \MongoDB\Operation\Explainable
             $options['fields'] = $options['projection'];
         }
         unset($options['projection']);
-        $this->findAndModify = new \MongoDB\Operation\FindAndModify($databaseName, $collectionName, ['query' => $filter, 'remove' => \true] + $options);
+        $this->findAndModify = new FindAndModify($databaseName, $collectionName, ['query' => $filter, 'remove' => \true] + $options);
     }
     /**
      * Execute the operation.

@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\ModelsContract;
-use OpenAI\Responses\Models\DeleteResponse;
-use OpenAI\Responses\Models\ListResponse;
-use OpenAI\Responses\Models\RetrieveResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\ModelsContract;
+use Odigos\OpenAI\Responses\Models\DeleteResponse;
+use Odigos\OpenAI\Responses\Models\ListResponse;
+use Odigos\OpenAI\Responses\Models\RetrieveResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 final class Models implements ModelsContract
 {
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Transportable;
     /**
      * Lists the currently available models, and provides basic information about each one such as the owner and availability.
      *

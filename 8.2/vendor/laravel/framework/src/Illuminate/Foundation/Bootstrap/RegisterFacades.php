@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Foundation\Bootstrap;
+namespace Odigos\Illuminate\Foundation\Bootstrap;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Foundation\AliasLoader;
-use Illuminate\Foundation\PackageManifest;
-use Illuminate\Support\Facades\Facade;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Foundation\AliasLoader;
+use Odigos\Illuminate\Foundation\PackageManifest;
+use Odigos\Illuminate\Support\Facades\Facade;
 class RegisterFacades
 {
     /**

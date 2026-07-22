@@ -13,7 +13,7 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Cookie;
+namespace Odigos\Cake\Http\Cookie;
 
 use DateTimeInterface;
 /**
@@ -198,14 +198,14 @@ interface CookieInterface
      *
      * @return \Cake\Http\Cookie\SameSiteEnum|null
      */
-    public function getSameSite(): ?\Cake\Http\Cookie\SameSiteEnum;
+    public function getSameSite(): ?SameSiteEnum;
     /**
      * Create a cookie with an updated SameSite option.
      *
      * @param \Cake\Http\Cookie\SameSiteEnum|string|null $sameSite Value for to set for Samesite option.
      * @return static
      */
-    public function withSameSite(\Cake\Http\Cookie\SameSiteEnum|string|null $sameSite): static;
+    public function withSameSite(SameSiteEnum|string|null $sameSite): static;
     /**
      * Get cookie options
      *

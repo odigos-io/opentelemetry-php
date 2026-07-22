@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Queue\Middleware;
+namespace Odigos\Illuminate\Queue\Middleware;
 
-use Illuminate\Cache\RateLimiter;
-use Illuminate\Container\Container;
+use Odigos\Illuminate\Cache\RateLimiter;
+use Odigos\Illuminate\Container\Container;
 use Throwable;
 class ThrottlesExceptions
 {

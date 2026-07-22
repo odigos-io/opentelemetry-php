@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\mssql;
+namespace Odigos\yii\db\mssql;
 
-use yii\db\ColumnSchemaBuilder as AbstractColumnSchemaBuilder;
-use yii\db\Expression;
+use Odigos\yii\db\ColumnSchemaBuilder as AbstractColumnSchemaBuilder;
+use Odigos\yii\db\Expression;
 /**
  * ColumnSchemaBuilder is the schema builder for MSSQL databases.
  *

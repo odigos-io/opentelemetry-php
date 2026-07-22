@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Process;
+namespace Odigos\Illuminate\Process;
 
-use Illuminate\Contracts\Process\ProcessResult as ProcessResultContract;
-use Illuminate\Process\Exceptions\ProcessFailedException;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Process\ProcessResult as ProcessResultContract;
+use Odigos\Illuminate\Process\Exceptions\ProcessFailedException;
+use Odigos\Illuminate\Support\Collection;
 class FakeProcessResult implements ProcessResultContract
 {
     /**
@@ -79,7 +79,7 @@ class FakeProcessResult implements ProcessResultContract
      */
     public function withCommand(string $command)
     {
-        return new \Illuminate\Process\FakeProcessResult($command, $this->exitCode, $this->output, $this->errorOutput);
+        return new FakeProcessResult($command, $this->exitCode, $this->output, $this->errorOutput);
     }
     /**
      * Determine if the process was successful.

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Console\Events;
+namespace Odigos\Illuminate\Console\Events;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 class CommandStarting
 {
     /**

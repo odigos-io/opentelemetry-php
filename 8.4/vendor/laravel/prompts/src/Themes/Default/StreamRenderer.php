@@ -1,9 +1,9 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\Stream;
-class StreamRenderer extends \Laravel\Prompts\Themes\Default\Renderer
+use Odigos\Laravel\Prompts\Stream;
+class StreamRenderer extends Renderer
 {
     /**
      * Render the stream.

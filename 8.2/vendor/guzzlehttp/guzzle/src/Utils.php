@@ -1,14 +1,14 @@
 <?php
 
-namespace GuzzleHttp;
+namespace Odigos\GuzzleHttp;
 
-use GuzzleHttp\Exception\InvalidArgumentException;
-use GuzzleHttp\Handler\CurlHandler;
-use GuzzleHttp\Handler\CurlMultiHandler;
-use GuzzleHttp\Handler\CurlShareHandleState;
-use GuzzleHttp\Handler\CurlVersion;
-use GuzzleHttp\Handler\Proxy;
-use GuzzleHttp\Handler\StreamHandler;
+use Odigos\GuzzleHttp\Exception\InvalidArgumentException;
+use Odigos\GuzzleHttp\Handler\CurlHandler;
+use Odigos\GuzzleHttp\Handler\CurlMultiHandler;
+use Odigos\GuzzleHttp\Handler\CurlShareHandleState;
+use Odigos\GuzzleHttp\Handler\CurlVersion;
+use Odigos\GuzzleHttp\Handler\Proxy;
+use Odigos\GuzzleHttp\Handler\StreamHandler;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 final class Utils
@@ -70,7 +70,7 @@ final class Utils
         if (\defined('STDOUT')) {
             return \STDOUT;
         }
-        return \GuzzleHttp\Psr7\Utils::tryFopen('php://output', 'w');
+        return Psr7\Utils::tryFopen('php://output', 'w');
     }
     /**
      * Chooses and creates a default handler to use based on the environment.
@@ -87,8 +87,8 @@ final class Utils
     {
         $handler = null;
         $sharingMode = CurlShareHandleState::normalizeMode($handlerOptions['transport_sharing'] ?? null, 'transport_sharing');
-        $sharingRequested = $sharingMode !== \GuzzleHttp\TransportSharing::NONE;
-        $sharingRequired = $sharingMode === \GuzzleHttp\TransportSharing::HANDLER_REQUIRE;
+        $sharingRequested = $sharingMode !== TransportSharing::NONE;
+        $sharingRequired = $sharingMode === TransportSharing::HANDLER_REQUIRE;
         $curlHandlerOptions = [];
         $curlSupported = \defined('CURLOPT_CUSTOMREQUEST') && CurlVersion::supportsCurlHandler() && (\function_exists('curl_multi_exec') || \function_exists('curl_exec'));
         if ($sharingRequired && !$curlSupported) {
@@ -122,7 +122,7 @@ final class Utils
      */
     public static function defaultUserAgent(): string
     {
-        return sprintf('GuzzleHttp/%d', \GuzzleHttp\ClientInterface::MAJOR_VERSION);
+        return sprintf('GuzzleHttp/%d', ClientInterface::MAJOR_VERSION);
     }
     /**
      * Returns the default cacert bundle for the current system.

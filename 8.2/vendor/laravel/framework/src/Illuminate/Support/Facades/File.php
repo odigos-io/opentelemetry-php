@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static bool exists(string $path)
@@ -59,7 +59,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Filesystem\Filesystem
  */
-class File extends \Illuminate\Support\Facades\Facade
+class File extends Facade
 {
     /**
      * Get the registered name of the component.

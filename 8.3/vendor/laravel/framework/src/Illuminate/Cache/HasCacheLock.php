@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
 trait HasCacheLock
 {
@@ -14,7 +14,7 @@ trait HasCacheLock
      */
     public function lock($name, $seconds = 0, $owner = null)
     {
-        return new \Illuminate\Cache\CacheLock($this, $name, $seconds, $owner);
+        return new CacheLock($this, $name, $seconds, $owner);
     }
     /**
      * Restore a lock instance using the owner identifier.

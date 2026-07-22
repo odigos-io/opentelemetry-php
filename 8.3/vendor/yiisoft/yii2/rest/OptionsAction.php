@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rest;
+namespace Odigos\yii\rest;
 
-use yii\base\Action as BaseAction;
+use Odigos\yii\base\Action as BaseAction;
 use Odigos\Yii;
 /**
  * OptionsAction responds to the OPTIONS request by sending back an `Allow` header.

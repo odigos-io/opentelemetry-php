@@ -1,13 +1,13 @@
 <?php
 
-namespace GuzzleHttp\Exception;
+namespace Odigos\GuzzleHttp\Exception;
 
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 /**
  * Exception thrown when a connection cannot be established.
  */
-class ConnectException extends \GuzzleHttp\Exception\TransferException implements NetworkExceptionInterface
+class ConnectException extends TransferException implements NetworkExceptionInterface
 {
     /**
      * @var RequestInterface

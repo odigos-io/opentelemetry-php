@@ -1,11 +1,11 @@
 <?php
 
-namespace GuzzleHttp\Cookie;
+namespace Odigos\GuzzleHttp\Cookie;
 
 /**
  * Persists cookies in the client session
  */
-class SessionCookieJar extends \GuzzleHttp\Cookie\CookieJar
+class SessionCookieJar extends CookieJar
 {
     /**
      * @var string session key
@@ -45,7 +45,7 @@ class SessionCookieJar extends \GuzzleHttp\Cookie\CookieJar
         $json = [];
         /** @var SetCookie $cookie */
         foreach ($this as $cookie) {
-            if (\GuzzleHttp\Cookie\CookieJar::shouldPersist($cookie, $this->storeSessionCookies)) {
+            if (CookieJar::shouldPersist($cookie, $this->storeSessionCookies)) {
                 $json[] = $cookie->toArray();
             }
         }
@@ -73,7 +73,7 @@ class SessionCookieJar extends \GuzzleHttp\Cookie\CookieJar
                 if (!\is_array($cookie)) {
                     throw new \RuntimeException('Invalid cookie data');
                 }
-                $this->setCookie(new \GuzzleHttp\Cookie\SetCookie($cookie));
+                $this->setCookie(new SetCookie($cookie));
             }
         } elseif (\is_scalar($data) && \strlen((string) $data)) {
             throw new \RuntimeException('Invalid cookie data');

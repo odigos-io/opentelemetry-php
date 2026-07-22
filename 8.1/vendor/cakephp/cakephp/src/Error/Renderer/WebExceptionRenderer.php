@@ -14,36 +14,36 @@ declare (strict_types=1);
  * @since         4.4.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error\Renderer;
+namespace Odigos\Cake\Error\Renderer;
 
-use Cake\Controller\Controller;
-use Cake\Controller\ControllerFactory;
-use Cake\Core\App;
-use Cake\Core\Configure;
-use Cake\Core\Container;
-use Cake\Core\Exception\CakeException;
-use Cake\Core\Exception\HttpErrorCodeInterface;
-use Cake\Core\Exception\MissingPluginException;
-use Cake\Error\Debugger;
-use Cake\Error\ExceptionRendererInterface;
-use Cake\Http\Exception\HttpException;
-use Cake\Http\Response;
-use Cake\Http\ResponseEmitter;
-use Cake\Http\ServerRequest;
-use Cake\Http\ServerRequestFactory;
-use Cake\Log\Log;
-use Cake\Routing\Router;
-use Cake\Utility\Inflector;
-use Cake\View\Exception\MissingLayoutException;
-use Cake\View\Exception\MissingTemplateException;
+use Odigos\Cake\Controller\Controller;
+use Odigos\Cake\Controller\ControllerFactory;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Container;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\HttpErrorCodeInterface;
+use Odigos\Cake\Core\Exception\MissingPluginException;
+use Odigos\Cake\Error\Debugger;
+use Odigos\Cake\Error\ExceptionRendererInterface;
+use Odigos\Cake\Http\Exception\HttpException;
+use Odigos\Cake\Http\Response;
+use Odigos\Cake\Http\ResponseEmitter;
+use Odigos\Cake\Http\ServerRequest;
+use Odigos\Cake\Http\ServerRequestFactory;
+use Odigos\Cake\Log\Log;
+use Odigos\Cake\Routing\Router;
+use Odigos\Cake\Utility\Inflector;
+use Odigos\Cake\View\Exception\MissingLayoutException;
+use Odigos\Cake\View\Exception\MissingTemplateException;
 use PDOException;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionMethod;
 use Throwable;
-use function Cake\Core\deprecationWarning;
-use function Cake\Core\h;
-use function Cake\Core\namespaceSplit;
-use function Cake\I18n\__d;
+use function Odigos\Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\h;
+use function Odigos\Cake\Core\namespaceSplit;
+use function Odigos\Cake\I18n\__d;
 /**
  * Web Exception Renderer.
  *

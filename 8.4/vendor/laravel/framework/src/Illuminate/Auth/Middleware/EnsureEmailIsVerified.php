@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Auth\Middleware;
+namespace Odigos\Illuminate\Auth\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
+use Odigos\Illuminate\Contracts\Auth\MustVerifyEmail;
+use Odigos\Illuminate\Support\Facades\Redirect;
+use Odigos\Illuminate\Support\Facades\URL;
 class EnsureEmailIsVerified
 {
     /**

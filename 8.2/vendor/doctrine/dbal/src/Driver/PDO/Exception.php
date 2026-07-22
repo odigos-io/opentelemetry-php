@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PDO;
+namespace Odigos\Doctrine\DBAL\Driver\PDO;
 
-use Doctrine\DBAL\Driver\AbstractException;
+use Odigos\Doctrine\DBAL\Driver\AbstractException;
 use PDOException;
 /** @internal */
 final class Exception extends AbstractException

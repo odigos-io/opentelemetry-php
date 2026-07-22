@@ -1,13 +1,13 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\VectorStoresFilesContract;
-use OpenAI\Resources\VectorStoresFiles;
-use OpenAI\Responses\VectorStores\Files\VectorStoreFileDeleteResponse;
-use OpenAI\Responses\VectorStores\Files\VectorStoreFileListResponse;
-use OpenAI\Responses\VectorStores\Files\VectorStoreFileResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\VectorStoresFilesContract;
+use Odigos\OpenAI\Resources\VectorStoresFiles;
+use Odigos\OpenAI\Responses\VectorStores\Files\VectorStoreFileDeleteResponse;
+use Odigos\OpenAI\Responses\VectorStores\Files\VectorStoreFileListResponse;
+use Odigos\OpenAI\Responses\VectorStores\Files\VectorStoreFileResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class VectorStoresFilesTestResource implements VectorStoresFilesContract
 {
     use Testable;

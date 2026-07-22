@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Mail\Events;
+namespace Odigos\Illuminate\Mail\Events;
 
-use Symfony\Component\Mime\Email;
+use Odigos\Symfony\Component\Mime\Email;
 class MessageSending
 {
     /**

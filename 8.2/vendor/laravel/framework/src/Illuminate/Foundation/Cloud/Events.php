@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation\Cloud;
+namespace Odigos\Illuminate\Foundation\Cloud;
 
-use Illuminate\Foundation\Cloud;
+use Odigos\Illuminate\Foundation\Cloud;
 use RuntimeException;
 use Throwable;
 class Events

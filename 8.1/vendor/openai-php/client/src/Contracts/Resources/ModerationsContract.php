@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Moderations\CreateResponse;
+use Odigos\OpenAI\Responses\Moderations\CreateResponse;
 interface ModerationsContract
 {
     /**

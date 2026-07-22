@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace GuzzleHttp\Promise;
+namespace Odigos\GuzzleHttp\Promise;
 
 use Generator;
 use Throwable;
@@ -41,7 +41,7 @@ use Throwable;
  *
  * @see https://github.com/petkaantonov/bluebird/blob/master/API.md#generators inspiration
  */
-final class Coroutine implements \GuzzleHttp\Promise\PromiseInterface
+final class Coroutine implements PromiseInterface
 {
     /**
      * @var PromiseInterface|null
@@ -58,7 +58,7 @@ final class Coroutine implements \GuzzleHttp\Promise\PromiseInterface
     public function __construct(callable $generatorFn)
     {
         $this->generator = $generatorFn();
-        $this->result = new \GuzzleHttp\Promise\Promise(function (): void {
+        $this->result = new Promise(function (): void {
             while (isset($this->currentPromise)) {
                 $this->currentPromise->wait();
             }
@@ -76,11 +76,11 @@ final class Coroutine implements \GuzzleHttp\Promise\PromiseInterface
     {
         return new self($generatorFn);
     }
-    public function then(?callable $onFulfilled = null, ?callable $onRejected = null): \GuzzleHttp\Promise\PromiseInterface
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null): PromiseInterface
     {
         return $this->result->then($onFulfilled, $onRejected);
     }
-    public function otherwise(callable $onRejected): \GuzzleHttp\Promise\PromiseInterface
+    public function otherwise(callable $onRejected): PromiseInterface
     {
         return $this->result->otherwise($onRejected);
     }
@@ -109,7 +109,7 @@ final class Coroutine implements \GuzzleHttp\Promise\PromiseInterface
     }
     private function nextCoroutine($yielded): void
     {
-        $this->currentPromise = \GuzzleHttp\Promise\Create::promiseFor($yielded)->then([$this, '_handleSuccess'], [$this, '_handleFailure']);
+        $this->currentPromise = Create::promiseFor($yielded)->then([$this, '_handleSuccess'], [$this, '_handleFailure']);
     }
     /**
      * @internal
@@ -135,7 +135,7 @@ final class Coroutine implements \GuzzleHttp\Promise\PromiseInterface
     {
         unset($this->currentPromise);
         try {
-            $nextYield = $this->generator->throw(\GuzzleHttp\Promise\Create::exceptionFor($reason));
+            $nextYield = $this->generator->throw(Create::exceptionFor($reason));
             // The throw was caught, so keep iterating on the coroutine
             $this->nextCoroutine($nextYield);
         } catch (Throwable $throwable) {

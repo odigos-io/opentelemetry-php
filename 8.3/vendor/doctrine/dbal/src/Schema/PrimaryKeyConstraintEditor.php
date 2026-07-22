@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Schema\Exception\InvalidPrimaryKeyConstraintDefinition;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidPrimaryKeyConstraintDefinition;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
 use function array_map;
 use function array_values;
 use function count;
@@ -71,11 +71,11 @@ final class PrimaryKeyConstraintEditor
         $this->isClustered = $isClustered;
         return $this;
     }
-    public function create(): \Doctrine\DBAL\Schema\PrimaryKeyConstraint
+    public function create(): PrimaryKeyConstraint
     {
         if (count($this->columnNames) < 1) {
             throw InvalidPrimaryKeyConstraintDefinition::columnNamesNotSet();
         }
-        return new \Doctrine\DBAL\Schema\PrimaryKeyConstraint($this->name, $this->columnNames, $this->isClustered);
+        return new PrimaryKeyConstraint($this->name, $this->columnNames, $this->isClustered);
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace GuzzleHttp;
+namespace Odigos\GuzzleHttp;
 
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Promise\PromiseInterface;
+use Odigos\GuzzleHttp\Exception\GuzzleException;
+use Odigos\GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;

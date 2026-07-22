@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Reflector;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Reflector;
+use Odigos\Illuminate\Support\Str;
 use LogicException;
 use UnexpectedValueException;
 class RouteAction

@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\SQLServer;
+namespace Odigos\Doctrine\DBAL\Platforms\SQLServer;
 
-use Doctrine\DBAL\Platforms\SQLServerPlatform;
-use Doctrine\DBAL\Schema\Comparator as BaseComparator;
-use Doctrine\DBAL\Schema\ComparatorConfig;
-use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Schema\TableDiff;
+use Odigos\Doctrine\DBAL\Platforms\SQLServerPlatform;
+use Odigos\Doctrine\DBAL\Schema\Comparator as BaseComparator;
+use Odigos\Doctrine\DBAL\Schema\ComparatorConfig;
+use Odigos\Doctrine\DBAL\Schema\Table;
+use Odigos\Doctrine\DBAL\Schema\TableDiff;
 /**
  * Compares schemas in the context of SQL Server platform.
  *

@@ -14,19 +14,19 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
-use Cake\Core\App;
-use Cake\Event\EventManagerInterface;
-use Cake\Http\Response;
-use Cake\Http\ServerRequest;
-use Cake\View\Exception\MissingViewException;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Event\EventManagerInterface;
+use Odigos\Cake\Http\Response;
+use Odigos\Cake\Http\ServerRequest;
+use Odigos\Cake\View\Exception\MissingViewException;
 use Closure;
 use Exception;
 use InvalidArgumentException;
 use JsonSerializable;
 use PDO;
-use function Cake\Core\pluginSplit;
+use function Odigos\Cake\Core\pluginSplit;
 /**
  * Provides an API for iteratively building a view up.
  *
@@ -547,9 +547,9 @@ class ViewBuilder implements JsonSerializable
      * @return \Cake\View\View
      * @throws \Cake\View\Exception\MissingViewException
      */
-    public function build(?ServerRequest $request = null, ?Response $response = null, ?EventManagerInterface $events = null): \Cake\View\View
+    public function build(?ServerRequest $request = null, ?Response $response = null, ?EventManagerInterface $events = null): View
     {
-        $className = $this->_className ?? App::className('App', 'View', 'View') ?? \Cake\View\View::class;
+        $className = $this->_className ?? App::className('App', 'View', 'View') ?? View::class;
         if ($className === 'View') {
             $className = App::className($className, 'View');
         } else {

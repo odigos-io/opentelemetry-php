@@ -14,18 +14,18 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Cache;
+namespace Odigos\Cake\Cache;
 
-use Cake\Cache\Exception\InvalidArgumentException;
-use Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Cache\Exception\InvalidArgumentException;
+use Odigos\Cake\Core\InstanceConfigTrait;
 use DateInterval;
 use DateTime;
 use Psr\SimpleCache\CacheInterface;
-use function Cake\Core\triggerWarning;
+use function Odigos\Cake\Core\triggerWarning;
 /**
  * Storage engine for CakePHP caching
  */
-abstract class CacheEngine implements CacheInterface, \Cake\Cache\CacheEngineInterface
+abstract class CacheEngine implements CacheInterface, CacheEngineInterface
 {
     use InstanceConfigTrait;
     /**

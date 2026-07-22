@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use MongoDB\BSON\Binary;
 use MongoDB\BSON\PackedArray;
@@ -23,14 +23,14 @@ use MongoDB\BSON\Serializable;
 use MongoDB\Driver\ClientEncryption;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnsupportedException;
 use function array_key_exists;
 use function is_array;
 use function is_object;
-use function MongoDB\document_to_array;
-use function MongoDB\is_document;
-use function MongoDB\server_supports_feature;
+use function Odigos\MongoDB\document_to_array;
+use function Odigos\MongoDB\is_document;
+use function Odigos\MongoDB\server_supports_feature;
 /**
  * Create an encrypted collection.
  *
@@ -49,10 +49,10 @@ use function MongoDB\server_supports_feature;
 final class CreateEncryptedCollection
 {
     private const WIRE_VERSION_FOR_QUERYABLE_ENCRYPTION_V2 = 21;
-    private \MongoDB\Operation\CreateCollection $createCollection;
+    private CreateCollection $createCollection;
     /** @var list<CreateCollection> */
     private array $createMetadataCollections;
-    private \MongoDB\Operation\CreateIndexes $createSafeContentIndex;
+    private CreateIndexes $createSafeContentIndex;
     /**
      * @see CreateCollection::__construct() for supported options
      * @param string $databaseName   Database name
@@ -68,12 +68,12 @@ final class CreateEncryptedCollection
         if (!is_document($this->options['encryptedFields'])) {
             throw InvalidArgumentException::expectedDocumentType('"encryptedFields" option', $this->options['encryptedFields']);
         }
-        $this->createCollection = new \MongoDB\Operation\CreateCollection($databaseName, $collectionName, $this->options);
+        $this->createCollection = new CreateCollection($databaseName, $collectionName, $this->options);
         /** @psalm-var array{ecocCollection?: ?string, escCollection?: ?string} */
         $encryptedFields = document_to_array($this->options['encryptedFields']);
         $enxcolOptions = ['clusteredIndex' => ['key' => ['_id' => 1], 'unique' => \true]];
-        $this->createMetadataCollections = [new \MongoDB\Operation\CreateCollection($databaseName, $encryptedFields['escCollection'] ?? 'enxcol_.' . $collectionName . '.esc', $enxcolOptions), new \MongoDB\Operation\CreateCollection($databaseName, $encryptedFields['ecocCollection'] ?? 'enxcol_.' . $collectionName . '.ecoc', $enxcolOptions)];
-        $this->createSafeContentIndex = new \MongoDB\Operation\CreateIndexes($databaseName, $collectionName, [['key' => ['__safeContent__' => 1]]]);
+        $this->createMetadataCollections = [new CreateCollection($databaseName, $encryptedFields['escCollection'] ?? 'enxcol_.' . $collectionName . '.esc', $enxcolOptions), new CreateCollection($databaseName, $encryptedFields['ecocCollection'] ?? 'enxcol_.' . $collectionName . '.ecoc', $enxcolOptions)];
+        $this->createSafeContentIndex = new CreateIndexes($databaseName, $collectionName, [['key' => ['__safeContent__' => 1]]]);
     }
     /**
      * Create data keys for any encrypted fields where "keyId" is null.
@@ -120,7 +120,7 @@ final class CreateEncryptedCollection
             }
         }
         $this->options['encryptedFields'] = $encryptedFields;
-        $this->createCollection = new \MongoDB\Operation\CreateCollection($this->databaseName, $this->collectionName, $this->options);
+        $this->createCollection = new CreateCollection($this->databaseName, $this->collectionName, $this->options);
         return $encryptedFields;
     }
     /**

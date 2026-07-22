@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Http\Resources;
+namespace Odigos\Illuminate\Http\Resources;
 
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 use JsonSerializable;
 class MergeValue
 {

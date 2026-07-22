@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Auth\Events;
+namespace Odigos\Illuminate\Auth\Events;
 
-use Illuminate\Http\Request;
+use Odigos\Illuminate\Http\Request;
 class Lockout
 {
     /**

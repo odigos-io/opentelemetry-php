@@ -4,13 +4,13 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 use MongoDB\BSON\PackedArray;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Model\BSONArray;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Model\BSONArray;
 use function array_is_list;
 /**
  * Returns true if the input sets have the same distinct elements. Accepts two or more argument expressions.
@@ -18,7 +18,7 @@ use function array_is_list;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/setEquals/
  * @internal
  */
-final class SetEqualsOperator implements \MongoDB\Builder\Expression\ResolvesToBool, OperatorInterface
+final class SetEqualsOperator implements ResolvesToBool, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$setEquals';
@@ -29,7 +29,7 @@ final class SetEqualsOperator implements \MongoDB\Builder\Expression\ResolvesToB
      * @param BSONArray|PackedArray|ResolvesToArray|array|string ...$expression
      * @no-named-arguments
      */
-    public function __construct(PackedArray|\MongoDB\Builder\Expression\ResolvesToArray|BSONArray|array|string ...$expression)
+    public function __construct(PackedArray|ResolvesToArray|BSONArray|array|string ...$expression)
     {
         if (\count($expression) < 1) {
             throw new InvalidArgumentException(\sprintf('Expected at least %d values for $expression, got %d.', 1, \count($expression)));

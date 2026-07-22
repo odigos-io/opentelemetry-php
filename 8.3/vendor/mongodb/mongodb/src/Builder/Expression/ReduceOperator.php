@@ -4,16 +4,16 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 use DateTimeInterface;
 use MongoDB\BSON\PackedArray;
 use MongoDB\BSON\Type;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\ExpressionInterface;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Model\BSONArray;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\ExpressionInterface;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Model\BSONArray;
 use stdClass;
 use function array_is_list;
 use function is_array;
@@ -25,7 +25,7 @@ use function str_starts_with;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/reduce/
  * @internal
  */
-final class ReduceOperator implements \MongoDB\Builder\Expression\ResolvesToAny, OperatorInterface
+final class ReduceOperator implements ResolvesToAny, OperatorInterface
 {
     public const ENCODE = Encode::Object;
     public const NAME = '$reduce';
@@ -35,7 +35,7 @@ final class ReduceOperator implements \MongoDB\Builder\Expression\ResolvesToAny,
      * If the argument resolves to a value of null or refers to a missing field, $reduce returns null.
      * If the argument does not resolve to an array or null nor refers to a missing field, $reduce returns an error.
      */
-    public readonly PackedArray|\MongoDB\Builder\Expression\ResolvesToArray|BSONArray|array|string $input;
+    public readonly PackedArray|ResolvesToArray|BSONArray|array|string $input;
     /** @var DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string $initialValue The initial cumulative value set before in is applied to the first element of the input array. */
     public readonly DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $initialValue;
     /**
@@ -55,7 +55,7 @@ final class ReduceOperator implements \MongoDB\Builder\Expression\ResolvesToAny,
      * - value is the variable that represents the cumulative value of the expression.
      * - this is the variable that refers to the element being processed.
      */
-    public function __construct(PackedArray|\MongoDB\Builder\Expression\ResolvesToArray|BSONArray|array|string $input, DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $initialValue, DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $in)
+    public function __construct(PackedArray|ResolvesToArray|BSONArray|array|string $input, DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $initialValue, DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $in)
     {
         if (is_string($input) && !str_starts_with($input, '$')) {
             throw new InvalidArgumentException('Argument $input can be an expression, field paths and variable names must be prefixed by "$" or "$$".');

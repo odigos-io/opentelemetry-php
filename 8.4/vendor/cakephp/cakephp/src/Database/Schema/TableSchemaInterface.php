@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Schema;
+namespace Odigos\Cake\Database\Schema;
 
-use Cake\Datasource\SchemaInterface;
+use Odigos\Cake\Datasource\SchemaInterface;
 /**
  * An interface used by database TableSchema objects.
  *

@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Database\Console;
+namespace Odigos\Illuminate\Database\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\ConfigurationUrlParser;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Support\ConfigurationUrlParser;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Process\Exception\ProcessFailedException;
+use Odigos\Symfony\Component\Process\Process;
 use UnexpectedValueException;
 #[AsCommand(name: 'db')]
 class DbCommand extends Command

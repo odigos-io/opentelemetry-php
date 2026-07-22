@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http\Client;
+namespace Odigos\Illuminate\Http\Client;
 
 use Closure;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use OutOfBoundsException;
 class ResponseSequence
 {
@@ -45,7 +45,7 @@ class ResponseSequence
      */
     public function push($body = null, int $status = 200, array $headers = [])
     {
-        return $this->pushResponse(\Illuminate\Http\Client\Factory::response($body, $status, $headers));
+        return $this->pushResponse(Factory::response($body, $status, $headers));
     }
     /**
      * Push a response with the given status code to the sequence.
@@ -56,7 +56,7 @@ class ResponseSequence
      */
     public function pushStatus(int $status, array $headers = [])
     {
-        return $this->pushResponse(\Illuminate\Http\Client\Factory::response('', $status, $headers));
+        return $this->pushResponse(Factory::response('', $status, $headers));
     }
     /**
      * Push a response with the contents of a file as the body to the sequence.
@@ -69,7 +69,7 @@ class ResponseSequence
     public function pushFile(string $filePath, int $status = 200, array $headers = [])
     {
         $string = file_get_contents($filePath);
-        return $this->pushResponse(\Illuminate\Http\Client\Factory::response($string, $status, $headers));
+        return $this->pushResponse(Factory::response($string, $status, $headers));
     }
     /**
      * Push a connection exception to the sequence.
@@ -79,7 +79,7 @@ class ResponseSequence
      */
     public function pushFailedConnection($message = null)
     {
-        return $this->pushResponse(\Illuminate\Http\Client\Factory::failedConnection($message));
+        return $this->pushResponse(Factory::failedConnection($message));
     }
     /**
      * Push a response to the sequence.
@@ -111,7 +111,7 @@ class ResponseSequence
      */
     public function dontFailWhenEmpty()
     {
-        return $this->whenEmpty(\Illuminate\Http\Client\Factory::response());
+        return $this->whenEmpty(Factory::response());
     }
     /**
      * Indicate that this sequence has depleted all of its responses.
@@ -136,7 +136,7 @@ class ResponseSequence
             throw new OutOfBoundsException('A request was made, but the response sequence is empty.');
         }
         if (!$this->failWhenEmpty && $this->isEmpty()) {
-            return value($this->emptyResponse ?? \Illuminate\Http\Client\Factory::response());
+            return value($this->emptyResponse ?? Factory::response());
         }
         $response = array_shift($this->responses);
         return $response instanceof Closure ? $response($request) : $response;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Console\Events;
+namespace Odigos\Illuminate\Console\Events;
 
-use Illuminate\Console\Application;
+use Odigos\Illuminate\Console\Application;
 class ArtisanStarting
 {
     /**

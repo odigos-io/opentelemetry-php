@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Pipeline;
+namespace Odigos\Illuminate\Pipeline;
 
 use Closure;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Pipeline\Pipeline as PipelineContract;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Pipeline\Pipeline as PipelineContract;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use RuntimeException;
 use Throwable;
 class Pipeline implements PipelineContract

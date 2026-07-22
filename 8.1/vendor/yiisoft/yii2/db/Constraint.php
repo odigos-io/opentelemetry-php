@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
-use yii\base\BaseObject;
+use Odigos\yii\base\BaseObject;
 /**
  * Constraint represents the metadata of a table constraint.
  *

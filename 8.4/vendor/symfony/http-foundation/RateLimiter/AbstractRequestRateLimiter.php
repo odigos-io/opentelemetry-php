@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\RateLimiter;
+namespace Odigos\Symfony\Component\HttpFoundation\RateLimiter;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\RateLimiter\LimiterInterface;
-use Symfony\Component\RateLimiter\Policy\NoLimiter;
-use Symfony\Component\RateLimiter\RateLimit;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\RateLimiter\LimiterInterface;
+use Odigos\Symfony\Component\RateLimiter\Policy\NoLimiter;
+use Odigos\Symfony\Component\RateLimiter\RateLimit;
 /**
  * An implementation of PeekableRequestRateLimiterInterface that
  * fits most use-cases.
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-abstract class AbstractRequestRateLimiter implements \Symfony\Component\HttpFoundation\RateLimiter\PeekableRequestRateLimiterInterface
+abstract class AbstractRequestRateLimiter implements PeekableRequestRateLimiterInterface
 {
     public function consume(Request $request): RateLimit
     {

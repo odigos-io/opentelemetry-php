@@ -1,10 +1,10 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
-use Illuminate\Support\Collection;
-use Laravel\Prompts\Exceptions\FormRevertedException;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Laravel\Prompts\Exceptions\FormRevertedException;
 class FormBuilder
 {
     /**
@@ -24,7 +24,7 @@ class FormBuilder
      */
     public function add(Closure $step, ?string $name = null, bool $ignoreWhenReverting = \false): self
     {
-        $this->steps[] = new \Laravel\Prompts\FormStep($step, \true, $name, $ignoreWhenReverting);
+        $this->steps[] = new FormStep($step, \true, $name, $ignoreWhenReverting);
         return $this;
     }
     /**
@@ -32,7 +32,7 @@ class FormBuilder
      */
     public function addIf(Closure|bool $condition, Closure $step, ?string $name = null, bool $ignoreWhenReverting = \false): self
     {
-        $this->steps[] = new \Laravel\Prompts\FormStep($step, $condition, $name, $ignoreWhenReverting);
+        $this->steps[] = new FormStep($step, $condition, $name, $ignoreWhenReverting);
         return $this;
     }
     /**
@@ -51,9 +51,9 @@ class FormBuilder
                 continue;
             }
             $wasReverted = \false;
-            $index > 0 ? \Laravel\Prompts\Prompt::revertUsing(function () use (&$wasReverted) {
+            $index > 0 ? Prompt::revertUsing(function () use (&$wasReverted) {
                 $wasReverted = \true;
-            }) : \Laravel\Prompts\Prompt::preventReverting();
+            }) : Prompt::preventReverting();
             try {
                 $this->responses[$step->name ?? $index] = $step->run($this->responses, $this->responses[$step->name ?? $index] ?? null);
             } catch (FormRevertedException) {
@@ -61,7 +61,7 @@ class FormBuilder
             }
             $wasReverted ? $index-- : $index++;
         }
-        \Laravel\Prompts\Prompt::preventReverting();
+        Prompt::preventReverting();
         return $this->responses;
     }
     /**

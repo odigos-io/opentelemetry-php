@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Contracts;
+namespace Odigos\OpenAI\Contracts;
 
 /**
  * @internal

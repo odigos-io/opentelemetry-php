@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\captcha;
+namespace Odigos\yii\captcha;
 
-use yii\web\AssetBundle;
+use Odigos\yii\web\AssetBundle;
 /**
  * This asset bundle provides the javascript files needed for the [[Captcha]] widget.
  *
@@ -18,5 +18,5 @@ class CaptchaAsset extends AssetBundle
 {
     public $sourcePath = '@yii/assets';
     public $js = ['yii.captcha.js'];
-    public $depends = ['yii\web\YiiAsset'];
+    public $depends = ['Odigos\yii\web\YiiAsset'];
 }

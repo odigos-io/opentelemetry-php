@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
 /**
  * Markdown provides an ability to transform markdown into HTML.
@@ -28,6 +28,6 @@ namespace yii\helpers;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class Markdown extends \yii\helpers\BaseMarkdown
+class Markdown extends BaseMarkdown
 {
 }

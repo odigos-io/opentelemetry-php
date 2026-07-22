@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
-use yii\base\Event;
+use Odigos\yii\base\Event;
 /**
  * This event class is used for Events triggered by the [[User]] class.
  *

@@ -8,22 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation;
+namespace Odigos\Symfony\Component\HttpFoundation;
 
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
-use Symfony\Component\HttpFoundation\Exception\ConflictingHeadersException;
-use Symfony\Component\HttpFoundation\Exception\JsonException;
-use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
-use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Odigos\Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Odigos\Symfony\Component\HttpFoundation\Exception\ConflictingHeadersException;
+use Odigos\Symfony\Component\HttpFoundation\Exception\JsonException;
+use Odigos\Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
+use Odigos\Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
+use Odigos\Symfony\Component\HttpFoundation\Session\SessionInterface;
 // Help opcache.preload discover always-needed symbols
-class_exists(\Symfony\Component\HttpFoundation\AcceptHeader::class);
-class_exists(\Symfony\Component\HttpFoundation\FileBag::class);
-class_exists(\Symfony\Component\HttpFoundation\HeaderBag::class);
-class_exists(\Symfony\Component\HttpFoundation\HeaderUtils::class);
-class_exists(\Symfony\Component\HttpFoundation\InputBag::class);
-class_exists(\Symfony\Component\HttpFoundation\ParameterBag::class);
-class_exists(\Symfony\Component\HttpFoundation\ServerBag::class);
+class_exists(AcceptHeader::class);
+class_exists(FileBag::class);
+class_exists(HeaderBag::class);
+class_exists(HeaderUtils::class);
+class_exists(InputBag::class);
+class_exists(ParameterBag::class);
+class_exists(ServerBag::class);
 /**
  * Request represents an HTTP request.
  *
@@ -227,13 +227,13 @@ class Request
      */
     public function initialize(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
     {
-        $this->request = new \Symfony\Component\HttpFoundation\InputBag($request);
-        $this->query = new \Symfony\Component\HttpFoundation\InputBag($query);
-        $this->attributes = new \Symfony\Component\HttpFoundation\ParameterBag($attributes);
-        $this->cookies = new \Symfony\Component\HttpFoundation\InputBag($cookies);
-        $this->files = new \Symfony\Component\HttpFoundation\FileBag($files);
-        $this->server = new \Symfony\Component\HttpFoundation\ServerBag($server);
-        $this->headers = new \Symfony\Component\HttpFoundation\HeaderBag($this->server->getHeaders());
+        $this->request = new InputBag($request);
+        $this->query = new InputBag($query);
+        $this->attributes = new ParameterBag($attributes);
+        $this->cookies = new InputBag($cookies);
+        $this->files = new FileBag($files);
+        $this->server = new ServerBag($server);
+        $this->headers = new HeaderBag($this->server->getHeaders());
         $this->content = $content;
         $this->languages = null;
         $this->charsets = null;
@@ -254,7 +254,7 @@ class Request
         $request = self::createRequestFromFactory($_GET, $_POST, [], $_COOKIE, $_FILES, $_SERVER);
         if (str_starts_with($request->headers->get('CONTENT_TYPE', ''), 'application/x-www-form-urlencoded') && \in_array(strtoupper($request->server->get('REQUEST_METHOD', 'GET')), ['PUT', 'DELETE', 'PATCH'])) {
             parse_str($request->getContent(), $data);
-            $request->request = new \Symfony\Component\HttpFoundation\InputBag($data);
+            $request->request = new InputBag($data);
         }
         return $request;
     }
@@ -395,23 +395,23 @@ class Request
     {
         $dup = clone $this;
         if (null !== $query) {
-            $dup->query = new \Symfony\Component\HttpFoundation\InputBag($query);
+            $dup->query = new InputBag($query);
         }
         if (null !== $request) {
-            $dup->request = new \Symfony\Component\HttpFoundation\InputBag($request);
+            $dup->request = new InputBag($request);
         }
         if (null !== $attributes) {
-            $dup->attributes = new \Symfony\Component\HttpFoundation\ParameterBag($attributes);
+            $dup->attributes = new ParameterBag($attributes);
         }
         if (null !== $cookies) {
-            $dup->cookies = new \Symfony\Component\HttpFoundation\InputBag($cookies);
+            $dup->cookies = new InputBag($cookies);
         }
         if (null !== $files) {
-            $dup->files = new \Symfony\Component\HttpFoundation\FileBag($files);
+            $dup->files = new FileBag($files);
         }
         if (null !== $server) {
-            $dup->server = new \Symfony\Component\HttpFoundation\ServerBag($server);
-            $dup->headers = new \Symfony\Component\HttpFoundation\HeaderBag($dup->server->getHeaders());
+            $dup->server = new ServerBag($server);
+            $dup->headers = new HeaderBag($dup->server->getHeaders());
         }
         $dup->languages = null;
         $dup->charsets = null;
@@ -567,7 +567,7 @@ class Request
         if ('' === ($qs ?? '')) {
             return '';
         }
-        $qs = \Symfony\Component\HttpFoundation\HeaderUtils::parseQuery($qs);
+        $qs = HeaderUtils::parseQuery($qs);
         ksort($qs);
         return http_build_query($qs, '', '&', \PHP_QUERY_RFC3986);
     }
@@ -1309,13 +1309,13 @@ class Request
      *
      * @throws JsonException When the body cannot be decoded to an array
      */
-    public function getPayload(): \Symfony\Component\HttpFoundation\InputBag
+    public function getPayload(): InputBag
     {
         if ($this->request->count()) {
             return clone $this->request;
         }
         if ('' === $content = $this->getContent()) {
-            return new \Symfony\Component\HttpFoundation\InputBag([]);
+            return new InputBag([]);
         }
         try {
             $content = json_decode($content, \true, 512, \JSON_BIGINT_AS_STRING | \JSON_THROW_ON_ERROR);
@@ -1325,7 +1325,7 @@ class Request
         if (!\is_array($content)) {
             throw new JsonException(\sprintf('JSON content was expected to decode to an array, "%s" returned.', get_debug_type($content)));
         }
-        return new \Symfony\Component\HttpFoundation\InputBag($content);
+        return new InputBag($content);
     }
     /**
      * Gets the request body decoded as array, typically from a JSON payload.
@@ -1417,7 +1417,7 @@ class Request
         if (null !== $this->languages) {
             return $this->languages;
         }
-        $languages = \Symfony\Component\HttpFoundation\AcceptHeader::fromString($this->headers->get('Accept-Language'))->all();
+        $languages = AcceptHeader::fromString($this->headers->get('Accept-Language'))->all();
         $this->languages = [];
         foreach ($languages as $acceptHeaderItem) {
             $lang = $acceptHeaderItem->getValue();
@@ -1451,7 +1451,7 @@ class Request
      */
     public function getCharsets(): array
     {
-        return $this->charsets ??= array_map('strval', array_keys(\Symfony\Component\HttpFoundation\AcceptHeader::fromString($this->headers->get('Accept-Charset'))->all()));
+        return $this->charsets ??= array_map('strval', array_keys(AcceptHeader::fromString($this->headers->get('Accept-Charset'))->all()));
     }
     /**
      * Gets a list of encodings acceptable by the client browser in preferable order.
@@ -1460,7 +1460,7 @@ class Request
      */
     public function getEncodings(): array
     {
-        return $this->encodings ??= array_map('strval', array_keys(\Symfony\Component\HttpFoundation\AcceptHeader::fromString($this->headers->get('Accept-Encoding'))->all()));
+        return $this->encodings ??= array_map('strval', array_keys(AcceptHeader::fromString($this->headers->get('Accept-Encoding'))->all()));
     }
     /**
      * Gets a list of content types acceptable by the client browser in preferable order.
@@ -1469,7 +1469,7 @@ class Request
      */
     public function getAcceptableContentTypes(): array
     {
-        return $this->acceptableContentTypes ??= array_map('strval', array_keys(\Symfony\Component\HttpFoundation\AcceptHeader::fromString($this->headers->get('Accept'))->all()));
+        return $this->acceptableContentTypes ??= array_map('strval', array_keys(AcceptHeader::fromString($this->headers->get('Accept'))->all()));
     }
     /**
      * Returns true if the request is an XMLHttpRequest.
@@ -1497,7 +1497,7 @@ class Request
             // see https://tools.ietf.org/html/rfc8674#section-3
             return $this->isSafeContentPreferred = \false;
         }
-        return $this->isSafeContentPreferred = \Symfony\Component\HttpFoundation\AcceptHeader::fromString($this->headers->get('Prefer'))->has('safe');
+        return $this->isSafeContentPreferred = AcceptHeader::fromString($this->headers->get('Prefer'))->has('safe');
     }
     /*
      * The following methods are derived from code of the Zend Framework (1.10dev - 2010-01-24)
@@ -1710,7 +1710,7 @@ class Request
      */
     public function isFromTrustedProxy(): bool
     {
-        return self::$trustedProxies && \Symfony\Component\HttpFoundation\IpUtils::checkIp($this->server->get('REMOTE_ADDR', ''), self::$trustedProxies);
+        return self::$trustedProxies && IpUtils::checkIp($this->server->get('REMOTE_ADDR', ''), self::$trustedProxies);
     }
     /**
      * This method is rather heavy because it splits and merges headers, and it's called by many other methods such as
@@ -1733,10 +1733,10 @@ class Request
         }
         if (self::$trustedHeaderSet & self::HEADER_FORWARDED && isset(self::FORWARDED_PARAMS[$type]) && $this->headers->has(self::TRUSTED_HEADERS[self::HEADER_FORWARDED])) {
             $forwarded = $this->headers->get(self::TRUSTED_HEADERS[self::HEADER_FORWARDED]);
-            $parts = \Symfony\Component\HttpFoundation\HeaderUtils::split($forwarded, ',;=');
+            $parts = HeaderUtils::split($forwarded, ',;=');
             $param = self::FORWARDED_PARAMS[$type];
             foreach ($parts as $subParts) {
-                if (null === $v = \Symfony\Component\HttpFoundation\HeaderUtils::combine($subParts)[$param] ?? null) {
+                if (null === $v = HeaderUtils::combine($subParts)[$param] ?? null) {
                     continue;
                 }
                 if (self::HEADER_X_FORWARDED_PORT === $type) {
@@ -1789,7 +1789,7 @@ class Request
                 unset($clientIps[$key]);
                 continue;
             }
-            if (\Symfony\Component\HttpFoundation\IpUtils::checkIp($clientIp, self::$trustedProxies)) {
+            if (IpUtils::checkIp($clientIp, self::$trustedProxies)) {
                 unset($clientIps[$key]);
                 // Fallback to this when the client IP falls into the range of trusted proxies
                 $firstTrustedIp ??= $clientIp;

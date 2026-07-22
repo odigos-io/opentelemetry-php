@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
 /**
  * Represents a GUID/UUID datatype (both are actually synonyms) in the database.
  */
-class GuidType extends \Doctrine\DBAL\Types\StringType
+class GuidType extends StringType
 {
     /**
      * {@inheritDoc}

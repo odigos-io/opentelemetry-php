@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\i18n;
+namespace Odigos\yii\i18n;
 
 use Closure;
 use DateInterval;
@@ -15,14 +15,14 @@ use DateTimeZone;
 use IntlDateFormatter;
 use NumberFormatter;
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidConfigException;
-use yii\helpers\ArrayHelper;
-use yii\helpers\FormatConverter;
-use yii\helpers\Html;
-use yii\helpers\HtmlPurifier;
-use yii\helpers\Url;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\FormatConverter;
+use Odigos\yii\helpers\Html;
+use Odigos\yii\helpers\HtmlPurifier;
+use Odigos\yii\helpers\Url;
 /**
  * Formatter provides a set of commonly used data formatting methods.
  *

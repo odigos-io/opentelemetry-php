@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Matcher;
+namespace Odigos\Symfony\Component\Routing\Matcher;
 
-use Symfony\Component\Routing\Exception\ExceptionInterface;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Odigos\Symfony\Component\Routing\Exception\ExceptionInterface;
+use Odigos\Symfony\Component\Routing\Exception\ResourceNotFoundException;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class RedirectableUrlMatcher extends \Symfony\Component\Routing\Matcher\UrlMatcher implements \Symfony\Component\Routing\Matcher\RedirectableUrlMatcherInterface
+abstract class RedirectableUrlMatcher extends UrlMatcher implements RedirectableUrlMatcherInterface
 {
     public function match(string $pathinfo): array
     {

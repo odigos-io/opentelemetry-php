@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\ArrayParameters\Exception;
+namespace Odigos\Doctrine\DBAL\ArrayParameters\Exception;
 
-use Doctrine\DBAL\ArrayParameters\Exception;
+use Odigos\Doctrine\DBAL\ArrayParameters\Exception;
 use LogicException;
 use function sprintf;
 class MissingNamedParameter extends LogicException implements Exception

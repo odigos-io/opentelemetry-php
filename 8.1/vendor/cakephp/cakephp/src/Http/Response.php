@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
-use Cake\Core\Configure;
-use Cake\Http\Cookie\CookieCollection;
-use Cake\Http\Cookie\CookieInterface;
-use Cake\Http\Exception\NotFoundException;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Http\Cookie\CookieCollection;
+use Odigos\Cake\Http\Cookie\CookieInterface;
+use Odigos\Cake\Http\Exception\NotFoundException;
 use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
@@ -30,8 +30,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use SplFileInfo;
 use Stringable;
-use function Cake\Core\env;
-use function Cake\I18n\__d;
+use function Odigos\Cake\Core\env;
+use function Odigos\Cake\I18n\__d;
 /**
  * Responses contain the response text, status and headers of a HTTP response.
  *
@@ -334,7 +334,7 @@ class Response implements ResponseInterface, Stringable
      */
     public function setTypeMap(string $type, array|string $mimeType): void
     {
-        \Cake\Http\MimeType::setMimeTypes($type, $mimeType);
+        MimeType::setMimeTypes($type, $mimeType);
     }
     /**
      * Returns the current content type.
@@ -377,7 +377,7 @@ class Response implements ResponseInterface, Stringable
         if (str_contains($contentType, '/')) {
             return $contentType;
         }
-        $mimeType = \Cake\Http\MimeType::getMimeType($contentType);
+        $mimeType = MimeType::getMimeType($contentType);
         if ($mimeType === null) {
             throw new InvalidArgumentException(sprintf('`%s` is an invalid content type.', $contentType));
         }
@@ -393,7 +393,7 @@ class Response implements ResponseInterface, Stringable
      */
     public function getMimeType(string $alias): array|string|false
     {
-        $mimeTypes = \Cake\Http\MimeType::getMimeTypes($alias);
+        $mimeTypes = MimeType::getMimeTypes($alias);
         if ($mimeTypes === null) {
             return \false;
         }
@@ -412,7 +412,7 @@ class Response implements ResponseInterface, Stringable
         if (is_array($ctype)) {
             return array_map($this->mapType(...), $ctype);
         }
-        return \Cake\Http\MimeType::getExtension($ctype);
+        return MimeType::getExtension($ctype);
     }
     /**
      * Returns the current charset.
@@ -760,7 +760,7 @@ class Response implements ResponseInterface, Stringable
      * @param \Cake\Http\ServerRequest $request Request object
      * @return bool Whether the response is 'modified' based on cache headers.
      */
-    public function isNotModified(\Cake\Http\ServerRequest $request): bool
+    public function isNotModified(ServerRequest $request): bool
     {
         $etags = preg_split('/\s*,\s*/', $request->getHeaderLine('If-None-Match'), 0, \PREG_SPLIT_NO_EMPTY) ?: [];
         $responseTag = $this->getHeaderLine('Etag');
@@ -888,11 +888,11 @@ class Response implements ResponseInterface, Stringable
      * @return \Cake\Http\CorsBuilder A builder object the provides a fluent interface for defining
      *   additional CORS headers.
      */
-    public function cors(\Cake\Http\ServerRequest $request): \Cake\Http\CorsBuilder
+    public function cors(ServerRequest $request): CorsBuilder
     {
         $origin = $request->getHeaderLine('Origin');
         $https = $request->is('https');
-        return new \Cake\Http\CorsBuilder($this, $origin, $https);
+        return new CorsBuilder($this, $origin, $https);
     }
     /**
      * Create a new instance that is based on a file.
@@ -918,7 +918,7 @@ class Response implements ResponseInterface, Stringable
         $file = $this->validateFile($path);
         $options += ['name' => null, 'download' => null];
         $extension = $file->getExtension();
-        $mapped = \Cake\Http\MimeType::getMimeTypeForFile($file->getRealPath());
+        $mapped = MimeType::getMimeTypeForFile($file->getRealPath());
         if ($extension === '' && $options['download'] === null) {
             $options['download'] = \true;
         }

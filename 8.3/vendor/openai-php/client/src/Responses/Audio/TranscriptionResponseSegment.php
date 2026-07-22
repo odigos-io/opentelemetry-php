@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Audio;
+namespace Odigos\OpenAI\Responses\Audio;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
 /**
  * @implements ResponseContract<array{id: int|string, start: float, end: float, text: string, seek?: int, tokens?: array<int, int>, temperature?: float, avg_logprob?: float, compression_ratio?: float, no_speech_prob?: float, transient?: bool, speaker?: string, type?: string}>
  */

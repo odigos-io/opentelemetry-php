@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\DataCollector;
+namespace Odigos\Symfony\Component\HttpKernel\DataCollector;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Odigos\Symfony\Component\HttpFoundation\RedirectResponse;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpKernel\Event\ControllerEvent;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class RouterDataCollector extends \Symfony\Component\HttpKernel\DataCollector\DataCollector
+class RouterDataCollector extends DataCollector
 {
     /**
      * @var \SplObjectStorage<Request, callable>

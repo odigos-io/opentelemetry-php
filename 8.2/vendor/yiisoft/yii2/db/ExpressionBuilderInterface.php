@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 /**
  * Interface ExpressionBuilderInterface is designed to build raw SQL from specific expression
@@ -24,5 +24,5 @@ interface ExpressionBuilderInterface
      * @param array $params the binding parameters.
      * @return string the raw SQL that will not be additionally escaped or quoted.
      */
-    public function build(\yii\db\ExpressionInterface $expression, array &$params = []);
+    public function build(ExpressionInterface $expression, array &$params = []);
 }

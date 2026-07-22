@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\oci;
+namespace Odigos\yii\db\oci;
 
 /**
  * Command represents an Oracle SQL statement to be executed against a database.
@@ -14,7 +14,7 @@ namespace yii\db\oci;
  *
  * @since 2.0.33
  */
-class Command extends \yii\db\Command
+class Command extends \Odigos\yii\db\Command
 {
     /**
      * {@inheritdoc}

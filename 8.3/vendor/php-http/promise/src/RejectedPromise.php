@@ -1,13 +1,13 @@
 <?php
 
-namespace Http\Promise;
+namespace Odigos\Http\Promise;
 
 /**
  * A rejected promise.
  *
  * @author Joel Wurtz <joel.wurtz@gmail.com>
  */
-final class RejectedPromise implements \Http\Promise\Promise
+final class RejectedPromise implements Promise
 {
     /**
      * @var \Throwable
@@ -23,14 +23,14 @@ final class RejectedPromise implements \Http\Promise\Promise
             return $this;
         }
         try {
-            return new \Http\Promise\FulfilledPromise($onRejected($this->exception));
+            return new FulfilledPromise($onRejected($this->exception));
         } catch (\Exception $e) {
             return new self($e);
         }
     }
     public function getState()
     {
-        return \Http\Promise\Promise::REJECTED;
+        return Promise::REJECTED;
     }
     public function wait($unwrap = \true)
     {

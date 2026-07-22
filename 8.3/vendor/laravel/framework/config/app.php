@@ -2,8 +2,8 @@
 
 namespace Odigos;
 
-use Illuminate\Support\Facades\Facade;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Support\Facades\Facade;
+use Odigos\Illuminate\Support\ServiceProvider;
 return [
     /*
     |--------------------------------------------------------------------------

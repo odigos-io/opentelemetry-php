@@ -8,20 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime;
+namespace Odigos\Symfony\Component\Mime;
 
-use Symfony\Component\Mime\Exception\LogicException;
-use Symfony\Component\Mime\Part\AbstractPart;
-use Symfony\Component\Mime\Part\DataPart;
-use Symfony\Component\Mime\Part\File;
-use Symfony\Component\Mime\Part\Multipart\AlternativePart;
-use Symfony\Component\Mime\Part\Multipart\MixedPart;
-use Symfony\Component\Mime\Part\Multipart\RelatedPart;
-use Symfony\Component\Mime\Part\TextPart;
+use Odigos\Symfony\Component\Mime\Exception\LogicException;
+use Odigos\Symfony\Component\Mime\Part\AbstractPart;
+use Odigos\Symfony\Component\Mime\Part\DataPart;
+use Odigos\Symfony\Component\Mime\Part\File;
+use Odigos\Symfony\Component\Mime\Part\Multipart\AlternativePart;
+use Odigos\Symfony\Component\Mime\Part\Multipart\MixedPart;
+use Odigos\Symfony\Component\Mime\Part\Multipart\RelatedPart;
+use Odigos\Symfony\Component\Mime\Part\TextPart;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Email extends \Symfony\Component\Mime\Message
+class Email extends Message
 {
     public const PRIORITY_HIGHEST = 1;
     public const PRIORITY_HIGH = 2;
@@ -67,36 +67,36 @@ class Email extends \Symfony\Component\Mime\Message
     /**
      * @return $this
      */
-    public function returnPath(\Symfony\Component\Mime\Address|string $address): static
+    public function returnPath(Address|string $address): static
     {
-        return $this->setHeaderBody('Path', 'Return-Path', \Symfony\Component\Mime\Address::create($address));
+        return $this->setHeaderBody('Path', 'Return-Path', Address::create($address));
     }
-    public function getReturnPath(): ?\Symfony\Component\Mime\Address
+    public function getReturnPath(): ?Address
     {
         return $this->getHeaders()->getHeaderBody('Return-Path');
     }
     /**
      * @return $this
      */
-    public function sender(\Symfony\Component\Mime\Address|string $address): static
+    public function sender(Address|string $address): static
     {
-        return $this->setHeaderBody('Mailbox', 'Sender', \Symfony\Component\Mime\Address::create($address));
+        return $this->setHeaderBody('Mailbox', 'Sender', Address::create($address));
     }
-    public function getSender(): ?\Symfony\Component\Mime\Address
+    public function getSender(): ?Address
     {
         return $this->getHeaders()->getHeaderBody('Sender');
     }
     /**
      * @return $this
      */
-    public function addFrom(\Symfony\Component\Mime\Address|string ...$addresses): static
+    public function addFrom(Address|string ...$addresses): static
     {
         return $this->addListAddressHeaderBody('From', $addresses);
     }
     /**
      * @return $this
      */
-    public function from(\Symfony\Component\Mime\Address|string ...$addresses): static
+    public function from(Address|string ...$addresses): static
     {
         if (!$addresses) {
             throw new LogicException('"from()" must be called with at least one address.');
@@ -113,14 +113,14 @@ class Email extends \Symfony\Component\Mime\Message
     /**
      * @return $this
      */
-    public function addReplyTo(\Symfony\Component\Mime\Address|string ...$addresses): static
+    public function addReplyTo(Address|string ...$addresses): static
     {
         return $this->addListAddressHeaderBody('Reply-To', $addresses);
     }
     /**
      * @return $this
      */
-    public function replyTo(\Symfony\Component\Mime\Address|string ...$addresses): static
+    public function replyTo(Address|string ...$addresses): static
     {
         return $this->setListAddressHeaderBody('Reply-To', $addresses);
     }
@@ -134,14 +134,14 @@ class Email extends \Symfony\Component\Mime\Message
     /**
      * @return $this
      */
-    public function addTo(\Symfony\Component\Mime\Address|string ...$addresses): static
+    public function addTo(Address|string ...$addresses): static
     {
         return $this->addListAddressHeaderBody('To', $addresses);
     }
     /**
      * @return $this
      */
-    public function to(\Symfony\Component\Mime\Address|string ...$addresses): static
+    public function to(Address|string ...$addresses): static
     {
         return $this->setListAddressHeaderBody('To', $addresses);
     }
@@ -155,14 +155,14 @@ class Email extends \Symfony\Component\Mime\Message
     /**
      * @return $this
      */
-    public function addCc(\Symfony\Component\Mime\Address|string ...$addresses): static
+    public function addCc(Address|string ...$addresses): static
     {
         return $this->addListAddressHeaderBody('Cc', $addresses);
     }
     /**
      * @return $this
      */
-    public function cc(\Symfony\Component\Mime\Address|string ...$addresses): static
+    public function cc(Address|string ...$addresses): static
     {
         return $this->setListAddressHeaderBody('Cc', $addresses);
     }
@@ -176,14 +176,14 @@ class Email extends \Symfony\Component\Mime\Message
     /**
      * @return $this
      */
-    public function addBcc(\Symfony\Component\Mime\Address|string ...$addresses): static
+    public function addBcc(Address|string ...$addresses): static
     {
         return $this->addListAddressHeaderBody('Bcc', $addresses);
     }
     /**
      * @return $this
      */
-    public function bcc(\Symfony\Component\Mime\Address|string ...$addresses): static
+    public function bcc(Address|string ...$addresses): static
     {
         return $this->setListAddressHeaderBody('Bcc', $addresses);
     }
@@ -444,7 +444,7 @@ class Email extends \Symfony\Component\Mime\Message
         if (!$header = $this->getHeaders()->get($name)) {
             return $this->setListAddressHeaderBody($name, $addresses);
         }
-        $header->addAddresses(\Symfony\Component\Mime\Address::createArray($addresses));
+        $header->addAddresses(Address::createArray($addresses));
         return $this;
     }
     /**
@@ -452,7 +452,7 @@ class Email extends \Symfony\Component\Mime\Message
      */
     private function setListAddressHeaderBody(string $name, array $addresses): static
     {
-        $addresses = \Symfony\Component\Mime\Address::createArray($addresses);
+        $addresses = Address::createArray($addresses);
         $headers = $this->getHeaders();
         if ($header = $headers->get($name)) {
             $header->setAddresses($addresses);

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Notifications;
+namespace Odigos\Illuminate\Notifications;
 
-use Illuminate\Queue\SerializesModels;
+use Odigos\Illuminate\Queue\SerializesModels;
 class Notification
 {
     use SerializesModels;

@@ -1,6 +1,6 @@
 <?php
 
-namespace GuzzleHttp;
+namespace Odigos\GuzzleHttp;
 
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
@@ -34,7 +34,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @final
  */
-class MessageFormatter implements \GuzzleHttp\MessageFormatterInterface
+class MessageFormatter implements MessageFormatterInterface
 {
     /**
      * Apache Common Log Format.
@@ -75,10 +75,10 @@ class MessageFormatter implements \GuzzleHttp\MessageFormatterInterface
             $result = '';
             switch ($matches[1]) {
                 case 'request':
-                    $result = \GuzzleHttp\Psr7\Message::toString($request);
+                    $result = Psr7\Message::toString($request);
                     break;
                 case 'response':
-                    $result = $response ? \GuzzleHttp\Psr7\Message::toString($response) : '';
+                    $result = $response ? Psr7\Message::toString($response) : '';
                     break;
                 case 'req_headers':
                     $result = \trim($request->getMethod() . ' ' . $request->getRequestTarget()) . ' HTTP/' . $request->getProtocolVersion() . "\r\n" . $this->headers($request);

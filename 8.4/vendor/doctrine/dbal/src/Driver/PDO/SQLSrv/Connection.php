@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PDO\SQLSrv;
+namespace Odigos\Doctrine\DBAL\Driver\PDO\SQLSrv;
 
-use Doctrine\DBAL\Driver\Middleware\AbstractConnectionMiddleware;
-use Doctrine\DBAL\Driver\PDO\Connection as PDOConnection;
+use Odigos\Doctrine\DBAL\Driver\Middleware\AbstractConnectionMiddleware;
+use Odigos\Doctrine\DBAL\Driver\PDO\Connection as PDOConnection;
 use PDO;
 final class Connection extends AbstractConnectionMiddleware
 {
@@ -12,9 +12,9 @@ final class Connection extends AbstractConnectionMiddleware
     {
         parent::__construct($connection);
     }
-    public function prepare(string $sql): \Doctrine\DBAL\Driver\PDO\SQLSrv\Statement
+    public function prepare(string $sql): Statement
     {
-        return new \Doctrine\DBAL\Driver\PDO\SQLSrv\Statement($this->connection->prepare($sql));
+        return new Statement($this->connection->prepare($sql));
     }
     public function getNativeConnection(): PDO
     {

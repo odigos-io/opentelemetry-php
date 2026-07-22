@@ -32,7 +32,7 @@ use DateTimeZone;
 use JsonSerializable;
 use ReflectionException;
 use ReturnTypeWillChange;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 /**
  * Common interface for Carbon and CarbonImmutable.

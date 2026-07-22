@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default\Concerns;
+namespace Odigos\Laravel\Prompts\Themes\Default\Concerns;
 
-use Laravel\Prompts\Prompt;
+use Odigos\Laravel\Prompts\Prompt;
 trait DrawsBoxes
 {
-    use \Laravel\Prompts\Themes\Default\Concerns\InteractsWithStrings;
+    use InteractsWithStrings;
     protected int $minWidth = 60;
     /**
      * Draw a box.

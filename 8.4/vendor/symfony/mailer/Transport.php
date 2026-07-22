@@ -8,42 +8,42 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer;
+namespace Odigos\Symfony\Component\Mailer;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Mailer\Bridge\AhaSend\Transport\AhaSendTransportFactory;
-use Symfony\Component\Mailer\Bridge\Amazon\Transport\SesTransportFactory;
-use Symfony\Component\Mailer\Bridge\Azure\Transport\AzureTransportFactory;
-use Symfony\Component\Mailer\Bridge\Brevo\Transport\BrevoTransportFactory;
-use Symfony\Component\Mailer\Bridge\Google\Transport\GmailTransportFactory;
-use Symfony\Component\Mailer\Bridge\Infobip\Transport\InfobipTransportFactory;
-use Symfony\Component\Mailer\Bridge\Mailchimp\Transport\MandrillTransportFactory;
-use Symfony\Component\Mailer\Bridge\MailerSend\Transport\MailerSendTransportFactory;
-use Symfony\Component\Mailer\Bridge\Mailgun\Transport\MailgunTransportFactory;
-use Symfony\Component\Mailer\Bridge\Mailjet\Transport\MailjetTransportFactory;
-use Symfony\Component\Mailer\Bridge\Mailomat\Transport\MailomatTransportFactory;
-use Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceTransportFactory;
-use Symfony\Component\Mailer\Bridge\Mailtrap\Transport\MailtrapTransportFactory;
-use Symfony\Component\Mailer\Bridge\Postal\Transport\PostalTransportFactory;
-use Symfony\Component\Mailer\Bridge\Postmark\Transport\PostmarkTransportFactory;
-use Symfony\Component\Mailer\Bridge\Resend\Transport\ResendTransportFactory;
-use Symfony\Component\Mailer\Bridge\Scaleway\Transport\ScalewayTransportFactory;
-use Symfony\Component\Mailer\Bridge\Sendgrid\Transport\SendgridTransportFactory;
-use Symfony\Component\Mailer\Bridge\Sweego\Transport\SweegoTransportFactory;
-use Symfony\Component\Mailer\Exception\InvalidArgumentException;
-use Symfony\Component\Mailer\Exception\UnsupportedSchemeException;
-use Symfony\Component\Mailer\Transport\Dsn;
-use Symfony\Component\Mailer\Transport\FailoverTransport;
-use Symfony\Component\Mailer\Transport\NativeTransportFactory;
-use Symfony\Component\Mailer\Transport\NullTransportFactory;
-use Symfony\Component\Mailer\Transport\RoundRobinTransport;
-use Symfony\Component\Mailer\Transport\SendmailTransportFactory;
-use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
-use Symfony\Component\Mailer\Transport\TransportFactoryInterface;
-use Symfony\Component\Mailer\Transport\TransportInterface;
-use Symfony\Component\Mailer\Transport\Transports;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Odigos\Symfony\Component\Mailer\Bridge\AhaSend\Transport\AhaSendTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Amazon\Transport\SesTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Azure\Transport\AzureTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Brevo\Transport\BrevoTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Google\Transport\GmailTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Infobip\Transport\InfobipTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Mailchimp\Transport\MandrillTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\MailerSend\Transport\MailerSendTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Mailgun\Transport\MailgunTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Mailjet\Transport\MailjetTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Mailomat\Transport\MailomatTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Mailtrap\Transport\MailtrapTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Postal\Transport\PostalTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Postmark\Transport\PostmarkTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Resend\Transport\ResendTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Scaleway\Transport\ScalewayTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Sendgrid\Transport\SendgridTransportFactory;
+use Odigos\Symfony\Component\Mailer\Bridge\Sweego\Transport\SweegoTransportFactory;
+use Odigos\Symfony\Component\Mailer\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Mailer\Exception\UnsupportedSchemeException;
+use Odigos\Symfony\Component\Mailer\Transport\Dsn;
+use Odigos\Symfony\Component\Mailer\Transport\FailoverTransport;
+use Odigos\Symfony\Component\Mailer\Transport\NativeTransportFactory;
+use Odigos\Symfony\Component\Mailer\Transport\NullTransportFactory;
+use Odigos\Symfony\Component\Mailer\Transport\RoundRobinTransport;
+use Odigos\Symfony\Component\Mailer\Transport\SendmailTransportFactory;
+use Odigos\Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
+use Odigos\Symfony\Component\Mailer\Transport\TransportFactoryInterface;
+use Odigos\Symfony\Component\Mailer\Transport\TransportInterface;
+use Odigos\Symfony\Component\Mailer\Transport\Transports;
+use Odigos\Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Konstantin Myakshin <molodchick@gmail.com>

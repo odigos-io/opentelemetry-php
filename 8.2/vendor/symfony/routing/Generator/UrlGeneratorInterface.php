@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Generator;
+namespace Odigos\Symfony\Component\Routing\Generator;
 
-use Symfony\Component\Routing\Exception\InvalidParameterException;
-use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\Routing\RequestContextAwareInterface;
+use Odigos\Symfony\Component\Routing\Exception\InvalidParameterException;
+use Odigos\Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
+use Odigos\Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Odigos\Symfony\Component\Routing\RequestContextAwareInterface;
 /**
  * UrlGeneratorInterface is the interface that all URL generator classes must implement.
  *

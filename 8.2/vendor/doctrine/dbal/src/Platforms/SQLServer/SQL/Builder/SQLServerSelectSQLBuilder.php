@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\SQLServer\SQL\Builder;
+namespace Odigos\Doctrine\DBAL\Platforms\SQLServer\SQL\Builder;
 
-use Doctrine\DBAL\Platforms\SQLServerPlatform;
-use Doctrine\DBAL\Query\ForUpdate\ConflictResolutionMode;
-use Doctrine\DBAL\Query\SelectQuery;
-use Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
+use Odigos\Doctrine\DBAL\Platforms\SQLServerPlatform;
+use Odigos\Doctrine\DBAL\Query\ForUpdate\ConflictResolutionMode;
+use Odigos\Doctrine\DBAL\Query\SelectQuery;
+use Odigos\Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
 use function count;
 use function implode;
 final class SQLServerSelectSQLBuilder implements SelectSQLBuilder

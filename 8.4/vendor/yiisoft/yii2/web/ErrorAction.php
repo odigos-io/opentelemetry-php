@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\Action;
-use yii\base\Exception;
-use yii\base\UserException;
+use Odigos\yii\base\Action;
+use Odigos\yii\base\Exception;
+use Odigos\yii\base\UserException;
 /**
  * ErrorAction displays application errors using a specified view.
  *
@@ -148,7 +148,7 @@ class ErrorAction extends Action
     protected function findException()
     {
         if (($exception = Yii::$app->getErrorHandler()->exception) === null) {
-            $exception = new \yii\web\NotFoundHttpException(Yii::t('yii', 'Page not found.'));
+            $exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         }
         return $exception;
     }
@@ -159,7 +159,7 @@ class ErrorAction extends Action
      */
     protected function getExceptionCode()
     {
-        if ($this->exception instanceof \yii\web\HttpException) {
+        if ($this->exception instanceof HttpException) {
             return $this->exception->statusCode;
         }
         return $this->exception->getCode();

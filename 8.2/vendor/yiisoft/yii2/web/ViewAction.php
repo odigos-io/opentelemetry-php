@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\Action;
-use yii\base\ViewNotFoundException;
+use Odigos\yii\base\Action;
+use Odigos\yii\base\ViewNotFoundException;
 /**
  * ViewAction represents an action that displays a view according to a user-specified parameter.
  *
@@ -82,9 +82,9 @@ class ViewAction extends Action
                 $this->controller->layout = $controllerLayout;
             }
             if (YII_DEBUG) {
-                throw new \yii\web\NotFoundHttpException($e->getMessage());
+                throw new NotFoundHttpException($e->getMessage());
             }
-            throw new \yii\web\NotFoundHttpException(Yii::t('yii', 'The requested view "{name}" was not found.', ['name' => $viewName]));
+            throw new NotFoundHttpException(Yii::t('yii', 'The requested view "{name}" was not found.', ['name' => $viewName]));
         }
         return $output;
     }
@@ -109,9 +109,9 @@ class ViewAction extends Action
         $viewName = Yii::$app->request->get($this->viewParam, $this->defaultView);
         if (!is_string($viewName) || !preg_match('~^\w(?:(?!\/\.{0,2}\/)[\w\/\-\.])*$~', $viewName)) {
             if (YII_DEBUG) {
-                throw new \yii\web\NotFoundHttpException("The requested view \"{$viewName}\" must start with a word character, must not contain /../ or /./, can contain only word characters, forward slashes, dots and dashes.");
+                throw new NotFoundHttpException("The requested view \"{$viewName}\" must start with a word character, must not contain /../ or /./, can contain only word characters, forward slashes, dots and dashes.");
             }
-            throw new \yii\web\NotFoundHttpException(Yii::t('yii', 'The requested view "{name}" was not found.', ['name' => $viewName]));
+            throw new NotFoundHttpException(Yii::t('yii', 'The requested view "{name}" was not found.', ['name' => $viewName]));
         }
         return empty($this->viewPrefix) ? $viewName : $this->viewPrefix . '/' . $viewName;
     }

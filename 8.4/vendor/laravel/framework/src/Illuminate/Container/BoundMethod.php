@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Container;
+namespace Odigos\Illuminate\Container;
 
 use Closure;
-use Illuminate\Contracts\Container\BindingResolutionException;
+use Odigos\Illuminate\Contracts\Container\BindingResolutionException;
 use InvalidArgumentException;
 use ReflectionFunction;
 use ReflectionMethod;
@@ -67,7 +67,7 @@ class BoundMethod
     protected static function callBoundMethod($container, $callback, $default)
     {
         if (!is_array($callback)) {
-            return \Illuminate\Container\Util::unwrapIfClosure($default);
+            return Util::unwrapIfClosure($default);
         }
         // Here we need to turn the array callable into a Class@method string we can use to
         // examine the container and see if there are any method bindings for this given
@@ -76,7 +76,7 @@ class BoundMethod
         if ($container->hasMethodBinding($method)) {
             return $container->callMethodBinding($method, $callback[0]);
         }
-        return \Illuminate\Container\Util::unwrapIfClosure($default);
+        return Util::unwrapIfClosure($default);
     }
     /**
      * Normalize the given callback into a Class@method string.
@@ -141,9 +141,9 @@ class BoundMethod
         if (array_key_exists($paramName = $parameter->getName(), $parameters)) {
             $pendingDependencies[] = $parameters[$paramName];
             unset($parameters[$paramName]);
-        } elseif ($attribute = \Illuminate\Container\Util::getContextualAttributeFromDependency($parameter)) {
+        } elseif ($attribute = Util::getContextualAttributeFromDependency($parameter)) {
             $pendingDependencies[] = $container->resolveFromAttribute($attribute);
-        } elseif (!is_null($className = \Illuminate\Container\Util::getParameterClassName($parameter))) {
+        } elseif (!is_null($className = Util::getParameterClassName($parameter))) {
             if (array_key_exists($className, $parameters)) {
                 $pendingDependencies[] = $parameters[$className];
                 unset($parameters[$className]);

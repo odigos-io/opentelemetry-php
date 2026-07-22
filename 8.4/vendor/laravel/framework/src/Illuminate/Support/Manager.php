@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Closure;
-use Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Container\Container;
 use InvalidArgumentException;
 abstract class Manager
 {
@@ -82,7 +82,7 @@ abstract class Manager
         if (isset($this->customCreators[$driver])) {
             return $this->callCustomCreator($driver);
         }
-        $method = 'create' . \Illuminate\Support\Str::studly($driver) . 'Driver';
+        $method = 'create' . Str::studly($driver) . 'Driver';
         if (method_exists($this, $method)) {
             return $this->{$method}();
         }

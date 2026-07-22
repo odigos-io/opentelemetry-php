@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Locator;
+namespace Odigos\Cake\ORM\Locator;
 
-use Cake\Datasource\Locator\LocatorInterface as BaseLocatorInterface;
-use Cake\Datasource\RepositoryInterface;
-use Cake\ORM\Table;
+use Odigos\Cake\Datasource\Locator\LocatorInterface as BaseLocatorInterface;
+use Odigos\Cake\Datasource\RepositoryInterface;
+use Odigos\Cake\ORM\Table;
 /**
  * Registries for Table objects should implement this interface.
  *

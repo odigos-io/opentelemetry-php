@@ -14,26 +14,26 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error\Middleware;
+namespace Odigos\Cake\Error\Middleware;
 
-use Cake\Core\App;
-use Cake\Core\Configure;
-use Cake\Core\InstanceConfigTrait;
-use Cake\Core\PluginApplicationInterface;
-use Cake\Error\ExceptionTrap;
-use Cake\Error\Renderer\WebExceptionRenderer;
-use Cake\Event\EventDispatcherTrait;
-use Cake\Http\Exception\RedirectException;
-use Cake\Http\Response;
-use Cake\Routing\Router;
-use Cake\Routing\RoutingApplicationInterface;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Core\PluginApplicationInterface;
+use Odigos\Cake\Error\ExceptionTrap;
+use Odigos\Cake\Error\Renderer\WebExceptionRenderer;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Http\Exception\RedirectException;
+use Odigos\Cake\Http\Response;
+use Odigos\Cake\Routing\Router;
+use Odigos\Cake\Routing\RoutingApplicationInterface;
 use Odigos\Laminas\Diactoros\Response\RedirectResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
-use function Cake\Core\triggerWarning;
+use function Odigos\Cake\Core\triggerWarning;
 /**
  * Error handling middleware.
  *

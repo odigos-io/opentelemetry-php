@@ -16,11 +16,11 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Mailer\Transport;
+namespace Odigos\Cake\Mailer\Transport;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Mailer\AbstractTransport;
-use Cake\Mailer\Message;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Mailer\AbstractTransport;
+use Odigos\Cake\Mailer\Message;
 /**
  * Send mail using mail() function
  */

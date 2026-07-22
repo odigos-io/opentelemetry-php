@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Redis;
+namespace Odigos\Illuminate\Contracts\Redis;
 
 use Closure;
 interface Connection

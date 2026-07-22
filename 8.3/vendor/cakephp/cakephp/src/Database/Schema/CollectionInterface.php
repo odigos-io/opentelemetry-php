@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Schema;
+namespace Odigos\Cake\Database\Schema;
 
 /**
  * Represents a database schema collection
@@ -49,5 +49,5 @@ interface CollectionInterface
      * @return \Cake\Database\Schema\TableSchemaInterface Object with column metadata.
      * @throws \Cake\Database\Exception\DatabaseException when table cannot be described.
      */
-    public function describe(string $name, array $options = []): \Cake\Database\Schema\TableSchemaInterface;
+    public function describe(string $name, array $options = []): TableSchemaInterface;
 }

@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.3.4
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
 use Odigos\Laminas\Diactoros\CallbackStream as BaseCallbackStream;
 /**

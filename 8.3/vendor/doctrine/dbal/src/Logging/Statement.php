@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Logging;
+namespace Odigos\Doctrine\DBAL\Logging;
 
-use Doctrine\DBAL\Driver\Middleware\AbstractStatementMiddleware;
-use Doctrine\DBAL\Driver\Result as ResultInterface;
-use Doctrine\DBAL\Driver\Statement as StatementInterface;
-use Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Driver\Middleware\AbstractStatementMiddleware;
+use Odigos\Doctrine\DBAL\Driver\Result as ResultInterface;
+use Odigos\Doctrine\DBAL\Driver\Statement as StatementInterface;
+use Odigos\Doctrine\DBAL\ParameterType;
 use Psr\Log\LoggerInterface;
 final class Statement extends AbstractStatementMiddleware
 {

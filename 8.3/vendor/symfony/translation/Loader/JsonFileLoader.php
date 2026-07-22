@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Loader;
+namespace Odigos\Symfony\Component\Translation\Loader;
 
-use Symfony\Component\Translation\Exception\InvalidResourceException;
+use Odigos\Symfony\Component\Translation\Exception\InvalidResourceException;
 /**
  * JsonFileLoader loads translations from an json file.
  *
  * @author singles
  */
-class JsonFileLoader extends \Symfony\Component\Translation\Loader\FileLoader
+class JsonFileLoader extends FileLoader
 {
     protected function loadResource(string $resource): array
     {

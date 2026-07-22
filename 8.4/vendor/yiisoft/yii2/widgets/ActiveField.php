@@ -5,15 +5,15 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\widgets;
+namespace Odigos\yii\widgets;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\ErrorHandler;
-use yii\base\Model;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
-use yii\web\JsExpression;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\ErrorHandler;
+use Odigos\yii\base\Model;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\Html;
+use Odigos\yii\web\JsExpression;
 /**
  * ActiveField represents a form input field within an [[ActiveForm]].
  *
@@ -237,7 +237,7 @@ class ActiveField extends Component
             $class[] = $this->form->requiredCssClass;
         }
         $options['class'] = implode(' ', $class);
-        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_CONTAINER) {
+        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_CONTAINER) {
             $this->addErrorClassIfNeeded($options);
         }
         $tag = ArrayHelper::remove($options, 'tag', 'div');
@@ -345,7 +345,7 @@ class ActiveField extends Component
     public function input($type, $options = [])
     {
         $options = array_merge($this->inputOptions, $options);
-        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
         $this->addAriaAttributes($options);
@@ -373,7 +373,7 @@ class ActiveField extends Component
     public function textInput($options = [])
     {
         $options = array_merge($this->inputOptions, $options);
-        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
         $this->addAriaAttributes($options);
@@ -418,7 +418,7 @@ class ActiveField extends Component
     public function passwordInput($options = [])
     {
         $options = array_merge($this->inputOptions, $options);
-        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
         $this->addAriaAttributes($options);
@@ -447,7 +447,7 @@ class ActiveField extends Component
         if (!isset($this->form->options['enctype'])) {
             $this->form->options['enctype'] = 'multipart/form-data';
         }
-        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
         $this->addAriaAttributes($options);
@@ -468,7 +468,7 @@ class ActiveField extends Component
     public function textarea($options = [])
     {
         $options = array_merge($this->inputOptions, $options);
-        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
         $this->addAriaAttributes($options);
@@ -503,7 +503,7 @@ class ActiveField extends Component
      */
     public function radio($options = [], $enclosedByLabel = \true)
     {
-        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
         $this->addAriaAttributes($options);
@@ -551,7 +551,7 @@ class ActiveField extends Component
      */
     public function checkbox($options = [], $enclosedByLabel = \true)
     {
-        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
         $this->addAriaAttributes($options);
@@ -594,7 +594,7 @@ class ActiveField extends Component
     public function dropDownList($items, $options = [])
     {
         $options = array_merge($this->inputOptions, $options);
-        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
         $this->addAriaAttributes($options);
@@ -624,7 +624,7 @@ class ActiveField extends Component
     public function listBox($items, $options = [])
     {
         $options = array_merge($this->inputOptions, $options);
-        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
         $this->addAriaAttributes($options);
@@ -645,7 +645,7 @@ class ActiveField extends Component
      */
     public function checkboxList($items, $options = [])
     {
-        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
         $this->addAriaAttributes($options);
@@ -666,7 +666,7 @@ class ActiveField extends Component
      */
     public function radioList($items, $options = [])
     {
-        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
         $this->addRoleAttributes($options, 'radiogroup');
@@ -710,7 +710,7 @@ class ActiveField extends Component
         $config['model'] = $this->model;
         $config['attribute'] = $this->attribute;
         $config['view'] = $this->form->getView();
-        if (is_subclass_of($class, 'yii\widgets\InputWidget')) {
+        if (is_subclass_of($class, 'Odigos\yii\widgets\InputWidget')) {
             foreach ($this->inputOptions as $key => $value) {
                 if (!isset($config['options'][$key])) {
                     $config['options'][$key] = $value;
@@ -720,7 +720,7 @@ class ActiveField extends Component
             if (!isset($config['options'])) {
                 $config['options'] = [];
             }
-            if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
+            if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
                 $this->addErrorClassIfNeeded($config['options']);
             }
             $this->addAriaAttributes($config['options']);

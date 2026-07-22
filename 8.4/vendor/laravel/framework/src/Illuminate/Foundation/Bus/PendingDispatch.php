@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Foundation\Bus;
+namespace Odigos\Illuminate\Foundation\Bus;
 
-use Illuminate\Bus\UniqueLock;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Foundation\Queue\InteractsWithUniqueJobs;
+use Odigos\Illuminate\Bus\UniqueLock;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Bus\Dispatcher;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeUnique;
+use Odigos\Illuminate\Foundation\Queue\InteractsWithUniqueJobs;
 class PendingDispatch
 {
     use InteractsWithUniqueJobs;

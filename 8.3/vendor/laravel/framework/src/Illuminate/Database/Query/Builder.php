@@ -1,36 +1,36 @@
 <?php
 
-namespace Illuminate\Database\Query;
+namespace Odigos\Illuminate\Database\Query;
 
 use BackedEnum;
 use Closure;
 use DatePeriod;
 use DateTimeInterface;
-use Illuminate\Contracts\Database\Query\Builder as BuilderContract;
-use Illuminate\Contracts\Database\Query\ConditionExpression;
-use Illuminate\Contracts\Database\Query\Expression as ExpressionContract;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Concerns\BuildsQueries;
-use Illuminate\Database\Concerns\BuildsWhereDateClauses;
-use Illuminate\Database\Concerns\ExplainsQueries;
-use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\PostgresConnection;
-use Illuminate\Database\Query\Grammars\Grammar;
-use Illuminate\Database\Query\Processors\Processor;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\LazyCollection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\ForwardsCalls;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Database\Query\Builder as BuilderContract;
+use Odigos\Illuminate\Contracts\Database\Query\ConditionExpression;
+use Odigos\Illuminate\Contracts\Database\Query\Expression as ExpressionContract;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Database\Concerns\BuildsQueries;
+use Odigos\Illuminate\Database\Concerns\BuildsWhereDateClauses;
+use Odigos\Illuminate\Database\Concerns\ExplainsQueries;
+use Odigos\Illuminate\Database\ConnectionInterface;
+use Odigos\Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Odigos\Illuminate\Database\Eloquent\Relations\Relation;
+use Odigos\Illuminate\Database\PostgresConnection;
+use Odigos\Illuminate\Database\Query\Grammars\Grammar;
+use Odigos\Illuminate\Database\Query\Processors\Processor;
+use Odigos\Illuminate\Pagination\Paginator;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\LazyCollection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
 use UnitEnum;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 class Builder implements BuilderContract
 {
     /** @use \Illuminate\Database\Concerns\BuildsQueries<\stdClass> */
@@ -282,7 +282,7 @@ class Builder implements BuilderContract
      */
     public function selectRaw($expression, array $bindings = [])
     {
-        $this->addSelect(new \Illuminate\Database\Query\Expression($expression));
+        $this->addSelect(new Expression($expression));
         if ($bindings) {
             $this->addBinding($bindings, 'select');
         }
@@ -311,7 +311,7 @@ class Builder implements BuilderContract
      */
     public function fromRaw($expression, $bindings = [])
     {
-        $this->from = new \Illuminate\Database\Query\Expression($expression);
+        $this->from = new Expression($expression);
         $this->addBinding($bindings, 'from');
         return $this;
     }
@@ -407,7 +407,7 @@ class Builder implements BuilderContract
         }
         $this->addBinding(json_encode($vector instanceof Arrayable ? $vector->toArray() : $vector, flags: \JSON_THROW_ON_ERROR), 'select');
         $as = $this->getGrammar()->wrap($as ?? $column . '_distance');
-        return $this->addSelect(new \Illuminate\Database\Query\Expression("({$this->getGrammar()->wrap($column)} <=> ?) as {$as}"));
+        return $this->addSelect(new Expression("({$this->getGrammar()->wrap($column)} <=> ?) as {$as}"));
     }
     /**
      * Force the query to only return distinct results.
@@ -447,7 +447,7 @@ class Builder implements BuilderContract
      */
     public function useIndex($index)
     {
-        $this->indexHint = new \Illuminate\Database\Query\IndexHint('hint', $index);
+        $this->indexHint = new IndexHint('hint', $index);
         return $this;
     }
     /**
@@ -458,7 +458,7 @@ class Builder implements BuilderContract
      */
     public function forceIndex($index)
     {
-        $this->indexHint = new \Illuminate\Database\Query\IndexHint('force', $index);
+        $this->indexHint = new IndexHint('force', $index);
         return $this;
     }
     /**
@@ -469,7 +469,7 @@ class Builder implements BuilderContract
      */
     public function ignoreIndex($index)
     {
-        $this->indexHint = new \Illuminate\Database\Query\IndexHint('ignore', $index);
+        $this->indexHint = new IndexHint('ignore', $index);
         return $this;
     }
     /**
@@ -533,7 +533,7 @@ class Builder implements BuilderContract
         [$query, $bindings] = $this->createSub($query);
         $expression = '(' . $query . ') as ' . $this->grammar->wrapTable($as);
         $this->addBinding($bindings, 'join');
-        return $this->join(new \Illuminate\Database\Query\Expression($expression), $first, $operator, $second, $type, $where);
+        return $this->join(new Expression($expression), $first, $operator, $second, $type, $where);
     }
     /**
      * Add a "lateral join" clause to the query.
@@ -546,7 +546,7 @@ class Builder implements BuilderContract
         [$query, $bindings] = $this->createSub($query);
         $expression = '(' . $query . ') as ' . $this->grammar->wrapTable($as);
         $this->addBinding($bindings, 'join');
-        $this->joins[] = $this->newJoinLateralClause($this, $type, new \Illuminate\Database\Query\Expression($expression));
+        $this->joins[] = $this->newJoinLateralClause($this, $type, new Expression($expression));
         return $this;
     }
     /**
@@ -668,7 +668,7 @@ class Builder implements BuilderContract
         [$query, $bindings] = $this->createSub($query);
         $expression = '(' . $query . ') as ' . $this->grammar->wrapTable($as);
         $this->addBinding($bindings, 'join');
-        $this->joins[] = $this->newJoinClause($this, 'cross', new \Illuminate\Database\Query\Expression($expression));
+        $this->joins[] = $this->newJoinClause($this, 'cross', new Expression($expression));
         return $this;
     }
     /**
@@ -680,7 +680,7 @@ class Builder implements BuilderContract
      */
     protected function newJoinClause(self $parentQuery, $type, $table)
     {
-        return new \Illuminate\Database\Query\JoinClause($parentQuery, $type, $table);
+        return new JoinClause($parentQuery, $type, $table);
     }
     /**
      * Get a new "join lateral" clause.
@@ -691,7 +691,7 @@ class Builder implements BuilderContract
      */
     protected function newJoinLateralClause(self $parentQuery, $type, $table)
     {
-        return new \Illuminate\Database\Query\JoinLateralClause($parentQuery, $type, $table);
+        return new JoinLateralClause($parentQuery, $type, $table);
     }
     /**
      * Merge an array of "where" clauses and bindings.
@@ -743,7 +743,7 @@ class Builder implements BuilderContract
         // of that subquery with the given value that was provided to the method.
         if ($this->isQueryable($column) && !is_null($operator)) {
             [$sub, $bindings] = $this->createSub($column);
-            return $this->addBinding($bindings, 'where')->where(new \Illuminate\Database\Query\Expression('(' . $sub . ')'), $operator, $value, $boolean);
+            return $this->addBinding($bindings, 'where')->where(new Expression('(' . $sub . ')'), $operator, $value, $boolean);
         }
         // If the given operator is not found in the list of valid operators we will
         // assume that the developer is just short-cutting the '=' operators and
@@ -769,7 +769,7 @@ class Builder implements BuilderContract
         // is a boolean. If it is, we'll add the raw boolean string as an actual
         // value to the query to ensure this is properly handled by the query.
         if (str_contains($columnString, '->') && is_bool($value)) {
-            $value = new \Illuminate\Database\Query\Expression($value ? 'true' : 'false');
+            $value = new Expression($value ? 'true' : 'false');
             if (is_string($column)) {
                 $type = 'JsonBoolean';
             }
@@ -1122,7 +1122,7 @@ class Builder implements BuilderContract
         // query accordingly so that this query is properly executed when it is run.
         if ($this->isQueryable($values)) {
             [$query, $bindings] = $this->createSub($values);
-            $values = [new \Illuminate\Database\Query\Expression($query)];
+            $values = [new Expression($query)];
             $this->addBinding($bindings, 'where');
         }
         // Next, if the value is Arrayable we need to cast it to its raw array form so we
@@ -1281,7 +1281,7 @@ class Builder implements BuilderContract
         $type = 'between';
         if ($this->isQueryable($column)) {
             [$sub, $bindings] = $this->createSub($column);
-            return $this->addBinding($bindings, 'where')->whereBetween(new \Illuminate\Database\Query\Expression('(' . $sub . ')'), $values, $boolean, $not);
+            return $this->addBinding($bindings, 'where')->whereBetween(new Expression('(' . $sub . ')'), $values, $boolean, $not);
         }
         if ($values instanceof DatePeriod) {
             $values = $this->resolveDatePeriodBounds($values);
@@ -1303,7 +1303,7 @@ class Builder implements BuilderContract
         $type = 'betweenColumns';
         if ($this->isQueryable($column)) {
             [$sub, $bindings] = $this->createSub($column);
-            return $this->addBinding($bindings, 'where')->whereBetweenColumns(new \Illuminate\Database\Query\Expression('(' . $sub . ')'), $values, $boolean, $not);
+            return $this->addBinding($bindings, 'where')->whereBetweenColumns(new Expression('(' . $sub . ')'), $values, $boolean, $not);
         }
         $this->wheres[] = compact('type', 'column', 'values', 'boolean', 'not');
         return $this;
@@ -2167,7 +2167,7 @@ class Builder implements BuilderContract
      */
     public function groupByRaw($sql, array $bindings = [])
     {
-        $this->groups[] = new \Illuminate\Database\Query\Expression($sql);
+        $this->groups[] = new Expression($sql);
         $this->addBinding($bindings, 'groupBy');
         return $this;
     }
@@ -2404,7 +2404,7 @@ class Builder implements BuilderContract
     {
         if ($this->isQueryable($column)) {
             [$query, $bindings] = $this->createSub($column);
-            $column = new \Illuminate\Database\Query\Expression('(' . $query . ')');
+            $column = new Expression('(' . $query . ')');
             $this->addBinding($bindings, $this->unions ? 'unionOrder' : 'order');
         }
         $direction = strtolower($direction);
@@ -2458,7 +2458,7 @@ class Builder implements BuilderContract
             $vector = Str::of($vector)->toEmbeddings(cache: \true);
         }
         $this->addBinding(json_encode($vector instanceof Arrayable ? $vector->toArray() : $vector, flags: \JSON_THROW_ON_ERROR), $this->unions ? 'unionOrder' : 'order');
-        $this->{$this->unions ? 'unionOrders' : 'orders'}[] = ['column' => new \Illuminate\Database\Query\Expression("({$this->getGrammar()->wrap($column)} <=> ?)"), 'direction' => 'asc'];
+        $this->{$this->unions ? 'unionOrders' : 'orders'}[] = ['column' => new Expression("({$this->getGrammar()->wrap($column)} <=> ?)"), 'direction' => 'asc'];
         return $this;
     }
     /**
@@ -3005,7 +3005,7 @@ class Builder implements BuilderContract
             if (is_null($clone->columns) && !empty($this->joins)) {
                 $clone->select($this->from . '.*');
             }
-            return $this->newQuery()->from(new \Illuminate\Database\Query\Expression('(' . $clone->toSql() . ') as ' . $this->grammar->wrap('aggregate_table')))->mergeBindings($clone)->setAggregate('count', $this->withoutSelectAliases($columns))->get()->all();
+            return $this->newQuery()->from(new Expression('(' . $clone->toSql() . ') as ' . $this->grammar->wrap('aggregate_table')))->mergeBindings($clone)->setAggregate('count', $this->withoutSelectAliases($columns))->get()->all();
         }
         $without = $this->unions ? ['unionOrders', 'unionLimit', 'unionOffset'] : ['columns', 'orders', 'limit', 'offset'];
         return $this->cloneWithout($without)->cloneWithoutBindings($this->unions ? ['unionOrder'] : ['select', 'order'])->setAggregate('count', $this->withoutSelectAliases($columns))->get()->all();
@@ -3438,7 +3438,7 @@ class Builder implements BuilderContract
                 }];
             }
             [$query, $bindings] = $this->parseSub($value);
-            return ['value' => new \Illuminate\Database\Query\Expression("({$query})"), 'bindings' => fn() => $bindings];
+            return ['value' => new Expression("({$query})"), 'bindings' => fn() => $bindings];
         });
         $sql = $this->grammar->compileUpdate($this, $values->map(fn($value) => $value['value'])->all());
         return $this->connection->update($sql, $this->cleanBindings($this->grammar->prepareBindingsForUpdate($this->bindings, $values->map(fn($value) => $value['bindings'])->all())));

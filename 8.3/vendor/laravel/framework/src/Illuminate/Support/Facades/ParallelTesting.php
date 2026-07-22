@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static void resolveOptionsUsing(\Closure|null $resolver)
@@ -22,7 +22,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Testing\ParallelTesting
  */
-class ParallelTesting extends \Illuminate\Support\Facades\Facade
+class ParallelTesting extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -31,6 +31,6 @@ class ParallelTesting extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return \Illuminate\Testing\ParallelTesting::class;
+        return \Odigos\Illuminate\Testing\ParallelTesting::class;
     }
 }

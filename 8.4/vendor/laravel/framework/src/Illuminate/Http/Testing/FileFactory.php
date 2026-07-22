@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Http\Testing;
+namespace Odigos\Illuminate\Http\Testing;
 
 use LogicException;
 class FileFactory
@@ -18,7 +18,7 @@ class FileFactory
         if (is_string($kilobytes)) {
             return $this->createWithContent($name, $kilobytes);
         }
-        return tap(new \Illuminate\Http\Testing\File($name, tmpfile()), function ($file) use ($kilobytes, $mimeType) {
+        return tap(new File($name, tmpfile()), function ($file) use ($kilobytes, $mimeType) {
             $file->sizeToReport = $kilobytes * 1024;
             $file->mimeTypeToReport = $mimeType;
         });
@@ -34,7 +34,7 @@ class FileFactory
     {
         $tmpfile = tmpfile();
         fwrite($tmpfile, $content);
-        return tap(new \Illuminate\Http\Testing\File($name, $tmpfile), function ($file) use ($tmpfile) {
+        return tap(new File($name, $tmpfile), function ($file) use ($tmpfile) {
             $file->sizeToReport = fstat($tmpfile)['size'];
         });
     }
@@ -50,7 +50,7 @@ class FileFactory
      */
     public function image($name, $width = 10, $height = 10)
     {
-        return new \Illuminate\Http\Testing\File($name, $this->generateImage($width, $height, pathinfo($name, \PATHINFO_EXTENSION)));
+        return new File($name, $this->generateImage($width, $height, pathinfo($name, \PATHINFO_EXTENSION)));
     }
     /**
      * Generate a dummy image of the given width and height.

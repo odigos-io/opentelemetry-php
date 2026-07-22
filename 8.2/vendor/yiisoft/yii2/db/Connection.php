@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 use PDO;
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\InvalidConfigException;
-use yii\base\NotSupportedException;
-use yii\caching\CacheInterface;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\NotSupportedException;
+use Odigos\yii\caching\CacheInterface;
 /**
  * Connection represents a connection to a database via [PDO](https://www.php.net/manual/en/book.pdo.php).
  *
@@ -271,25 +271,25 @@ class Connection extends Component
      * [[Schema]] class to support DBMS that is not supported by Yii.
      */
     public $schemaMap = [
-        'pgsql' => 'yii\db\pgsql\Schema',
+        'pgsql' => 'Odigos\yii\db\pgsql\Schema',
         // PostgreSQL
-        'mysqli' => 'yii\db\mysql\Schema',
+        'mysqli' => 'Odigos\yii\db\mysql\Schema',
         // MySQL
-        'mysql' => 'yii\db\mysql\Schema',
+        'mysql' => 'Odigos\yii\db\mysql\Schema',
         // MySQL
-        'sqlite' => 'yii\db\sqlite\Schema',
+        'sqlite' => 'Odigos\yii\db\sqlite\Schema',
         // sqlite 3
-        'sqlite2' => 'yii\db\sqlite\Schema',
+        'sqlite2' => 'Odigos\yii\db\sqlite\Schema',
         // sqlite 2
-        'sqlsrv' => 'yii\db\mssql\Schema',
+        'sqlsrv' => 'Odigos\yii\db\mssql\Schema',
         // newer MSSQL driver on MS Windows hosts
-        'oci' => 'yii\db\oci\Schema',
+        'oci' => 'Odigos\yii\db\oci\Schema',
         // Oracle driver
-        'mssql' => 'yii\db\mssql\Schema',
+        'mssql' => 'Odigos\yii\db\mssql\Schema',
         // older MSSQL driver on MS Windows hosts
-        'dblib' => 'yii\db\mssql\Schema',
+        'dblib' => 'Odigos\yii\db\mssql\Schema',
         // dblib drivers on GNU/Linux (and maybe other OSes) hosts
-        'cubrid' => 'yii\db\cubrid\Schema',
+        'cubrid' => 'Odigos\yii\db\cubrid\Schema',
     ];
     /**
      * @var string|null Custom PDO wrapper class. If not set, it will use [[PDO]] or [[\yii\db\mssql\PDO]] when MSSQL is used.
@@ -304,7 +304,7 @@ class Connection extends Component
      * @since 2.0.7
      * @deprecated since 2.0.14. Use [[$commandMap]] for precise configuration.
      */
-    public $commandClass = 'yii\db\Command';
+    public $commandClass = 'Odigos\yii\db\Command';
     /**
      * @var array mapping between PDO driver names and [[Command]] classes.
      * The keys of the array are PDO driver names while the values are either the corresponding
@@ -317,25 +317,25 @@ class Connection extends Component
      * @since 2.0.14
      */
     public $commandMap = [
-        'pgsql' => 'yii\db\Command',
+        'pgsql' => 'Odigos\yii\db\Command',
         // PostgreSQL
-        'mysqli' => 'yii\db\Command',
+        'mysqli' => 'Odigos\yii\db\Command',
         // MySQL
-        'mysql' => 'yii\db\Command',
+        'mysql' => 'Odigos\yii\db\Command',
         // MySQL
-        'sqlite' => 'yii\db\sqlite\Command',
+        'sqlite' => 'Odigos\yii\db\sqlite\Command',
         // sqlite 3
-        'sqlite2' => 'yii\db\sqlite\Command',
+        'sqlite2' => 'Odigos\yii\db\sqlite\Command',
         // sqlite 2
-        'sqlsrv' => 'yii\db\Command',
+        'sqlsrv' => 'Odigos\yii\db\Command',
         // newer MSSQL driver on MS Windows hosts
-        'oci' => 'yii\db\oci\Command',
+        'oci' => 'Odigos\yii\db\oci\Command',
         // Oracle driver
-        'mssql' => 'yii\db\Command',
+        'mssql' => 'Odigos\yii\db\Command',
         // older MSSQL driver on MS Windows hosts
-        'dblib' => 'yii\db\Command',
+        'dblib' => 'Odigos\yii\db\Command',
         // dblib drivers on GNU/Linux (and maybe other OSes) hosts
-        'cubrid' => 'yii\db\Command',
+        'cubrid' => 'Odigos\yii\db\Command',
     ];
     /**
      * @var bool whether to enable [savepoint](https://en.wikipedia.org/wiki/Savepoint).
@@ -643,7 +643,7 @@ class Connection extends Component
             if ($enableProfiling) {
                 Yii::endProfile($token, __METHOD__);
             }
-            throw new \yii\db\Exception($e->getMessage(), $e->errorInfo, $e->getCode(), $e);
+            throw new Exception($e->getMessage(), $e->errorInfo, $e->getCode(), $e);
         }
     }
     /**
@@ -693,13 +693,13 @@ class Connection extends Component
             }
             switch ($driver) {
                 case 'mssql':
-                    $pdoClass = 'yii\db\mssql\PDO';
+                    $pdoClass = 'Odigos\yii\db\mssql\PDO';
                     break;
                 case 'dblib':
-                    $pdoClass = 'yii\db\mssql\DBLibPDO';
+                    $pdoClass = 'Odigos\yii\db\mssql\DBLibPDO';
                     break;
                 case 'sqlsrv':
-                    $pdoClass = 'yii\db\mssql\SqlsrvPDO';
+                    $pdoClass = 'Odigos\yii\db\mssql\SqlsrvPDO';
                     break;
                 default:
                     $pdoClass = 'PDO';
@@ -746,7 +746,7 @@ class Connection extends Component
     public function createCommand($sql = null, $params = [])
     {
         $driver = $this->getDriverName();
-        $config = ['class' => 'yii\db\Command'];
+        $config = ['class' => 'Odigos\yii\db\Command'];
         if ($this->commandClass !== $config['class']) {
             $config['class'] = $this->commandClass;
         } elseif (isset($this->commandMap[$driver])) {
@@ -776,7 +776,7 @@ class Connection extends Component
     {
         $this->open();
         if (($transaction = $this->getTransaction()) === null) {
-            $transaction = $this->_transaction = new \yii\db\Transaction(['db' => $this]);
+            $transaction = $this->_transaction = new Transaction(['db' => $this]);
         }
         $transaction->begin($isolationLevel);
         return $transaction;

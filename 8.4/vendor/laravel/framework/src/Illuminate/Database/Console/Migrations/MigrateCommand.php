@@ -1,22 +1,22 @@
 <?php
 
-namespace Illuminate\Database\Console\Migrations;
+namespace Odigos\Illuminate\Database\Console\Migrations;
 
-use Illuminate\Console\ConfirmableTrait;
-use Illuminate\Contracts\Console\Isolatable;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Events\SchemaLoaded;
-use Illuminate\Database\Migrations\Migrator;
-use Illuminate\Database\SQLiteDatabaseDoesNotExistException;
-use Illuminate\Database\SqlServerConnection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Console\ConfirmableTrait;
+use Odigos\Illuminate\Contracts\Console\Isolatable;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Database\Events\SchemaLoaded;
+use Odigos\Illuminate\Database\Migrations\Migrator;
+use Odigos\Illuminate\Database\SQLiteDatabaseDoesNotExistException;
+use Odigos\Illuminate\Database\SqlServerConnection;
+use Odigos\Illuminate\Support\Str;
 use PDOException;
 use RuntimeException;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 use Throwable;
-use function Laravel\Prompts\confirm;
+use function Odigos\Laravel\Prompts\confirm;
 #[AsCommand(name: 'migrate')]
-class MigrateCommand extends \Illuminate\Database\Console\Migrations\BaseCommand implements Isolatable
+class MigrateCommand extends BaseCommand implements Isolatable
 {
     use ConfirmableTrait;
     /**

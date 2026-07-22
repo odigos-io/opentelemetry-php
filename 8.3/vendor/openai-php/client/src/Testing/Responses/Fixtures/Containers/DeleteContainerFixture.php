@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\Containers;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\Containers;
 
 final class DeleteContainerFixture
 {

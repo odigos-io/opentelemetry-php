@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 /**
  * ModelEvent represents the parameter needed by [[Model]] events.
@@ -13,7 +13,7 @@ namespace yii\base;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ModelEvent extends \yii\base\Event
+class ModelEvent extends Event
 {
     /**
      * @var bool whether the model is in valid status. Defaults to true.

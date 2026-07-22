@@ -16,6 +16,6 @@ namespace Odigos;
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-use Cake\Utility\Inflector;
+use Odigos\Cake\Utility\Inflector;
 // Store the initial state
 Inflector::reset();

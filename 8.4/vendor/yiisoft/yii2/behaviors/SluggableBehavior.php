@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\behaviors;
+namespace Odigos\yii\behaviors;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\db\BaseActiveRecord;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Inflector;
-use yii\validators\UniqueValidator;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\db\BaseActiveRecord;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\Inflector;
+use Odigos\yii\validators\UniqueValidator;
 /**
  * SluggableBehavior automatically fills the specified attribute with a value that can be used a slug in a URL.
  *
@@ -63,7 +63,7 @@ use yii\validators\UniqueValidator;
  * @template T of BaseActiveRecord = BaseActiveRecord
  * @extends AttributeBehavior<T>
  */
-class SluggableBehavior extends \yii\behaviors\AttributeBehavior
+class SluggableBehavior extends AttributeBehavior
 {
     /**
      * @var string the attribute that will receive the slug value

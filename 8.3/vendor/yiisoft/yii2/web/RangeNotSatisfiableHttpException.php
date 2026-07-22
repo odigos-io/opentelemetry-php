@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 /**
  * RangeNotSatisfiableHttpException represents an exception caused by an improper request of the end-user.
@@ -20,7 +20,7 @@ namespace yii\web;
  *
  * @since 2.0.11
  */
-class RangeNotSatisfiableHttpException extends \yii\web\HttpException
+class RangeNotSatisfiableHttpException extends HttpException
 {
     /**
      * Constructor.

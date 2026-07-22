@@ -5,16 +5,16 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\grid;
+namespace Odigos\yii\grid;
 
 use Closure;
-use yii\base\Model;
-use yii\data\ActiveDataProvider;
-use yii\data\ArrayDataProvider;
-use yii\db\ActiveQueryInterface;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
-use yii\helpers\Inflector;
+use Odigos\yii\base\Model;
+use Odigos\yii\data\ActiveDataProvider;
+use Odigos\yii\data\ArrayDataProvider;
+use Odigos\yii\db\ActiveQueryInterface;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\Html;
+use Odigos\yii\helpers\Inflector;
 /**
  * DataColumn is the default column type for the [[GridView]] widget.
  *
@@ -35,7 +35,7 @@ use yii\helpers\Inflector;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class DataColumn extends \yii\grid\Column
+class DataColumn extends Column
 {
     /**
      * @var string the attribute name associated with this column. When neither [[content]] nor [[value]]

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Foundation;
+namespace Odigos\Illuminate\Foundation;
 
-use Illuminate\Contracts\Cache\Factory;
-use Illuminate\Contracts\Cache\Repository;
-use Illuminate\Contracts\Foundation\MaintenanceMode;
+use Odigos\Illuminate\Contracts\Cache\Factory;
+use Odigos\Illuminate\Contracts\Cache\Repository;
+use Odigos\Illuminate\Contracts\Foundation\MaintenanceMode;
 class CacheBasedMaintenanceMode implements MaintenanceMode
 {
     /**

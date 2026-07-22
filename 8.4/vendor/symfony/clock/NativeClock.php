@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Clock;
+namespace Odigos\Symfony\Component\Clock;
 
 /**
  * A clock that relies the system time.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-final class NativeClock implements \Symfony\Component\Clock\ClockInterface
+final class NativeClock implements ClockInterface
 {
     private \DateTimeZone $timezone;
     /**
@@ -25,9 +25,9 @@ final class NativeClock implements \Symfony\Component\Clock\ClockInterface
     {
         $this->timezone = \is_string($timezone ??= date_default_timezone_get()) ? $this->withTimeZone($timezone)->timezone : $timezone;
     }
-    public function now(): \Symfony\Component\Clock\DatePoint
+    public function now(): DatePoint
     {
-        return \Symfony\Component\Clock\DatePoint::createFromInterface(new \DateTimeImmutable('now', $this->timezone));
+        return DatePoint::createFromInterface(new \DateTimeImmutable('now', $this->timezone));
     }
     public function sleep(float|int $seconds): void
     {

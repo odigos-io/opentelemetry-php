@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rbac;
+namespace Odigos\yii\rbac;
 
 /**
  * For more details and usage information on Permission, see the [guide article on security authorization](guide:security-authorization).
@@ -13,7 +13,7 @@ namespace yii\rbac;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Permission extends \yii\rbac\Item
+class Permission extends Item
 {
     /**
      * {@inheritdoc}

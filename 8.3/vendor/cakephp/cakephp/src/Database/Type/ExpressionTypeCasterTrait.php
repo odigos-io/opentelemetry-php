@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
-use Cake\Database\TypeFactory;
+use Odigos\Cake\Database\TypeFactory;
 /**
  * Offers a method to convert values to ExpressionInterface objects
  * if the type they should be converted to implements ExpressionTypeInterface
@@ -39,7 +39,7 @@ trait ExpressionTypeCasterTrait
         }
         $baseType = str_replace('[]', '', $type);
         $converter = TypeFactory::build($baseType);
-        if (!$converter instanceof \Cake\Database\Type\ExpressionTypeInterface) {
+        if (!$converter instanceof ExpressionTypeInterface) {
             return $value;
         }
         $multi = $type !== $baseType;
@@ -63,7 +63,7 @@ trait ExpressionTypeCasterTrait
         $types = array_filter($types);
         foreach ($types as $k => $type) {
             $object = TypeFactory::build($type);
-            if ($object instanceof \Cake\Database\Type\ExpressionTypeInterface) {
+            if ($object instanceof ExpressionTypeInterface) {
                 $result[$k] = $object;
             }
         }

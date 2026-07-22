@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\mail;
+namespace Odigos\yii\mail;
 
 /**
  * MessageInterface is the interface that should be implemented by mail message classes.
@@ -188,7 +188,7 @@ interface MessageInterface
      * If null, the "mailer" application component will be used instead.
      * @return bool whether this message is sent successfully.
      */
-    public function send(?\yii\mail\MailerInterface $mailer = null);
+    public function send(?MailerInterface $mailer = null);
     /**
      * Returns string representation of this message.
      * @return string the string representation of this message.

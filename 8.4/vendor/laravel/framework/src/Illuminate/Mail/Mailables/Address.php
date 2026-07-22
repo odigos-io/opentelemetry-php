@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Mail\Mailables;
+namespace Odigos\Illuminate\Mail\Mailables;
 
 use InvalidArgumentException;
 class Address

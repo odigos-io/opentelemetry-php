@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
 use BcMath\Number;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Exception\InvalidType;
-use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Types\Exception\InvalidType;
+use Odigos\Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use TypeError;
 use ValueError;
 use function is_float;
-final class NumberType extends \Doctrine\DBAL\Types\Type
+final class NumberType extends Type
 {
     /** {@inheritDoc} */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string

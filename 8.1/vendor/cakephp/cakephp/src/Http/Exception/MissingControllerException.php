@@ -12,10 +12,10 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Exception;
+namespace Odigos\Cake\Http\Exception;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Core\Exception\HttpErrorCodeInterface;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\HttpErrorCodeInterface;
 /**
  * Missing Controller exception - used when a controller
  * cannot be found.

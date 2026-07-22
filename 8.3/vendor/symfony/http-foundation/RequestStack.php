@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation;
+namespace Odigos\Symfony\Component\HttpFoundation;
 
-use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Odigos\Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
+use Odigos\Symfony\Component\HttpFoundation\Session\SessionInterface;
 /**
  * Request stack that controls the lifecycle of requests.
  *
@@ -38,7 +38,7 @@ class RequestStack
      * This method should generally not be called directly as the stack
      * management should be taken care of by the application itself.
      */
-    public function push(\Symfony\Component\HttpFoundation\Request $request): void
+    public function push(Request $request): void
     {
         $this->requests[] = $request;
     }
@@ -50,14 +50,14 @@ class RequestStack
      * This method should generally not be called directly as the stack
      * management should be taken care of by the application itself.
      */
-    public function pop(): ?\Symfony\Component\HttpFoundation\Request
+    public function pop(): ?Request
     {
         if (!$this->requests) {
             return null;
         }
         return array_pop($this->requests);
     }
-    public function getCurrentRequest(): ?\Symfony\Component\HttpFoundation\Request
+    public function getCurrentRequest(): ?Request
     {
         return end($this->requests) ?: null;
     }
@@ -68,7 +68,7 @@ class RequestStack
      * might make it un-compatible with other features of your framework
      * like ESI support.
      */
-    public function getMainRequest(): ?\Symfony\Component\HttpFoundation\Request
+    public function getMainRequest(): ?Request
     {
         if (!$this->requests) {
             return null;
@@ -84,7 +84,7 @@ class RequestStack
      *
      * If current Request is the main request, it returns null.
      */
-    public function getParentRequest(): ?\Symfony\Component\HttpFoundation\Request
+    public function getParentRequest(): ?Request
     {
         $pos = \count($this->requests) - 2;
         return $this->requests[$pos] ?? null;
@@ -104,7 +104,7 @@ class RequestStack
     public function resetRequestFormats(): void
     {
         static $resetRequestFormats;
-        $resetRequestFormats ??= \Closure::bind(static fn() => self::$formats = null, null, \Symfony\Component\HttpFoundation\Request::class);
+        $resetRequestFormats ??= \Closure::bind(static fn() => self::$formats = null, null, Request::class);
         $resetRequestFormats();
     }
 }

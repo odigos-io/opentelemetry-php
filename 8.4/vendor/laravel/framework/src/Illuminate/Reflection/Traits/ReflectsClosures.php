@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Support\Traits;
+namespace Odigos\Illuminate\Support\Traits;
 
 use Closure;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Reflector;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Reflector;
 use ReflectionFunction;
 use ReflectionIntersectionType;
 use ReflectionUnionType;

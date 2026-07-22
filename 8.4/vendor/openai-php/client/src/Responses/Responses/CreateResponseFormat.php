@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses;
+namespace Odigos\OpenAI\Responses\Responses;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Responses\Format\JsonObjectFormat;
-use OpenAI\Responses\Responses\Format\JsonSchemaFormat;
-use OpenAI\Responses\Responses\Format\TextFormat;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Responses\Format\JsonObjectFormat;
+use Odigos\OpenAI\Responses\Responses\Format\JsonSchemaFormat;
+use Odigos\OpenAI\Responses\Responses\Format\TextFormat;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type JsonObjectFormatType from JsonObjectFormat
  * @phpstan-import-type JsonSchemaFormatType from JsonSchemaFormat

@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\Threads\Messages;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\Threads\Messages;
 
 final class ThreadMessageResponseFixture
 {

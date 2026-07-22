@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Constraint\Email;
+namespace Odigos\Cake\TestSuite\Constraint\Email;
 
-use Cake\TestSuite\TestEmailTransport;
+use Odigos\Cake\TestSuite\TestEmailTransport;
 use Odigos\PHPUnit\Framework\Constraint\Constraint;
 /**
  * Base class for all mail assertion constraints

@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\I18n\Formatter;
+namespace Odigos\Cake\I18n\Formatter;
 
-use Cake\I18n\FormatterInterface;
+use Odigos\Cake\I18n\FormatterInterface;
 /**
  * A formatter that will interpolate variables using sprintf and
  * select the correct plural form when required

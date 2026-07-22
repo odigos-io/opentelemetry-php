@@ -10,7 +10,7 @@ namespace Odigos;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Symfony\Polyfill\Intl\Grapheme as p;
+use Odigos\Symfony\Polyfill\Intl\Grapheme as p;
 if (!\function_exists('grapheme_str_split') && !\function_exists('Odigos\grapheme_str_split')) {
     function grapheme_str_split(string $string, int $length = 1): array|false
     {

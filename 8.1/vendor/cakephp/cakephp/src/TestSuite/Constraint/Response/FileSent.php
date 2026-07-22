@@ -13,7 +13,7 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Constraint\Response;
+namespace Odigos\Cake\TestSuite\Constraint\Response;
 
 use Psr\Http\Message\ResponseInterface;
 /**
@@ -21,7 +21,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @internal
  */
-class FileSent extends \Cake\TestSuite\Constraint\Response\ResponseBase
+class FileSent extends ResponseBase
 {
     /**
      * @var \Cake\Http\Response

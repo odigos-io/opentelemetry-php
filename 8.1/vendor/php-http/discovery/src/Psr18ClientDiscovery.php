@@ -1,16 +1,16 @@
 <?php
 
-namespace Http\Discovery;
+namespace Odigos\Http\Discovery;
 
-use Http\Discovery\Exception\DiscoveryFailedException;
-use Http\Discovery\Exception\NotFoundException as RealNotFoundException;
+use Odigos\Http\Discovery\Exception\DiscoveryFailedException;
+use Odigos\Http\Discovery\Exception\NotFoundException as RealNotFoundException;
 use Psr\Http\Client\ClientInterface;
 /**
  * Finds a PSR-18 HTTP Client.
  *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-final class Psr18ClientDiscovery extends \Http\Discovery\ClassDiscovery
+final class Psr18ClientDiscovery extends ClassDiscovery
 {
     /**
      * Finds a PSR-18 HTTP Client.

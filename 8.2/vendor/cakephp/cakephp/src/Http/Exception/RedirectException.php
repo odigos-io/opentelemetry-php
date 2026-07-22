@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Exception;
+namespace Odigos\Cake\Http\Exception;
 
 /**
  * An exception subclass used by routing and application code to
@@ -29,7 +29,7 @@ namespace Cake\Http\Exception;
  * Additional headers can also be provided in the constructor, or
  * using the setHeaders() method.
  */
-class RedirectException extends \Cake\Http\Exception\HttpException
+class RedirectException extends HttpException
 {
     /**
      * Constructor

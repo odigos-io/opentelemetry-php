@@ -4,12 +4,12 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Stage;
+namespace Odigos\MongoDB\Builder\Stage;
 
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Builder\Type\Optional;
-use MongoDB\Builder\Type\StageInterface;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\Optional;
+use Odigos\MongoDB\Builder\Type\StageInterface;
 /**
  * Lists sampled queries for all collections or a specific collection.
  *

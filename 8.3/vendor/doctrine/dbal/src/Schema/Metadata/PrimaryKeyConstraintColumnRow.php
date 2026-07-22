@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Metadata;
+namespace Odigos\Doctrine\DBAL\Schema\Metadata;
 
 /**
  * A row of metadata describing a primary key constraint column.

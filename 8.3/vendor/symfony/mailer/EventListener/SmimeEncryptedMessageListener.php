@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\EventListener;
+namespace Odigos\Symfony\Component\Mailer\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Mailer\Event\MessageEvent;
-use Symfony\Component\Mime\Crypto\SMimeEncrypter;
-use Symfony\Component\Mime\Message;
+use Odigos\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Odigos\Symfony\Component\Mailer\Event\MessageEvent;
+use Odigos\Symfony\Component\Mime\Crypto\SMimeEncrypter;
+use Odigos\Symfony\Component\Mime\Message;
 /**
  * Encrypts messages using S/MIME.
  *
@@ -21,7 +21,7 @@ use Symfony\Component\Mime\Message;
  */
 final class SmimeEncryptedMessageListener implements EventSubscriberInterface
 {
-    public function __construct(private readonly \Symfony\Component\Mailer\EventListener\SmimeCertificateRepositoryInterface $smimeRepository, private readonly ?int $cipher = null)
+    public function __construct(private readonly SmimeCertificateRepositoryInterface $smimeRepository, private readonly ?int $cipher = null)
     {
     }
     public function onMessage(MessageEvent $event): void

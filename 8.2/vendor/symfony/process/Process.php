@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Process;
+namespace Odigos\Symfony\Component\Process;
 
-use Symfony\Component\Process\Exception\InvalidArgumentException;
-use Symfony\Component\Process\Exception\LogicException;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Exception\ProcessSignaledException;
-use Symfony\Component\Process\Exception\ProcessStartFailedException;
-use Symfony\Component\Process\Exception\ProcessTimedOutException;
-use Symfony\Component\Process\Exception\RuntimeException;
-use Symfony\Component\Process\Pipes\UnixPipes;
-use Symfony\Component\Process\Pipes\WindowsPipes;
+use Odigos\Symfony\Component\Process\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Process\Exception\LogicException;
+use Odigos\Symfony\Component\Process\Exception\ProcessFailedException;
+use Odigos\Symfony\Component\Process\Exception\ProcessSignaledException;
+use Odigos\Symfony\Component\Process\Exception\ProcessStartFailedException;
+use Odigos\Symfony\Component\Process\Exception\ProcessTimedOutException;
+use Odigos\Symfony\Component\Process\Exception\RuntimeException;
+use Odigos\Symfony\Component\Process\Pipes\UnixPipes;
+use Odigos\Symfony\Component\Process\Pipes\WindowsPipes;
 /**
  * Process is a thin wrapper around proc_* functions to easily
  * start independent PHP processes.
@@ -1032,7 +1032,7 @@ class Process implements \IteratorAggregate
         if ($this->isRunning()) {
             throw new LogicException('Input cannot be set while the process is running.');
         }
-        $this->input = \Symfony\Component\Process\ProcessUtils::validateInput(__METHOD__, $input);
+        $this->input = ProcessUtils::validateInput(__METHOD__, $input);
         return $this;
     }
     /**
@@ -1354,7 +1354,7 @@ class Process implements \IteratorAggregate
         if ('\\' === \DIRECTORY_SEPARATOR && isset($commandline[0][0]) && \strlen($commandline[0]) === strcspn($commandline[0], ':/\\')) {
             // On Windows, we don't rely on the OS to find the executable if possible to avoid lookups
             // in the current directory which could be untrusted. Instead we use the ExecutableFinder.
-            $commandline[0] = (self::$executables[$commandline[0]] ??= (new \Symfony\Component\Process\ExecutableFinder())->find($commandline[0])) ?? $commandline[0];
+            $commandline[0] = (self::$executables[$commandline[0]] ??= (new ExecutableFinder())->find($commandline[0])) ?? $commandline[0];
         }
         return implode(' ', array_map($this->escapeArgument(...), $commandline));
     }
@@ -1390,7 +1390,7 @@ class Process implements \IteratorAggregate
             return $varCache[$m[0]] = '!' . $var . '!';
         }, $cmd);
         static $comSpec;
-        if (!$comSpec && $comSpec = (new \Symfony\Component\Process\ExecutableFinder())->find('cmd.exe')) {
+        if (!$comSpec && $comSpec = (new ExecutableFinder())->find('cmd.exe')) {
             // Escape according to CommandLineToArgvW rules
             $comSpec = '"' . preg_replace('{(\\\\*+)"}', '$1$1\"', $comSpec) . '"';
         }

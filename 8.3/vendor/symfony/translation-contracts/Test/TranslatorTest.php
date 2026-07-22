@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Contracts\Translation\Test;
+namespace Odigos\Symfony\Contracts\Translation\Test;
 
 use Odigos\PHPUnit\Framework\Attributes\DataProvider;
 use Odigos\PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use Odigos\PHPUnit\Framework\TestCase;
-use Symfony\Component\Translation\TranslatableMessage;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Contracts\Translation\TranslatorTrait;
+use Odigos\Symfony\Component\Translation\TranslatableMessage;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatorTrait;
 /**
  * Test should cover all languages mentioned on http://translate.sourceforge.net/wiki/l10n/pluralforms
  * and Plural forms mentioned on http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms.

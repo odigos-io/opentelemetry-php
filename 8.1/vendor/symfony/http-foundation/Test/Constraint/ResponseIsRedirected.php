@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\Test\Constraint;
+namespace Odigos\Symfony\Component\HttpFoundation\Test\Constraint;
 
 use Odigos\PHPUnit\Framework\Constraint\Constraint;
-use Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpFoundation\Response;
 final class ResponseIsRedirected extends Constraint
 {
     public function toString(): string

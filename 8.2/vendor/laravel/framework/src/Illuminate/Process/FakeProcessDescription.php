@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Process;
+namespace Odigos\Illuminate\Process;
 
-use Illuminate\Support\Collection;
-use Symfony\Component\Process\Process;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Symfony\Component\Process\Process;
 class FakeProcessDescription
 {
     /**
@@ -149,7 +149,7 @@ class FakeProcessDescription
      */
     public function toProcessResult(string $command)
     {
-        return new \Illuminate\Process\FakeProcessResult(command: $command, exitCode: $this->exitCode, output: $this->resolveOutput(), errorOutput: $this->resolveErrorOutput());
+        return new FakeProcessResult(command: $command, exitCode: $this->exitCode, output: $this->resolveOutput(), errorOutput: $this->resolveErrorOutput());
     }
     /**
      * Resolve the standard output as a string.

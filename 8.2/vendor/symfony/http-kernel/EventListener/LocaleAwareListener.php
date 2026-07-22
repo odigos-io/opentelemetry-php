@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\EventListener;
+namespace Odigos\Symfony\Component\HttpKernel\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Contracts\Translation\LocaleAwareInterface;
+use Odigos\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Odigos\Symfony\Component\HttpFoundation\RequestStack;
+use Odigos\Symfony\Component\HttpKernel\Event\FinishRequestEvent;
+use Odigos\Symfony\Component\HttpKernel\Event\RequestEvent;
+use Odigos\Symfony\Component\HttpKernel\KernelEvents;
+use Odigos\Symfony\Contracts\Translation\LocaleAwareInterface;
 /**
  * Pass the current locale to the provided services.
  *

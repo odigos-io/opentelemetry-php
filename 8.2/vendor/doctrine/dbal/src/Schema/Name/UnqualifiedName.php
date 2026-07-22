@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Name;
+namespace Odigos\Doctrine\DBAL\Schema\Name;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Schema\Name;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Schema\Name;
 /**
  * An unqualified {@see Name} consisting of a single identifier.
  */
 final readonly class UnqualifiedName implements Name
 {
-    public function __construct(private \Doctrine\DBAL\Schema\Name\Identifier $identifier)
+    public function __construct(private Identifier $identifier)
     {
     }
-    public function getIdentifier(): \Doctrine\DBAL\Schema\Name\Identifier
+    public function getIdentifier(): Identifier
     {
         return $this->identifier;
     }
@@ -28,7 +28,7 @@ final readonly class UnqualifiedName implements Name
     /**
      * Returns whether this unqualified name is equal to the other.
      */
-    public function equals(self $other, \Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding $folding): bool
+    public function equals(self $other, UnquotedIdentifierFolding $folding): bool
     {
         if ($this === $other) {
             return \true;
@@ -42,7 +42,7 @@ final readonly class UnqualifiedName implements Name
      */
     public static function quoted(string $value): self
     {
-        return new self(\Doctrine\DBAL\Schema\Name\Identifier::quoted($value));
+        return new self(Identifier::quoted($value));
     }
     /**
      * Creates an unquoted unqualified name.
@@ -51,6 +51,6 @@ final readonly class UnqualifiedName implements Name
      */
     public static function unquoted(string $value): self
     {
-        return new self(\Doctrine\DBAL\Schema\Name\Identifier::unquoted($value));
+        return new self(Identifier::unquoted($value));
     }
 }

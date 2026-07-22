@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Contracts\Concurrency;
+namespace Odigos\Illuminate\Contracts\Concurrency;
 
 use Closure;
-use Illuminate\Support\Defer\DeferredCallback;
+use Odigos\Illuminate\Support\Defer\DeferredCallback;
 interface Driver
 {
     /**

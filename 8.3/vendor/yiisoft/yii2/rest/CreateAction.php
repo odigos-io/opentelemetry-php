@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rest;
+namespace Odigos\yii\rest;
 
 use Odigos\Yii;
-use yii\base\Model;
-use yii\helpers\Url;
-use yii\web\ServerErrorHttpException;
+use Odigos\yii\base\Model;
+use Odigos\yii\helpers\Url;
+use Odigos\yii\web\ServerErrorHttpException;
 /**
  * CreateAction implements the API endpoint for creating a new model from the given data.
  *
@@ -22,7 +22,7 @@ use yii\web\ServerErrorHttpException;
  * @template T of Controller = Controller
  * @extends Action<T>
  */
-class CreateAction extends \yii\rest\Action
+class CreateAction extends Action
 {
     /**
      * @var string the scenario to be assigned to the new model before it is validated and saved.

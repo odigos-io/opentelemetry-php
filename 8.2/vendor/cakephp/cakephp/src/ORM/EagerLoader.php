@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
-use Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\ORM\Query\SelectQuery;
 use Closure;
 use InvalidArgumentException;
 /**
@@ -65,7 +65,7 @@ class EagerLoader
      *
      * @var \Cake\ORM\EagerLoader|null
      */
-    protected ?\Cake\ORM\EagerLoader $_matching = null;
+    protected ?EagerLoader $_matching = null;
     /**
      * A map of table aliases pointing to the association objects they represent
      * for the query.
@@ -243,7 +243,7 @@ class EagerLoader
      * will be normalized.
      * @return array<string, \Cake\ORM\EagerLoadable>
      */
-    public function normalized(\Cake\ORM\Table $repository): array
+    public function normalized(Table $repository): array
     {
         if ($this->_normalized !== null) {
             return $this->_normalized;
@@ -273,7 +273,7 @@ class EagerLoader
                 $table = $options;
                 $options = [];
             }
-            if ($options instanceof \Cake\ORM\EagerLoadable) {
+            if ($options instanceof EagerLoadable) {
                 $options = $options->asContainArray();
                 $table = key($options);
                 $options = current($options);
@@ -333,7 +333,7 @@ class EagerLoader
      * per association in the containments array.
      * @return void
      */
-    public function attachAssociations(SelectQuery $query, \Cake\ORM\Table $repository, bool $includeFields): void
+    public function attachAssociations(SelectQuery $query, Table $repository, bool $includeFields): void
     {
         if (!$this->_containments && $this->_matching === null) {
             return;
@@ -359,7 +359,7 @@ class EagerLoader
      * attached.
      * @return array<string, \Cake\ORM\EagerLoadable>
      */
-    public function attachableAssociations(\Cake\ORM\Table $repository): array
+    public function attachableAssociations(Table $repository): array
     {
         $contain = $this->normalized($repository);
         $matching = $this->_matching ? $this->_matching->normalized($repository) : [];
@@ -375,7 +375,7 @@ class EagerLoader
      * to be loaded.
      * @return array<\Cake\ORM\EagerLoadable>
      */
-    public function externalAssociations(\Cake\ORM\Table $repository): array
+    public function externalAssociations(Table $repository): array
     {
         if ($this->_loadExternal) {
             return $this->_loadExternal;
@@ -397,7 +397,7 @@ class EagerLoader
      * @return \Cake\ORM\EagerLoadable Object with normalized associations
      * @throws \InvalidArgumentException When containments refer to associations that do not exist.
      */
-    protected function _normalizeContain(\Cake\ORM\Table $parent, string $alias, array $options, array $paths): \Cake\ORM\EagerLoadable
+    protected function _normalizeContain(Table $parent, string $alias, array $options, array $paths): EagerLoadable
     {
         $defaults = $this->_containOptions;
         $instance = $parent->getAssociation($alias);
@@ -412,7 +412,7 @@ class EagerLoader
         $extra = array_diff_key($options, $defaults);
         $config = ['associations' => [], 'instance' => $instance, 'config' => array_diff_key($options, $extra), 'aliasPath' => trim($paths['aliasPath'], '.'), 'propertyPath' => trim($paths['propertyPath'], '.'), 'targetProperty' => $instance->getProperty()];
         $config['canBeJoined'] = $instance->canBeJoined($config['config']);
-        $eagerLoadable = new \Cake\ORM\EagerLoadable($alias, $config);
+        $eagerLoadable = new EagerLoadable($alias, $config);
         if ($config['canBeJoined']) {
             $this->_aliasList[$paths['root']][$alias][] = $eagerLoadable;
         } else {
@@ -454,14 +454,14 @@ class EagerLoader
      * @param \Cake\ORM\EagerLoadable $loadable The association config.
      * @return void
      */
-    protected function _correctStrategy(\Cake\ORM\EagerLoadable $loadable): void
+    protected function _correctStrategy(EagerLoadable $loadable): void
     {
         $config = $loadable->getConfig();
-        $currentStrategy = $config['strategy'] ?? \Cake\ORM\Association::STRATEGY_JOIN;
-        if (!$loadable->canBeJoined() || $currentStrategy !== \Cake\ORM\Association::STRATEGY_JOIN) {
+        $currentStrategy = $config['strategy'] ?? Association::STRATEGY_JOIN;
+        if (!$loadable->canBeJoined() || $currentStrategy !== Association::STRATEGY_JOIN) {
             return;
         }
-        $config['strategy'] = \Cake\ORM\Association::STRATEGY_SELECT;
+        $config['strategy'] = Association::STRATEGY_SELECT;
         $loadable->setConfig($config);
         $loadable->setCanBeJoined(\false);
     }
@@ -578,7 +578,7 @@ class EagerLoader
      * will be normalized.
      * @return array
      */
-    public function associationsMap(\Cake\ORM\Table $table): array
+    public function associationsMap(Table $table): array
     {
         $map = [];
         if (!$this->getMatching() && !$this->getContain() && $this->_joinsMap === []) {
@@ -626,9 +626,9 @@ class EagerLoader
      * If not passed, the default property for the association will be used.
      * @return void
      */
-    public function addToJoinsMap(string $alias, \Cake\ORM\Association $assoc, bool $asMatching = \false, ?string $targetProperty = null): void
+    public function addToJoinsMap(string $alias, Association $assoc, bool $asMatching = \false, ?string $targetProperty = null): void
     {
-        $this->_joinsMap[$alias] = new \Cake\ORM\EagerLoadable($alias, ['aliasPath' => $alias, 'instance' => $assoc, 'canBeJoined' => \true, 'forMatching' => $asMatching, 'targetProperty' => $targetProperty ?: $assoc->getProperty()]);
+        $this->_joinsMap[$alias] = new EagerLoadable($alias, ['aliasPath' => $alias, 'instance' => $assoc, 'canBeJoined' => \true, 'forMatching' => $asMatching, 'targetProperty' => $targetProperty ?: $assoc->getProperty()]);
     }
     /**
      * Helper function used to return the keys from the query records that will be used
@@ -648,7 +648,7 @@ class EagerLoader
                 continue;
             }
             $source = $instance->getSource();
-            $keys = $instance->type() === \Cake\ORM\Association::MANY_TO_ONE ? (array) $instance->getForeignKey() : (array) $instance->getBindingKey();
+            $keys = $instance->type() === Association::MANY_TO_ONE ? (array) $instance->getForeignKey() : (array) $instance->getBindingKey();
             $alias = $source->getAlias();
             $pkFields = [];
             /** @var string $key */

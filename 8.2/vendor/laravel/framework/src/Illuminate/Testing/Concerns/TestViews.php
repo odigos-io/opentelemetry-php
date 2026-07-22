@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Testing\Concerns;
+namespace Odigos\Illuminate\Testing\Concerns;
 
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\ParallelTesting;
+use Odigos\Illuminate\Support\Facades\File;
+use Odigos\Illuminate\Support\Facades\ParallelTesting;
 trait TestViews
 {
     /**

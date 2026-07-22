@@ -16,7 +16,7 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Schema;
+namespace Odigos\Cake\Database\Schema;
 
 use InvalidArgumentException;
 /**
@@ -24,7 +24,7 @@ use InvalidArgumentException;
  *
  * Models a database foreign key constraint
  */
-class ForeignKey extends \Cake\Database\Schema\Constraint
+class ForeignKey extends Constraint
 {
     public const CASCADE = 'cascade';
     public const RESTRICT = 'restrict';
@@ -203,7 +203,7 @@ class ForeignKey extends \Cake\Database\Schema\Constraint
      */
     protected function normalizeDeferrable(string $deferrable): string
     {
-        $mapping = ['DEFERRED' => \Cake\Database\Schema\ForeignKey::DEFERRED, 'IMMEDIATE' => \Cake\Database\Schema\ForeignKey::IMMEDIATE, 'NOT DEFERRED' => \Cake\Database\Schema\ForeignKey::NOT_DEFERRED, \Cake\Database\Schema\ForeignKey::DEFERRED => \Cake\Database\Schema\ForeignKey::DEFERRED, \Cake\Database\Schema\ForeignKey::IMMEDIATE => \Cake\Database\Schema\ForeignKey::IMMEDIATE, \Cake\Database\Schema\ForeignKey::NOT_DEFERRED => \Cake\Database\Schema\ForeignKey::NOT_DEFERRED];
+        $mapping = ['DEFERRED' => ForeignKey::DEFERRED, 'IMMEDIATE' => ForeignKey::IMMEDIATE, 'NOT DEFERRED' => ForeignKey::NOT_DEFERRED, ForeignKey::DEFERRED => ForeignKey::DEFERRED, ForeignKey::IMMEDIATE => ForeignKey::IMMEDIATE, ForeignKey::NOT_DEFERRED => ForeignKey::NOT_DEFERRED];
         $normalized = strtoupper(str_replace('_', ' ', $deferrable));
         if (array_key_exists($normalized, $mapping)) {
             return $mapping[$normalized];

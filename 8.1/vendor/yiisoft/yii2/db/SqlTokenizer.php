@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
-use yii\base\Component;
-use yii\base\InvalidArgumentException;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidArgumentException;
 /**
  * SqlTokenizer splits an SQL query into individual SQL tokens.
  *
@@ -81,10 +81,10 @@ abstract class SqlTokenizer extends Component
         $this->offset = 0;
         $this->_substrings = [];
         $this->_buffer = '';
-        $this->_token = new \yii\db\SqlToken(['type' => \yii\db\SqlToken::TYPE_CODE, 'content' => $this->sql]);
+        $this->_token = new SqlToken(['type' => SqlToken::TYPE_CODE, 'content' => $this->sql]);
         $this->_tokenStack = new \SplStack();
         $this->_tokenStack->push($this->_token);
-        $this->_token[] = new \yii\db\SqlToken(['type' => \yii\db\SqlToken::TYPE_STATEMENT]);
+        $this->_token[] = new SqlToken(['type' => SqlToken::TYPE_STATEMENT]);
         $this->_tokenStack->push($this->_token[0]);
         $this->_currentToken = $this->_tokenStack->top();
         while (!$this->isEof()) {
@@ -248,7 +248,7 @@ abstract class SqlTokenizer extends Component
             return \false;
         }
         $this->addTokenFromBuffer();
-        $this->_currentToken[] = new \yii\db\SqlToken(['type' => $isIdentifier ? \yii\db\SqlToken::TYPE_IDENTIFIER : \yii\db\SqlToken::TYPE_STRING_LITERAL, 'content' => is_string($content) ? $content : $this->substring($length), 'startOffset' => $this->offset, 'endOffset' => $this->offset + $length]);
+        $this->_currentToken[] = new SqlToken(['type' => $isIdentifier ? SqlToken::TYPE_IDENTIFIER : SqlToken::TYPE_STRING_LITERAL, 'content' => is_string($content) ? $content : $this->substring($length), 'startOffset' => $this->offset, 'endOffset' => $this->offset + $length]);
         return \true;
     }
     /**
@@ -264,29 +264,29 @@ abstract class SqlTokenizer extends Component
         $this->addTokenFromBuffer();
         switch ($this->substring($length)) {
             case '(':
-                $this->_currentToken[] = new \yii\db\SqlToken(['type' => \yii\db\SqlToken::TYPE_OPERATOR, 'content' => is_string($content) ? $content : $this->substring($length), 'startOffset' => $this->offset, 'endOffset' => $this->offset + $length]);
-                $this->_currentToken[] = new \yii\db\SqlToken(['type' => \yii\db\SqlToken::TYPE_PARENTHESIS]);
+                $this->_currentToken[] = new SqlToken(['type' => SqlToken::TYPE_OPERATOR, 'content' => is_string($content) ? $content : $this->substring($length), 'startOffset' => $this->offset, 'endOffset' => $this->offset + $length]);
+                $this->_currentToken[] = new SqlToken(['type' => SqlToken::TYPE_PARENTHESIS]);
                 $this->_tokenStack->push($this->_currentToken[-1]);
                 $this->_currentToken = $this->_tokenStack->top();
                 break;
             case ')':
                 $this->_tokenStack->pop();
                 $this->_currentToken = $this->_tokenStack->top();
-                $this->_currentToken[] = new \yii\db\SqlToken(['type' => \yii\db\SqlToken::TYPE_OPERATOR, 'content' => ')', 'startOffset' => $this->offset, 'endOffset' => $this->offset + $length]);
+                $this->_currentToken[] = new SqlToken(['type' => SqlToken::TYPE_OPERATOR, 'content' => ')', 'startOffset' => $this->offset, 'endOffset' => $this->offset + $length]);
                 break;
             case ';':
                 if (!$this->_currentToken->getHasChildren()) {
                     break;
                 }
-                $this->_currentToken[] = new \yii\db\SqlToken(['type' => \yii\db\SqlToken::TYPE_OPERATOR, 'content' => is_string($content) ? $content : $this->substring($length), 'startOffset' => $this->offset, 'endOffset' => $this->offset + $length]);
+                $this->_currentToken[] = new SqlToken(['type' => SqlToken::TYPE_OPERATOR, 'content' => is_string($content) ? $content : $this->substring($length), 'startOffset' => $this->offset, 'endOffset' => $this->offset + $length]);
                 $this->_tokenStack->pop();
                 $this->_currentToken = $this->_tokenStack->top();
-                $this->_currentToken[] = new \yii\db\SqlToken(['type' => \yii\db\SqlToken::TYPE_STATEMENT]);
+                $this->_currentToken[] = new SqlToken(['type' => SqlToken::TYPE_STATEMENT]);
                 $this->_tokenStack->push($this->_currentToken[-1]);
                 $this->_currentToken = $this->_tokenStack->top();
                 break;
             default:
-                $this->_currentToken[] = new \yii\db\SqlToken(['type' => \yii\db\SqlToken::TYPE_OPERATOR, 'content' => is_string($content) ? $content : $this->substring($length), 'startOffset' => $this->offset, 'endOffset' => $this->offset + $length]);
+                $this->_currentToken[] = new SqlToken(['type' => SqlToken::TYPE_OPERATOR, 'content' => is_string($content) ? $content : $this->substring($length), 'startOffset' => $this->offset, 'endOffset' => $this->offset + $length]);
                 break;
         }
         return \true;
@@ -300,7 +300,7 @@ abstract class SqlTokenizer extends Component
             return;
         }
         $isKeyword = $this->isKeyword($this->_buffer, $content);
-        $this->_currentToken[] = new \yii\db\SqlToken(['type' => $isKeyword ? \yii\db\SqlToken::TYPE_KEYWORD : \yii\db\SqlToken::TYPE_TOKEN, 'content' => is_string($content) ? $content : $this->_buffer, 'startOffset' => $this->offset - mb_strlen($this->_buffer, 'UTF-8'), 'endOffset' => $this->offset]);
+        $this->_currentToken[] = new SqlToken(['type' => $isKeyword ? SqlToken::TYPE_KEYWORD : SqlToken::TYPE_TOKEN, 'content' => is_string($content) ? $content : $this->_buffer, 'startOffset' => $this->offset - mb_strlen($this->_buffer, 'UTF-8'), 'endOffset' => $this->offset]);
         $this->_buffer = '';
     }
     /**

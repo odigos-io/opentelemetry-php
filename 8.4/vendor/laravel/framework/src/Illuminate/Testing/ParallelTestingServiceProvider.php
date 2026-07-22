@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Testing;
+namespace Odigos\Illuminate\Testing;
 
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Testing\Concerns\TestCaches;
-use Illuminate\Testing\Concerns\TestDatabases;
-use Illuminate\Testing\Concerns\TestViews;
+use Odigos\Illuminate\Contracts\Support\DeferrableProvider;
+use Odigos\Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Testing\Concerns\TestCaches;
+use Odigos\Illuminate\Testing\Concerns\TestDatabases;
+use Odigos\Illuminate\Testing\Concerns\TestViews;
 class ParallelTestingServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     use TestCaches, TestDatabases, TestViews;
@@ -31,8 +31,8 @@ class ParallelTestingServiceProvider extends ServiceProvider implements Deferrab
     public function register()
     {
         if ($this->app->runningInConsole()) {
-            $this->app->singleton(\Illuminate\Testing\ParallelTesting::class, function () {
-                return new \Illuminate\Testing\ParallelTesting($this->app);
+            $this->app->singleton(ParallelTesting::class, function () {
+                return new ParallelTesting($this->app);
             });
         }
     }

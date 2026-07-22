@@ -46,7 +46,7 @@ RUN apt-get update -qq \
 RUN curl -sSL https://github.com/humbug/php-scoper/releases/latest/download/php-scoper.phar \
     -o /usr/local/bin/php-scoper.phar
 
-COPY _helpers/scoper.inc.php _helpers/build-classmap.php /tmp/
+COPY _helpers/scoper.inc.php _helpers/scoper-hook-patcher.php _helpers/build-classmap.php /tmp/
 
 RUN php -d memory_limit=1G /usr/local/bin/php-scoper.phar add-prefix \
         --config=/tmp/scoper.inc.php \

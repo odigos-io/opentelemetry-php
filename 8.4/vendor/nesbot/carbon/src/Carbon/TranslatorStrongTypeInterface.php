@@ -11,7 +11,7 @@ declare (strict_types=1);
  */
 namespace Odigos\Carbon;
 
-use Symfony\Component\Translation\MessageCatalogueInterface;
+use Odigos\Symfony\Component\Translation\MessageCatalogueInterface;
 /**
  * Mark translator using strong type from symfony/translation >= 6.
  */

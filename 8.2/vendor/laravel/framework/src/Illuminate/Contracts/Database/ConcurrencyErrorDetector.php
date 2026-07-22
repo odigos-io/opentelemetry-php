@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Database;
+namespace Odigos\Illuminate\Contracts\Database;
 
 use Throwable;
 interface ConcurrencyErrorDetector

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Node;
+namespace Odigos\Symfony\Component\CssSelector\Node;
 
 /**
  * Represents a "<selector>[<namespace>|<attribute> <operator> <value>]" node.
@@ -20,12 +20,12 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-class AttributeNode extends \Symfony\Component\CssSelector\Node\AbstractNode
+class AttributeNode extends AbstractNode
 {
-    public function __construct(private \Symfony\Component\CssSelector\Node\NodeInterface $selector, private ?string $namespace, private string $attribute, private string $operator, private ?string $value)
+    public function __construct(private NodeInterface $selector, private ?string $namespace, private string $attribute, private string $operator, private ?string $value)
     {
     }
-    public function getSelector(): \Symfony\Component\CssSelector\Node\NodeInterface
+    public function getSelector(): NodeInterface
     {
         return $this->selector;
     }
@@ -45,9 +45,9 @@ class AttributeNode extends \Symfony\Component\CssSelector\Node\AbstractNode
     {
         return $this->value;
     }
-    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
+    public function getSpecificity(): Specificity
     {
-        return $this->selector->getSpecificity()->plus(new \Symfony\Component\CssSelector\Node\Specificity(0, 1, 0));
+        return $this->selector->getSpecificity()->plus(new Specificity(0, 1, 0));
     }
     public function __toString(): string
     {

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses\Output;
+namespace Odigos\OpenAI\Responses\Responses\Output;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type OutputMcpListToolsToolType from OutputMcpListToolsTool
  *
@@ -32,7 +32,7 @@ final class OutputMcpListTools implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        $tools = array_map(fn(array $result): \OpenAI\Responses\Responses\Output\OutputMcpListToolsTool => \OpenAI\Responses\Responses\Output\OutputMcpListToolsTool::from($result), $attributes['tools']);
+        $tools = array_map(fn(array $result): OutputMcpListToolsTool => OutputMcpListToolsTool::from($result), $attributes['tools']);
         return new self(id: $attributes['id'], serverLabel: $attributes['server_label'], type: $attributes['type'], tools: $tools);
     }
     /**
@@ -40,6 +40,6 @@ final class OutputMcpListTools implements ResponseContract
      */
     public function toArray(): array
     {
-        return ['id' => $this->id, 'server_label' => $this->serverLabel, 'type' => $this->type, 'tools' => array_map(fn(\OpenAI\Responses\Responses\Output\OutputMcpListToolsTool $tool) => $tool->toArray(), $this->tools)];
+        return ['id' => $this->id, 'server_label' => $this->serverLabel, 'type' => $this->type, 'tools' => array_map(fn(OutputMcpListToolsTool $tool) => $tool->toArray(), $this->tools)];
     }
 }

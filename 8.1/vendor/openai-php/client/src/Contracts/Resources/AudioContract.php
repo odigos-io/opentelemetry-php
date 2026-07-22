@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Audio\SpeechStreamResponse;
-use OpenAI\Responses\Audio\TranscriptionResponse;
-use OpenAI\Responses\Audio\TranslationResponse;
+use Odigos\OpenAI\Responses\Audio\SpeechStreamResponse;
+use Odigos\OpenAI\Responses\Audio\TranscriptionResponse;
+use Odigos\OpenAI\Responses\Audio\TranslationResponse;
 interface AudioContract
 {
     /**

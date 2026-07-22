@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBInstrumentation;
 use OpenTelemetry\SDK\Sdk;
 if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(MongoDBInstrumentation::NAME) === \true) {
     return;

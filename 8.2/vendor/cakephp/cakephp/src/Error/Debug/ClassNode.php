@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error\Debug;
+namespace Odigos\Cake\Error\Debug;
 
 /**
  * Dump node for objects/class instances.
  */
-class ClassNode implements \Cake\Error\Debug\NodeInterface
+class ClassNode implements NodeInterface
 {
     /**
      * @var string
@@ -50,7 +50,7 @@ class ClassNode implements \Cake\Error\Debug\NodeInterface
      * @param \Cake\Error\Debug\PropertyNode $node The property to add.
      * @return void
      */
-    public function addProperty(\Cake\Error\Debug\PropertyNode $node): void
+    public function addProperty(PropertyNode $node): void
     {
         $this->properties[] = $node;
     }

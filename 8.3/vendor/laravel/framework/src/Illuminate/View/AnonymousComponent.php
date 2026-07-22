@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\View;
+namespace Odigos\Illuminate\View;
 
-class AnonymousComponent extends \Illuminate\View\Component
+class AnonymousComponent extends Component
 {
     /**
      * The component view.

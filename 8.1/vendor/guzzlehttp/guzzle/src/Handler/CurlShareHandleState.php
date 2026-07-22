@@ -1,8 +1,8 @@
 <?php
 
-namespace GuzzleHttp\Handler;
+namespace Odigos\GuzzleHttp\Handler;
 
-use GuzzleHttp\TransportSharing;
+use Odigos\GuzzleHttp\TransportSharing;
 /**
  * @internal
  */
@@ -107,12 +107,12 @@ final class CurlShareHandleState
      */
     private static function handlerLocks(string $mode): array
     {
-        \GuzzleHttp\Handler\CurlVersion::ensureHandlerSharingSupported();
+        CurlVersion::ensureHandlerSharingSupported();
         if ($mode === TransportSharing::HANDLER_REQUIRE) {
-            \GuzzleHttp\Handler\CurlVersion::ensureSslSessionSharingSupported();
+            CurlVersion::ensureSslSessionSharingSupported();
         }
         $locks = [self::requireCurlConstant('CURL_LOCK_DATA_DNS')];
-        if (\GuzzleHttp\Handler\CurlVersion::supportsSslSessionSharing()) {
+        if (CurlVersion::supportsSslSessionSharing()) {
             $locks[] = self::requireCurlConstant('CURL_LOCK_DATA_SSL_SESSION');
         }
         return $locks;

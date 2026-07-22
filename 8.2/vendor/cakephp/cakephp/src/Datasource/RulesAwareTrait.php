@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.0.7
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource;
+namespace Odigos\Cake\Datasource;
 
 use ArrayObject;
-use Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherInterface;
 /**
  * A trait that allows a class to build and apply application.
  * rules.
@@ -35,7 +35,7 @@ trait RulesAwareTrait
      *
      * @var \Cake\Datasource\RulesChecker|null
      */
-    protected ?\Cake\Datasource\RulesChecker $_rulesChecker = null;
+    protected ?RulesChecker $_rulesChecker = null;
     /**
      * Returns whether the passed entity complies with all the rules stored in
      * the rules checker.
@@ -45,7 +45,7 @@ trait RulesAwareTrait
      * @param \ArrayObject<string, mixed>|array|null $options The options To be passed to the rules.
      * @return bool
      */
-    public function checkRules(\Cake\Datasource\EntityInterface $entity, string $operation = \Cake\Datasource\RulesChecker::CREATE, ArrayObject|array|null $options = null): bool
+    public function checkRules(EntityInterface $entity, string $operation = RulesChecker::CREATE, ArrayObject|array|null $options = null): bool
     {
         $rules = $this->rulesChecker();
         $options = $options ?: new ArrayObject();
@@ -76,13 +76,13 @@ trait RulesAwareTrait
      * @see \Cake\Datasource\RulesChecker
      * @return \Cake\Datasource\RulesChecker
      */
-    public function rulesChecker(): \Cake\Datasource\RulesChecker
+    public function rulesChecker(): RulesChecker
     {
         if ($this->_rulesChecker !== null) {
             return $this->_rulesChecker;
         }
         /** @var class-string<\Cake\Datasource\RulesChecker> $class */
-        $class = defined('static::RULES_CLASS') ? static::RULES_CLASS : \Cake\Datasource\RulesChecker::class;
+        $class = defined('static::RULES_CLASS') ? static::RULES_CLASS : RulesChecker::class;
         /**
          * @phpstan-ignore-next-line
          */
@@ -99,7 +99,7 @@ trait RulesAwareTrait
      * @param \Cake\Datasource\RulesChecker $rules The rules object to be modified.
      * @return \Cake\Datasource\RulesChecker
      */
-    public function buildRules(\Cake\Datasource\RulesChecker $rules): \Cake\Datasource\RulesChecker
+    public function buildRules(RulesChecker $rules): RulesChecker
     {
         return $rules;
     }

@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 use Odigos\Yii;
 /**
@@ -19,7 +19,7 @@ use Odigos\Yii;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-abstract class Request extends \yii\base\Component
+abstract class Request extends Component
 {
     private $_scriptFile;
     private $_isConsoleRequest;
@@ -55,7 +55,7 @@ abstract class Request extends \yii\base\Component
             if (isset($_SERVER['SCRIPT_FILENAME'])) {
                 $this->setScriptFile($_SERVER['SCRIPT_FILENAME']);
             } else {
-                throw new \yii\base\InvalidConfigException('Unable to determine the entry script file path.');
+                throw new InvalidConfigException('Unable to determine the entry script file path.');
             }
         }
         return $this->_scriptFile;
@@ -74,7 +74,7 @@ abstract class Request extends \yii\base\Component
         if ($scriptFile !== \false && is_file($scriptFile)) {
             $this->_scriptFile = $scriptFile;
         } else {
-            throw new \yii\base\InvalidConfigException('Unable to determine the entry script file path.');
+            throw new InvalidConfigException('Unable to determine the entry script file path.');
         }
     }
 }

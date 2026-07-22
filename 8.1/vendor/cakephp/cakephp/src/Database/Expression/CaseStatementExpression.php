@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         4.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Type\ExpressionTypeCasterTrait;
-use Cake\Database\TypedResultInterface;
-use Cake\Database\TypeMapTrait;
-use Cake\Database\ValueBinder;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\Type\ExpressionTypeCasterTrait;
+use Odigos\Cake\Database\TypedResultInterface;
+use Odigos\Cake\Database\TypeMapTrait;
+use Odigos\Cake\Database\ValueBinder;
 use Closure;
 use InvalidArgumentException;
 use LogicException;
@@ -29,7 +29,7 @@ use LogicException;
  */
 class CaseStatementExpression implements ExpressionInterface, TypedResultInterface
 {
-    use \Cake\Database\Expression\CaseExpressionTrait;
+    use CaseExpressionTrait;
     use ExpressionTypeCasterTrait;
     use TypeMapTrait;
     /**
@@ -265,12 +265,12 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
             throw new LogicException('Cannot call `when()` between `when()` and `then()`.');
         }
         if ($when instanceof Closure) {
-            $when = $when(new \Cake\Database\Expression\WhenThenExpression($this->getTypeMap()));
-            if (!$when instanceof \Cake\Database\Expression\WhenThenExpression) {
-                throw new LogicException(sprintf('`when()` callables must return an instance of `\%s`, `%s` given.', \Cake\Database\Expression\WhenThenExpression::class, get_debug_type($when)));
+            $when = $when(new WhenThenExpression($this->getTypeMap()));
+            if (!$when instanceof WhenThenExpression) {
+                throw new LogicException(sprintf('`when()` callables must return an instance of `\%s`, `%s` given.', WhenThenExpression::class, get_debug_type($when)));
             }
         }
-        if ($when instanceof \Cake\Database\Expression\WhenThenExpression) {
+        if ($when instanceof WhenThenExpression) {
             $this->when[] = $when;
         } else {
             $this->whenBuffer = ['when' => $when, 'type' => $type];
@@ -338,7 +338,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
         if ($this->whenBuffer === null) {
             throw new LogicException('Cannot call `then()` before `when()`.');
         }
-        $whenThen = (new \Cake\Database\Expression\WhenThenExpression($this->getTypeMap()))->when($this->whenBuffer['when'], $this->whenBuffer['type'])->then($result, $type);
+        $whenThen = (new WhenThenExpression($this->getTypeMap()))->when($this->whenBuffer['when'], $this->whenBuffer['type'])->then($result, $type);
         $this->whenBuffer = null;
         $this->when[] = $whenThen;
         return $this;

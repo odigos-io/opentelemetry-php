@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\conditions;
+namespace Odigos\yii\db\conditions;
 
 /**
  * Class ConjunctionCondition
@@ -13,7 +13,7 @@ namespace yii\db\conditions;
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.14
  */
-abstract class ConjunctionCondition implements \yii\db\conditions\ConditionInterface
+abstract class ConjunctionCondition implements ConditionInterface
 {
     /**
      * @var mixed[]

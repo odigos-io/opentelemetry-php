@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Support\DateFactory;
+use Odigos\Illuminate\Support\DateFactory;
 /**
  * @see https://carbon.nesbot.com/docs/
  * @see https://github.com/briannesbitt/Carbon/blob/master/src/Carbon/Factory.php
@@ -105,7 +105,7 @@ use Illuminate\Support\DateFactory;
  *
  * @see \Illuminate\Support\DateFactory
  */
-class Date extends \Illuminate\Support\Facades\Facade
+class Date extends Facade
 {
     const DEFAULT_FACADE = DateFactory::class;
     /**

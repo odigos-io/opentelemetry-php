@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Session\Middleware;
+namespace Odigos\Illuminate\Contracts\Session\Middleware;
 
 interface AuthenticatesSessions
 {

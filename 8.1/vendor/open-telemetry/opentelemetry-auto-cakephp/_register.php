@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\CakePHP\CakePHPInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\CakePHP\CakePHPInstrumentation;
 use OpenTelemetry\SDK\Sdk;
 if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(CakePHPInstrumentation::NAME) === \true) {
     return;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\View\Concerns;
+namespace Odigos\Illuminate\View\Concerns;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\LazyCollection;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\LazyCollection;
 trait ManagesLoops
 {
     /**

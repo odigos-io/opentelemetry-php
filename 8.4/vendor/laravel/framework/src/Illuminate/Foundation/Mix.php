@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation;
+namespace Odigos\Illuminate\Foundation;
 
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\HtmlString;
+use Odigos\Illuminate\Support\Str;
 class Mix
 {
     /**
@@ -38,13 +38,13 @@ class Mix
         $manifestPath = public_path($manifestDirectory . '/mix-manifest.json');
         if (!isset($manifests[$manifestPath])) {
             if (!is_file($manifestPath)) {
-                throw new \Illuminate\Foundation\MixManifestNotFoundException("Mix manifest not found at: {$manifestPath}");
+                throw new MixManifestNotFoundException("Mix manifest not found at: {$manifestPath}");
             }
             $manifests[$manifestPath] = json_decode(file_get_contents($manifestPath), \true);
         }
         $manifest = $manifests[$manifestPath];
         if (!isset($manifest[$path])) {
-            $exception = new \Illuminate\Foundation\MixFileNotFoundException("Unable to locate Mix file: {$path}.");
+            $exception = new MixFileNotFoundException("Unable to locate Mix file: {$path}.");
             if (!app('config')->get('app.debug')) {
                 report($exception);
                 return $path;

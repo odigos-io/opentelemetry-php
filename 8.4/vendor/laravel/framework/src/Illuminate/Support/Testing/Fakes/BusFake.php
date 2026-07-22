@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Support\Testing\Fakes;
+namespace Odigos\Illuminate\Support\Testing\Fakes;
 
 use Closure;
-use Illuminate\Bus\BatchRepository;
-use Illuminate\Bus\ChainedBatch;
-use Illuminate\Bus\PendingBatch;
-use Illuminate\Contracts\Bus\QueueingDispatcher;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\Bus\BatchRepository;
+use Odigos\Illuminate\Bus\ChainedBatch;
+use Odigos\Illuminate\Bus\PendingBatch;
+use Odigos\Illuminate\Contracts\Bus\QueueingDispatcher;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 use RuntimeException;
-class BusFake implements \Illuminate\Support\Testing\Fakes\Fake, QueueingDispatcher
+class BusFake implements Fake, QueueingDispatcher
 {
     use ReflectsClosures;
     /**
@@ -81,7 +81,7 @@ class BusFake implements \Illuminate\Support\Testing\Fakes\Fake, QueueingDispatc
     {
         $this->dispatcher = $dispatcher;
         $this->jobsToFake = Arr::wrap($jobsToFake);
-        $this->batchRepository = $batchRepository ?: new \Illuminate\Support\Testing\Fakes\BatchRepositoryFake();
+        $this->batchRepository = $batchRepository ?: new BatchRepositoryFake();
     }
     /**
      * Specify the jobs that should be dispatched instead of faked.
@@ -268,7 +268,7 @@ class BusFake implements \Illuminate\Support\Testing\Fakes\Fake, QueueingDispatc
         $callback = null;
         if ($command instanceof Closure) {
             [$command, $callback] = [$this->firstClosureParameterType($command), $command];
-        } elseif ($command instanceof \Illuminate\Support\Testing\Fakes\ChainedBatchTruthTest) {
+        } elseif ($command instanceof ChainedBatchTruthTest) {
             $instance = $command;
             $command = ChainedBatch::class;
             $callback = fn($job) => $instance($job->toPendingBatch());
@@ -337,7 +337,7 @@ class BusFake implements \Illuminate\Support\Testing\Fakes\Fake, QueueingDispatc
                 return \false;
             }
             foreach ($job->chained as $index => $serializedChainedJob) {
-                if ($chain[$index] instanceof \Illuminate\Support\Testing\Fakes\ChainedBatchTruthTest) {
+                if ($chain[$index] instanceof ChainedBatchTruthTest) {
                     $chainedBatch = unserialize($serializedChainedJob);
                     if (!$chainedBatch instanceof ChainedBatch || !$chain[$index]($chainedBatch->toPendingBatch())) {
                         return \false;
@@ -370,7 +370,7 @@ class BusFake implements \Illuminate\Support\Testing\Fakes\Fake, QueueingDispatc
      */
     public function chainedBatch(Closure $callback)
     {
-        return new \Illuminate\Support\Testing\Fakes\ChainedBatchTruthTest($callback);
+        return new ChainedBatchTruthTest($callback);
     }
     /**
      * Assert if a batch was dispatched based on a truth-test callback.
@@ -380,7 +380,7 @@ class BusFake implements \Illuminate\Support\Testing\Fakes\Fake, QueueingDispatc
      */
     public function assertBatched(callable|array $callback)
     {
-        $callback = is_array($callback) ? fn(\Illuminate\Support\Testing\Fakes\PendingBatchFake $batch) => $batch->hasJobs($callback) : $callback;
+        $callback = is_array($callback) ? fn(PendingBatchFake $batch) => $batch->hasJobs($callback) : $callback;
         PHPUnit::assertTrue($this->batched($callback)->count() > 0, 'The expected batch was not dispatched.');
     }
     /**
@@ -585,7 +585,7 @@ class BusFake implements \Illuminate\Support\Testing\Fakes\Fake, QueueingDispatc
     {
         $jobs = Collection::wrap($jobs);
         $jobs = ChainedBatch::prepareNestedBatches($jobs);
-        return new \Illuminate\Support\Testing\Fakes\PendingChainFake($this, $jobs->shift(), $jobs->toArray());
+        return new PendingChainFake($this, $jobs->shift(), $jobs->toArray());
     }
     /**
      * Attempt to find the batch with the given ID.
@@ -605,7 +605,7 @@ class BusFake implements \Illuminate\Support\Testing\Fakes\Fake, QueueingDispatc
      */
     public function batch($jobs)
     {
-        return new \Illuminate\Support\Testing\Fakes\PendingBatchFake($this, Collection::wrap($jobs));
+        return new PendingBatchFake($this, Collection::wrap($jobs));
     }
     /**
      * Dispatch an empty job batch for testing.

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http\Client;
+namespace Odigos\Illuminate\Http\Client;
 
-use GuzzleHttp\Psr7\Message;
-class RequestException extends \Illuminate\Http\Client\HttpClientException
+use Odigos\GuzzleHttp\Psr7\Message;
+class RequestException extends HttpClientException
 {
     /**
      * The response instance.
@@ -35,7 +35,7 @@ class RequestException extends \Illuminate\Http\Client\HttpClientException
      * @param  \Illuminate\Http\Client\Response  $response
      * @param  int|false|null  $truncateExceptionsAt
      */
-    public function __construct(\Illuminate\Http\Client\Response $response, $truncateExceptionsAt = null)
+    public function __construct(Response $response, $truncateExceptionsAt = null)
     {
         $this->truncateExceptionsAt = $truncateExceptionsAt;
         $this->response = $response;
@@ -88,7 +88,7 @@ class RequestException extends \Illuminate\Http\Client\HttpClientException
      * @param  \Illuminate\Http\Client\Response  $response
      * @return string
      */
-    protected function prepareMessage(\Illuminate\Http\Client\Response $response)
+    protected function prepareMessage(Response $response)
     {
         $message = "HTTP request returned status code {$response->status()}";
         $truncateExceptionsAt = $this->truncateExceptionsAt ?? static::$truncateAt;

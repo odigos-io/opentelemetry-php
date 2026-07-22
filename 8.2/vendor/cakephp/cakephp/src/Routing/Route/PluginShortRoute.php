@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         1.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing\Route;
+namespace Odigos\Cake\Routing\Route;
 
 /**
  * Plugin short route, that copies the plugin param to the controller parameters
  * It is used for supporting /{plugin} routes.
  */
-class PluginShortRoute extends \Cake\Routing\Route\InflectedRoute
+class PluginShortRoute extends InflectedRoute
 {
     /**
      * Parses a string URL into an array. If a plugin key is found, it will be copied to the

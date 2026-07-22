@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Console\Concerns;
+namespace Odigos\Illuminate\Console\Concerns;
 
-use Illuminate\Support\Collection;
-use Symfony\Component\Finder\Finder;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Symfony\Component\Finder\Finder;
 trait FindsAvailableModels
 {
     /**

@@ -13,11 +13,11 @@ declare (strict_types=1);
  * @since         4.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Client\Adapter;
+namespace Odigos\Cake\Http\Client\Adapter;
 
-use Cake\Http\Client\AdapterInterface;
-use Cake\Http\Client\Exception\MissingResponseException;
-use Cake\Http\Client\Response;
+use Odigos\Cake\Http\Client\AdapterInterface;
+use Odigos\Cake\Http\Client\Exception\MissingResponseException;
+use Odigos\Cake\Http\Client\Response;
 use Closure;
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;

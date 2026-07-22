@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Http;
+namespace Odigos\Illuminate\Foundation\Http;
 
-use Illuminate\Support\Carbon;
-use Symfony\Component\HttpFoundation\Cookie;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Symfony\Component\HttpFoundation\Cookie;
 class MaintenanceModeBypassCookie
 {
     /**

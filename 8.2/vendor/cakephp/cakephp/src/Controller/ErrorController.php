@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Controller;
+namespace Odigos\Cake\Controller;
 
-use Cake\Event\EventInterface;
-use Cake\View\JsonView;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\View\JsonView;
 /**
  * Error Handling Controller
  *
  * Controller used by ErrorHandler to render error views.
  */
-class ErrorController extends \Cake\Controller\Controller
+class ErrorController extends Controller
 {
     /**
      * Get alternate view classes that can be used in

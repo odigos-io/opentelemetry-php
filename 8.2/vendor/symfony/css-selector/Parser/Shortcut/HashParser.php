@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Parser\Shortcut;
+namespace Odigos\Symfony\Component\CssSelector\Parser\Shortcut;
 
-use Symfony\Component\CssSelector\Node\ElementNode;
-use Symfony\Component\CssSelector\Node\HashNode;
-use Symfony\Component\CssSelector\Node\SelectorNode;
-use Symfony\Component\CssSelector\Parser\ParserInterface;
+use Odigos\Symfony\Component\CssSelector\Node\ElementNode;
+use Odigos\Symfony\Component\CssSelector\Node\HashNode;
+use Odigos\Symfony\Component\CssSelector\Node\SelectorNode;
+use Odigos\Symfony\Component\CssSelector\Parser\ParserInterface;
 /**
  * CSS selector hash parser shortcut.
  *

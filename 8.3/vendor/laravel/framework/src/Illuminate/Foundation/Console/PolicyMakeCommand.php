@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\GeneratorCommand;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Console\GeneratorCommand;
+use Odigos\Illuminate\Support\Str;
 use LogicException;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use function Laravel\Prompts\suggest;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use function Odigos\Laravel\Prompts\suggest;
 #[AsCommand(name: 'make:policy')]
 class PolicyMakeCommand extends GeneratorCommand
 {

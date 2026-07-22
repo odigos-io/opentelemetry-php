@@ -13,7 +13,7 @@ namespace Odigos;
 // The $locale argument added to grapheme_*() in PHP 8.5 / ICU 74 is accepted
 // for native-signature compatibility but ignored by the polyfill, which only
 // performs UTF-8 case folding.
-use Symfony\Polyfill\Intl\Grapheme as p;
+use Odigos\Symfony\Polyfill\Intl\Grapheme as p;
 if (!\function_exists('grapheme_stripos') && !\function_exists('Odigos\grapheme_stripos')) {
     function grapheme_stripos(?string $haystack, ?string $needle, ?int $offset = 0, ?string $locale = ''): int|false
     {

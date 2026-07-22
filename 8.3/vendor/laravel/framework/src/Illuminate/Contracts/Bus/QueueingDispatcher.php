@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Contracts\Bus;
+namespace Odigos\Illuminate\Contracts\Bus;
 
-interface QueueingDispatcher extends \Illuminate\Contracts\Bus\Dispatcher
+interface QueueingDispatcher extends Dispatcher
 {
     /**
      * Attempt to find the batch with the given ID.

@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Bus;
+namespace Odigos\Illuminate\Bus;
 
 use Odigos\Carbon\CarbonImmutable;
 use Closure;
-use Illuminate\Bus\Events\BatchCanceled;
-use Illuminate\Bus\Events\BatchFinished;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Queue\Factory as QueueFactory;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Queue\CallQueuedClosure;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Bus\Events\BatchCanceled;
+use Odigos\Illuminate\Bus\Events\BatchFinished;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Contracts\Queue\Factory as QueueFactory;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Queue\CallQueuedClosure;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 use JsonSerializable;
 use Throwable;
 class Batch implements Arrayable, JsonSerializable
@@ -92,7 +92,7 @@ class Batch implements Arrayable, JsonSerializable
     /**
      * Create a new batch instance.
      */
-    public function __construct(QueueFactory $queue, \Illuminate\Bus\BatchRepository $repository, string $id, string $name, int $totalJobs, int $pendingJobs, int $failedJobs, array $failedJobIds, array $options, CarbonImmutable $createdAt, ?CarbonImmutable $cancelledAt = null, ?CarbonImmutable $finishedAt = null)
+    public function __construct(QueueFactory $queue, BatchRepository $repository, string $id, string $name, int $totalJobs, int $pendingJobs, int $failedJobs, array $failedJobIds, array $options, CarbonImmutable $createdAt, ?CarbonImmutable $cancelledAt = null, ?CarbonImmutable $finishedAt = null)
     {
         $this->queue = $queue;
         $this->repository = $repository;
@@ -369,7 +369,7 @@ class Batch implements Arrayable, JsonSerializable
      * @param  callable  $handler
      * @return void
      */
-    protected function invokeHandlerCallback($handler, \Illuminate\Bus\Batch $batch, ?Throwable $e = null)
+    protected function invokeHandlerCallback($handler, Batch $batch, ?Throwable $e = null)
     {
         try {
             $handler($batch, $e);

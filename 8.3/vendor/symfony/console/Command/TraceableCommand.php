@@ -8,26 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Command;
+namespace Odigos\Symfony\Component\Console\Command;
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Completion\CompletionInput;
-use Symfony\Component\Console\Completion\CompletionSuggestions;
-use Symfony\Component\Console\Helper\HelperInterface;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Stopwatch\Stopwatch;
+use Odigos\Symfony\Component\Console\Application;
+use Odigos\Symfony\Component\Console\Completion\CompletionInput;
+use Odigos\Symfony\Component\Console\Completion\CompletionSuggestions;
+use Odigos\Symfony\Component\Console\Helper\HelperInterface;
+use Odigos\Symfony\Component\Console\Helper\HelperSet;
+use Odigos\Symfony\Component\Console\Input\InputDefinition;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Stopwatch\Stopwatch;
 /**
  * @internal
  *
  * @author Jules Pietri <jules@heahprod.com>
  */
-final class TraceableCommand extends \Symfony\Component\Console\Command\Command
+final class TraceableCommand extends Command
 {
-    public readonly \Symfony\Component\Console\Command\Command $command;
+    public readonly Command $command;
     public int $exitCode;
     public ?int $interruptedBySignal = null;
     public bool $ignoreValidation;
@@ -44,9 +44,9 @@ final class TraceableCommand extends \Symfony\Component\Console\Command\Command
     public array $interactiveInputs = [];
     public array $handledSignals = [];
     public ?array $invokableCommandInfo = null;
-    public function __construct(\Symfony\Component\Console\Command\Command $command, private readonly Stopwatch $stopwatch)
+    public function __construct(Command $command, private readonly Stopwatch $stopwatch)
     {
-        if ($command instanceof \Symfony\Component\Console\Command\LazyCommand) {
+        if ($command instanceof LazyCommand) {
             $command = $command->getCommand();
         }
         $this->command = $command;
@@ -54,7 +54,7 @@ final class TraceableCommand extends \Symfony\Component\Console\Command\Command
         $this->setDescription($command->getDescription());
         parent::__construct($command->getName());
         // init below enables calling {@see parent::run()}
-        [$code, $processTitle, $ignoreValidationErrors] = \Closure::bind(fn() => [$this->code, $this->processTitle, $this->ignoreValidationErrors], $command, \Symfony\Component\Console\Command\Command::class)();
+        [$code, $processTitle, $ignoreValidationErrors] = \Closure::bind(fn() => [$this->code, $this->processTitle, $this->ignoreValidationErrors], $command, Command::class)();
         if (\is_callable($code)) {
             $this->setCode($code);
         }
@@ -129,8 +129,8 @@ final class TraceableCommand extends \Symfony\Component\Console\Command\Command
      */
     public function setCode(callable $code): static
     {
-        if ($code instanceof \Symfony\Component\Console\Command\InvokableCommand) {
-            $r = \Closure::bind(fn() => $this->invokable, $code, \Symfony\Component\Console\Command\InvokableCommand::class)();
+        if ($code instanceof InvokableCommand) {
+            $r = \Closure::bind(fn() => $this->invokable, $code, InvokableCommand::class)();
             $this->invokableCommandInfo = ['class' => $r->getClosureScopeClass()->name, 'file' => $r->getFileName(), 'line' => $r->getStartLine()];
             // Pass the original callable to avoid double-wrapping in Command::setCode()
             $this->command->setCode($code->getCode());
@@ -245,7 +245,7 @@ final class TraceableCommand extends \Symfony\Component\Console\Command\Command
     }
     protected function interact(InputInterface $input, OutputInterface $output): void
     {
-        if (!$this->isInteractive = \Symfony\Component\Console\Command\Command::class !== (new \ReflectionMethod($this->command, 'interact'))->getDeclaringClass()->getName()) {
+        if (!$this->isInteractive = Command::class !== (new \ReflectionMethod($this->command, 'interact'))->getDeclaringClass()->getName()) {
             return;
         }
         $event = $this->stopwatch->start($this->getName() . '.interact', 'command');

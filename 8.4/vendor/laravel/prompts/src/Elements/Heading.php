@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Prompts\Elements;
+namespace Odigos\Laravel\Prompts\Elements;
 
-class Heading implements \Laravel\Prompts\Elements\ElementContract
+class Heading implements ElementContract
 {
     public function __construct(protected string $text)
     {

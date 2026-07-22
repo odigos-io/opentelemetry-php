@@ -1,24 +1,24 @@
 <?php
 
-namespace Illuminate\Support\Testing\Fakes;
+namespace Odigos\Illuminate\Support\Testing\Fakes;
 
 use BadMethodCallException;
 use Closure;
-use Illuminate\Bus\UniqueLock;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Contracts\Queue\Queue;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Events\CallQueuedListener;
-use Illuminate\Queue\CallQueuedClosure;
-use Illuminate\Queue\QueueManager;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\Bus\UniqueLock;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Contracts\Queue\Queue;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeUnique;
+use Odigos\Illuminate\Events\CallQueuedListener;
+use Odigos\Illuminate\Queue\CallQueuedClosure;
+use Odigos\Illuminate\Queue\QueueManager;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 /**
  * @phpstan-type RawPushType array{"payload": string, "queue": string|null, "options": array<array-key, mixed>}
  */
-class QueueFake extends QueueManager implements \Illuminate\Support\Testing\Fakes\Fake, Queue
+class QueueFake extends QueueManager implements Fake, Queue
 {
     use ReflectsClosures;
     /**

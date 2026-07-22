@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Mail;
+namespace Odigos\Illuminate\Mail;
 
 use Closure;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
+use Odigos\Illuminate\Http\UploadedFile;
+use Odigos\Illuminate\Support\Facades\Storage;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 use RuntimeException;
 class Attachment
@@ -180,7 +180,7 @@ class Attachment
      * @param  array  $options
      * @return bool
      */
-    public function isEquivalent(\Illuminate\Mail\Attachment $attachment, $options = [])
+    public function isEquivalent(Attachment $attachment, $options = [])
     {
         $newOptions = ['as' => $options['as'] ?? $attachment->as, 'mime' => $options['mime'] ?? $attachment->mime];
         return $this->attachWith(fn($path) => [$path, ['as' => $this->as, 'mime' => $this->mime]], fn($data) => [$data(), ['as' => $this->as, 'mime' => $this->mime]]) === $attachment->attachWith(fn($path) => [$path, $newOptions], fn($data) => [$data(), $newOptions]);

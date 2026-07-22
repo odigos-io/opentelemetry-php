@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Loader;
+namespace Odigos\Symfony\Component\Routing\Loader;
 
-use Symfony\Component\Config\Loader\FileLoader;
-use Symfony\Component\Config\Resource\FileResource;
-use Symfony\Component\Routing\Loader\Configurator\Traits\HostTrait;
-use Symfony\Component\Routing\Loader\Configurator\Traits\LocalizedRouteTrait;
-use Symfony\Component\Routing\Loader\Configurator\Traits\PrefixTrait;
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Parser as YamlParser;
-use Symfony\Component\Yaml\Yaml;
+use Odigos\Symfony\Component\Config\Loader\FileLoader;
+use Odigos\Symfony\Component\Config\Resource\FileResource;
+use Odigos\Symfony\Component\Routing\Loader\Configurator\Traits\HostTrait;
+use Odigos\Symfony\Component\Routing\Loader\Configurator\Traits\LocalizedRouteTrait;
+use Odigos\Symfony\Component\Routing\Loader\Configurator\Traits\PrefixTrait;
+use Odigos\Symfony\Component\Routing\RouteCollection;
+use Odigos\Symfony\Component\Yaml\Exception\ParseException;
+use Odigos\Symfony\Component\Yaml\Parser as YamlParser;
+use Odigos\Symfony\Component\Yaml\Yaml;
 /**
  * YamlFileLoader loads Yaml routing files.
  *

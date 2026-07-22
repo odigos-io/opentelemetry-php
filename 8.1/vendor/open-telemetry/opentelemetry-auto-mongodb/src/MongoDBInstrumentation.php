@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\MongoDB;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\MongoDB;
 
 use function MongoDB\Driver\Monitoring\addSubscriber;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
@@ -16,7 +16,7 @@ final class MongoDBInstrumentation
         $instrumentation = new CachedInstrumentation('io.opentelemetry.contrib.php.mongodb', null, 'https://opentelemetry.io/schemas/1.32.0');
         $commandSerializer ??= self::defaultCommandSerializer();
         /** @psalm-suppress UnusedFunctionCall */
-        addSubscriber(new \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBInstrumentationSubscriber($instrumentation, $commandSerializer));
+        addSubscriber(new MongoDBInstrumentationSubscriber($instrumentation, $commandSerializer));
     }
     /**
      * @return callable(object): string

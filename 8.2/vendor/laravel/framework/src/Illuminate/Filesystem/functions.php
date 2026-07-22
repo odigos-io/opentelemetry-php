@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Filesystem;
+namespace Odigos\Illuminate\Filesystem;
 
-if (!function_exists('Illuminate\Filesystem\join_paths')) {
+if (!function_exists('Odigos\Illuminate\Filesystem\join_paths')) {
     /**
      * Join the given paths together.
      *

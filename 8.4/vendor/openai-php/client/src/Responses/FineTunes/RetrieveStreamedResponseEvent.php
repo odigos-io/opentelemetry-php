@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\FineTunes;
+namespace Odigos\OpenAI\Responses\FineTunes;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\FakeableForStreamedResponse;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\FakeableForStreamedResponse;
 /**
  * @implements ResponseContract<array{object: string, created_at: int, level: string, message: string}>
  */

@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\ContainerFileContract;
-use OpenAI\Contracts\Resources\ContainersContract;
-use OpenAI\Responses\Containers\CreateContainer;
-use OpenAI\Responses\Containers\DeleteContainer;
-use OpenAI\Responses\Containers\ListContainers;
-use OpenAI\Responses\Containers\RetrieveContainer;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\ContainerFileContract;
+use Odigos\OpenAI\Contracts\Resources\ContainersContract;
+use Odigos\OpenAI\Responses\Containers\CreateContainer;
+use Odigos\OpenAI\Responses\Containers\DeleteContainer;
+use Odigos\OpenAI\Responses\Containers\ListContainers;
+use Odigos\OpenAI\Responses\Containers\RetrieveContainer;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 /**
  * @phpstan-import-type CreateContainerType from CreateContainer
  * @phpstan-import-type RetrieveContainerType from RetrieveContainer
@@ -19,7 +19,7 @@ use OpenAI\ValueObjects\Transporter\Response;
  */
 final class Containers implements ContainersContract
 {
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Transportable;
     /**
      * Creates a container for use with the Code Interpreter tool.
      *
@@ -79,6 +79,6 @@ final class Containers implements ContainersContract
      */
     public function files(): ContainerFileContract
     {
-        return new \OpenAI\Resources\ContainerFile($this->transporter);
+        return new ContainerFile($this->transporter);
     }
 }

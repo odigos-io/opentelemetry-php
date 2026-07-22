@@ -14,20 +14,20 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
-use Cake\Core\App;
-use Cake\Core\Exception\CakeException;
-use Cake\Core\Plugin;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOptionParser;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Utility\Inflector;
 use DirectoryIterator;
 /**
  * Command for interactive I18N management.
  */
-class I18nInitCommand extends \Cake\Command\Command
+class I18nInitCommand extends Command
 {
     /**
      * @inheritDoc

@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\EventDispatcher\Debug;
+namespace Odigos\Symfony\Component\EventDispatcher\Debug;
 
 use Psr\EventDispatcher\StoppableEventInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Stopwatch\Stopwatch;
-use Symfony\Contracts\Service\ResetInterface;
+use Odigos\Symfony\Component\EventDispatcher\EventDispatcher;
+use Odigos\Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Odigos\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\RequestStack;
+use Odigos\Symfony\Component\Stopwatch\Stopwatch;
+use Odigos\Symfony\Contracts\Service\ResetInterface;
 /**
  * Collects some data about event listeners.
  *
@@ -171,8 +171,8 @@ class TraceableEventDispatcher implements EventDispatcherInterface, ResetInterfa
         foreach ($allListeners as $eventName => $listeners) {
             foreach ($listeners as [$listener, $priority]) {
                 if (!\in_array($listener, $calledListeners, \true)) {
-                    if (!$listener instanceof \Symfony\Component\EventDispatcher\Debug\WrappedListener) {
-                        $listener = new \Symfony\Component\EventDispatcher\Debug\WrappedListener($listener, null, $this->stopwatch, $this, $priority);
+                    if (!$listener instanceof WrappedListener) {
+                        $listener = new WrappedListener($listener, null, $this->stopwatch, $this, $priority);
                     }
                     $notCalled[] = $listener->getInfo($eventName);
                 }
@@ -238,7 +238,7 @@ class TraceableEventDispatcher implements EventDispatcherInterface, ResetInterfa
         }
         foreach ($this->dispatcher->getListeners($eventName) as $listener) {
             $priority = $this->getListenerPriority($eventName, $listener) ?? 0;
-            $wrappedListener = new \Symfony\Component\EventDispatcher\Debug\WrappedListener($listener instanceof \Symfony\Component\EventDispatcher\Debug\WrappedListener ? $listener->getWrappedListener() : $listener, null, $this->stopwatch, $this);
+            $wrappedListener = new WrappedListener($listener instanceof WrappedListener ? $listener->getWrappedListener() : $listener, null, $this->stopwatch, $this);
             $this->wrappedListeners[$eventName][] = $wrappedListener;
             $this->dispatcher->removeListener($eventName, $listener);
             $this->dispatcher->addListener($eventName, $wrappedListener, $priority);
@@ -254,7 +254,7 @@ class TraceableEventDispatcher implements EventDispatcherInterface, ResetInterfa
         unset($this->wrappedListeners[$eventName]);
         $skipped = \false;
         foreach ($this->dispatcher->getListeners($eventName) as $listener) {
-            if (!$listener instanceof \Symfony\Component\EventDispatcher\Debug\WrappedListener) {
+            if (!$listener instanceof WrappedListener) {
                 // #12845: a new listener was added during dispatch.
                 continue;
             }

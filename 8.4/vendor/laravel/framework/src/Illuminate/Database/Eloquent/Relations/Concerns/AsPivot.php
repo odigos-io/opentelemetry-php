@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Relations\Concerns;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Support\Str;
 trait AsPivot
 {
     /**

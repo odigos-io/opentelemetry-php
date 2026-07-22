@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Testing;
+namespace Odigos\Illuminate\Testing;
 
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Symfony\Component\Console\Output\ConsoleOutput;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutput;
 class ParallelConsoleOutput extends ConsoleOutput
 {
     /**

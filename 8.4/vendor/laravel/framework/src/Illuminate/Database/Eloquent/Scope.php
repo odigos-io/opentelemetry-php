@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
 interface Scope
 {
@@ -13,5 +13,5 @@ interface Scope
      * @param  TModel  $model
      * @return void
      */
-    public function apply(\Illuminate\Database\Eloquent\Builder $builder, \Illuminate\Database\Eloquent\Model $model);
+    public function apply(Builder $builder, Model $model);
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache\Events;
+namespace Odigos\Illuminate\Cache\Events;
 
-class CacheHit extends \Illuminate\Cache\Events\CacheEvent
+class CacheHit extends CacheEvent
 {
     /**
      * The value that was retrieved.

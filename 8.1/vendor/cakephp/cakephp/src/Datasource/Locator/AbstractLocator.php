@@ -14,14 +14,14 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource\Locator;
+namespace Odigos\Cake\Datasource\Locator;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Datasource\RepositoryInterface;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Datasource\RepositoryInterface;
 /**
  * Provides an abstract registry/factory for repository objects.
  */
-abstract class AbstractLocator implements \Cake\Datasource\Locator\LocatorInterface
+abstract class AbstractLocator implements LocatorInterface
 {
     /**
      * Instances that belong to the registry.

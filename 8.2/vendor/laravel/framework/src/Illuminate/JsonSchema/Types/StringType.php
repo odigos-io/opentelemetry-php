@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\JsonSchema\Types;
+namespace Odigos\Illuminate\JsonSchema\Types;
 
-class StringType extends \Illuminate\JsonSchema\Types\Type
+class StringType extends Type
 {
     /**
      * The minimum length (inclusive).

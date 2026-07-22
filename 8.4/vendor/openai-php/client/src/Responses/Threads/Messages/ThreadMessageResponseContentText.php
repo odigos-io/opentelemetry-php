@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Threads\Messages;
+namespace Odigos\OpenAI\Responses\Threads\Messages;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{value: string, annotations: array<int, array{type: 'file_citation', text: string, file_citation: array{file_id: string, quote?: string}, start_index: int, end_index: int}|array{type: 'file_path', text: string, file_path: array{file_id: string}, start_index: int, end_index: int}>}>
  */
@@ -29,9 +29,9 @@ final class ThreadMessageResponseContentText implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        $annotations = array_map(fn(array $annotation): \OpenAI\Responses\Threads\Messages\ThreadMessageResponseContentTextAnnotationFileCitationObject|\OpenAI\Responses\Threads\Messages\ThreadMessageResponseContentTextAnnotationFilePathObject => match ($annotation['type']) {
-            'file_citation' => \OpenAI\Responses\Threads\Messages\ThreadMessageResponseContentTextAnnotationFileCitationObject::from($annotation),
-            'file_path' => \OpenAI\Responses\Threads\Messages\ThreadMessageResponseContentTextAnnotationFilePathObject::from($annotation),
+        $annotations = array_map(fn(array $annotation): ThreadMessageResponseContentTextAnnotationFileCitationObject|ThreadMessageResponseContentTextAnnotationFilePathObject => match ($annotation['type']) {
+            'file_citation' => ThreadMessageResponseContentTextAnnotationFileCitationObject::from($annotation),
+            'file_path' => ThreadMessageResponseContentTextAnnotationFilePathObject::from($annotation),
         }, $attributes['annotations']);
         return new self($attributes['value'], $annotations);
     }
@@ -40,6 +40,6 @@ final class ThreadMessageResponseContentText implements ResponseContract
      */
     public function toArray(): array
     {
-        return ['value' => $this->value, 'annotations' => array_map(fn(\OpenAI\Responses\Threads\Messages\ThreadMessageResponseContentTextAnnotationFilePathObject|\OpenAI\Responses\Threads\Messages\ThreadMessageResponseContentTextAnnotationFileCitationObject $annotation): array => $annotation->toArray(), $this->annotations)];
+        return ['value' => $this->value, 'annotations' => array_map(fn(ThreadMessageResponseContentTextAnnotationFilePathObject|ThreadMessageResponseContentTextAnnotationFileCitationObject $annotation): array => $annotation->toArray(), $this->annotations)];
     }
 }

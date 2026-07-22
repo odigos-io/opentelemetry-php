@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses\Streaming;
+namespace Odigos\OpenAI\Responses\Responses\Streaming;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Contracts\ResponseHasMetaInformationContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Concerns\HasMetaInformation;
-use OpenAI\Responses\Meta\MetaInformation;
-use OpenAI\Responses\Responses\Output\OutputMessageContentOutputTextAnnotationsContainerFile;
-use OpenAI\Responses\Responses\Output\OutputMessageContentOutputTextAnnotationsFileCitation;
-use OpenAI\Responses\Responses\Output\OutputMessageContentOutputTextAnnotationsFilePath;
-use OpenAI\Responses\Responses\Output\OutputMessageContentOutputTextAnnotationsUrlCitation;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Contracts\ResponseHasMetaInformationContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Concerns\HasMetaInformation;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMessageContentOutputTextAnnotationsContainerFile;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMessageContentOutputTextAnnotationsFileCitation;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMessageContentOutputTextAnnotationsFilePath;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMessageContentOutputTextAnnotationsUrlCitation;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type ContainerFileType from OutputMessageContentOutputTextAnnotationsContainerFile
  * @phpstan-import-type FileCitationType from OutputMessageContentOutputTextAnnotationsFileCitation

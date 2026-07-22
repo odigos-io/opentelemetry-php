@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\SerializableClosure;
+namespace Odigos\Laravel\SerializableClosure;
 
 use Closure;
 class UnsignedSerializableClosure
@@ -19,7 +19,7 @@ class UnsignedSerializableClosure
      */
     public function __construct(Closure $closure)
     {
-        $this->serializable = new \Laravel\SerializableClosure\Serializers\Native($closure);
+        $this->serializable = new Serializers\Native($closure);
     }
     /**
      * Resolve the closure with the given arguments.

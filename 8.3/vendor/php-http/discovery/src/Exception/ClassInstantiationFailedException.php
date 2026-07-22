@@ -1,8 +1,8 @@
 <?php
 
-namespace Http\Discovery\Exception;
+namespace Odigos\Http\Discovery\Exception;
 
-use Http\Discovery\Exception;
+use Odigos\Http\Discovery\Exception;
 /**
  * Thrown when a class fails to instantiate.
  *

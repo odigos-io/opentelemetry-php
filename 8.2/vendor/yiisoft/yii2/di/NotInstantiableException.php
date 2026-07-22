@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\di;
+namespace Odigos\yii\di;
 
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * NotInstantiableException represents an exception caused by incorrect dependency injection container
  * configuration or usage.

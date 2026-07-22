@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Cache\Events\CacheFailedOver;
-use Illuminate\Contracts\Cache\LockProvider;
-use Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Cache\Events\CacheFailedOver;
+use Odigos\Illuminate\Contracts\Cache\LockProvider;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
 use RuntimeException;
 use Throwable;
-class FailoverStore extends \Illuminate\Cache\TaggableStore implements LockProvider
+class FailoverStore extends TaggableStore implements LockProvider
 {
     /**
      * The caches which failed on the last action.
@@ -20,7 +20,7 @@ class FailoverStore extends \Illuminate\Cache\TaggableStore implements LockProvi
      *
      * @param  array<int, string>  $stores
      */
-    public function __construct(protected \Illuminate\Cache\CacheManager $cache, protected Dispatcher $events, protected array $stores)
+    public function __construct(protected CacheManager $cache, protected Dispatcher $events, protected array $stores)
     {
     }
     /**
@@ -161,7 +161,7 @@ class FailoverStore extends \Illuminate\Cache\TaggableStore implements LockProvi
     public function flushStaleTags()
     {
         foreach ($this->stores as $store) {
-            if ($this->store($store)->getStore() instanceof \Illuminate\Cache\RedisStore) {
+            if ($this->store($store)->getStore() instanceof RedisStore) {
                 $this->store($store)->flushStaleTags();
                 break;
             }

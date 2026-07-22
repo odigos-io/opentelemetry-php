@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Query;
+namespace Odigos\Doctrine\DBAL\Query;
 
 final class SelectQuery
 {
@@ -13,7 +13,7 @@ final class SelectQuery
      * @param string[] $groupBy
      * @param string[] $orderBy
      */
-    public function __construct(private readonly bool $distinct, private readonly array $columns, private readonly array $from, private readonly ?string $where, private readonly array $groupBy, private readonly ?string $having, private readonly array $orderBy, private readonly \Doctrine\DBAL\Query\Limit $limit, private readonly ?\Doctrine\DBAL\Query\ForUpdate $forUpdate)
+    public function __construct(private readonly bool $distinct, private readonly array $columns, private readonly array $from, private readonly ?string $where, private readonly array $groupBy, private readonly ?string $having, private readonly array $orderBy, private readonly Limit $limit, private readonly ?ForUpdate $forUpdate)
     {
     }
     public function isDistinct(): bool
@@ -48,11 +48,11 @@ final class SelectQuery
     {
         return $this->orderBy;
     }
-    public function getLimit(): \Doctrine\DBAL\Query\Limit
+    public function getLimit(): Limit
     {
         return $this->limit;
     }
-    public function getForUpdate(): ?\Doctrine\DBAL\Query\ForUpdate
+    public function getForUpdate(): ?ForUpdate
     {
         return $this->forUpdate;
     }

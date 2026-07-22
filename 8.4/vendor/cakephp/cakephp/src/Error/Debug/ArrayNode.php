@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error\Debug;
+namespace Odigos\Cake\Error\Debug;
 
 /**
  * Dump node for Array values.
  */
-class ArrayNode implements \Cake\Error\Debug\NodeInterface
+class ArrayNode implements NodeInterface
 {
     /**
      * @var array<\Cake\Error\Debug\ArrayItemNode>
@@ -42,7 +42,7 @@ class ArrayNode implements \Cake\Error\Debug\NodeInterface
      * @param \Cake\Error\Debug\ArrayItemNode $node The item to add.
      * @return void
      */
-    public function add(\Cake\Error\Debug\ArrayItemNode $node): void
+    public function add(ArrayItemNode $node): void
     {
         $this->items[] = $node;
     }

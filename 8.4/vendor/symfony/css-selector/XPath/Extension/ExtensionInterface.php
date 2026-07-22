@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\XPath\Extension;
+namespace Odigos\Symfony\Component\CssSelector\XPath\Extension;
 
-use Symfony\Component\CssSelector\XPath\XPathExpr;
+use Odigos\Symfony\Component\CssSelector\XPath\XPathExpr;
 /**
  * XPath expression translator extension interface.
  *

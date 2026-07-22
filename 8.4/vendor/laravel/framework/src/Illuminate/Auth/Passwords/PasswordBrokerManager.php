@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Auth\Passwords;
+namespace Odigos\Illuminate\Auth\Passwords;
 
-use Illuminate\Contracts\Auth\PasswordBrokerFactory as FactoryContract;
+use Odigos\Illuminate\Contracts\Auth\PasswordBrokerFactory as FactoryContract;
 use InvalidArgumentException;
 /**
  * @mixin \Illuminate\Contracts\Auth\PasswordBroker
@@ -58,7 +58,7 @@ class PasswordBrokerManager implements FactoryContract
         // The password broker uses a token repository to validate tokens and send user
         // password e-mails, as well as validating that password reset process as an
         // aggregate service of sorts providing a convenient interface for resets.
-        return new \Illuminate\Auth\Passwords\PasswordBroker($this->createTokenRepository($config), $this->app['auth']->createUserProvider($config['provider'] ?? null), $this->app['events'] ?? null, timeboxDuration: $this->app['config']->get('auth.timebox_duration', 200000));
+        return new PasswordBroker($this->createTokenRepository($config), $this->app['auth']->createUserProvider($config['provider'] ?? null), $this->app['events'] ?? null, timeboxDuration: $this->app['config']->get('auth.timebox_duration', 200000));
     }
     /**
      * Create a token repository instance based on the given configuration.
@@ -73,9 +73,9 @@ class PasswordBrokerManager implements FactoryContract
             $key = base64_decode(substr($key, 7));
         }
         if (isset($config['driver']) && $config['driver'] === 'cache') {
-            return new \Illuminate\Auth\Passwords\CacheTokenRepository($this->app['cache']->store($config['store'] ?? null), $this->app['hash'], $key, ($config['expire'] ?? 60) * 60, $config['throttle'] ?? 0);
+            return new CacheTokenRepository($this->app['cache']->store($config['store'] ?? null), $this->app['hash'], $key, ($config['expire'] ?? 60) * 60, $config['throttle'] ?? 0);
         }
-        return new \Illuminate\Auth\Passwords\DatabaseTokenRepository($this->app['db']->connection($config['connection'] ?? null), $this->app['hash'], $config['table'], $key, ($config['expire'] ?? 60) * 60, $config['throttle'] ?? 0);
+        return new DatabaseTokenRepository($this->app['db']->connection($config['connection'] ?? null), $this->app['hash'], $config['table'], $key, ($config['expire'] ?? 60) * 60, $config['throttle'] ?? 0);
     }
     /**
      * Get the password broker configuration.

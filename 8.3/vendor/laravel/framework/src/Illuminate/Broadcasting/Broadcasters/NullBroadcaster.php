@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Broadcasting\Broadcasters;
+namespace Odigos\Illuminate\Broadcasting\Broadcasters;
 
-class NullBroadcaster extends \Illuminate\Broadcasting\Broadcasters\Broadcaster
+class NullBroadcaster extends Broadcaster
 {
     /**
      * {@inheritdoc}

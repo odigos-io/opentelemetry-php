@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Factories;
+namespace Odigos\Illuminate\Database\Eloquent\Factories;
 
-use Illuminate\Support\Arr;
-class CrossJoinSequence extends \Illuminate\Database\Eloquent\Factories\Sequence
+use Odigos\Illuminate\Support\Arr;
+class CrossJoinSequence extends Sequence
 {
     /**
      * Create a new cross join sequence instance.

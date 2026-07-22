@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Console\View\Components;
+namespace Odigos\Illuminate\Console\View\Components;
 
-use Symfony\Component\Console\Output\OutputInterface;
-class BulletList extends \Illuminate\Console\View\Components\Component
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+class BulletList extends Component
 {
     /**
      * Renders the component using the given arguments.
@@ -14,7 +14,7 @@ class BulletList extends \Illuminate\Console\View\Components\Component
      */
     public function render($elements, $verbosity = OutputInterface::VERBOSITY_NORMAL)
     {
-        $elements = $this->mutate($elements, [\Illuminate\Console\View\Components\Mutators\EnsureDynamicContentIsHighlighted::class, \Illuminate\Console\View\Components\Mutators\EnsureNoPunctuation::class, \Illuminate\Console\View\Components\Mutators\EnsureRelativePaths::class]);
+        $elements = $this->mutate($elements, [Mutators\EnsureDynamicContentIsHighlighted::class, Mutators\EnsureNoPunctuation::class, Mutators\EnsureRelativePaths::class]);
         $this->renderView('bullet-list', ['elements' => $elements], $verbosity);
     }
 }

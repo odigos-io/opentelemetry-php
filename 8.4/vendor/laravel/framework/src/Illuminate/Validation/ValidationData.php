@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Arr;
 class ValidationData
 {
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Query\Processors;
+namespace Odigos\Illuminate\Database\Query\Processors;
 
-use Illuminate\Database\Query\Builder;
+use Odigos\Illuminate\Database\Query\Builder;
 class Processor
 {
     /**

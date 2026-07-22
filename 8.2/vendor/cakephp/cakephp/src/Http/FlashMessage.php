@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         4.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
-use Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Core\InstanceConfigTrait;
 use Throwable;
-use function Cake\Core\pluginSplit;
+use function Odigos\Cake\Core\pluginSplit;
 /**
  * The FlashMessage class provides a way for you to write a flash variable
  * to the session, to be rendered in a view with the FlashHelper.
@@ -35,7 +35,7 @@ class FlashMessage
     /**
      * @var \Cake\Http\Session
      */
-    protected \Cake\Http\Session $session;
+    protected Session $session;
     /**
      * Constructor
      *
@@ -43,7 +43,7 @@ class FlashMessage
      * @param array<string, mixed> $config Config array.
      * @see FlashMessage::set() For list of valid config keys.
      */
-    public function __construct(\Cake\Http\Session $session, array $config = [])
+    public function __construct(Session $session, array $config = [])
     {
         $this->session = $session;
         $this->setConfig($config);

@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Middleware;
+namespace Odigos\Cake\Http\Middleware;
 
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;

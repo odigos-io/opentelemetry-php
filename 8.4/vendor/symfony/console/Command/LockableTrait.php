@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Command;
+namespace Odigos\Symfony\Component\Console\Command;
 
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Exception\LogicException;
-use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Lock\LockInterface;
-use Symfony\Component\Lock\Store\FlockStore;
-use Symfony\Component\Lock\Store\SemaphoreStore;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Exception\LogicException;
+use Odigos\Symfony\Component\Lock\LockFactory;
+use Odigos\Symfony\Component\Lock\LockInterface;
+use Odigos\Symfony\Component\Lock\Store\FlockStore;
+use Odigos\Symfony\Component\Lock\Store\SemaphoreStore;
 /**
  * Basic lock feature for commands.
  *
@@ -45,7 +45,7 @@ trait LockableTrait
             $this->lockFactory = new LockFactory($store);
         }
         if (!$name) {
-            if ($this instanceof \Symfony\Component\Console\Command\Command) {
+            if ($this instanceof Command) {
                 $name = $this->getName();
             } elseif ($attribute = (new \ReflectionClass($this::class))->getAttributes(AsCommand::class)) {
                 $name = $attribute[0]->newInstance()->name;

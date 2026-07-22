@@ -14,19 +14,19 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Association;
+namespace Odigos\Cake\ORM\Association;
 
-use Cake\Core\App;
-use Cake\Database\Expression\IdentifierExpression;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Database\ExpressionInterface;
-use Cake\Datasource\EntityInterface;
-use Cake\ORM\Association;
-use Cake\ORM\Association\Loader\SelectWithPivotLoader;
-use Cake\ORM\Query\SelectQuery;
-use Cake\ORM\Table;
-use Cake\Utility\Hash;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Database\Expression\IdentifierExpression;
+use Odigos\Cake\Database\Expression\QueryExpression;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\ORM\Association;
+use Odigos\Cake\ORM\Association\Loader\SelectWithPivotLoader;
+use Odigos\Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\ORM\Table;
+use Odigos\Cake\Utility\Hash;
+use Odigos\Cake\Utility\Inflector;
 use Closure;
 use InvalidArgumentException;
 use SplObjectStorage;
@@ -1227,7 +1227,7 @@ class BelongsToMany extends Association
     {
         if ($name === null) {
             if (empty($this->_junctionTableName)) {
-                $tablesNames = array_map('Cake\Utility\Inflector::underscore', [$this->getSource()->getTable(), $this->getTarget()->getTable()]);
+                $tablesNames = array_map('Odigos\Cake\Utility\Inflector::underscore', [$this->getSource()->getTable(), $this->getTarget()->getTable()]);
                 sort($tablesNames);
                 $this->_junctionTableName = implode('_', $tablesNames);
             }

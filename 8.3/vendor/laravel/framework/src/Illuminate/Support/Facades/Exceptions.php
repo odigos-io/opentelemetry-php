@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Testing\Fakes\ExceptionHandlerFake;
+use Odigos\Illuminate\Contracts\Debug\ExceptionHandler;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Testing\Fakes\ExceptionHandlerFake;
 /**
  * @method static void register()
  * @method static \Illuminate\Foundation\Exceptions\ReportableHandler reportable(callable $reportUsing)
@@ -38,7 +38,7 @@ use Illuminate\Support\Testing\Fakes\ExceptionHandlerFake;
  * @see \Illuminate\Foundation\Exceptions\Handler
  * @see \Illuminate\Support\Testing\Fakes\ExceptionHandlerFake
  */
-class Exceptions extends \Illuminate\Support\Facades\Facade
+class Exceptions extends Facade
 {
     /**
      * Replace the bound instance with a fake.

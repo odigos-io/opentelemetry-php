@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Odigos\Illuminate\Database\Eloquent\Relations;
 
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
  * @extends \Illuminate\Database\Eloquent\Relations\MorphOneOrMany<TRelatedModel, TDeclaringModel, \Illuminate\Database\Eloquent\Collection<int, TRelatedModel>>
  */
-class MorphMany extends \Illuminate\Database\Eloquent\Relations\MorphOneOrMany
+class MorphMany extends MorphOneOrMany
 {
     /**
      * Convert the relationship to a "morph one" relationship.
@@ -18,7 +18,7 @@ class MorphMany extends \Illuminate\Database\Eloquent\Relations\MorphOneOrMany
      */
     public function one()
     {
-        return \Illuminate\Database\Eloquent\Relations\MorphOne::noConstraints(fn() => tap(new \Illuminate\Database\Eloquent\Relations\MorphOne($this->getQuery(), $this->getParent(), $this->morphType, $this->foreignKey, $this->localKey), function ($morphOne) {
+        return MorphOne::noConstraints(fn() => tap(new MorphOne($this->getQuery(), $this->getParent(), $this->morphType, $this->foreignKey, $this->localKey), function ($morphOne) {
             if ($inverse = $this->getInverseRelationship()) {
                 $morphOne->inverse($inverse);
             }

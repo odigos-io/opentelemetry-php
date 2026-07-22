@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\API;
+namespace Odigos\Doctrine\DBAL\Driver\API;
 
-use Doctrine\DBAL\Driver\Exception;
-use Doctrine\DBAL\Exception\DriverException;
-use Doctrine\DBAL\Query;
+use Odigos\Doctrine\DBAL\Driver\Exception;
+use Odigos\Doctrine\DBAL\Exception\DriverException;
+use Odigos\Doctrine\DBAL\Query;
 interface ExceptionConverter
 {
     /**

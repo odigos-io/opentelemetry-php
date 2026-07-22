@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
 /**
  * Exception for an invalid specified field name in a statement detected in the driver.
  */
-class InvalidFieldNameException extends \Doctrine\DBAL\Exception\ServerException
+class InvalidFieldNameException extends ServerException
 {
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Log\Events;
+namespace Odigos\Illuminate\Log\Events;
 
 class MessageLogged
 {

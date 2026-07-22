@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 use Odigos\Yii;
-use yii\helpers\VarDumper;
-use yii\web\HttpException;
+use Odigos\yii\helpers\VarDumper;
+use Odigos\yii\web\HttpException;
 /**
  * ErrorHandler handles uncaught PHP errors and exceptions.
  *
@@ -23,7 +23,7 @@ use yii\web\HttpException;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-abstract class ErrorHandler extends \yii\base\Component
+abstract class ErrorHandler extends Component
 {
     /**
      * @event Event an event that is triggered when the handler is called by shutdown function via [[handleFatalError()]].
@@ -121,7 +121,7 @@ abstract class ErrorHandler extends \yii\base\Component
      */
     public function handleException($exception)
     {
-        if ($exception instanceof \yii\base\ExitException) {
+        if ($exception instanceof ExitException) {
             return;
         }
         $this->exception = $exception;
@@ -205,7 +205,7 @@ abstract class ErrorHandler extends \yii\base\Component
             return \true;
         }
         if (\E_ERROR & $code) {
-            $exception = new \yii\base\ErrorException($message, $code, $code, $file, $line);
+            $exception = new ErrorException($message, $code, $code, $file, $line);
             $ref = new \ReflectionProperty('\Exception', 'trace');
             // @link https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_reflectionsetaccessible
             // @link https://wiki.php.net/rfc/make-reflection-setaccessible-no-op
@@ -235,10 +235,10 @@ abstract class ErrorHandler extends \yii\base\Component
         if (error_reporting() & $code) {
             // load ErrorException manually here because autoloading them will not work
             // when error occurs while autoloading a class
-            if (!class_exists('yii\base\ErrorException', \false)) {
+            if (!class_exists('Odigos\yii\base\ErrorException', \false)) {
                 require_once __DIR__ . '/ErrorException.php';
             }
-            $exception = new \yii\base\ErrorException($message, $code, $code, $file, $line);
+            $exception = new ErrorException($message, $code, $code, $file, $line);
             if (\PHP_VERSION_ID < 70400) {
                 // prior to PHP 7.4 we can't throw exceptions inside of __toString() - it will result a fatal error
                 $trace = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
@@ -275,16 +275,16 @@ abstract class ErrorHandler extends \yii\base\Component
         }
         // load ErrorException manually here because autoloading them will not work
         // when error occurs while autoloading a class
-        if (!class_exists('yii\base\ErrorException', \false)) {
+        if (!class_exists('Odigos\yii\base\ErrorException', \false)) {
             require_once __DIR__ . '/ErrorException.php';
         }
-        if (!\yii\base\ErrorException::isFatalError($error)) {
+        if (!ErrorException::isFatalError($error)) {
             return;
         }
         if (!empty($this->_hhvmException)) {
             $this->exception = $this->_hhvmException;
         } else {
-            $this->exception = new \yii\base\ErrorException($error['message'], $error['type'], $error['type'], $error['file'], $error['line']);
+            $this->exception = new ErrorException($error['message'], $error['type'], $error['type'], $error['file'], $error['line']);
         }
         unset($error);
         $this->logException($this->exception);
@@ -359,7 +359,7 @@ abstract class ErrorHandler extends \yii\base\Component
      */
     public static function convertExceptionToString($exception)
     {
-        if ($exception instanceof \yii\base\UserException) {
+        if ($exception instanceof UserException) {
             return "{$exception->getName()}: {$exception->getMessage()}";
         }
         if (YII_DEBUG) {
@@ -376,9 +376,9 @@ abstract class ErrorHandler extends \yii\base\Component
      */
     public static function convertExceptionToVerboseString($exception)
     {
-        if ($exception instanceof \yii\base\Exception) {
+        if ($exception instanceof Exception) {
             $message = "Exception ({$exception->getName()})";
-        } elseif ($exception instanceof \yii\base\ErrorException) {
+        } elseif ($exception instanceof ErrorException) {
             $message = (string) $exception->getName();
         } else {
             $message = 'Exception';

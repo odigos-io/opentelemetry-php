@@ -1,9 +1,9 @@
 <?php
 
-namespace GuzzleHttp\Handler;
+namespace Odigos\GuzzleHttp\Handler;
 
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Utils;
+use Odigos\GuzzleHttp\Psr7\Response;
+use Odigos\GuzzleHttp\Utils;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
@@ -63,7 +63,7 @@ final class EasyHandle
     public function createResponse(): void
     {
         $this->response = null;
-        [$ver, $status, $reason, $headers] = \GuzzleHttp\Handler\HeaderProcessor::parseHeaders($this->headers);
+        [$ver, $status, $reason, $headers] = HeaderProcessor::parseHeaders($this->headers);
         $normalizedKeys = Utils::normalizeHeaderKeys($headers);
         if (isset($this->options['decode_content']) && $this->options['decode_content'] !== \false && isset($normalizedKeys['content-encoding'])) {
             $headers['x-encoded-content-encoding'] = $headers[$normalizedKeys['content-encoding']];

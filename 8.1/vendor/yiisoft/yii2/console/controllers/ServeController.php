@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console\controllers;
+namespace Odigos\yii\console\controllers;
 
 use Odigos\Yii;
-use yii\console\Application;
-use yii\console\Controller;
-use yii\console\ExitCode;
-use yii\helpers\Console;
+use Odigos\yii\console\Application;
+use Odigos\yii\console\Controller;
+use Odigos\yii\console\ExitCode;
+use Odigos\yii\helpers\Console;
 /**
  * Runs PHP built-in web server.
  *

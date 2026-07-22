@@ -13,14 +13,14 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console\TestSuite\Constraint;
+namespace Odigos\Cake\Console\TestSuite\Constraint;
 
 /**
  * ContentsContain
  *
  * @internal
  */
-class ContentsContain extends \Cake\Console\TestSuite\Constraint\ContentsBase
+class ContentsContain extends ContentsBase
 {
     /**
      * Checks if contents contain expected
@@ -50,5 +50,5 @@ class ContentsContain extends \Cake\Console\TestSuite\Constraint\ContentsBase
     }
 }
 // phpcs:disable
-class_alias('Cake\Console\TestSuite\Constraint\ContentsContain', 'Cake\TestSuite\Constraint\Console\ContentsContain');
+class_alias('Odigos\Cake\Console\TestSuite\Constraint\ContentsContain', 'Odigos\Cake\TestSuite\Constraint\Console\ContentsContain');
 // phpcs:enable

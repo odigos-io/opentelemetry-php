@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Metadata;
+namespace Odigos\Doctrine\DBAL\Schema\Metadata;
 
-use Doctrine\DBAL\Schema\Index\IndexType;
+use Odigos\Doctrine\DBAL\Schema\Index\IndexType;
 /**
  * A row of metadata describing an index column.
  */

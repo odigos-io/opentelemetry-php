@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
 /**
  * Describe the interface between a command
@@ -52,5 +52,5 @@ interface CommandInterface
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null Exit code or null for success.
      */
-    public function run(array $argv, \Cake\Console\ConsoleIo $io): ?int;
+    public function run(array $argv, ConsoleIo $io): ?int;
 }

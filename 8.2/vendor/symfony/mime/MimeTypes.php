@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime;
+namespace Odigos\Symfony\Component\Mime;
 
-use Symfony\Component\Mime\Exception\LogicException;
+use Odigos\Symfony\Component\Mime\Exception\LogicException;
 /**
  * Manages MIME types and file extensions.
  *
@@ -32,7 +32,7 @@ use Symfony\Component\Mime\Exception\LogicException;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-final class MimeTypes implements \Symfony\Component\Mime\MimeTypesInterface
+final class MimeTypes implements MimeTypesInterface
 {
     private array $extensions = [];
     private array $mimeTypes = [];
@@ -40,7 +40,7 @@ final class MimeTypes implements \Symfony\Component\Mime\MimeTypesInterface
      * @var MimeTypeGuesserInterface[]
      */
     private array $guessers = [];
-    private static \Symfony\Component\Mime\MimeTypes $default;
+    private static MimeTypes $default;
     public function __construct(array $map = [])
     {
         foreach ($map as $mimeType => $extensions) {
@@ -49,8 +49,8 @@ final class MimeTypes implements \Symfony\Component\Mime\MimeTypesInterface
                 $this->mimeTypes[$extension][] = $mimeType;
             }
         }
-        $this->registerGuesser(new \Symfony\Component\Mime\FileBinaryMimeTypeGuesser());
-        $this->registerGuesser(new \Symfony\Component\Mime\FileinfoMimeTypeGuesser());
+        $this->registerGuesser(new FileBinaryMimeTypeGuesser());
+        $this->registerGuesser(new FileinfoMimeTypeGuesser());
     }
     public static function setDefault(self $default): void
     {
@@ -65,7 +65,7 @@ final class MimeTypes implements \Symfony\Component\Mime\MimeTypesInterface
      *
      * The last registered guesser has precedence over the other ones.
      */
-    public function registerGuesser(\Symfony\Component\Mime\MimeTypeGuesserInterface $guesser): void
+    public function registerGuesser(MimeTypeGuesserInterface $guesser): void
     {
         array_unshift($this->guessers, $guesser);
     }

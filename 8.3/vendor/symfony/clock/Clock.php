@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Clock;
+namespace Odigos\Symfony\Component\Clock;
 
 use Psr\Clock\ClockInterface as PsrClockInterface;
 /**
@@ -16,9 +16,9 @@ use Psr\Clock\ClockInterface as PsrClockInterface;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-final class Clock implements \Symfony\Component\Clock\ClockInterface
+final class Clock implements ClockInterface
 {
-    private static \Symfony\Component\Clock\ClockInterface $globalClock;
+    private static ClockInterface $globalClock;
     public function __construct(private readonly ?PsrClockInterface $clock = null, private ?\DateTimeZone $timezone = null)
     {
     }
@@ -28,29 +28,29 @@ final class Clock implements \Symfony\Component\Clock\ClockInterface
      * Note that you should prefer injecting a ClockInterface or using
      * ClockAwareTrait when possible instead of using this method.
      */
-    public static function get(): \Symfony\Component\Clock\ClockInterface
+    public static function get(): ClockInterface
     {
-        return self::$globalClock ??= new \Symfony\Component\Clock\NativeClock();
+        return self::$globalClock ??= new NativeClock();
     }
     public static function set(PsrClockInterface $clock): void
     {
-        self::$globalClock = $clock instanceof \Symfony\Component\Clock\ClockInterface ? $clock : new self($clock);
+        self::$globalClock = $clock instanceof ClockInterface ? $clock : new self($clock);
     }
-    public function now(): \Symfony\Component\Clock\DatePoint
+    public function now(): DatePoint
     {
         $now = ($this->clock ?? self::get())->now();
-        if (!$now instanceof \Symfony\Component\Clock\DatePoint) {
-            $now = \Symfony\Component\Clock\DatePoint::createFromInterface($now);
+        if (!$now instanceof DatePoint) {
+            $now = DatePoint::createFromInterface($now);
         }
         return isset($this->timezone) ? $now->setTimezone($this->timezone) : $now;
     }
     public function sleep(float|int $seconds): void
     {
         $clock = $this->clock ?? self::get();
-        if ($clock instanceof \Symfony\Component\Clock\ClockInterface) {
+        if ($clock instanceof ClockInterface) {
             $clock->sleep($seconds);
         } else {
-            (new \Symfony\Component\Clock\NativeClock())->sleep($seconds);
+            (new NativeClock())->sleep($seconds);
         }
     }
     /**

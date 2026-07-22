@@ -14,30 +14,30 @@ declare (strict_types=1);
 * @since         3.0.0
 * @license       https://opensource.org/licenses/mit-license.php MIT License
 */
-namespace Cake\Database;
+namespace Odigos\Cake\Database;
 
-use Cake\Cache\Cache;
-use Cake\Core\App;
-use Cake\Core\Exception\CakeException;
-use Cake\Core\Retry\CommandRetry;
-use Cake\Database\Exception\MissingDriverException;
-use Cake\Database\Exception\MissingExtensionException;
-use Cake\Database\Exception\NestedTransactionRollbackException;
-use Cake\Database\Query\DeleteQuery;
-use Cake\Database\Query\InsertQuery;
-use Cake\Database\Query\QueryFactory;
-use Cake\Database\Query\SelectQuery;
-use Cake\Database\Query\UpdateQuery;
-use Cake\Database\Retry\ReconnectStrategy;
-use Cake\Database\Schema\CachedCollection;
-use Cake\Database\Schema\Collection as SchemaCollection;
-use Cake\Database\Schema\CollectionInterface as SchemaCollectionInterface;
-use Cake\Datasource\ConnectionInterface;
-use Cake\Log\Log;
+use Odigos\Cake\Cache\Cache;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Retry\CommandRetry;
+use Odigos\Cake\Database\Exception\MissingDriverException;
+use Odigos\Cake\Database\Exception\MissingExtensionException;
+use Odigos\Cake\Database\Exception\NestedTransactionRollbackException;
+use Odigos\Cake\Database\Query\DeleteQuery;
+use Odigos\Cake\Database\Query\InsertQuery;
+use Odigos\Cake\Database\Query\QueryFactory;
+use Odigos\Cake\Database\Query\SelectQuery;
+use Odigos\Cake\Database\Query\UpdateQuery;
+use Odigos\Cake\Database\Retry\ReconnectStrategy;
+use Odigos\Cake\Database\Schema\CachedCollection;
+use Odigos\Cake\Database\Schema\Collection as SchemaCollection;
+use Odigos\Cake\Database\Schema\CollectionInterface as SchemaCollectionInterface;
+use Odigos\Cake\Datasource\ConnectionInterface;
+use Odigos\Cake\Log\Log;
 use Closure;
 use Psr\SimpleCache\CacheInterface;
 use Throwable;
-use function Cake\Core\env;
+use function Odigos\Cake\Core\env;
 /**
  * Represents a connection with a database server.
  */
@@ -52,11 +52,11 @@ class Connection implements ConnectionInterface
     /**
      * @var \Cake\Database\Driver
      */
-    protected \Cake\Database\Driver $readDriver;
+    protected Driver $readDriver;
     /**
      * @var \Cake\Database\Driver
      */
-    protected \Cake\Database\Driver $writeDriver;
+    protected Driver $writeDriver;
     /**
      * Contains how many nested transactions have been started.
      *
@@ -128,7 +128,7 @@ class Connection implements ConnectionInterface
     {
         $driver = $config['driver'] ?? '';
         if (!is_string($driver)) {
-            assert($driver instanceof \Cake\Database\Driver);
+            assert($driver instanceof Driver);
             if (!$driver->enabled()) {
                 throw new MissingExtensionException(['driver' => $driver::class, 'name' => $this->configName()]);
             }
@@ -214,7 +214,7 @@ class Connection implements ConnectionInterface
      * @param string $role Connection role ('read' or 'write')
      * @return \Cake\Database\Driver
      */
-    public function getDriver(string $role = self::ROLE_WRITE): \Cake\Database\Driver
+    public function getDriver(string $role = self::ROLE_WRITE): Driver
     {
         assert($role === self::ROLE_READ || $role === self::ROLE_WRITE);
         return $role === self::ROLE_READ ? $this->getReadDriver() : $this->getWriteDriver();
@@ -224,7 +224,7 @@ class Connection implements ConnectionInterface
      *
      * @return \Cake\Database\Driver
      */
-    public function getReadDriver(): \Cake\Database\Driver
+    public function getReadDriver(): Driver
     {
         return $this->readDriver;
     }
@@ -233,7 +233,7 @@ class Connection implements ConnectionInterface
      *
      * @return \Cake\Database\Driver
      */
-    public function getWriteDriver(): \Cake\Database\Driver
+    public function getWriteDriver(): Driver
     {
         return $this->writeDriver;
     }
@@ -246,7 +246,7 @@ class Connection implements ConnectionInterface
      * @param array $types list or associative array of types to be used for casting values in query
      * @return \Cake\Database\StatementInterface executed statement
      */
-    public function execute(string $sql, array $params = [], array $types = []): \Cake\Database\StatementInterface
+    public function execute(string $sql, array $params = [], array $types = []): StatementInterface
     {
         return $this->getDisconnectRetry()->run(fn() => $this->getWriteDriver()->execute($sql, $params, $types));
     }
@@ -257,7 +257,7 @@ class Connection implements ConnectionInterface
      * @param \Cake\Database\Query $query The query to be executed
      * @return \Cake\Database\StatementInterface executed statement
      */
-    public function run(\Cake\Database\Query $query): \Cake\Database\StatementInterface
+    public function run(Query $query): StatementInterface
     {
         return $this->getDisconnectRetry()->run(fn() => $this->getDriver($query->getConnectionRole())->run($query));
     }
@@ -278,7 +278,7 @@ class Connection implements ConnectionInterface
      * @param array<string, string> $types Associative array containing the types to be used for casting.
      * @return \Cake\Database\Query\SelectQuery<mixed>
      */
-    public function selectQuery(\Cake\Database\ExpressionInterface|Closure|array|string|float|int $fields = [], array|string $table = [], array $types = []): SelectQuery
+    public function selectQuery(ExpressionInterface|Closure|array|string|float|int $fields = [], array|string $table = [], array $types = []): SelectQuery
     {
         return $this->queryFactory()->select($fields, $table, $types);
     }
@@ -303,7 +303,7 @@ class Connection implements ConnectionInterface
      * @param array<string, string> $types Associative array containing the types to be used for casting.
      * @return \Cake\Database\Query\UpdateQuery
      */
-    public function updateQuery(\Cake\Database\ExpressionInterface|string|null $table = null, array $values = [], array $conditions = [], array $types = []): UpdateQuery
+    public function updateQuery(ExpressionInterface|string|null $table = null, array $values = [], array $conditions = [], array $types = []): UpdateQuery
     {
         return $this->queryFactory()->update($table, $values, $conditions, $types);
     }
@@ -353,7 +353,7 @@ class Connection implements ConnectionInterface
      * @param array<string, string> $types Array containing the types to be used for casting
      * @return \Cake\Database\StatementInterface
      */
-    public function insert(string $table, array $values, array $types = []): \Cake\Database\StatementInterface
+    public function insert(string $table, array $values, array $types = []): StatementInterface
     {
         return $this->insertQuery($table, $values, $types)->execute();
     }
@@ -366,7 +366,7 @@ class Connection implements ConnectionInterface
      * @param array<string, string> $types list of associative array containing the types to be used for casting
      * @return \Cake\Database\StatementInterface
      */
-    public function update(string $table, array $values, array $conditions = [], array $types = []): \Cake\Database\StatementInterface
+    public function update(string $table, array $values, array $conditions = [], array $types = []): StatementInterface
     {
         return $this->updateQuery($table, $values, $conditions, $types)->execute();
     }
@@ -378,7 +378,7 @@ class Connection implements ConnectionInterface
      * @param array<string, string> $types list of associative array containing the types to be used for casting
      * @return \Cake\Database\StatementInterface
      */
-    public function delete(string $table, array $conditions = [], array $types = []): \Cake\Database\StatementInterface
+    public function delete(string $table, array $conditions = [], array $types = []): StatementInterface
     {
         return $this->deleteQuery($table, $conditions, $types)->execute();
     }
@@ -474,7 +474,7 @@ class Connection implements ConnectionInterface
         if ($enable === \false) {
             $this->_useSavePoints = \false;
         } else {
-            $this->_useSavePoints = $this->getWriteDriver()->supports(\Cake\Database\DriverFeatureEnum::SAVEPOINT);
+            $this->_useSavePoints = $this->getWriteDriver()->supports(DriverFeatureEnum::SAVEPOINT);
         }
         return $this;
     }

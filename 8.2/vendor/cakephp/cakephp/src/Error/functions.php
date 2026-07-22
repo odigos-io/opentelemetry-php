@@ -15,9 +15,9 @@ declare (strict_types=1);
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 // phpcs:disable PSR1.Files.SideEffects
-namespace Cake\Error;
+namespace Odigos\Cake\Error;
 
-use Cake\Core\Configure;
+use Odigos\Cake\Core\Configure;
 /**
  * Prints out debug information about given variable and returns the
  * variable that was passed.
@@ -38,12 +38,12 @@ function debug(mixed $var, ?bool $showHtml = null, bool $showFrom = \true): mixe
     }
     $location = [];
     if ($showFrom) {
-        $trace = \Cake\Error\Debugger::trace(['start' => 0, 'depth' => 1, 'format' => 'array']);
+        $trace = Debugger::trace(['start' => 0, 'depth' => 1, 'format' => 'array']);
         if (isset($trace[0]['line']) && isset($trace[0]['file'])) {
             $location = ['line' => $trace[0]['line'], 'file' => $trace[0]['file']];
         }
     }
-    \Cake\Error\Debugger::printVar($var, $location, $showHtml);
+    Debugger::printVar($var, $location, $showHtml);
     return $var;
 }
 /**
@@ -67,7 +67,7 @@ function stackTrace(array $options = []): void
     $options += ['start' => 0];
     $options['start']++;
     /** @var string $trace */
-    $trace = \Cake\Error\Debugger::trace($options);
+    $trace = Debugger::trace($options);
     echo $trace;
 }
 /**
@@ -86,9 +86,9 @@ function dd(mixed $var, ?bool $showHtml = null): void
     if (!Configure::read('debug')) {
         return;
     }
-    $trace = \Cake\Error\Debugger::trace(['start' => 0, 'depth' => 2, 'format' => 'array']);
+    $trace = Debugger::trace(['start' => 0, 'depth' => 2, 'format' => 'array']);
     $location = ['line' => $trace[0]['line'], 'file' => $trace[0]['file']];
-    \Cake\Error\Debugger::printVar($var, $location, $showHtml);
+    Debugger::printVar($var, $location, $showHtml);
     die(1);
 }
 /**

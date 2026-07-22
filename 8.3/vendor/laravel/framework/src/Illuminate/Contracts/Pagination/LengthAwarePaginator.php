@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Pagination;
+namespace Odigos\Illuminate\Contracts\Pagination;
 
 /**
  * @template TKey of array-key
@@ -9,7 +9,7 @@ namespace Illuminate\Contracts\Pagination;
  *
  * @extends Paginator<TKey, TValue>
  */
-interface LengthAwarePaginator extends \Illuminate\Contracts\Pagination\Paginator
+interface LengthAwarePaginator extends Paginator
 {
     /**
      * Create a range of pagination URLs.

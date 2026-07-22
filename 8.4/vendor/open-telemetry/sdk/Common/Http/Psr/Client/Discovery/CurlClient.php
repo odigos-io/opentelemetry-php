@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery;
 
-use Http\Client\Curl\Client;
+use Odigos\Http\Client\Curl\Client;
 use Psr\Http\Client\ClientInterface;
 class CurlClient implements \OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery\DiscoveryInterface
 {

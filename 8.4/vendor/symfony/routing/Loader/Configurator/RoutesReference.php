@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Loader\Configurator;
+namespace Odigos\Symfony\Component\Routing\Loader\Configurator;
 
 // For the phpdoc to remain compatible with the generation of per-app Routes class,
 // this file should have no "use" statements: all symbols referenced by

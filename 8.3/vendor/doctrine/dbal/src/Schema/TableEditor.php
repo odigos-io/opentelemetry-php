@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Schema\Collections\Exception\ObjectAlreadyExists;
-use Doctrine\DBAL\Schema\Collections\Exception\ObjectDoesNotExist;
-use Doctrine\DBAL\Schema\Collections\OptionallyUnqualifiedNamedObjectSet;
-use Doctrine\DBAL\Schema\Collections\UnqualifiedNamedObjectSet;
-use Doctrine\DBAL\Schema\Exception\InvalidTableDefinition;
-use Doctrine\DBAL\Schema\Exception\InvalidTableModification;
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Collections\Exception\ObjectAlreadyExists;
+use Odigos\Doctrine\DBAL\Schema\Collections\Exception\ObjectDoesNotExist;
+use Odigos\Doctrine\DBAL\Schema\Collections\OptionallyUnqualifiedNamedObjectSet;
+use Odigos\Doctrine\DBAL\Schema\Collections\UnqualifiedNamedObjectSet;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidTableDefinition;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidTableModification;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
 use function strcasecmp;
 final class TableEditor
 {
@@ -19,7 +19,7 @@ final class TableEditor
     private readonly UnqualifiedNamedObjectSet $columns;
     /** @var UnqualifiedNamedObjectSet<Index> */
     private UnqualifiedNamedObjectSet $indexes;
-    private ?\Doctrine\DBAL\Schema\PrimaryKeyConstraint $primaryKeyConstraint = null;
+    private ?PrimaryKeyConstraint $primaryKeyConstraint = null;
     /** @var OptionallyUnqualifiedNamedObjectSet<UniqueConstraint> */
     private readonly OptionallyUnqualifiedNamedObjectSet $uniqueConstraints;
     /** @var OptionallyUnqualifiedNamedObjectSet<ForeignKeyConstraint> */
@@ -27,7 +27,7 @@ final class TableEditor
     /** @var array<string, mixed> */
     private array $options = [];
     private string $comment = '';
-    private ?\Doctrine\DBAL\Schema\TableConfiguration $configuration = null;
+    private ?TableConfiguration $configuration = null;
     /** @internal Use {@link Table::editor()} or {@link Table::edit()} to create an instance */
     public function __construct()
     {
@@ -67,7 +67,7 @@ final class TableEditor
         $this->name = OptionallyQualifiedName::quoted($unqualifiedName, $qualifier);
         return $this;
     }
-    public function setColumns(\Doctrine\DBAL\Schema\Column $firstColumn, \Doctrine\DBAL\Schema\Column ...$otherColumns): self
+    public function setColumns(Column $firstColumn, Column ...$otherColumns): self
     {
         $this->columns->clear();
         foreach ([$firstColumn, ...$otherColumns] as $column) {
@@ -75,7 +75,7 @@ final class TableEditor
         }
         return $this;
     }
-    public function addColumn(\Doctrine\DBAL\Schema\Column $column): self
+    public function addColumn(Column $column): self
     {
         try {
             $this->columns->add($column);
@@ -88,7 +88,7 @@ final class TableEditor
     public function modifyColumn(UnqualifiedName $columnName, callable $modification): self
     {
         try {
-            $this->columns->modify($columnName, static function (\Doctrine\DBAL\Schema\Column $column) use ($modification): \Doctrine\DBAL\Schema\Column {
+            $this->columns->modify($columnName, static function (Column $column) use ($modification): Column {
                 $editor = $column->edit();
                 $modification($editor);
                 return $editor->create();
@@ -110,7 +110,7 @@ final class TableEditor
     }
     public function renameColumn(UnqualifiedName $oldColumnName, UnqualifiedName $newColumnName): self
     {
-        $this->modifyColumn($oldColumnName, static function (\Doctrine\DBAL\Schema\ColumnEditor $editor) use ($newColumnName): void {
+        $this->modifyColumn($oldColumnName, static function (ColumnEditor $editor) use ($newColumnName): void {
             $editor->setName($newColumnName);
         });
         $this->renameColumnInIndexes($oldColumnName, $newColumnName);
@@ -127,7 +127,7 @@ final class TableEditor
             foreach ($index->getIndexedColumns() as $column) {
                 $columnName = $column->getColumnName();
                 if ($this->namesEqual($columnName, $oldColumnName)) {
-                    $columns[] = new \Doctrine\DBAL\Schema\Index\IndexedColumn($newColumnName, $column->getLength());
+                    $columns[] = new Index\IndexedColumn($newColumnName, $column->getLength());
                     $modified = \true;
                 } else {
                     $columns[] = $column;
@@ -136,7 +136,7 @@ final class TableEditor
             if (!$modified) {
                 continue;
             }
-            $this->indexes->modify($index->getObjectName(), static function (\Doctrine\DBAL\Schema\Index $index) use ($columns): \Doctrine\DBAL\Schema\Index {
+            $this->indexes->modify($index->getObjectName(), static function (Index $index) use ($columns): Index {
                 return $index->edit()->setColumns(...$columns)->create();
             });
         }
@@ -163,13 +163,13 @@ final class TableEditor
     }
     private function renameColumnInUniqueConstraints(UnqualifiedName $oldColumnName, UnqualifiedName $newColumnName): void
     {
-        $this->renameColumnInConstraints($this->uniqueConstraints, $oldColumnName, $newColumnName, static fn(\Doctrine\DBAL\Schema\UniqueConstraint $constraint): array => $constraint->getColumnNames(), static function (\Doctrine\DBAL\Schema\UniqueConstraint $constraint, array $columnNames): \Doctrine\DBAL\Schema\UniqueConstraint {
+        $this->renameColumnInConstraints($this->uniqueConstraints, $oldColumnName, $newColumnName, static fn(UniqueConstraint $constraint): array => $constraint->getColumnNames(), static function (UniqueConstraint $constraint, array $columnNames): UniqueConstraint {
             return $constraint->edit()->setColumnNames(...$columnNames)->create();
         });
     }
     private function renameColumnInForeignKeyConstraints(UnqualifiedName $oldColumnName, UnqualifiedName $newColumnName): void
     {
-        $this->renameColumnInConstraints($this->foreignKeyConstraints, $oldColumnName, $newColumnName, static fn(\Doctrine\DBAL\Schema\ForeignKeyConstraint $constraint): array => $constraint->getReferencingColumnNames(), static function (\Doctrine\DBAL\Schema\ForeignKeyConstraint $constraint, array $columnNames): \Doctrine\DBAL\Schema\ForeignKeyConstraint {
+        $this->renameColumnInConstraints($this->foreignKeyConstraints, $oldColumnName, $newColumnName, static fn(ForeignKeyConstraint $constraint): array => $constraint->getReferencingColumnNames(), static function (ForeignKeyConstraint $constraint, array $columnNames): ForeignKeyConstraint {
             return $constraint->edit()->setReferencingColumnNames(...$columnNames)->create();
         });
     }
@@ -233,7 +233,7 @@ final class TableEditor
     {
         return $this->dropColumn(UnqualifiedName::unquoted($columnName));
     }
-    public function setIndexes(\Doctrine\DBAL\Schema\Index ...$indexes): self
+    public function setIndexes(Index ...$indexes): self
     {
         $this->indexes->clear();
         foreach ($indexes as $index) {
@@ -241,7 +241,7 @@ final class TableEditor
         }
         return $this;
     }
-    public function addIndex(\Doctrine\DBAL\Schema\Index $index): self
+    public function addIndex(Index $index): self
     {
         try {
             $this->indexes->add($index);
@@ -253,7 +253,7 @@ final class TableEditor
     public function renameIndex(UnqualifiedName $oldIndexName, UnqualifiedName $newIndexName): self
     {
         try {
-            $this->indexes->modify($oldIndexName, static function (\Doctrine\DBAL\Schema\Index $index) use ($newIndexName): \Doctrine\DBAL\Schema\Index {
+            $this->indexes->modify($oldIndexName, static function (Index $index) use ($newIndexName): Index {
                 return $index->edit()->setName($newIndexName)->create();
             });
         } catch (ObjectDoesNotExist $e) {
@@ -285,7 +285,7 @@ final class TableEditor
     {
         return $this->dropIndex(UnqualifiedName::unquoted($indexName));
     }
-    public function setPrimaryKeyConstraint(?\Doctrine\DBAL\Schema\PrimaryKeyConstraint $primaryKeyConstraint): self
+    public function setPrimaryKeyConstraint(?PrimaryKeyConstraint $primaryKeyConstraint): self
     {
         $this->primaryKeyConstraint = $primaryKeyConstraint;
         foreach ($this->indexes->toList() as $index) {
@@ -296,7 +296,7 @@ final class TableEditor
         }
         return $this;
     }
-    public function addPrimaryKeyConstraint(\Doctrine\DBAL\Schema\PrimaryKeyConstraint $primaryKeyConstraint): self
+    public function addPrimaryKeyConstraint(PrimaryKeyConstraint $primaryKeyConstraint): self
     {
         if ($this->primaryKeyConstraint !== null) {
             throw InvalidTableModification::primaryKeyConstraintAlreadyExists($this->name);
@@ -310,7 +310,7 @@ final class TableEditor
         }
         return $this->setPrimaryKeyConstraint(null);
     }
-    public function setUniqueConstraints(\Doctrine\DBAL\Schema\UniqueConstraint ...$uniqueConstraints): self
+    public function setUniqueConstraints(UniqueConstraint ...$uniqueConstraints): self
     {
         $this->uniqueConstraints->clear();
         foreach ($uniqueConstraints as $uniqueConstraint) {
@@ -318,7 +318,7 @@ final class TableEditor
         }
         return $this;
     }
-    public function addUniqueConstraint(\Doctrine\DBAL\Schema\UniqueConstraint $uniqueConstraint): self
+    public function addUniqueConstraint(UniqueConstraint $uniqueConstraint): self
     {
         try {
             $this->uniqueConstraints->add($uniqueConstraint);
@@ -341,7 +341,7 @@ final class TableEditor
     {
         return $this->dropUniqueConstraint(UnqualifiedName::unquoted($constraintName));
     }
-    public function setForeignKeyConstraints(\Doctrine\DBAL\Schema\ForeignKeyConstraint ...$foreignKeyConstraints): self
+    public function setForeignKeyConstraints(ForeignKeyConstraint ...$foreignKeyConstraints): self
     {
         $this->foreignKeyConstraints->clear();
         foreach ($foreignKeyConstraints as $foreignKeyConstraint) {
@@ -349,7 +349,7 @@ final class TableEditor
         }
         return $this;
     }
-    public function addForeignKeyConstraint(\Doctrine\DBAL\Schema\ForeignKeyConstraint $foreignKeyConstraint): self
+    public function addForeignKeyConstraint(ForeignKeyConstraint $foreignKeyConstraint): self
     {
         try {
             $this->foreignKeyConstraints->add($foreignKeyConstraint);
@@ -387,12 +387,12 @@ final class TableEditor
         $this->options = $options;
         return $this;
     }
-    public function setConfiguration(\Doctrine\DBAL\Schema\TableConfiguration $configuration): self
+    public function setConfiguration(TableConfiguration $configuration): self
     {
         $this->configuration = $configuration;
         return $this;
     }
-    public function create(): \Doctrine\DBAL\Schema\Table
+    public function create(): Table
     {
         if ($this->name === null) {
             throw InvalidTableDefinition::nameNotSet();
@@ -404,6 +404,6 @@ final class TableEditor
         if ($this->comment !== '') {
             $options['comment'] = $this->comment;
         }
-        return new \Doctrine\DBAL\Schema\Table($this->name->toString(), $this->columns->toList(), $this->indexes->toList(), $this->uniqueConstraints->toList(), $this->foreignKeyConstraints->toList(), $options, $this->configuration, $this->primaryKeyConstraint);
+        return new Table($this->name->toString(), $this->columns->toList(), $this->indexes->toList(), $this->uniqueConstraints->toList(), $this->foreignKeyConstraints->toList(), $options, $this->configuration, $this->primaryKeyConstraint);
     }
 }

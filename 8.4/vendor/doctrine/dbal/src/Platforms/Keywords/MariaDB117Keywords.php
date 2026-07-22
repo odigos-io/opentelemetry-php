@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\Keywords;
+namespace Odigos\Doctrine\DBAL\Platforms\Keywords;
 
 use function array_merge;
 /** @deprecated */
-class MariaDB117Keywords extends \Doctrine\DBAL\Platforms\Keywords\MariaDBKeywords
+class MariaDB117Keywords extends MariaDBKeywords
 {
     /**
      * {@inheritDoc}

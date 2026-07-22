@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\sqlite;
+namespace Odigos\yii\db\sqlite;
 
-use yii\db\ColumnSchemaBuilder as AbstractColumnSchemaBuilder;
+use Odigos\yii\db\ColumnSchemaBuilder as AbstractColumnSchemaBuilder;
 /**
  * ColumnSchemaBuilder is the schema builder for Sqlite databases.
  *

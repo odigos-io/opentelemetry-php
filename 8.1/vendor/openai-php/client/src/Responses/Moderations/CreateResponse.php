@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Moderations;
+namespace Odigos\OpenAI\Responses\Moderations;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Contracts\ResponseHasMetaInformationContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Concerns\HasMetaInformation;
-use OpenAI\Responses\Meta\MetaInformation;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Contracts\ResponseHasMetaInformationContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Concerns\HasMetaInformation;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{id: string, model: string, results: array<int, array{categories: array<string, bool>, category_scores: array<string, float>, flagged: bool}>}>
  */
@@ -33,7 +33,7 @@ final class CreateResponse implements ResponseContract, ResponseHasMetaInformati
      */
     public static function from(array $attributes, MetaInformation $meta): self
     {
-        $results = array_map(fn(array $result): \OpenAI\Responses\Moderations\CreateResponseResult => \OpenAI\Responses\Moderations\CreateResponseResult::from($result), $attributes['results']);
+        $results = array_map(fn(array $result): CreateResponseResult => CreateResponseResult::from($result), $attributes['results']);
         return new self($attributes['id'], $attributes['model'], $results, $meta);
     }
     /**
@@ -41,6 +41,6 @@ final class CreateResponse implements ResponseContract, ResponseHasMetaInformati
      */
     public function toArray(): array
     {
-        return ['id' => $this->id, 'model' => $this->model, 'results' => array_map(static fn(\OpenAI\Responses\Moderations\CreateResponseResult $result): array => $result->toArray(), $this->results)];
+        return ['id' => $this->id, 'model' => $this->model, 'results' => array_map(static fn(CreateResponseResult $result): array => $result->toArray(), $this->results)];
     }
 }

@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * ApcCache provides APC caching in terms of an application component.
  *
@@ -22,7 +22,7 @@ use yii\base\InvalidConfigException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ApcCache extends \yii\caching\Cache
+class ApcCache extends Cache
 {
     /**
      * @var bool whether to use apcu or apc as the underlying caching extension.

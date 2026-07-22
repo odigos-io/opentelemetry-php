@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
-class TextPrompt extends \Laravel\Prompts\Prompt
+class TextPrompt extends Prompt
 {
-    use \Laravel\Prompts\Concerns\TypedValue;
+    use Concerns\TypedValue;
     /**
      * Create a new TextPrompt instance.
      */

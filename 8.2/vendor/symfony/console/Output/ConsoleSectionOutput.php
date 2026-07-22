@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Output;
+namespace Odigos\Symfony\Component\Console\Output;
 
-use Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use Symfony\Component\Console\Helper\Helper;
-use Symfony\Component\Console\Terminal;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use Odigos\Symfony\Component\Console\Helper\Helper;
+use Odigos\Symfony\Component\Console\Terminal;
 /**
  * @author Pierre du Plessis <pdples@gmail.com>
  * @author Gabriel Ostrolucký <gabriel.ostrolucky@gmail.com>
  */
-class ConsoleSectionOutput extends \Symfony\Component\Console\Output\StreamOutput
+class ConsoleSectionOutput extends StreamOutput
 {
     private array $content = [];
     private int $lines = 0;

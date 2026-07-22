@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 /**
  * TooManyRequestsHttpException represents a "Too Many Requests" HTTP exception with status code 429.
@@ -18,7 +18,7 @@ namespace yii\web;
  * @author Dan Schmidt <danschmidt5189@gmail.com>
  * @since 2.0
  */
-class TooManyRequestsHttpException extends \yii\web\HttpException
+class TooManyRequestsHttpException extends HttpException
 {
     /**
      * Constructor.

@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\mutex;
+namespace Odigos\yii\mutex;
 
 use PDO;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * OracleMutex implements mutex "lock" mechanism via Oracle locks.
  *
@@ -38,7 +38,7 @@ use yii\base\InvalidConfigException;
  * @author Alexander Zlakomanov <zlakomanoff@gmail.com>
  * @since 2.0.10
  */
-class OracleMutex extends \yii\mutex\DbMutex
+class OracleMutex extends DbMutex
 {
     /** available lock modes */
     public const MODE_X = 'X_MODE';

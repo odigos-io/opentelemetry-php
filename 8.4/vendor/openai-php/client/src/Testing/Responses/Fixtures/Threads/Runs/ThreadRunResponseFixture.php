@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\Threads\Runs;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\Threads\Runs;
 
 final class ThreadRunResponseFixture
 {

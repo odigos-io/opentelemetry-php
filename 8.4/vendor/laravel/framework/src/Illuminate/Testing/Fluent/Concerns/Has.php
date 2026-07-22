@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Testing\Fluent\Concerns;
+namespace Odigos\Illuminate\Testing\Fluent\Concerns;
 
 use Closure;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Arr;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 trait Has
 {

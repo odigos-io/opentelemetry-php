@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console;
+namespace Odigos\Symfony\Component\Console;
 
-use Symfony\Component\Console\Event\ConsoleCommandEvent;
-use Symfony\Component\Console\Event\ConsoleErrorEvent;
-use Symfony\Component\Console\Event\ConsoleSignalEvent;
-use Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use Odigos\Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Odigos\Symfony\Component\Console\Event\ConsoleErrorEvent;
+use Odigos\Symfony\Component\Console\Event\ConsoleSignalEvent;
+use Odigos\Symfony\Component\Console\Event\ConsoleTerminateEvent;
 /**
  * Contains all events dispatched by an Application.
  *

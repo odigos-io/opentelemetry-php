@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Console\View\Components;
+namespace Odigos\Illuminate\Console\View\Components;
 
-use Illuminate\Console\OutputStyle;
-use Illuminate\Console\QuestionHelper;
+use Odigos\Illuminate\Console\OutputStyle;
+use Odigos\Illuminate\Console\QuestionHelper;
 use ReflectionClass;
-use Symfony\Component\Console\Helper\SymfonyQuestionHelper;
+use Odigos\Symfony\Component\Console\Helper\SymfonyQuestionHelper;
 use function Odigos\Termwind\render;
 use function Odigos\Termwind\renderUsing;
 abstract class Component

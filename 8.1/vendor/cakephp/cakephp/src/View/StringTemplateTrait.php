@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
 /**
  * Adds string template functionality to any class by providing methods to
@@ -31,7 +31,7 @@ trait StringTemplateTrait
      *
      * @var \Cake\View\StringTemplate|null
      */
-    protected ?\Cake\View\StringTemplate $_templater = null;
+    protected ?StringTemplate $_templater = null;
     /**
      * Sets templates to use.
      *
@@ -69,11 +69,11 @@ trait StringTemplateTrait
      *
      * @return \Cake\View\StringTemplate
      */
-    public function templater(): \Cake\View\StringTemplate
+    public function templater(): StringTemplate
     {
         if ($this->_templater === null) {
             /** @var class-string<\Cake\View\StringTemplate> $class */
-            $class = $this->getConfig('templateClass') ?: \Cake\View\StringTemplate::class;
+            $class = $this->getConfig('templateClass') ?: StringTemplate::class;
             $this->_templater = new $class();
             $templates = $this->getConfig('templates');
             if ($templates) {

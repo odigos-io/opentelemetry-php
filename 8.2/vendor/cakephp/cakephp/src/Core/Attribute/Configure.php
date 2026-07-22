@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core\Attribute;
+namespace Odigos\Cake\Core\Attribute;
 
 use Attribute;
-use Cake\Core\Configure as CakeConfigure;
+use Odigos\Cake\Core\Configure as CakeConfigure;
 use Odigos\League\Container\Attribute\AttributeInterface;
 /**
  * Configure attribute for dependency injection container delegate.

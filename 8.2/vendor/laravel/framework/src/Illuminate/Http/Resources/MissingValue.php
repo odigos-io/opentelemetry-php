@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Http\Resources;
+namespace Odigos\Illuminate\Http\Resources;
 
-class MissingValue implements \Illuminate\Http\Resources\PotentiallyMissing
+class MissingValue implements PotentiallyMissing
 {
     /**
      * Determine if the object should be considered "missing".

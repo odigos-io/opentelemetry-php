@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace GuzzleHttp\Psr7;
+namespace Odigos\GuzzleHttp\Psr7;
 
 use Psr\Http\Message\UriInterface;
 /**
@@ -118,11 +118,11 @@ final class UriNormalizer
         if ($flags & self::REMOVE_DEFAULT_HOST && $uri->getScheme() === 'file' && $uri->getHost() === 'localhost') {
             $uri = $uri->withHost('');
         }
-        if ($flags & self::REMOVE_DEFAULT_PORT && $uri->getPort() !== null && \GuzzleHttp\Psr7\Uri::isDefaultPort($uri)) {
+        if ($flags & self::REMOVE_DEFAULT_PORT && $uri->getPort() !== null && Uri::isDefaultPort($uri)) {
             $uri = $uri->withPort(null);
         }
-        if ($flags & self::REMOVE_DOT_SEGMENTS && !\GuzzleHttp\Psr7\Uri::isRelativePathReference($uri)) {
-            $uri = $uri->withPath(\GuzzleHttp\Psr7\UriResolver::removeDotSegments($uri->getPath()));
+        if ($flags & self::REMOVE_DOT_SEGMENTS && !Uri::isRelativePathReference($uri)) {
+            $uri = $uri->withPath(UriResolver::removeDotSegments($uri->getPath()));
         }
         if ($flags & self::REMOVE_DUPLICATE_SLASHES) {
             $path = preg_replace('#//++#', '/', $uri->getPath());

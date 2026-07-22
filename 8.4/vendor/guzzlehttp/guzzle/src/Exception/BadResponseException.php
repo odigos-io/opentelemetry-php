@@ -1,13 +1,13 @@
 <?php
 
-namespace GuzzleHttp\Exception;
+namespace Odigos\GuzzleHttp\Exception;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 /**
  * Exception when an HTTP error occurs (4xx or 5xx error)
  */
-class BadResponseException extends \GuzzleHttp\Exception\RequestException
+class BadResponseException extends RequestException
 {
     public function __construct(string $message, RequestInterface $request, ResponseInterface $response, ?\Throwable $previous = null, array $handlerContext = [])
     {

@@ -1,12 +1,12 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\ChatContract;
-use OpenAI\Resources\Chat;
-use OpenAI\Responses\Chat\CreateResponse;
-use OpenAI\Responses\StreamResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\ChatContract;
+use Odigos\OpenAI\Resources\Chat;
+use Odigos\OpenAI\Responses\Chat\CreateResponse;
+use Odigos\OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class ChatTestResource implements ChatContract
 {
     use Testable;

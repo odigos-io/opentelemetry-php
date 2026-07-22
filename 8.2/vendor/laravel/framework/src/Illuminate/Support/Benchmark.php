@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Closure;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 class Benchmark
 {
     use Macroable;
@@ -16,8 +16,8 @@ class Benchmark
      */
     public static function measure(Closure|array $benchmarkables, int $iterations = 1): array|float
     {
-        return \Illuminate\Support\Collection::wrap($benchmarkables)->map(function ($callback) use ($iterations) {
-            return \Illuminate\Support\Collection::range(1, $iterations)->map(function () use ($callback) {
+        return Collection::wrap($benchmarkables)->map(function ($callback) use ($iterations) {
+            return Collection::range(1, $iterations)->map(function () use ($callback) {
                 gc_collect_cycles();
                 $start = hrtime(\true);
                 $callback();
@@ -49,7 +49,7 @@ class Benchmark
      */
     public static function dd(Closure|array $benchmarkables, int $iterations = 1): never
     {
-        $result = (new \Illuminate\Support\Collection(static::measure(\Illuminate\Support\Arr::wrap($benchmarkables), $iterations)))->map(fn($average) => number_format($average, 3) . 'ms')->when($benchmarkables instanceof Closure, fn($c) => $c->first(), fn($c) => $c->all());
+        $result = (new Collection(static::measure(Arr::wrap($benchmarkables), $iterations)))->map(fn($average) => number_format($average, 3) . 'ms')->when($benchmarkables instanceof Closure, fn($c) => $c->first(), fn($c) => $c->all());
         dd($result);
     }
 }

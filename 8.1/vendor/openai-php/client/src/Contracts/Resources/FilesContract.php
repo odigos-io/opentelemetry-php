@@ -1,11 +1,11 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Files\CreateResponse;
-use OpenAI\Responses\Files\DeleteResponse;
-use OpenAI\Responses\Files\ListResponse;
-use OpenAI\Responses\Files\RetrieveResponse;
+use Odigos\OpenAI\Responses\Files\CreateResponse;
+use Odigos\OpenAI\Responses\Files\DeleteResponse;
+use Odigos\OpenAI\Responses\Files\ListResponse;
+use Odigos\OpenAI\Responses\Files\RetrieveResponse;
 interface FilesContract
 {
     /**

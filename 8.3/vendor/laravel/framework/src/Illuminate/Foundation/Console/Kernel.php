@@ -1,33 +1,33 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
 use Odigos\Carbon\CarbonInterval;
 use Closure;
 use DateTimeInterface;
-use Illuminate\Console\Application as Artisan;
-use Illuminate\Console\Command;
-use Illuminate\Console\Events\CommandFinished;
-use Illuminate\Console\Events\CommandStarting;
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Contracts\Console\Kernel as KernelContract;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Foundation\Events\Terminating;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Env;
-use Illuminate\Support\InteractsWithTime;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Console\Application as Artisan;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Console\Events\CommandFinished;
+use Odigos\Illuminate\Console\Events\CommandStarting;
+use Odigos\Illuminate\Console\Scheduling\Schedule;
+use Odigos\Illuminate\Contracts\Console\Kernel as KernelContract;
+use Odigos\Illuminate\Contracts\Debug\ExceptionHandler;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Foundation\Events\Terminating;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Env;
+use Odigos\Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Support\Str;
 use ReflectionClass;
 use SplFileInfo;
-use Symfony\Component\Console\ConsoleEvents;
-use Symfony\Component\Console\Event\ConsoleCommandEvent;
-use Symfony\Component\Console\Event\ConsoleTerminateEvent;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\Finder\Finder;
+use Odigos\Symfony\Component\Console\ConsoleEvents;
+use Odigos\Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Odigos\Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use Odigos\Symfony\Component\EventDispatcher\EventDispatcher;
+use Odigos\Symfony\Component\Finder\Finder;
 use Throwable;
 use WeakMap;
 class Kernel implements KernelContract
@@ -104,7 +104,7 @@ class Kernel implements KernelContract
      *
      * @var string[]
      */
-    protected $bootstrappers = [\Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables::class, \Illuminate\Foundation\Bootstrap\LoadConfiguration::class, \Illuminate\Foundation\Bootstrap\HandleExceptions::class, \Illuminate\Foundation\Bootstrap\RegisterFacades::class, \Illuminate\Foundation\Bootstrap\SetRequestForConsole::class, \Illuminate\Foundation\Bootstrap\RegisterProviders::class, \Illuminate\Foundation\Bootstrap\BootProviders::class];
+    protected $bootstrappers = [\Odigos\Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables::class, \Odigos\Illuminate\Foundation\Bootstrap\LoadConfiguration::class, \Odigos\Illuminate\Foundation\Bootstrap\HandleExceptions::class, \Odigos\Illuminate\Foundation\Bootstrap\RegisterFacades::class, \Odigos\Illuminate\Foundation\Bootstrap\SetRequestForConsole::class, \Odigos\Illuminate\Foundation\Bootstrap\RegisterProviders::class, \Odigos\Illuminate\Foundation\Bootstrap\BootProviders::class];
     /**
      * Create a new console kernel instance.
      *
@@ -271,7 +271,7 @@ class Kernel implements KernelContract
      */
     public function command($signature, Closure $callback)
     {
-        $command = new \Illuminate\Foundation\Console\ClosureCommand($signature, $callback);
+        $command = new ClosureCommand($signature, $callback);
         Artisan::starting(function ($artisan) use ($command) {
             $artisan->add($command);
         });
@@ -365,7 +365,7 @@ class Kernel implements KernelContract
      */
     public function queue($command, array $parameters = [])
     {
-        return \Illuminate\Foundation\Console\QueuedCommand::dispatch(func_get_args());
+        return QueuedCommand::dispatch(func_get_args());
     }
     /**
      * Get all of the commands registered with the console.
@@ -429,7 +429,7 @@ class Kernel implements KernelContract
      */
     public function bootstrapWithoutBootingProviders()
     {
-        $this->app->bootstrapWith((new Collection($this->bootstrappers()))->reject(fn($bootstrapper) => $bootstrapper === \Illuminate\Foundation\Bootstrap\BootProviders::class)->all());
+        $this->app->bootstrapWith((new Collection($this->bootstrappers()))->reject(fn($bootstrapper) => $bootstrapper === \Odigos\Illuminate\Foundation\Bootstrap\BootProviders::class)->all());
     }
     /**
      * Determine if the kernel should discover commands.

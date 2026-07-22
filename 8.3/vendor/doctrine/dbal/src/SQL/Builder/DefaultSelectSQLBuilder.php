@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\SQL\Builder;
+namespace Odigos\Doctrine\DBAL\SQL\Builder;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Platforms\Exception\NotSupported;
-use Doctrine\DBAL\Query\ForUpdate\ConflictResolutionMode;
-use Doctrine\DBAL\Query\SelectQuery;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Platforms\Exception\NotSupported;
+use Odigos\Doctrine\DBAL\Query\ForUpdate\ConflictResolutionMode;
+use Odigos\Doctrine\DBAL\Query\SelectQuery;
 use function count;
 use function implode;
-final class DefaultSelectSQLBuilder implements \Doctrine\DBAL\SQL\Builder\SelectSQLBuilder
+final class DefaultSelectSQLBuilder implements SelectSQLBuilder
 {
     /** @internal The SQL builder should be instantiated only by database platforms. */
     public function __construct(private readonly AbstractPlatform $platform, private readonly ?string $forUpdateSQL, private readonly ?string $skipLockedSQL)

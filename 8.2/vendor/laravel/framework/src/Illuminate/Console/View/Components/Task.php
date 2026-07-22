@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Console\View\Components;
+namespace Odigos\Illuminate\Console\View\Components;
 
-use Illuminate\Console\View\TaskResult;
-use Illuminate\Support\InteractsWithTime;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Illuminate\Console\View\TaskResult;
+use Odigos\Illuminate\Support\InteractsWithTime;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 use function Odigos\Termwind\terminal;
-class Task extends \Illuminate\Console\View\Components\Component
+class Task extends Component
 {
     use InteractsWithTime;
     /**
@@ -20,7 +20,7 @@ class Task extends \Illuminate\Console\View\Components\Component
      */
     public function render($description, $task = null, $verbosity = OutputInterface::VERBOSITY_NORMAL)
     {
-        $description = $this->mutate($description, [\Illuminate\Console\View\Components\Mutators\EnsureDynamicContentIsHighlighted::class, \Illuminate\Console\View\Components\Mutators\EnsureNoPunctuation::class, \Illuminate\Console\View\Components\Mutators\EnsureRelativePaths::class]);
+        $description = $this->mutate($description, [Mutators\EnsureDynamicContentIsHighlighted::class, Mutators\EnsureNoPunctuation::class, Mutators\EnsureRelativePaths::class]);
         $descriptionWidth = mb_strlen(preg_replace("/\\<[\\w=#\\/\\;,:.&,%?]+\\>|\\e\\[\\d+m/", '$1', $description) ?? '');
         $this->output->write("  {$description} ", \false, $verbosity);
         $startTime = microtime(\true);

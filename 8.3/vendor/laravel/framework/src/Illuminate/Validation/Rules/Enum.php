@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Validation\Rules;
+namespace Odigos\Illuminate\Validation\Rules;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Contracts\Validation\ValidatorAwareRule;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Validation\Rule;
+use Odigos\Illuminate\Contracts\Validation\ValidatorAwareRule;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Traits\Conditionable;
 use Stringable;
 use TypeError;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 class Enum implements Rule, ValidatorAwareRule, Stringable
 {
     use Conditionable;

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing;
+namespace Odigos\Symfony\Component\Routing;
 
 /**
  * RouteCompiler compiles Route instances to CompiledRoute instances.
@@ -16,7 +16,7 @@ namespace Symfony\Component\Routing;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Tobias Schultze <http://tobion.de>
  */
-class RouteCompiler implements \Symfony\Component\Routing\RouteCompilerInterface
+class RouteCompiler implements RouteCompilerInterface
 {
     /**
      * This string defines the characters that are automatically considered separators in front of
@@ -37,7 +37,7 @@ class RouteCompiler implements \Symfony\Component\Routing\RouteCompilerInterface
      * @throws \DomainException          if a variable name starts with a digit or if it is too long to be successfully used as
      *                                   a PCRE subpattern
      */
-    public static function compile(\Symfony\Component\Routing\Route $route): \Symfony\Component\Routing\CompiledRoute
+    public static function compile(Route $route): CompiledRoute
     {
         $hostVariables = [];
         $variables = [];
@@ -69,9 +69,9 @@ class RouteCompiler implements \Symfony\Component\Routing\RouteCompilerInterface
         $variables = array_merge($variables, $pathVariables);
         $tokens = $result['tokens'];
         $regex = $result['regex'];
-        return new \Symfony\Component\Routing\CompiledRoute($staticPrefix, $regex, $tokens, $pathVariables, $hostRegex, $hostTokens, $hostVariables, array_unique($variables));
+        return new CompiledRoute($staticPrefix, $regex, $tokens, $pathVariables, $hostRegex, $hostTokens, $hostVariables, array_unique($variables));
     }
-    private static function compilePattern(\Symfony\Component\Routing\Route $route, string $pattern, bool $isHost): array
+    private static function compilePattern(Route $route, string $pattern, bool $isHost): array
     {
         $tokens = [];
         $variables = [];
@@ -195,7 +195,7 @@ class RouteCompiler implements \Symfony\Component\Routing\RouteCompilerInterface
     /**
      * Determines the longest static prefix possible for a route.
      */
-    private static function determineStaticPrefix(\Symfony\Component\Routing\Route $route, array $tokens): string
+    private static function determineStaticPrefix(Route $route, array $tokens): string
     {
         if ('text' !== $tokens[0][0]) {
             return $route->hasDefault($tokens[0][3]) || '/' === $tokens[0][1] ? '' : $tokens[0][1];

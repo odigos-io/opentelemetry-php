@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Auth\Middleware;
+namespace Odigos\Illuminate\Auth\Middleware;
 
 use Closure;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Contracts\Auth\Factory as Auth;
-use Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
-use Illuminate\Http\Request;
+use Odigos\Illuminate\Auth\AuthenticationException;
+use Odigos\Illuminate\Contracts\Auth\Factory as Auth;
+use Odigos\Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
+use Odigos\Illuminate\Http\Request;
 class Authenticate implements AuthenticatesRequests
 {
     /**

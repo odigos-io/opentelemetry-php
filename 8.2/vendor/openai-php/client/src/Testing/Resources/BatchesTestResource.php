@@ -1,12 +1,12 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\BatchesContract;
-use OpenAI\Resources\Batches;
-use OpenAI\Responses\Batches\BatchListResponse;
-use OpenAI\Responses\Batches\BatchResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\BatchesContract;
+use Odigos\OpenAI\Resources\Batches;
+use Odigos\OpenAI\Responses\Batches\BatchListResponse;
+use Odigos\OpenAI\Responses\Batches\BatchResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class BatchesTestResource implements BatchesContract
 {
     use Testable;

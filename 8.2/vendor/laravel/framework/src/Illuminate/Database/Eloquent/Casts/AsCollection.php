@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Casts;
+namespace Odigos\Illuminate\Database\Eloquent\Casts;
 
-use Illuminate\Contracts\Database\Eloquent\Castable;
-use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Database\Eloquent\Castable;
+use Odigos\Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
 use InvalidArgumentException;
 class AsCollection implements Castable
 {
@@ -28,7 +28,7 @@ class AsCollection implements Castable
                 if (!isset($attributes[$key])) {
                     return;
                 }
-                $data = \Illuminate\Database\Eloquent\Casts\Json::decode($attributes[$key]);
+                $data = Json::decode($attributes[$key]);
                 $collectionClass = empty($this->arguments[0]) ? Collection::class : $this->arguments[0];
                 if (!is_a($collectionClass, Collection::class, \true)) {
                     throw new InvalidArgumentException('The provided class must extend [' . Collection::class . '].');
@@ -47,7 +47,7 @@ class AsCollection implements Castable
             }
             public function set($model, $key, $value, $attributes)
             {
-                return [$key => \Illuminate\Database\Eloquent\Casts\Json::encode($value)];
+                return [$key => Json::encode($value)];
             }
         };
     }

@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Event;
+namespace Odigos\Cake\Event;
 
 /**
  * Represents the transport class of events across the system. It receives a name, subject and an optional

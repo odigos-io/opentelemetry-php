@@ -1,10 +1,10 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
-use Symfony\Component\Process\ExecutableFinder;
-use Symfony\Component\Process\Process;
-class NotifyPrompt extends \Laravel\Prompts\Prompt
+use Odigos\Symfony\Component\Process\ExecutableFinder;
+use Odigos\Symfony\Component\Process\Process;
+class NotifyPrompt extends Prompt
 {
     /**
      * Create a new NotifyPrompt instance.

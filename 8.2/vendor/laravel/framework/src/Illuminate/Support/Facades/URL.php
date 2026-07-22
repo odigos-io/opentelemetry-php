@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static string full()
@@ -52,7 +52,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Routing\UrlGenerator
  */
-class URL extends \Illuminate\Support\Facades\Facade
+class URL extends Facade
 {
     /**
      * Get the registered name of the component.

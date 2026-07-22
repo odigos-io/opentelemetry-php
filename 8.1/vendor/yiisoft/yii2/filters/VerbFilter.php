@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters;
+namespace Odigos\yii\filters;
 
 use Odigos\Yii;
-use yii\base\Action;
-use yii\base\ActionEvent;
-use yii\base\Behavior;
-use yii\web\Controller;
-use yii\web\MethodNotAllowedHttpException;
+use Odigos\yii\base\Action;
+use Odigos\yii\base\ActionEvent;
+use Odigos\yii\base\Behavior;
+use Odigos\yii\web\Controller;
+use Odigos\yii\web\MethodNotAllowedHttpException;
 /**
  * VerbFilter is an action filter that filters by HTTP request methods.
  *

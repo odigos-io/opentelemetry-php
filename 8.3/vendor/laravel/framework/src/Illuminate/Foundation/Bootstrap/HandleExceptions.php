@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Foundation\Bootstrap;
+namespace Odigos\Illuminate\Foundation\Bootstrap;
 
 use ErrorException;
 use Exception;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Log\LogManager;
-use Illuminate\Support\Env;
+use Odigos\Illuminate\Contracts\Debug\ExceptionHandler;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Log\LogManager;
+use Odigos\Illuminate\Support\Env;
 use Odigos\Monolog\Handler\NullHandler;
 use Odigos\PHPUnit\Framework\TestCase;
 use Odigos\PHPUnit\Runner\ErrorHandler;
 use Odigos\PHPUnit\Runner\Version;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\ErrorHandler\Error\FatalError;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutput;
+use Odigos\Symfony\Component\ErrorHandler\Error\FatalError;
 use Throwable;
 class HandleExceptions
 {

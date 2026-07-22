@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Support\Defer;
+namespace Odigos\Illuminate\Support\Defer;
 
 use ArrayAccess;
 use Closure;
 use Countable;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 class DeferredCallbackCollection implements ArrayAccess, Countable
 {
     /**

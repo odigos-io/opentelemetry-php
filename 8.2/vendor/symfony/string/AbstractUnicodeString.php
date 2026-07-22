@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\String;
+namespace Odigos\Symfony\Component\String;
 
-use Symfony\Component\String\Exception\ExceptionInterface;
-use Symfony\Component\String\Exception\InvalidArgumentException;
-use Symfony\Component\String\Exception\RuntimeException;
+use Odigos\Symfony\Component\String\Exception\ExceptionInterface;
+use Odigos\Symfony\Component\String\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\String\Exception\RuntimeException;
 /**
  * Represents a string of abstract Unicode characters.
  *
@@ -24,7 +24,7 @@ use Symfony\Component\String\Exception\RuntimeException;
  *
  * @throws ExceptionInterface
  */
-abstract class AbstractUnicodeString extends \Symfony\Component\String\AbstractString
+abstract class AbstractUnicodeString extends AbstractString
 {
     public const NFC = \Normalizer::NFC;
     public const NFD = \Normalizer::NFD;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Contracts\Routing\ResponseFactory;
-class ViewController extends \Illuminate\Routing\Controller
+use Odigos\Illuminate\Contracts\Routing\ResponseFactory;
+class ViewController extends Controller
 {
     /**
      * The response factory implementation.

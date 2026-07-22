@@ -1,16 +1,16 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\VectorStoresContract;
-use OpenAI\Contracts\Resources\VectorStoresFileBatchesContract;
-use OpenAI\Contracts\Resources\VectorStoresFilesContract;
-use OpenAI\Resources\VectorStores;
-use OpenAI\Responses\VectorStores\Search\VectorStoreSearchResponse;
-use OpenAI\Responses\VectorStores\VectorStoreDeleteResponse;
-use OpenAI\Responses\VectorStores\VectorStoreListResponse;
-use OpenAI\Responses\VectorStores\VectorStoreResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\VectorStoresContract;
+use Odigos\OpenAI\Contracts\Resources\VectorStoresFileBatchesContract;
+use Odigos\OpenAI\Contracts\Resources\VectorStoresFilesContract;
+use Odigos\OpenAI\Resources\VectorStores;
+use Odigos\OpenAI\Responses\VectorStores\Search\VectorStoreSearchResponse;
+use Odigos\OpenAI\Responses\VectorStores\VectorStoreDeleteResponse;
+use Odigos\OpenAI\Responses\VectorStores\VectorStoreListResponse;
+use Odigos\OpenAI\Responses\VectorStores\VectorStoreResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class VectorStoresTestResource implements VectorStoresContract
 {
     use Testable;
@@ -47,10 +47,10 @@ final class VectorStoresTestResource implements VectorStoresContract
     }
     public function files(): VectorStoresFilesContract
     {
-        return new \OpenAI\Testing\Resources\VectorStoresFilesTestResource($this->fake);
+        return new VectorStoresFilesTestResource($this->fake);
     }
     public function batches(): VectorStoresFileBatchesContract
     {
-        return new \OpenAI\Testing\Resources\VectorStoresFileBatchesTestResource($this->fake);
+        return new VectorStoresFileBatchesTestResource($this->fake);
     }
 }

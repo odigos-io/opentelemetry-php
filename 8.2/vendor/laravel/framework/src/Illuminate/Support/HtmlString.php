@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
-use Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
 use Stringable;
 class HtmlString implements Htmlable, Stringable
 {

@@ -12,11 +12,11 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core;
+namespace Odigos\Cake\Core;
 
-use Cake\Console\CommandCollection;
-use Cake\Http\MiddlewareQueue;
-use Cake\Routing\RouteBuilder;
+use Odigos\Cake\Console\CommandCollection;
+use Odigos\Cake\Http\MiddlewareQueue;
+use Odigos\Cake\Routing\RouteBuilder;
 /**
  * Plugin Interface
  */
@@ -70,7 +70,7 @@ interface PluginInterface
      * @param \Cake\Core\PluginApplicationInterface $app The host application
      * @return void
      */
-    public function bootstrap(\Cake\Core\PluginApplicationInterface $app): void;
+    public function bootstrap(PluginApplicationInterface $app): void;
     /**
      * Add console commands for the plugin.
      *
@@ -101,7 +101,7 @@ interface PluginInterface
      * @param \Cake\Core\ContainerInterface $container Container instance.
      * @return void
      */
-    public function services(\Cake\Core\ContainerInterface $container): void;
+    public function services(ContainerInterface $container): void;
     /**
      * Disables the named hook
      *

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\ValueObjects;
+namespace Odigos\OpenAI\ValueObjects;
 
-use OpenAI\Contracts\StringableContract;
+use Odigos\OpenAI\Contracts\StringableContract;
 /**
  * @internal
  */

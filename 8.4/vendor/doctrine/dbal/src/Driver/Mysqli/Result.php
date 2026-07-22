@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\Mysqli;
+namespace Odigos\Doctrine\DBAL\Driver\Mysqli;
 
-use Doctrine\DBAL\Driver\Exception;
-use Doctrine\DBAL\Driver\FetchUtils;
-use Doctrine\DBAL\Driver\Mysqli\Exception\StatementError;
-use Doctrine\DBAL\Driver\Result as ResultInterface;
-use Doctrine\DBAL\Exception\InvalidColumnIndex;
+use Odigos\Doctrine\DBAL\Driver\Exception;
+use Odigos\Doctrine\DBAL\Driver\FetchUtils;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Exception\StatementError;
+use Odigos\Doctrine\DBAL\Driver\Result as ResultInterface;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnIndex;
 use mysqli_sql_exception;
 use mysqli_stmt;
 use function array_column;
@@ -40,7 +40,7 @@ final class Result implements ResultInterface
      *
      * @throws Exception
      */
-    public function __construct(private readonly mysqli_stmt $statement, private ?\Doctrine\DBAL\Driver\Mysqli\Statement $statementReference = null)
+    public function __construct(private readonly mysqli_stmt $statement, private ?Statement $statementReference = null)
     {
         $meta = $statement->result_metadata();
         $this->hasColumns = $meta !== \false;

@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation;
+namespace Odigos\Symfony\Component\HttpFoundation;
 
 /**
  * ResponseHeaderBag is a container for Response HTTP headers.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ResponseHeaderBag extends \Symfony\Component\HttpFoundation\HeaderBag
+class ResponseHeaderBag extends HeaderBag
 {
     public const COOKIES_FLAT = 'flat';
     public const COOKIES_ARRAY = 'array';
@@ -85,7 +85,7 @@ class ResponseHeaderBag extends \Symfony\Component\HttpFoundation\HeaderBag
                 $this->cookies = [];
             }
             foreach ((array) $values as $cookie) {
-                $this->setCookie(\Symfony\Component\HttpFoundation\Cookie::fromString($cookie));
+                $this->setCookie(Cookie::fromString($cookie));
             }
             $this->headerNames[$uniqueKey] = $key;
             return;
@@ -123,7 +123,7 @@ class ResponseHeaderBag extends \Symfony\Component\HttpFoundation\HeaderBag
     {
         return $this->computedCacheControl[$key] ?? null;
     }
-    public function setCookie(\Symfony\Component\HttpFoundation\Cookie $cookie): void
+    public function setCookie(Cookie $cookie): void
     {
         $this->cookies[$cookie->getDomain() ?? ''][$cookie->getPath()][$cookie->getName()] = $cookie;
         $this->headerNames['set-cookie'] = 'Set-Cookie';
@@ -178,14 +178,14 @@ class ResponseHeaderBag extends \Symfony\Component\HttpFoundation\HeaderBag
     public function clearCookie(string $name, ?string $path = '/', ?string $domain = null, bool $secure = \false, bool $httpOnly = \true, ?string $sameSite = null): void
     {
         $partitioned = 6 < \func_num_args() ? func_get_arg(6) : \false;
-        $this->setCookie(new \Symfony\Component\HttpFoundation\Cookie($name, null, 1, $path, $domain, $secure, $httpOnly, \false, $sameSite, $partitioned));
+        $this->setCookie(new Cookie($name, null, 1, $path, $domain, $secure, $httpOnly, \false, $sameSite, $partitioned));
     }
     /**
      * @see HeaderUtils::makeDisposition()
      */
     public function makeDisposition(string $disposition, string $filename, string $filenameFallback = ''): string
     {
-        return \Symfony\Component\HttpFoundation\HeaderUtils::makeDisposition($disposition, $filename, $filenameFallback);
+        return HeaderUtils::makeDisposition($disposition, $filename, $filenameFallback);
     }
     /**
      * Returns the calculated value of the cache-control header.

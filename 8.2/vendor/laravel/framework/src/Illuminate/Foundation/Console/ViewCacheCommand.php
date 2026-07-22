@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Finder\Finder;
+use Odigos\Symfony\Component\Finder\SplFileInfo;
 #[AsCommand(name: 'view:cache')]
 class ViewCacheCommand extends Command
 {

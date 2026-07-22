@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\Deprecations\PHPUnit;
+namespace Odigos\Doctrine\Deprecations\PHPUnit;
 
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use Odigos\PHPUnit\Framework\Attributes\After;
 use Odigos\PHPUnit\Framework\Attributes\Before;
 use function sprintf;

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Loader;
+namespace Odigos\Symfony\Component\Routing\Loader;
 
-use Symfony\Component\Config\Resource\GlobResource;
-use Symfony\Component\Routing\RouteCollection;
+use Odigos\Symfony\Component\Config\Resource\GlobResource;
+use Odigos\Symfony\Component\Routing\RouteCollection;
 /**
  * AttributeDirectoryLoader loads routing information from attributes set
  * on PHP classes and methods.
@@ -19,7 +19,7 @@ use Symfony\Component\Routing\RouteCollection;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Alexandre Daubois <alex.daubois@gmail.com>
  */
-class AttributeDirectoryLoader extends \Symfony\Component\Routing\Loader\AttributeFileLoader
+class AttributeDirectoryLoader extends AttributeFileLoader
 {
     /**
      * @throws \InvalidArgumentException When the directory does not exist or its routes cannot be parsed

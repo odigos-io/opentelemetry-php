@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
-use yii\base\BaseObject;
+use Odigos\yii\base\BaseObject;
 /**
  * HeaderCollection is used by [[Response]] to maintain the currently registered HTTP headers.
  *

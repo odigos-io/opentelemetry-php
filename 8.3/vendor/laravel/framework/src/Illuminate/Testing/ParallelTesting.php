@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Testing;
+namespace Odigos\Illuminate\Testing;
 
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Support\Str;
 class ParallelTesting
 {
     /**

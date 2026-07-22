@@ -15,22 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
-use MongoDB\DeleteResult;
+use Odigos\MongoDB\DeleteResult;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnsupportedException;
 /**
  * Operation for deleting a single document with the delete command.
  *
  * @see \MongoDB\Collection::deleteOne()
  * @see https://mongodb.com/docs/manual/reference/command/delete/
  */
-final class DeleteOne implements \MongoDB\Operation\Explainable
+final class DeleteOne implements Explainable
 {
-    private \MongoDB\Operation\Delete $delete;
+    private Delete $delete;
     /**
      * Constructs a delete command.
      *
@@ -66,7 +66,7 @@ final class DeleteOne implements \MongoDB\Operation\Explainable
      */
     public function __construct(string $databaseName, string $collectionName, array|object $filter, array $options = [])
     {
-        $this->delete = new \MongoDB\Operation\Delete($databaseName, $collectionName, $filter, 1, $options);
+        $this->delete = new Delete($databaseName, $collectionName, $filter, 1, $options);
     }
     /**
      * Execute the operation.

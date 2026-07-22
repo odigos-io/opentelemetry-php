@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Odigos\Illuminate\Database\Eloquent\Relations;
 
-class MorphPivot extends \Illuminate\Database\Eloquent\Relations\Pivot
+class MorphPivot extends Pivot
 {
     /**
      * The type of the polymorphic relation.

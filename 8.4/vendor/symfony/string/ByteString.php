@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\String;
+namespace Odigos\Symfony\Component\String;
 
 use Random\Randomizer;
-use Symfony\Component\String\Exception\ExceptionInterface;
-use Symfony\Component\String\Exception\InvalidArgumentException;
-use Symfony\Component\String\Exception\RuntimeException;
+use Odigos\Symfony\Component\String\Exception\ExceptionInterface;
+use Odigos\Symfony\Component\String\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\String\Exception\RuntimeException;
 /**
  * Represents a binary-safe string of bytes.
  *
@@ -22,7 +22,7 @@ use Symfony\Component\String\Exception\RuntimeException;
  *
  * @throws ExceptionInterface
  */
-class ByteString extends \Symfony\Component\String\AbstractString
+class ByteString extends AbstractString
 {
     private const ALPHABET_ALPHANUMERIC = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
     public function __construct(string $string = '')
@@ -86,18 +86,18 @@ class ByteString extends \Symfony\Component\String\AbstractString
         }
         return $chunks;
     }
-    public function endsWith(string|iterable|\Symfony\Component\String\AbstractString $suffix): bool
+    public function endsWith(string|iterable|AbstractString $suffix): bool
     {
-        if ($suffix instanceof \Symfony\Component\String\AbstractString) {
+        if ($suffix instanceof AbstractString) {
             $suffix = $suffix->string;
         } elseif (!\is_string($suffix)) {
             return parent::endsWith($suffix);
         }
         return '' !== $suffix && \strlen($this->string) >= \strlen($suffix) && 0 === substr_compare($this->string, $suffix, -\strlen($suffix), null, $this->ignoreCase);
     }
-    public function equalsTo(string|iterable|\Symfony\Component\String\AbstractString $string): bool
+    public function equalsTo(string|iterable|AbstractString $string): bool
     {
-        if ($string instanceof \Symfony\Component\String\AbstractString) {
+        if ($string instanceof AbstractString) {
             $string = $string->string;
         } elseif (!\is_string($string)) {
             return parent::equalsTo($string);
@@ -113,9 +113,9 @@ class ByteString extends \Symfony\Component\String\AbstractString
         $str->string = strtolower($str->string);
         return $str;
     }
-    public function indexOf(string|iterable|\Symfony\Component\String\AbstractString $needle, int $offset = 0): ?int
+    public function indexOf(string|iterable|AbstractString $needle, int $offset = 0): ?int
     {
-        if ($needle instanceof \Symfony\Component\String\AbstractString) {
+        if ($needle instanceof AbstractString) {
             $needle = $needle->string;
         } elseif (!\is_string($needle)) {
             return parent::indexOf($needle, $offset);
@@ -126,9 +126,9 @@ class ByteString extends \Symfony\Component\String\AbstractString
         $i = $this->ignoreCase ? stripos($this->string, $needle, $offset) : strpos($this->string, $needle, $offset);
         return \false === $i ? null : $i;
     }
-    public function indexOfLast(string|iterable|\Symfony\Component\String\AbstractString $needle, int $offset = 0): ?int
+    public function indexOfLast(string|iterable|AbstractString $needle, int $offset = 0): ?int
     {
-        if ($needle instanceof \Symfony\Component\String\AbstractString) {
+        if ($needle instanceof AbstractString) {
             $needle = $needle->string;
         } elseif (!\is_string($needle)) {
             return parent::indexOfLast($needle, $offset);
@@ -278,9 +278,9 @@ class ByteString extends \Symfony\Component\String\AbstractString
         }
         return $chunks;
     }
-    public function startsWith(string|iterable|\Symfony\Component\String\AbstractString $prefix): bool
+    public function startsWith(string|iterable|AbstractString $prefix): bool
     {
-        if ($prefix instanceof \Symfony\Component\String\AbstractString) {
+        if ($prefix instanceof AbstractString) {
             $prefix = $prefix->string;
         } elseif (!\is_string($prefix)) {
             return parent::startsWith($prefix);
@@ -293,13 +293,13 @@ class ByteString extends \Symfony\Component\String\AbstractString
         $str->string = $allWords ? ucwords($str->string) : ucfirst($str->string);
         return $str;
     }
-    public function toUnicodeString(?string $fromEncoding = null): \Symfony\Component\String\UnicodeString
+    public function toUnicodeString(?string $fromEncoding = null): UnicodeString
     {
-        return new \Symfony\Component\String\UnicodeString($this->toCodePointString($fromEncoding)->string);
+        return new UnicodeString($this->toCodePointString($fromEncoding)->string);
     }
-    public function toCodePointString(?string $fromEncoding = null): \Symfony\Component\String\CodePointString
+    public function toCodePointString(?string $fromEncoding = null): CodePointString
     {
-        $u = new \Symfony\Component\String\CodePointString();
+        $u = new CodePointString();
         if (\in_array($fromEncoding, [null, 'utf8', 'utf-8', 'UTF8', 'UTF-8'], \true) && preg_match('//u', $this->string)) {
             $u->string = $this->string;
             return $u;
@@ -351,6 +351,6 @@ class ByteString extends \Symfony\Component\String\AbstractString
     public function width(bool $ignoreAnsiDecoration = \true): int
     {
         $string = preg_match('//u', $this->string) ? $this->string : preg_replace('/[\x80-\xFF]/', '?', $this->string);
-        return (new \Symfony\Component\String\CodePointString($string))->width($ignoreAnsiDecoration);
+        return (new CodePointString($string))->width($ignoreAnsiDecoration);
     }
 }

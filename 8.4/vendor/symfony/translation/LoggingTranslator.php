@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation;
+namespace Odigos\Symfony\Component\Translation;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Contracts\Translation\LocaleAwareInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Contracts\Translation\LocaleAwareInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  */
-class LoggingTranslator implements TranslatorInterface, \Symfony\Component\Translation\TranslatorBagInterface, LocaleAwareInterface
+class LoggingTranslator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
 {
-    public function __construct(private TranslatorInterface&\Symfony\Component\Translation\TranslatorBagInterface&LocaleAwareInterface $translator, private LoggerInterface $logger)
+    public function __construct(private TranslatorInterface&TranslatorBagInterface&LocaleAwareInterface $translator, private LoggerInterface $logger)
     {
     }
     public function trans(?string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
@@ -40,7 +40,7 @@ class LoggingTranslator implements TranslatorInterface, \Symfony\Component\Trans
     {
         return $this->translator->getLocale();
     }
-    public function getCatalogue(?string $locale = null): \Symfony\Component\Translation\MessageCatalogueInterface
+    public function getCatalogue(?string $locale = null): MessageCatalogueInterface
     {
         return $this->translator->getCatalogue($locale);
     }
@@ -50,7 +50,7 @@ class LoggingTranslator implements TranslatorInterface, \Symfony\Component\Trans
     }
     public function getFallbackLocales(): array
     {
-        if ($this->translator instanceof \Symfony\Component\Translation\Translator || method_exists($this->translator, 'getFallbackLocales')) {
+        if ($this->translator instanceof Translator || method_exists($this->translator, 'getFallbackLocales')) {
             return $this->translator->getFallbackLocales();
         }
         return [];

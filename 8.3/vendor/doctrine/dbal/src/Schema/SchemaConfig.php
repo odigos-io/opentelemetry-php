@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
 /**
  * Configuration for a Schema.
@@ -57,8 +57,8 @@ class SchemaConfig
     {
         $this->defaultTableOptions = $defaultTableOptions;
     }
-    public function toTableConfiguration(): \Doctrine\DBAL\Schema\TableConfiguration
+    public function toTableConfiguration(): TableConfiguration
     {
-        return new \Doctrine\DBAL\Schema\TableConfiguration($this->maxIdentifierLength);
+        return new TableConfiguration($this->maxIdentifierLength);
     }
 }

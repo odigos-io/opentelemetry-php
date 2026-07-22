@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Foundation\Testing\Traits;
+namespace Odigos\Illuminate\Foundation\Testing\Traits;
 
 trait CanConfigureMigrationCommands
 {

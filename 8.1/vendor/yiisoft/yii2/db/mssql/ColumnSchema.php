@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\mssql;
+namespace Odigos\yii\db\mssql;
 
 /**
  * Class ColumnSchema for MSSQL database
  *
  * @since 2.0.23
  */
-class ColumnSchema extends \yii\db\ColumnSchema
+class ColumnSchema extends \Odigos\yii\db\ColumnSchema
 {
     /**
      * @var bool whether this column is a computed column

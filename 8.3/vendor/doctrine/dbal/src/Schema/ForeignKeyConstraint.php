@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Schema\Exception\InvalidState;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint\Deferrability;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint\MatchType;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint\ReferentialAction;
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
-use Doctrine\DBAL\Schema\Name\Parser\UnqualifiedNameParser;
-use Doctrine\DBAL\Schema\Name\Parsers;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidState;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint\Deferrability;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint\MatchType;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint\ReferentialAction;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\UnqualifiedNameParser;
+use Odigos\Doctrine\DBAL\Schema\Name\Parsers;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use Throwable;
 use ValueError;
 use function array_keys;
@@ -28,7 +28,7 @@ use function substr;
  * @extends AbstractOptionallyNamedObject<UnqualifiedName>
  * @final This class will be made final in DBAL 5.0.
  */
-class ForeignKeyConstraint extends \Doctrine\DBAL\Schema\AbstractOptionallyNamedObject
+class ForeignKeyConstraint extends AbstractOptionallyNamedObject
 {
     /**
      * Asset identifier instances of the referencing table column names the foreign key constraint is associated with.
@@ -43,7 +43,7 @@ class ForeignKeyConstraint extends \Doctrine\DBAL\Schema\AbstractOptionallyNamed
      *
      * @deprecated
      */
-    protected \Doctrine\DBAL\Schema\Identifier $_foreignTableName;
+    protected Identifier $_foreignTableName;
     /**
      * Asset identifier instances of the referenced table column names the foreign key constraint is associated with.
      *
@@ -130,7 +130,7 @@ class ForeignKeyConstraint extends \Doctrine\DBAL\Schema\AbstractOptionallyNamed
         }
         parent::__construct($name);
         $this->_localColumnNames = $this->createIdentifierMap($localColumnNames);
-        $this->_foreignTableName = new \Doctrine\DBAL\Schema\Identifier($foreignTableName);
+        $this->_foreignTableName = new Identifier($foreignTableName);
         $this->_foreignColumnNames = $this->createIdentifierMap($foreignColumnNames);
         $this->referencingColumnNames = $this->parseColumnNames($localColumnNames);
         $this->referencedTableName = $this->parseReferencedTableName($foreignTableName);
@@ -227,7 +227,7 @@ class ForeignKeyConstraint extends \Doctrine\DBAL\Schema\AbstractOptionallyNamed
     {
         $identifiers = [];
         foreach ($names as $name) {
-            $identifiers[$name] = new \Doctrine\DBAL\Schema\Identifier($name);
+            $identifiers[$name] = new Identifier($name);
         }
         return $identifiers;
     }
@@ -535,7 +535,7 @@ class ForeignKeyConstraint extends \Doctrine\DBAL\Schema\AbstractOptionallyNamed
      *
      * @param Index $index The index to be checked against.
      */
-    public function intersectsIndexColumns(\Doctrine\DBAL\Schema\Index $index): bool
+    public function intersectsIndexColumns(Index $index): bool
     {
         Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6728', '%s is deprecated.', __METHOD__);
         foreach ($index->getColumns() as $indexColumn) {
@@ -550,14 +550,14 @@ class ForeignKeyConstraint extends \Doctrine\DBAL\Schema\AbstractOptionallyNamed
     /**
      * Instantiates a new foreign key constraint editor.
      */
-    public static function editor(): \Doctrine\DBAL\Schema\ForeignKeyConstraintEditor
+    public static function editor(): ForeignKeyConstraintEditor
     {
-        return new \Doctrine\DBAL\Schema\ForeignKeyConstraintEditor();
+        return new ForeignKeyConstraintEditor();
     }
     /**
      * Instantiates a new foreign key constraint editor and initializes it with the constraint's properties.
      */
-    public function edit(): \Doctrine\DBAL\Schema\ForeignKeyConstraintEditor
+    public function edit(): ForeignKeyConstraintEditor
     {
         return self::editor()->setName($this->getObjectName())->setReferencedTableName($this->getReferencedTableName())->setReferencingColumnNames(...$this->getReferencingColumnNames())->setReferencedColumnNames(...$this->getReferencedColumnNames())->setMatchType($this->getMatchType())->setOnDeleteAction($this->getOnDeleteAction())->setOnUpdateAction($this->getOnUpdateAction())->setDeferrability($this->getDeferrability());
     }

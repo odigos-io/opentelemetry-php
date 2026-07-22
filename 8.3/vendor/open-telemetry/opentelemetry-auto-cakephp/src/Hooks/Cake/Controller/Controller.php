@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks\Cake\Controller;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks\Cake\Controller;
 
-use Cake\Controller\Controller as CakeController;
+use Odigos\Cake\Controller\Controller as CakeController;
 use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\Context\Context;
-use OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks\CakeHook;
-use OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks\CakeHookTrait;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks\CakeHook;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\CakePHP\Hooks\CakeHookTrait;
 use function OpenTelemetry\Instrumentation\hook;
 use OpenTelemetry\SemConv\TraceAttributes;
 use Throwable;
@@ -16,11 +16,11 @@ class Controller implements CakeHook
     use CakeHookTrait;
     public function instrument(): void
     {
-        hook(CakeController::class, 'invokeAction', pre: function (CakeController $app, array $params, string $class, string $function, ?string $filename, ?int $lineno) {
+        hook('Cake\\Controller\\Controller', 'invokeAction', pre: function (object $app, array $params, string $class, string $function, ?string $filename, ?int $lineno) {
             $request = $app->getRequest();
             $request = $this->buildSpan($request, $class, $function, $filename, $lineno);
             $app->setRequest($request);
-        }, post: static function (CakeController $app, array $params, $return, ?Throwable $exception) {
+        }, post: static function (object $app, array $params, $return, ?Throwable $exception) {
             $scope = Context::storage()->scope();
             if (!$scope) {
                 return;

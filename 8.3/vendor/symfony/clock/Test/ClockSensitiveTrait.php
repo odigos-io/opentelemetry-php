@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Clock\Test;
+namespace Odigos\Symfony\Component\Clock\Test;
 
 use Odigos\PHPUnit\Framework\Attributes\After;
 use Odigos\PHPUnit\Framework\Attributes\Before;
 use Odigos\PHPUnit\Framework\Attributes\BeforeClass;
-use Symfony\Component\Clock\Clock;
-use Symfony\Component\Clock\ClockInterface;
-use Symfony\Component\Clock\MockClock;
-use function Symfony\Component\Clock\now;
+use Odigos\Symfony\Component\Clock\Clock;
+use Odigos\Symfony\Component\Clock\ClockInterface;
+use Odigos\Symfony\Component\Clock\MockClock;
+use function Odigos\Symfony\Component\Clock\now;
 /**
  * Helps with mocking the time in your test cases.
  *

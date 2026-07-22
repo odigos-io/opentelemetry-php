@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Realtime;
+namespace Odigos\OpenAI\Responses\Realtime;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Realtime\Session\ClientSecret;
-use OpenAI\Responses\Realtime\Session\InputAudioTranscription;
-use OpenAI\Responses\Realtime\Session\TurnDetection;
-use OpenAI\Responses\Realtime\Tools\FunctionTool;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Realtime\Session\ClientSecret;
+use Odigos\OpenAI\Responses\Realtime\Session\InputAudioTranscription;
+use Odigos\OpenAI\Responses\Realtime\Session\TurnDetection;
+use Odigos\OpenAI\Responses\Realtime\Tools\FunctionTool;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type ClientSecretType from ClientSecret
  * @phpstan-import-type InputAudioTranscriptionType from InputAudioTranscription

@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 /**
  * GoneHttpException represents a "Gone" HTTP exception with status code 410.
@@ -19,7 +19,7 @@ namespace yii\web;
  * @author Dan Schmidt <danschmidt5189@gmail.com>
  * @since 2.0
  */
-class GoneHttpException extends \yii\web\HttpException
+class GoneHttpException extends HttpException
 {
     /**
      * Constructor.

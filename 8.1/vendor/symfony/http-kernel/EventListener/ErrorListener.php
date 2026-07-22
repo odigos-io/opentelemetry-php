@@ -8,24 +8,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\EventListener;
+namespace Odigos\Symfony\Component\HttpKernel\EventListener;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Symfony\Component\ErrorHandler\ErrorHandler;
-use Symfony\Component\ErrorHandler\Exception\FlattenException;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Attribute\WithHttpStatus;
-use Symfony\Component\HttpKernel\Attribute\WithLogLevel;
-use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
-use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpKernel\Log\DebugLoggerConfigurator;
+use Odigos\Symfony\Component\ErrorHandler\ErrorHandler;
+use Odigos\Symfony\Component\ErrorHandler\Exception\FlattenException;
+use Odigos\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpKernel\Attribute\WithHttpStatus;
+use Odigos\Symfony\Component\HttpKernel\Attribute\WithLogLevel;
+use Odigos\Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
+use Odigos\Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Odigos\Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Odigos\Symfony\Component\HttpKernel\Exception\HttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Odigos\Symfony\Component\HttpKernel\HttpKernelInterface;
+use Odigos\Symfony\Component\HttpKernel\KernelEvents;
+use Odigos\Symfony\Component\HttpKernel\Log\DebugLoggerConfigurator;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */

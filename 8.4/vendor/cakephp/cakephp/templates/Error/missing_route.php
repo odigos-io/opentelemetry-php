@@ -16,9 +16,9 @@ namespace Odigos;
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  * @var \Cake\Core\Exception\CakeException $error
  */
-use Cake\Error\Debugger;
-use Cake\Routing\Router;
-use function Cake\Core\h;
+use Odigos\Cake\Error\Debugger;
+use Odigos\Cake\Routing\Router;
+use function Odigos\Cake\Core\h;
 $this->layout = 'dev_error';
 $this->assign('title', 'Missing Route');
 $this->assign('templateName', 'missing_route.php');

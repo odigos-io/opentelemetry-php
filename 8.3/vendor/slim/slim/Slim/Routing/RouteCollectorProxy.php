@@ -6,15 +6,15 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Routing;
+namespace Odigos\Slim\Routing;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Slim\Interfaces\CallableResolverInterface;
-use Slim\Interfaces\RouteCollectorInterface;
-use Slim\Interfaces\RouteCollectorProxyInterface;
-use Slim\Interfaces\RouteGroupInterface;
-use Slim\Interfaces\RouteInterface;
+use Odigos\Slim\Interfaces\CallableResolverInterface;
+use Odigos\Slim\Interfaces\RouteCollectorInterface;
+use Odigos\Slim\Interfaces\RouteCollectorProxyInterface;
+use Odigos\Slim\Interfaces\RouteGroupInterface;
+use Odigos\Slim\Interfaces\RouteInterface;
 /**
  * @template TContainerInterface of (ContainerInterface|null)
  * @template-implements RouteCollectorProxyInterface<TContainerInterface>
@@ -35,7 +35,7 @@ class RouteCollectorProxy implements RouteCollectorProxyInterface
         $this->responseFactory = $responseFactory;
         $this->callableResolver = $callableResolver;
         $this->container = $container;
-        $this->routeCollector = $routeCollector ?? new \Slim\Routing\RouteCollector($responseFactory, $callableResolver, $container);
+        $this->routeCollector = $routeCollector ?? new RouteCollector($responseFactory, $callableResolver, $container);
         $this->groupPattern = $groupPattern;
     }
     /**

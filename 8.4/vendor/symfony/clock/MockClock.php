@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Clock;
+namespace Odigos\Symfony\Component\Clock;
 
 /**
  * A clock that always returns the same date, suitable for testing time-sensitive logic.
@@ -17,9 +17,9 @@ namespace Symfony\Component\Clock;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-final class MockClock implements \Symfony\Component\Clock\ClockInterface
+final class MockClock implements ClockInterface
 {
-    private \Symfony\Component\Clock\DatePoint $now;
+    private DatePoint $now;
     /**
      * @throws \DateMalformedStringException When $now is invalid
      * @throws \DateInvalidTimeZoneException When $timezone is invalid
@@ -30,13 +30,13 @@ final class MockClock implements \Symfony\Component\Clock\ClockInterface
             $timezone = new \DateTimeZone($timezone);
         }
         if (\is_string($now)) {
-            $now = new \Symfony\Component\Clock\DatePoint($now, $timezone ?? new \DateTimeZone('UTC'));
-        } elseif (!$now instanceof \Symfony\Component\Clock\DatePoint) {
-            $now = \Symfony\Component\Clock\DatePoint::createFromInterface($now);
+            $now = new DatePoint($now, $timezone ?? new \DateTimeZone('UTC'));
+        } elseif (!$now instanceof DatePoint) {
+            $now = DatePoint::createFromInterface($now);
         }
         $this->now = null !== $timezone ? $now->setTimezone($timezone) : $now;
     }
-    public function now(): \Symfony\Component\Clock\DatePoint
+    public function now(): DatePoint
     {
         return clone $this->now;
     }
@@ -48,7 +48,7 @@ final class MockClock implements \Symfony\Component\Clock\ClockInterface
         $now = (float) $this->now->format('Uu') + $seconds * 1000000.0;
         $now = substr_replace(\sprintf('@%07.0F', $now), '.', -6, 0);
         $timezone = $this->now->getTimezone();
-        $this->now = \Symfony\Component\Clock\DatePoint::createFromInterface(new \DateTimeImmutable($now, $timezone))->setTimezone($timezone);
+        $this->now = DatePoint::createFromInterface(new \DateTimeImmutable($now, $timezone))->setTimezone($timezone);
     }
     /**
      * @throws \DateMalformedStringException When $modifier is invalid

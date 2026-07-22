@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Facades\DB;
+use Odigos\Illuminate\Support\Str;
 use PDOException;
 use Throwable;
 class QueryException extends PDOException

@@ -15,9 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
-use MongoDB\Codec\DocumentCodec;
+use Odigos\MongoDB\Codec\DocumentCodec;
 use MongoDB\Driver\Command;
 use MongoDB\Driver\CursorInterface;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
@@ -26,25 +26,25 @@ use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnexpectedValueException;
-use MongoDB\Exception\UnsupportedException;
-use MongoDB\Model\CodecCursor;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnexpectedValueException;
+use Odigos\MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Model\CodecCursor;
 use stdClass;
 use function is_array;
 use function is_bool;
 use function is_integer;
 use function is_string;
-use function MongoDB\is_document;
-use function MongoDB\is_last_pipeline_operator_write;
-use function MongoDB\is_pipeline;
+use function Odigos\MongoDB\is_document;
+use function Odigos\MongoDB\is_last_pipeline_operator_write;
+use function Odigos\MongoDB\is_pipeline;
 /**
  * Operation for the aggregate command.
  *
  * @see \MongoDB\Collection::aggregate()
  * @see https://mongodb.com/docs/manual/reference/command/aggregate/
  */
-final class Aggregate implements \MongoDB\Operation\Explainable
+final class Aggregate implements Explainable
 {
     private bool $isWrite;
     /**

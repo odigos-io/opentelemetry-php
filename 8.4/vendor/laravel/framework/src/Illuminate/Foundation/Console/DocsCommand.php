@@ -1,21 +1,21 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
 use Odigos\Carbon\CarbonInterval;
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Http\Client\Factory as Http;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Env;
-use Illuminate\Support\Str;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\ExecutableFinder;
-use Symfony\Component\Process\Process;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Http\Client\Factory as Http;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Env;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Process\Exception\ProcessFailedException;
+use Odigos\Symfony\Component\Process\ExecutableFinder;
+use Odigos\Symfony\Component\Process\Process;
 use Throwable;
-use function Laravel\Prompts\suggest;
+use function Odigos\Laravel\Prompts\suggest;
 #[AsCommand(name: 'docs')]
 class DocsCommand extends Command
 {

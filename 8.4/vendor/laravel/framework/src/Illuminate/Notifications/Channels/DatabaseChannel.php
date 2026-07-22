@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Notifications\Channels;
+namespace Odigos\Illuminate\Notifications\Channels;
 
-use Illuminate\Notifications\Notification;
+use Odigos\Illuminate\Notifications\Notification;
 use RuntimeException;
 class DatabaseChannel
 {

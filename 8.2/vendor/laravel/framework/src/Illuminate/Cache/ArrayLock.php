@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Support\Carbon;
-class ArrayLock extends \Illuminate\Cache\Lock
+use Odigos\Illuminate\Support\Carbon;
+class ArrayLock extends Lock
 {
     /**
      * The parent array cache store.

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception\InvalidColumnType;
+namespace Odigos\Doctrine\DBAL\Exception\InvalidColumnType;
 
-use Doctrine\DBAL\Exception\InvalidColumnType;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnType;
 /** @internal */
 final class ColumnPrecisionRequired extends InvalidColumnType
 {

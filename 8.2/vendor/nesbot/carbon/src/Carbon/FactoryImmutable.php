@@ -14,9 +14,9 @@ namespace Odigos\Carbon;
 use Closure;
 use DateTimeInterface;
 use DateTimeZone;
-use Symfony\Component\Clock\ClockInterface;
-use Symfony\Component\Clock\NativeClock;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Component\Clock\ClockInterface;
+use Odigos\Symfony\Component\Clock\NativeClock;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * A factory to generate CarbonImmutable instances with common settings.
  *

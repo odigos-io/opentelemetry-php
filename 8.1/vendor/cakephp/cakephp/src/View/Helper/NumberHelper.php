@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         0.10.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Helper;
+namespace Odigos\Cake\View\Helper;
 
-use Cake\I18n\Number;
-use Cake\View\Helper;
-use function Cake\Core\h;
+use Odigos\Cake\I18n\Number;
+use Odigos\Cake\View\Helper;
+use function Odigos\Cake\Core\h;
 /**
  * Number helper library.
  *

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
-use Illuminate\Database\Events\ModelsPruned;
+use Odigos\Illuminate\Database\Events\ModelsPruned;
 use LogicException;
 trait MassPrunable
 {

@@ -5,18 +5,18 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
 use Odigos\Yii;
-use yii\helpers\Json;
-use yii\web\UploadedFile;
+use Odigos\yii\helpers\Json;
+use Odigos\yii\web\UploadedFile;
 /**
  * ImageValidator verifies if an attribute is receiving a valid image.
  *
  * @author Taras Gudz <gudz.taras@gmail.com>
  * @since 2.0
  */
-class ImageValidator extends \yii\validators\FileValidator
+class ImageValidator extends FileValidator
 {
     /**
      * @var string the error message used when the uploaded file is not an image.
@@ -150,7 +150,7 @@ class ImageValidator extends \yii\validators\FileValidator
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
-        \yii\validators\ValidationAsset::register($view);
+        ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
         return 'yii.validation.image(attribute, messages, ' . Json::htmlEncode($options) . ', deferred);';
     }

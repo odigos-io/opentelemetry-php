@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
 /**
  * Contains platform-specific parameters used for creating and managing objects scoped to a {@see Table}.

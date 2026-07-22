@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\ValueObjects\Transporter;
+namespace Odigos\OpenAI\ValueObjects\Transporter;
 
-use Http\Discovery\Psr17Factory;
-use Http\Message\MultipartStream\MultipartStreamBuilder;
-use OpenAI\Contracts\Request;
-use OpenAI\Enums\Transporter\ContentType;
-use OpenAI\Enums\Transporter\Method;
-use OpenAI\ValueObjects\ResourceUri;
+use Odigos\Http\Discovery\Psr17Factory;
+use Odigos\Http\Message\MultipartStream\MultipartStreamBuilder;
+use Odigos\OpenAI\Contracts\Request;
+use Odigos\OpenAI\Enums\Transporter\ContentType;
+use Odigos\OpenAI\Enums\Transporter\Method;
+use Odigos\OpenAI\ValueObjects\ResourceUri;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 /**
@@ -118,7 +118,7 @@ final class Payload
     /**
      * Creates a new Psr 7 Request instance.
      */
-    public function toRequest(\OpenAI\ValueObjects\Transporter\BaseUri $baseUri, \OpenAI\ValueObjects\Transporter\Headers $headers, \OpenAI\ValueObjects\Transporter\QueryParams $queryParams): RequestInterface
+    public function toRequest(BaseUri $baseUri, Headers $headers, QueryParams $queryParams): RequestInterface
     {
         $psr17Factory = new Psr17Factory();
         $body = null;

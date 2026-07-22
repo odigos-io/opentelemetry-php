@@ -1,21 +1,21 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Odigos\Illuminate\Database\Eloquent\Relations;
 
 use Closure;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
-use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
-use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithPivotTable;
-use Illuminate\Database\Query\Grammars\MySqlGrammar;
-use Illuminate\Database\UniqueConstraintViolationException;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection as BaseCollection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Database\Eloquent\Builder;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\ModelNotFoundException;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithPivotTable;
+use Odigos\Illuminate\Database\Query\Grammars\MySqlGrammar;
+use Odigos\Illuminate\Database\UniqueConstraintViolationException;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection as BaseCollection;
+use Odigos\Illuminate\Support\Str;
 use InvalidArgumentException;
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
@@ -27,7 +27,7 @@ use InvalidArgumentException;
  *
  * @todo use TAccessor when PHPStan bug is fixed: https://github.com/phpstan/phpstan/issues/12756
  */
-class BelongsToMany extends \Illuminate\Database\Eloquent\Relations\Relation
+class BelongsToMany extends Relation
 {
     use InteractsWithDictionary, InteractsWithPivotTable;
     /**
@@ -267,7 +267,7 @@ class BelongsToMany extends \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function getPivotClass()
     {
-        return $this->using ?? \Illuminate\Database\Eloquent\Relations\Pivot::class;
+        return $this->using ?? Pivot::class;
     }
     /**
      * Specify the custom pivot model to use for the relationship.

@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Extractor;
+namespace Odigos\Symfony\Component\Translation\Extractor;
 
 use Odigos\PhpParser\NodeTraverser;
 use Odigos\PhpParser\NodeVisitor;
 use Odigos\PhpParser\Parser;
 use Odigos\PhpParser\ParserFactory;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Translation\Extractor\Visitor\AbstractVisitor;
-use Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Finder\Finder;
+use Odigos\Symfony\Component\Translation\Extractor\Visitor\AbstractVisitor;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
 /**
  * PhpAstExtractor extracts translation messages from a PHP AST.
  *
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
  */
-final class PhpAstExtractor extends \Symfony\Component\Translation\Extractor\AbstractFileExtractor implements \Symfony\Component\Translation\Extractor\ExtractorInterface
+final class PhpAstExtractor extends AbstractFileExtractor implements ExtractorInterface
 {
     private Parser $parser;
     public function __construct(

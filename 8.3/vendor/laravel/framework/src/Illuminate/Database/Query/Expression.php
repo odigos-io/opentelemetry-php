@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Query;
+namespace Odigos\Illuminate\Database\Query;
 
-use Illuminate\Contracts\Database\Query\Expression as ExpressionContract;
-use Illuminate\Database\Grammar;
+use Odigos\Illuminate\Contracts\Database\Query\Expression as ExpressionContract;
+use Odigos\Illuminate\Database\Grammar;
 /**
  * @template TValue of string|int|float
  */

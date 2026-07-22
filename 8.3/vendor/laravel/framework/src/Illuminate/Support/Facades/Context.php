@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static bool has(string $key)
@@ -49,7 +49,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Log\Context\Repository
  */
-class Context extends \Illuminate\Support\Facades\Facade
+class Context extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -58,6 +58,6 @@ class Context extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return \Illuminate\Log\Context\Repository::class;
+        return \Odigos\Illuminate\Log\Context\Repository::class;
     }
 }

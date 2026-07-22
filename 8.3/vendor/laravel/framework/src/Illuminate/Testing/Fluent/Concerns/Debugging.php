@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Testing\Fluent\Concerns;
+namespace Odigos\Illuminate\Testing\Fluent\Concerns;
 
-use Illuminate\Support\Traits\Dumpable;
+use Odigos\Illuminate\Support\Traits\Dumpable;
 trait Debugging
 {
     use Dumpable;

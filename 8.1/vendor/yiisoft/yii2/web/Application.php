@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\InvalidRouteException;
-use yii\helpers\Url;
+use Odigos\yii\base\InvalidRouteException;
+use Odigos\yii\helpers\Url;
 /**
  * Application is the base class for all web application classes.
  *
@@ -27,7 +27,7 @@ use yii\helpers\Url;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Application extends \yii\base\Application
+class Application extends \Odigos\yii\base\Application
 {
     /**
      * @var string the default route of this application. Defaults to 'site'.
@@ -77,7 +77,7 @@ class Application extends \yii\base\Application
         if (empty($this->catchAll)) {
             try {
                 list($route, $params) = $request->resolve();
-            } catch (\yii\web\UrlNormalizerRedirectException $e) {
+            } catch (UrlNormalizerRedirectException $e) {
                 $url = $e->url;
                 if (is_array($url)) {
                     if (isset($url[0])) {
@@ -97,7 +97,7 @@ class Application extends \yii\base\Application
             Yii::debug("Route requested: '{$route}'", __METHOD__);
             $this->requestedRoute = $route;
             $result = $this->runAction($route, $params);
-            if ($result instanceof \yii\web\Response) {
+            if ($result instanceof Response) {
                 return $result;
             }
             $response = $this->getResponse();
@@ -106,7 +106,7 @@ class Application extends \yii\base\Application
             }
             return $response;
         } catch (InvalidRouteException $e) {
-            throw new \yii\web\NotFoundHttpException(Yii::t('yii', 'Page not found.'), $e->getCode(), $e);
+            throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'), $e->getCode(), $e);
         }
     }
     private $_homeUrl;
@@ -175,6 +175,6 @@ class Application extends \yii\base\Application
      */
     public function coreComponents()
     {
-        return array_merge(parent::coreComponents(), ['request' => ['class' => 'yii\web\Request'], 'response' => ['class' => 'yii\web\Response'], 'session' => ['class' => 'yii\web\Session'], 'user' => ['class' => 'yii\web\User'], 'errorHandler' => ['class' => 'yii\web\ErrorHandler']]);
+        return array_merge(parent::coreComponents(), ['request' => ['class' => 'Odigos\yii\web\Request'], 'response' => ['class' => 'Odigos\yii\web\Response'], 'session' => ['class' => 'Odigos\yii\web\Session'], 'user' => ['class' => 'Odigos\yii\web\User'], 'errorHandler' => ['class' => 'Odigos\yii\web\ErrorHandler']]);
     }
 }

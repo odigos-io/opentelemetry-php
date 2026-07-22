@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Containers\Files\ContainerFileDeleteResponse;
-use OpenAI\Responses\Containers\Files\ContainerFileListResponse;
-use OpenAI\Responses\Containers\Files\ContainerFileResponse;
+use Odigos\OpenAI\Responses\Containers\Files\ContainerFileDeleteResponse;
+use Odigos\OpenAI\Responses\Containers\Files\ContainerFileListResponse;
+use Odigos\OpenAI\Responses\Containers\Files\ContainerFileResponse;
 interface ContainerFileContract
 {
     /**

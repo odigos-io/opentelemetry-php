@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Foundation\Cloud;
+namespace Odigos\Illuminate\Foundation\Cloud;
 
 use Odigos\Aws\CommandInterface;
 use Odigos\Aws\Exception\AwsException;
 use Odigos\Aws\Sqs\SqsClient;
-use Illuminate\Foundation\Application;
-use Illuminate\Queue\Connectors\ConnectorInterface;
-use Illuminate\Queue\Events\JobQueued;
-use Illuminate\Queue\Events\WorkerStopping;
-use Illuminate\Queue\SqsQueue;
-use Illuminate\Queue\Worker;
-use Illuminate\Queue\WorkerStopReason;
+use Odigos\Illuminate\Foundation\Application;
+use Odigos\Illuminate\Queue\Connectors\ConnectorInterface;
+use Odigos\Illuminate\Queue\Events\JobQueued;
+use Odigos\Illuminate\Queue\Events\WorkerStopping;
+use Odigos\Illuminate\Queue\SqsQueue;
+use Odigos\Illuminate\Queue\Worker;
+use Odigos\Illuminate\Queue\WorkerStopReason;
 use Psr\Http\Message\RequestInterface;
 class QueueConnector implements ConnectorInterface
 {
@@ -29,10 +29,10 @@ class QueueConnector implements ConnectorInterface
     /**
      * Establish a queue connection.
      */
-    public function connect(array $config): \Illuminate\Foundation\Cloud\Queue
+    public function connect(array $config): Queue
     {
         $underlying = $this->connector->connect($config['connection']);
-        $queue = new \Illuminate\Foundation\Cloud\Queue($underlying, $this->app[\Illuminate\Foundation\Cloud\Events::class], $config);
+        $queue = new Queue($underlying, $this->app[Events::class], $config);
         if ($underlying instanceof SqsQueue) {
             $this->registerErrorHandling($underlying->getSqs(), $queue);
         }
@@ -47,14 +47,14 @@ class QueueConnector implements ConnectorInterface
     /**
      * Register SQS client middleware that translates "queue does not exist" errors into ManagedQueueNotFoundExceptions.
      */
-    protected function registerErrorHandling(SqsClient $sqs, \Illuminate\Foundation\Cloud\Queue $queue): void
+    protected function registerErrorHandling(SqsClient $sqs, Queue $queue): void
     {
         $sqs->getHandlerList()->appendSign(function (callable $handler) use ($queue) {
             return function (CommandInterface $command, RequestInterface $request) use ($handler, $queue) {
                 return $handler($command, $request)->otherwise(function ($reason) use ($command, $queue) {
                     if ($reason instanceof AwsException && $reason->getAwsErrorCode() === 'AWS.SimpleQueueService.NonExistentQueue') {
                         $name = $queue->normalizeQueue($command['QueueUrl'] ?? null);
-                        throw new \Illuminate\Foundation\Cloud\ManagedQueueNotFoundException("Managed queue [{$name}] does not exist.", 0, $reason);
+                        throw new ManagedQueueNotFoundException("Managed queue [{$name}] does not exist.", 0, $reason);
                     }
                     throw $reason;
                 });
@@ -64,14 +64,14 @@ class QueueConnector implements ConnectorInterface
     /**
      * Configure the queue.
      */
-    protected function configureQueue(\Illuminate\Foundation\Cloud\Queue $queue): void
+    protected function configureQueue(Queue $queue): void
     {
         $this->app['events']->listen(fn(JobQueued $event) => $event->connectionName === $queue->getConnectionName() ? $queue->finishQueueingJob($event->queue) : null);
     }
     /**
      * Configure the queue worker.
      */
-    protected function configureWorker(\Illuminate\Foundation\Cloud\Queue $queue): void
+    protected function configureWorker(Queue $queue): void
     {
         Worker::$restartable = \false;
         Worker::$pausable = \false;
@@ -90,7 +90,7 @@ class QueueConnector implements ConnectorInterface
     /**
      * Configure the failed job provider.
      */
-    protected function configureFailedJobProvider(\Illuminate\Foundation\Cloud\Queue $queue): void
+    protected function configureFailedJobProvider(Queue $queue): void
     {
         $this->app['queue.failer']->setQueue($queue);
     }

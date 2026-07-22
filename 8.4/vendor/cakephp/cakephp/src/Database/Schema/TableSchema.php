@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Schema;
+namespace Odigos\Cake\Database\Schema;
 
-use Cake\Database\Connection;
-use Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\Connection;
+use Odigos\Cake\Database\Exception\DatabaseException;
 /**
  * Represents a single table in a database schema.
  *
@@ -29,7 +29,7 @@ use Cake\Database\Exception\DatabaseException;
  * Schema\Collection objects. They can also be converted into SQL using the
  * createSql(), dropSql() and truncateSql() methods.
  */
-class TableSchema implements \Cake\Database\Schema\TableSchemaInterface, \Cake\Database\Schema\SqlGeneratorInterface
+class TableSchema implements TableSchemaInterface, SqlGeneratorInterface
 {
     /**
      * The name of the table
@@ -164,43 +164,43 @@ class TableSchema implements \Cake\Database\Schema\TableSchemaInterface, \Cake\D
      *
      * @var string
      */
-    public const INDEX_INDEX = \Cake\Database\Schema\Index::INDEX;
+    public const INDEX_INDEX = Index::INDEX;
     /**
      * Fulltext index type
      *
      * @var string
      */
-    public const INDEX_FULLTEXT = \Cake\Database\Schema\Index::FULLTEXT;
+    public const INDEX_FULLTEXT = Index::FULLTEXT;
     /**
      * Foreign key cascade action
      *
      * @var string
      */
-    public const ACTION_CASCADE = \Cake\Database\Schema\ForeignKey::CASCADE;
+    public const ACTION_CASCADE = ForeignKey::CASCADE;
     /**
      * Foreign key set null action
      *
      * @var string
      */
-    public const ACTION_SET_NULL = \Cake\Database\Schema\ForeignKey::SET_NULL;
+    public const ACTION_SET_NULL = ForeignKey::SET_NULL;
     /**
      * Foreign key no action
      *
      * @var string
      */
-    public const ACTION_NO_ACTION = \Cake\Database\Schema\ForeignKey::NO_ACTION;
+    public const ACTION_NO_ACTION = ForeignKey::NO_ACTION;
     /**
      * Foreign key restrict action
      *
      * @var string
      */
-    public const ACTION_RESTRICT = \Cake\Database\Schema\ForeignKey::RESTRICT;
+    public const ACTION_RESTRICT = ForeignKey::RESTRICT;
     /**
      * Foreign key restrict default
      *
      * @var string
      */
-    public const ACTION_SET_DEFAULT = \Cake\Database\Schema\ForeignKey::SET_DEFAULT;
+    public const ACTION_SET_DEFAULT = ForeignKey::SET_DEFAULT;
     /**
      * Constructor.
      *
@@ -248,7 +248,7 @@ class TableSchema implements \Cake\Database\Schema\TableSchemaInterface, \Cake\D
             }
             $attrs[$key] = $value;
         }
-        $column = new \Cake\Database\Schema\Column(...$attrs);
+        $column = new Column(...$attrs);
         $this->_columns[$name] = $column;
         $this->_typeMap[$name] = $column->getType();
         return $this;
@@ -301,7 +301,7 @@ class TableSchema implements \Cake\Database\Schema\TableSchemaInterface, \Cake\D
      * @param string $name The name of the column to get.
      * @return \Cake\Database\Schema\Column
      */
-    public function column(string $name): \Cake\Database\Schema\Column
+    public function column(string $name): Column
     {
         $column = $this->_columns[$name] ?? null;
         if ($column === null) {
@@ -405,7 +405,7 @@ class TableSchema implements \Cake\Database\Schema\TableSchemaInterface, \Cake\D
             }
         }
         $attrs['name'] = $name;
-        $this->_indexes[$name] = new \Cake\Database\Schema\Index(...$attrs);
+        $this->_indexes[$name] = new Index(...$attrs);
         return $this;
     }
     /**
@@ -442,7 +442,7 @@ class TableSchema implements \Cake\Database\Schema\TableSchemaInterface, \Cake\D
      * @param string $name The name of the index to get.
      * @return \Cake\Database\Schema\Index
      */
-    public function index(string $name): \Cake\Database\Schema\Index
+    public function index(string $name): Index
     {
         $index = $this->_indexes[$name] ?? null;
         if ($index === null) {
@@ -479,7 +479,7 @@ class TableSchema implements \Cake\Database\Schema\TableSchemaInterface, \Cake\D
         if (!in_array($attrs['type'], static::$_validConstraintTypes, \true)) {
             throw new DatabaseException(sprintf('Invalid constraint type `%s` in table `%s`.', $attrs['type'], $this->_table));
         }
-        if ($attrs['type'] !== \Cake\Database\Schema\TableSchema::CONSTRAINT_CHECK) {
+        if ($attrs['type'] !== TableSchema::CONSTRAINT_CHECK) {
             if (empty($attrs['columns'])) {
                 throw new DatabaseException(sprintf('Constraints in table `%s` must have at least one column.', $this->_table));
             }
@@ -505,7 +505,7 @@ class TableSchema implements \Cake\Database\Schema\TableSchemaInterface, \Cake\D
         }
         if ($type === static::CONSTRAINT_FOREIGN) {
             $constraint = $this->_constraints[$name] ?? null;
-            if ($constraint instanceof \Cake\Database\Schema\ForeignKey) {
+            if ($constraint instanceof ForeignKey) {
                 // Update an existing foreign key constraint.
                 // This is backwards compatible with the incremental
                 // build API that I would like to deprecate.
@@ -517,11 +517,11 @@ class TableSchema implements \Cake\Database\Schema\TableSchemaInterface, \Cake\D
             }
         }
         $this->_constraints[$name] = match ($type) {
-            static::CONSTRAINT_UNIQUE => new \Cake\Database\Schema\UniqueKey(...$attrs),
-            static::CONSTRAINT_FOREIGN => new \Cake\Database\Schema\ForeignKey(...$attrs),
-            static::CONSTRAINT_PRIMARY => new \Cake\Database\Schema\Constraint(...$attrs),
-            static::CONSTRAINT_CHECK => new \Cake\Database\Schema\CheckConstraint(...$attrs),
-            default => new \Cake\Database\Schema\Constraint(...$attrs),
+            static::CONSTRAINT_UNIQUE => new UniqueKey(...$attrs),
+            static::CONSTRAINT_FOREIGN => new ForeignKey(...$attrs),
+            static::CONSTRAINT_PRIMARY => new Constraint(...$attrs),
+            static::CONSTRAINT_CHECK => new CheckConstraint(...$attrs),
+            default => new Constraint(...$attrs),
         };
         return $this;
     }
@@ -590,7 +590,7 @@ class TableSchema implements \Cake\Database\Schema\TableSchemaInterface, \Cake\D
             return null;
         }
         $data = $constraint->toArray();
-        if ($constraint instanceof \Cake\Database\Schema\ForeignKey) {
+        if ($constraint instanceof ForeignKey) {
             $data['references'] = [$constraint->getReferencedTable(), $constraint->getReferencedColumns()];
             // If there is only one referenced column, we return it as a string.
             // TODO this should be deprecated, but I don't know how to warn about it.
@@ -617,7 +617,7 @@ class TableSchema implements \Cake\Database\Schema\TableSchemaInterface, \Cake\D
      * @param string $name The name of the constraint to get.
      * @return \Cake\Database\Schema\Constraint A constraint object.
      */
-    public function constraint(string $name): \Cake\Database\Schema\Constraint
+    public function constraint(string $name): Constraint
     {
         if (!isset($this->_constraints[$name])) {
             $message = sprintf('Table `%s` does not contain a constraint named `%s`.', $this->_table, $name);

@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Database\Query\Grammars;
+namespace Odigos\Illuminate\Database\Query\Grammars;
 
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\JoinLateralClause;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Database\Query\Builder;
+use Odigos\Illuminate\Database\Query\JoinLateralClause;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
 use InvalidArgumentException;
-class MySqlGrammar extends \Illuminate\Database\Query\Grammars\Grammar
+class MySqlGrammar extends Grammar
 {
     /**
      * The grammar specific operators.

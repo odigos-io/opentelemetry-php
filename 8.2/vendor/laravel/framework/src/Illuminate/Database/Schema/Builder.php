@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Database\Schema;
+namespace Odigos\Illuminate\Database\Schema;
 
 use Closure;
-use Illuminate\Container\Container;
-use Illuminate\Database\Connection;
-use Illuminate\Database\PostgresConnection;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Database\Connection;
+use Odigos\Illuminate\Database\PostgresConnection;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
@@ -253,7 +253,7 @@ class Builder
     public function whenTableHasColumn(string $table, string $column, Closure $callback)
     {
         if ($this->hasColumn($table, $column)) {
-            $this->table($table, fn(\Illuminate\Database\Schema\Blueprint $table) => $callback($table));
+            $this->table($table, fn(Blueprint $table) => $callback($table));
         }
     }
     /**
@@ -267,7 +267,7 @@ class Builder
     public function whenTableDoesntHaveColumn(string $table, string $column, Closure $callback)
     {
         if (!$this->hasColumn($table, $column)) {
-            $this->table($table, fn(\Illuminate\Database\Schema\Blueprint $table) => $callback($table));
+            $this->table($table, fn(Blueprint $table) => $callback($table));
         }
     }
     /**
@@ -282,7 +282,7 @@ class Builder
     public function whenTableHasIndex(string $table, string|array $index, Closure $callback, ?string $type = null)
     {
         if ($this->hasIndex($table, $index, $type)) {
-            $this->table($table, fn(\Illuminate\Database\Schema\Blueprint $table) => $callback($table));
+            $this->table($table, fn(Blueprint $table) => $callback($table));
         }
     }
     /**
@@ -297,7 +297,7 @@ class Builder
     public function whenTableDoesntHaveIndex(string $table, string|array $index, Closure $callback, ?string $type = null)
     {
         if (!$this->hasIndex($table, $index, $type)) {
-            $this->table($table, fn(\Illuminate\Database\Schema\Blueprint $table) => $callback($table));
+            $this->table($table, fn(Blueprint $table) => $callback($table));
         }
     }
     /**
@@ -451,7 +451,7 @@ class Builder
      */
     public function dropColumns($table, $columns)
     {
-        $this->table($table, function (\Illuminate\Database\Schema\Blueprint $blueprint) use ($columns) {
+        $this->table($table, function (Blueprint $blueprint) use ($columns) {
             $blueprint->dropColumn($columns);
         });
     }
@@ -570,7 +570,7 @@ class Builder
      * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
      * @return void
      */
-    protected function build(\Illuminate\Database\Schema\Blueprint $blueprint)
+    protected function build(Blueprint $blueprint)
     {
         $blueprint->build();
     }
@@ -587,7 +587,7 @@ class Builder
         if (isset($this->resolver)) {
             return call_user_func($this->resolver, $connection, $table, $callback);
         }
-        return Container::getInstance()->make(\Illuminate\Database\Schema\Blueprint::class, compact('connection', 'table', 'callback'));
+        return Container::getInstance()->make(Blueprint::class, compact('connection', 'table', 'callback'));
     }
     /**
      * Get the names of the current schemas for the connection.

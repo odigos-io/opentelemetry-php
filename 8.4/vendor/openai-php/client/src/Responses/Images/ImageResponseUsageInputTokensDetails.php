@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Images;
+namespace Odigos\OpenAI\Responses\Images;
 
 final class ImageResponseUsageInputTokensDetails
 {

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Chat;
+namespace Odigos\OpenAI\Responses\Chat;
 
 /**
  * @phpstan-import-type CreateResponseChoiceAudioType from CreateResponseChoiceAudio
@@ -14,7 +14,7 @@ final class CreateResponseMessage
      * @param  array<int, CreateResponseChoiceAnnotations>  $annotations
      * @param  array<int, CreateResponseChoiceImage>|null  $images
      */
-    private function __construct(public readonly string $role, public readonly ?string $content, public readonly array $annotations, public readonly array $toolCalls, public readonly ?\OpenAI\Responses\Chat\CreateResponseFunctionCall $functionCall, public readonly ?\OpenAI\Responses\Chat\CreateResponseChoiceAudio $audio = null, public readonly ?array $images = null)
+    private function __construct(public readonly string $role, public readonly ?string $content, public readonly array $annotations, public readonly array $toolCalls, public readonly ?CreateResponseFunctionCall $functionCall, public readonly ?CreateResponseChoiceAudio $audio = null, public readonly ?array $images = null)
     {
     }
     /**
@@ -22,10 +22,10 @@ final class CreateResponseMessage
      */
     public static function from(array $attributes): self
     {
-        $toolCalls = array_map(fn(array $result): \OpenAI\Responses\Chat\CreateResponseToolCall => \OpenAI\Responses\Chat\CreateResponseToolCall::from($result), $attributes['tool_calls'] ?? []);
-        $annotations = array_map(fn(array $result): \OpenAI\Responses\Chat\CreateResponseChoiceAnnotations => \OpenAI\Responses\Chat\CreateResponseChoiceAnnotations::from($result), $attributes['annotations'] ?? []);
-        $images = isset($attributes['images']) ? array_map(fn(array $result): \OpenAI\Responses\Chat\CreateResponseChoiceImage => \OpenAI\Responses\Chat\CreateResponseChoiceImage::from($result), $attributes['images']) : null;
-        return new self(role: $attributes['role'], content: $attributes['content'] ?? null, annotations: $annotations, toolCalls: $toolCalls, functionCall: isset($attributes['function_call']) ? \OpenAI\Responses\Chat\CreateResponseFunctionCall::from($attributes['function_call']) : null, audio: isset($attributes['audio']) ? \OpenAI\Responses\Chat\CreateResponseChoiceAudio::from($attributes['audio']) : null, images: $images);
+        $toolCalls = array_map(fn(array $result): CreateResponseToolCall => CreateResponseToolCall::from($result), $attributes['tool_calls'] ?? []);
+        $annotations = array_map(fn(array $result): CreateResponseChoiceAnnotations => CreateResponseChoiceAnnotations::from($result), $attributes['annotations'] ?? []);
+        $images = isset($attributes['images']) ? array_map(fn(array $result): CreateResponseChoiceImage => CreateResponseChoiceImage::from($result), $attributes['images']) : null;
+        return new self(role: $attributes['role'], content: $attributes['content'] ?? null, annotations: $annotations, toolCalls: $toolCalls, functionCall: isset($attributes['function_call']) ? CreateResponseFunctionCall::from($attributes['function_call']) : null, audio: isset($attributes['audio']) ? CreateResponseChoiceAudio::from($attributes['audio']) : null, images: $images);
     }
     /**
      * @return array{role: string, content: string|null, annotations?: array<int, array{type: string, url_citation: array{start_index: int, end_index: int, title: string, url: string}}>, function_call?: array{name: string, arguments: string}, tool_calls?: array<int, array{id: string, type: string, function: array{name: string, arguments: string}}>, audio?: CreateResponseChoiceAudioType, images?: array<int, CreateResponseChoiceImageType>}
@@ -34,19 +34,19 @@ final class CreateResponseMessage
     {
         $data = ['role' => $this->role, 'content' => $this->content];
         if ($this->annotations !== []) {
-            $data['annotations'] = array_map(fn(\OpenAI\Responses\Chat\CreateResponseChoiceAnnotations $annotations): array => $annotations->toArray(), $this->annotations);
+            $data['annotations'] = array_map(fn(CreateResponseChoiceAnnotations $annotations): array => $annotations->toArray(), $this->annotations);
         }
-        if ($this->functionCall instanceof \OpenAI\Responses\Chat\CreateResponseFunctionCall) {
+        if ($this->functionCall instanceof CreateResponseFunctionCall) {
             $data['function_call'] = $this->functionCall->toArray();
         }
         if ($this->toolCalls !== []) {
-            $data['tool_calls'] = array_map(fn(\OpenAI\Responses\Chat\CreateResponseToolCall $toolCall): array => $toolCall->toArray(), $this->toolCalls);
+            $data['tool_calls'] = array_map(fn(CreateResponseToolCall $toolCall): array => $toolCall->toArray(), $this->toolCalls);
         }
-        if ($this->audio instanceof \OpenAI\Responses\Chat\CreateResponseChoiceAudio) {
+        if ($this->audio instanceof CreateResponseChoiceAudio) {
             $data['audio'] = $this->audio->toArray();
         }
         if ($this->images !== null && $this->images !== []) {
-            $data['images'] = array_map(fn(\OpenAI\Responses\Chat\CreateResponseChoiceImage $image): array => $image->toArray(), $this->images);
+            $data['images'] = array_map(fn(CreateResponseChoiceImage $image): array => $image->toArray(), $this->images);
         }
         return $data;
     }

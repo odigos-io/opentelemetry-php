@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Cake\PHPStan;
+namespace Odigos\Cake\PHPStan;
 
-use Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\ORM\Query\SelectQuery;
 use Odigos\PHPStan\Reflection\ClassReflection;
 use Odigos\PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use Odigos\PHPStan\Reflection\MethodReflection;

@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Descriptor;
+namespace Odigos\Symfony\Component\Console\Descriptor;
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Helper;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Application;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Helper\Helper;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputDefinition;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Markdown descriptor.
  *
@@ -24,7 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @internal
  */
-class MarkdownDescriptor extends \Symfony\Component\Console\Descriptor\Descriptor
+class MarkdownDescriptor extends Descriptor
 {
     public function describe(OutputInterface $output, object $object, array $options = []): void
     {
@@ -93,11 +93,11 @@ class MarkdownDescriptor extends \Symfony\Component\Console\Descriptor\Descripto
     protected function describeApplication(Application $application, array $options = []): void
     {
         $describedNamespace = $options['namespace'] ?? null;
-        $description = new \Symfony\Component\Console\Descriptor\ApplicationDescription($application, $describedNamespace);
+        $description = new ApplicationDescription($application, $describedNamespace);
         $title = $this->getApplicationTitle($application);
         $this->write($title . "\n" . str_repeat('=', Helper::width($title)));
         foreach ($description->getNamespaces() as $namespace) {
-            if (\Symfony\Component\Console\Descriptor\ApplicationDescription::GLOBAL_NAMESPACE !== $namespace['id']) {
+            if (ApplicationDescription::GLOBAL_NAMESPACE !== $namespace['id']) {
                 $this->write("\n\n");
                 $this->write('**' . $namespace['id'] . ':**');
             }

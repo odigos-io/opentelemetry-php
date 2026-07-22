@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Schema;
+namespace Odigos\Illuminate\Database\Schema;
 
-use Illuminate\Database\Connection;
-use Illuminate\Support\Collection;
-class SqliteSchemaState extends \Illuminate\Database\Schema\SchemaState
+use Odigos\Illuminate\Database\Connection;
+use Odigos\Illuminate\Support\Collection;
+class SqliteSchemaState extends SchemaState
 {
     /**
      * Dump the database's schema into a file.

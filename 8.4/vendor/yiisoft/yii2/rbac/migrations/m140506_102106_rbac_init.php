@@ -7,15 +7,15 @@ namespace Odigos;
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-use yii\base\InvalidConfigException;
-use yii\rbac\DbManager;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\rbac\DbManager;
 /**
  * Initializes RBAC tables.
  *
  * @author Alexander Kochetov <creocoder@gmail.com>
  * @since 2.0
  */
-class m140506_102106_rbac_init extends \yii\db\Migration
+class m140506_102106_rbac_init extends \Odigos\yii\db\Migration
 {
     /**
      * @throws yii\base\InvalidConfigException

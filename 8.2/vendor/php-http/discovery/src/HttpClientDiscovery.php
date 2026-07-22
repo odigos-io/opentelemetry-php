@@ -1,9 +1,9 @@
 <?php
 
-namespace Http\Discovery;
+namespace Odigos\Http\Discovery;
 
-use Http\Client\HttpClient;
-use Http\Discovery\Exception\DiscoveryFailedException;
+use Odigos\Http\Client\HttpClient;
+use Odigos\Http\Discovery\Exception\DiscoveryFailedException;
 /**
  * Finds an HTTP Client.
  *
@@ -11,7 +11,7 @@ use Http\Discovery\Exception\DiscoveryFailedException;
  *
  * @deprecated This will be removed in 2.0. Consider using Psr18ClientDiscovery.
  */
-final class HttpClientDiscovery extends \Http\Discovery\ClassDiscovery
+final class HttpClientDiscovery extends ClassDiscovery
 {
     /**
      * Finds an HTTP Client.
@@ -25,7 +25,7 @@ final class HttpClientDiscovery extends \Http\Discovery\ClassDiscovery
         try {
             $client = static::findOneByType(HttpClient::class);
         } catch (DiscoveryFailedException $e) {
-            throw new \Http\Discovery\NotFoundException('No HTTPlug clients found. Make sure to install a package providing "php-http/client-implementation". Example: "php-http/guzzle6-adapter".', 0, $e);
+            throw new NotFoundException('No HTTPlug clients found. Make sure to install a package providing "php-http/client-implementation". Example: "php-http/guzzle6-adapter".', 0, $e);
         }
         return static::instantiateClass($client);
     }

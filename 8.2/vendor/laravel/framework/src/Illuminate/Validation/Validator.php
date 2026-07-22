@@ -1,28 +1,28 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
 use BadMethodCallException;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Translation\Translator;
-use Illuminate\Contracts\Validation\DataAwareRule;
-use Illuminate\Contracts\Validation\ImplicitRule;
-use Illuminate\Contracts\Validation\Rule as RuleContract;
-use Illuminate\Contracts\Validation\Validator as ValidatorContract;
-use Illuminate\Contracts\Validation\ValidatorAwareRule;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Fluent;
-use Illuminate\Support\MessageBag;
-use Illuminate\Support\Str;
-use Illuminate\Support\ValidatedInput;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Translation\Translator;
+use Odigos\Illuminate\Contracts\Validation\DataAwareRule;
+use Odigos\Illuminate\Contracts\Validation\ImplicitRule;
+use Odigos\Illuminate\Contracts\Validation\Rule as RuleContract;
+use Odigos\Illuminate\Contracts\Validation\Validator as ValidatorContract;
+use Odigos\Illuminate\Contracts\Validation\ValidatorAwareRule;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Fluent;
+use Odigos\Illuminate\Support\MessageBag;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\ValidatedInput;
 use InvalidArgumentException;
 use RuntimeException;
 use stdClass;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Odigos\Symfony\Component\HttpFoundation\File\UploadedFile;
 class Validator implements ValidatorContract
 {
-    use \Illuminate\Validation\Concerns\FormatsMessages, \Illuminate\Validation\Concerns\ValidatesAttributes;
+    use Concerns\FormatsMessages, Concerns\ValidatesAttributes;
     /**
      * The Translator implementation.
      *
@@ -208,7 +208,7 @@ class Validator implements ValidatorContract
      *
      * @var class-string<\Illuminate\Validation\ValidationException>
      */
-    protected $exception = \Illuminate\Validation\ValidationException::class;
+    protected $exception = ValidationException::class;
     /**
      * The custom callback to determine if an exponent is within allowed range.
      *
@@ -445,7 +445,7 @@ class Validator implements ValidatorContract
     {
         try {
             return $this->validate();
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             $e->errorBag = $errorBag;
             throw $e;
         }
@@ -496,7 +496,7 @@ class Validator implements ValidatorContract
     protected function validateAttribute($attribute, $rule)
     {
         $this->currentRule = $rule;
-        [$rule, $parameters] = \Illuminate\Validation\ValidationRuleParser::parse($rule);
+        [$rule, $parameters] = ValidationRuleParser::parse($rule);
         if ($rule === '') {
             return;
         }
@@ -649,7 +649,7 @@ class Validator implements ValidatorContract
         if (!$this->hasRule($attribute, ['Sometimes'])) {
             return \true;
         }
-        $data = \Illuminate\Validation\ValidationData::initializeAndGatherData($attribute, $this->data);
+        $data = ValidationData::initializeAndGatherData($attribute, $this->data);
         return array_key_exists($attribute, $data) || array_key_exists($attribute, $this->data);
     }
     /**
@@ -691,9 +691,9 @@ class Validator implements ValidatorContract
     {
         $originalAttribute = $this->replacePlaceholderInString($attribute);
         $attribute = match (\true) {
-            $rule instanceof \Illuminate\Validation\Rules\Email => $attribute,
-            $rule instanceof \Illuminate\Validation\Rules\File => $attribute,
-            $rule instanceof \Illuminate\Validation\Rules\Password => $attribute,
+            $rule instanceof Rules\Email => $attribute,
+            $rule instanceof Rules\File => $attribute,
+            $rule instanceof Rules\Password => $attribute,
             default => $originalAttribute,
         };
         $value = is_array($value) ? $this->replacePlaceholders($value) : $value;
@@ -707,7 +707,7 @@ class Validator implements ValidatorContract
             $rule->setData($this->data);
         }
         if (!$rule->passes($attribute, $value)) {
-            $ruleClass = $rule instanceof \Illuminate\Validation\InvokableValidationRule ? get_class($rule->invokable()) : get_class($rule);
+            $ruleClass = $rule instanceof InvokableValidationRule ? get_class($rule->invokable()) : get_class($rule);
             $this->failedRules[$originalAttribute][$ruleClass] = [];
             $messages = $this->getFromLocalArray($originalAttribute, $ruleClass) ?? $rule->message();
             $messages = $messages ? (array) $messages : [$ruleClass];
@@ -875,7 +875,7 @@ class Validator implements ValidatorContract
         }
         $rules = (array) $rules;
         foreach ($this->rules[$attribute] as $rule) {
-            [$rule, $parameters] = \Illuminate\Validation\ValidationRuleParser::parse($rule);
+            [$rule, $parameters] = ValidationRuleParser::parse($rule);
             if (in_array($rule, $rules)) {
                 return [$rule, $parameters];
             }
@@ -992,7 +992,7 @@ class Validator implements ValidatorContract
         // The primary purpose of this parser is to expand any "*" rules to the all
         // of the explicit rules needed for the given data. For example the rule
         // names.* would get expanded to names.0, names.1, etc. for this data.
-        $response = (new \Illuminate\Validation\ValidationRuleParser($this->data))->explode(\Illuminate\Validation\ValidationRuleParser::filterConditionalRules($rules, $this->data));
+        $response = (new ValidationRuleParser($this->data))->explode(ValidationRuleParser::filterConditionalRules($rules, $this->data));
         foreach ($response->rules as $key => $rule) {
             $this->rules[$key] = array_merge($this->rules[$key] ?? [], $rule);
         }
@@ -1010,7 +1010,7 @@ class Validator implements ValidatorContract
     {
         $payload = new Fluent($this->data);
         foreach ((array) $attribute as $key) {
-            $response = (new \Illuminate\Validation\ValidationRuleParser($this->data))->explode([$key => $rules]);
+            $response = (new ValidationRuleParser($this->data))->explode([$key => $rules]);
             $this->implicitAttributes = array_merge($response->implicitAttributes, $this->implicitAttributes);
             foreach ($response->rules as $ruleKey => $ruleValue) {
                 if ($callback($payload, $this->dataForSometimesIteration($ruleKey, !str_ends_with($key, '.*')))) {
@@ -1233,7 +1233,7 @@ class Validator implements ValidatorContract
         if (!isset($this->presenceVerifier)) {
             throw new RuntimeException('Presence verifier has not been set.');
         }
-        if ($this->presenceVerifier instanceof \Illuminate\Validation\DatabasePresenceVerifierInterface) {
+        if ($this->presenceVerifier instanceof DatabasePresenceVerifierInterface) {
             $this->presenceVerifier->setConnection($connection);
         }
         return $this->presenceVerifier;
@@ -1244,7 +1244,7 @@ class Validator implements ValidatorContract
      * @param  \Illuminate\Validation\PresenceVerifierInterface  $presenceVerifier
      * @return void
      */
-    public function setPresenceVerifier(\Illuminate\Validation\PresenceVerifierInterface $presenceVerifier)
+    public function setPresenceVerifier(PresenceVerifierInterface $presenceVerifier)
     {
         $this->presenceVerifier = $presenceVerifier;
     }
@@ -1267,8 +1267,8 @@ class Validator implements ValidatorContract
      */
     public function setException($exception)
     {
-        if (!is_a($exception, \Illuminate\Validation\ValidationException::class, \true)) {
-            throw new InvalidArgumentException(sprintf('Exception [%s] is invalid. It must extend [%s].', $exception, \Illuminate\Validation\ValidationException::class));
+        if (!is_a($exception, ValidationException::class, \true)) {
+            throw new InvalidArgumentException(sprintf('Exception [%s] is invalid. It must extend [%s].', $exception, ValidationException::class));
         }
         $this->exception = $exception;
         return $this;

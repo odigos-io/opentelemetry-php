@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Queue\Middleware;
+namespace Odigos\Illuminate\Queue\Middleware;
 
-use Illuminate\Cache\RateLimiter;
-use Illuminate\Cache\RateLimiting\Unlimited;
-use Illuminate\Container\Container;
-use Illuminate\Support\Collection;
-use function Illuminate\Support\enum_value;
+use Odigos\Illuminate\Cache\RateLimiter;
+use Odigos\Illuminate\Cache\RateLimiting\Unlimited;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Support\Collection;
+use function Odigos\Illuminate\Support\enum_value;
 class RateLimited
 {
     /**

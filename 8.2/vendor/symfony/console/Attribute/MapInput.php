@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Attribute;
+namespace Odigos\Symfony\Component\Console\Attribute;
 
-use Symfony\Component\Console\Attribute\Reflection\ReflectionMember;
-use Symfony\Component\Console\Exception\LogicException;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Interaction\Interaction;
+use Odigos\Symfony\Component\Console\Attribute\Reflection\ReflectionMember;
+use Odigos\Symfony\Component\Console\Exception\LogicException;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Interaction\Interaction;
 /**
  * Maps a command input into an object (DTO).
  */
@@ -47,9 +47,9 @@ final class MapInput
         }
         $self->class = new \ReflectionClass($class);
         foreach ($self->class->getProperties() as $property) {
-            if ($argument = \Symfony\Component\Console\Attribute\Argument::tryFrom($property)) {
+            if ($argument = Argument::tryFrom($property)) {
                 $self->definition[$property->name] = $argument;
-            } elseif ($option = \Symfony\Component\Console\Attribute\Option::tryFrom($property)) {
+            } elseif ($option = Option::tryFrom($property)) {
                 $self->definition[$property->name] = $option;
             } elseif ($input = self::tryFrom($property)) {
                 $self->definition[$property->name] = $input;
@@ -62,7 +62,7 @@ final class MapInput
             throw new LogicException(\sprintf('The input class "%s" must have at least one argument or option.', $self->class->name));
         }
         foreach ($self->class->getMethods() as $method) {
-            if ($attribute = \Symfony\Component\Console\Attribute\Interact::tryFrom($method)) {
+            if ($attribute = Interact::tryFrom($method)) {
                 $self->interactiveAttributes[] = $attribute;
             }
         }
@@ -76,7 +76,7 @@ final class MapInput
         $instance = $this->class->newInstanceWithoutConstructor();
         foreach ($this->definition as $name => $spec) {
             // ignore required arguments that are not set yet (may happen in interactive mode)
-            if ($spec instanceof \Symfony\Component\Console\Attribute\Argument && $spec->isRequired() && \in_array($input->getArgument($spec->name), [null, []], \true)) {
+            if ($spec instanceof Argument && $spec->isRequired() && \in_array($input->getArgument($spec->name), [null, []], \true)) {
                 continue;
             }
             $instance->{$name} = $spec->resolveValue($input);
@@ -94,8 +94,8 @@ final class MapInput
                 continue;
             }
             match (\true) {
-                $spec instanceof \Symfony\Component\Console\Attribute\Argument => $input->setArgument($spec->name, $value),
-                $spec instanceof \Symfony\Component\Console\Attribute\Option => $input->setOption($spec->name, $value),
+                $spec instanceof Argument => $input->setArgument($spec->name, $value),
+                $spec instanceof Option => $input->setOption($spec->name, $value),
                 $spec instanceof self => $spec->setValue($input, $value),
                 default => throw new LogicException('Unexpected specification type.'),
             };
@@ -107,7 +107,7 @@ final class MapInput
     public function getArguments(): iterable
     {
         foreach ($this->definition as $spec) {
-            if ($spec instanceof \Symfony\Component\Console\Attribute\Argument) {
+            if ($spec instanceof Argument) {
                 yield $spec;
             } elseif ($spec instanceof self) {
                 yield from $spec->getArguments();
@@ -120,7 +120,7 @@ final class MapInput
     public function getOptions(): iterable
     {
         foreach ($this->definition as $spec) {
-            if ($spec instanceof \Symfony\Component\Console\Attribute\Option) {
+            if ($spec instanceof Option) {
                 yield $spec;
             } elseif ($spec instanceof self) {
                 yield from $spec->getOptions();
@@ -137,7 +137,7 @@ final class MapInput
         foreach ($this->definition as $spec) {
             if ($spec instanceof self) {
                 yield from $spec->getPropertyInteractions();
-            } elseif ($spec instanceof \Symfony\Component\Console\Attribute\Argument && $attribute = $spec->getInteractiveAttribute()) {
+            } elseif ($spec instanceof Argument && $attribute = $spec->getInteractiveAttribute()) {
                 yield new Interaction($this, $attribute);
             }
         }

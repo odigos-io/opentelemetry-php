@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\DependencyInjection;
+namespace Odigos\Symfony\Component\HttpKernel\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
-use Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
-use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver;
-use Symfony\Component\Stopwatch\Stopwatch;
+use Odigos\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use Odigos\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use Odigos\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use Odigos\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Odigos\Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
+use Odigos\Symfony\Component\DependencyInjection\ContainerBuilder;
+use Odigos\Symfony\Component\DependencyInjection\Reference;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver;
+use Odigos\Symfony\Component\Stopwatch\Stopwatch;
 /**
  * Gathers and configures the argument value resolvers.
  *

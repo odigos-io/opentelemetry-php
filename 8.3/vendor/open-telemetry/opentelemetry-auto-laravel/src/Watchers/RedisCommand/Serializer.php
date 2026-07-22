@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers\RedisCommand;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers\RedisCommand;
 
 /**
  * @see https://github.com/open-telemetry/opentelemetry-js-contrib/blob/main/packages/opentelemetry-redis-common/src/index.ts

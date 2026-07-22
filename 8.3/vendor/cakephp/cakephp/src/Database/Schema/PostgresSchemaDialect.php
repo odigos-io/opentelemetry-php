@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Schema;
+namespace Odigos\Cake\Database\Schema;
 
-use Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\Exception\DatabaseException;
 /**
  * Schema management/reflection features for Postgres.
  *
  * @internal
  */
-class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
+class PostgresSchemaDialect extends SchemaDialect
 {
     /**
      * @const int
@@ -132,65 +132,65 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
             return ['type' => $col, 'length' => null];
         }
         if (in_array($col, ['timestamptz', 'timestamp with time zone'], \true)) {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE, 'length' => null];
+            return ['type' => TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE, 'length' => null];
         }
         if (str_contains($col, 'timestamp')) {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL, 'length' => null];
+            return ['type' => TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL, 'length' => null];
         }
         if (str_contains($col, 'time')) {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_TIME, 'length' => null];
+            return ['type' => TableSchemaInterface::TYPE_TIME, 'length' => null];
         }
         if ($col === 'serial' || $col === 'integer') {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_INTEGER, 'length' => 10];
+            return ['type' => TableSchemaInterface::TYPE_INTEGER, 'length' => 10];
         }
         if ($col === 'bigserial' || $col === 'bigint') {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_BIGINTEGER, 'length' => 20];
+            return ['type' => TableSchemaInterface::TYPE_BIGINTEGER, 'length' => 20];
         }
         if ($col === 'smallint') {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_SMALLINTEGER, 'length' => 5];
+            return ['type' => TableSchemaInterface::TYPE_SMALLINTEGER, 'length' => 5];
         }
         if ($col === 'uuid') {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_UUID, 'length' => null];
+            return ['type' => TableSchemaInterface::TYPE_UUID, 'length' => null];
         }
         if ($col === 'char') {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_CHAR, 'length' => $length];
+            return ['type' => TableSchemaInterface::TYPE_CHAR, 'length' => $length];
         }
         if (str_contains($col, 'character')) {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_STRING, 'length' => $length];
+            return ['type' => TableSchemaInterface::TYPE_STRING, 'length' => $length];
         }
         // money is 'string' as it includes arbitrary text content
         // before the number value.
         if (str_contains($col, 'money') || $col === 'string') {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_STRING, 'length' => $length];
+            return ['type' => TableSchemaInterface::TYPE_STRING, 'length' => $length];
         }
         if (str_contains($col, 'text')) {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_TEXT, 'length' => null];
+            return ['type' => TableSchemaInterface::TYPE_TEXT, 'length' => null];
         }
         if ($col === 'bytea') {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_BINARY, 'length' => null];
+            return ['type' => TableSchemaInterface::TYPE_BINARY, 'length' => null];
         }
         if ($col === 'real' || str_contains($col, 'double')) {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_FLOAT, 'length' => null];
+            return ['type' => TableSchemaInterface::TYPE_FLOAT, 'length' => null];
         }
         if (str_contains($col, 'numeric') || str_contains($col, 'decimal')) {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_DECIMAL, 'length' => null];
+            return ['type' => TableSchemaInterface::TYPE_DECIMAL, 'length' => null];
         }
         if (str_contains($col, 'json')) {
-            return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_JSON, 'length' => null];
+            return ['type' => TableSchemaInterface::TYPE_JSON, 'length' => null];
         }
         if (in_array($col, ['geometry', 'geography'])) {
             return ['type' => $col, 'length' => null];
         }
         $length = is_numeric($length) ? $length : null;
-        return ['type' => \Cake\Database\Schema\TableSchemaInterface::TYPE_STRING, 'length' => $length];
+        return ['type' => TableSchemaInterface::TYPE_STRING, 'length' => $length];
     }
     /**
      * @inheritDoc
      */
-    public function convertColumnDescription(\Cake\Database\Schema\TableSchema $schema, array $row): void
+    public function convertColumnDescription(TableSchema $schema, array $row): void
     {
         $field = $this->_convertColumn($row['type']);
-        if ($field['type'] === \Cake\Database\Schema\TableSchemaInterface::TYPE_BOOLEAN) {
+        if ($field['type'] === TableSchemaInterface::TYPE_BOOLEAN) {
             if ($row['default'] === 'true') {
                 $row['default'] = 1;
             }
@@ -207,13 +207,13 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
             $field['length'] = $row['column_precision'];
             $field['precision'] = $row['column_scale'] ?: null;
         }
-        if ($field['type'] === \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL) {
+        if ($field['type'] === TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL) {
             $field['precision'] = $row['datetime_precision'];
             if ($field['precision'] === 0) {
-                $field['type'] = \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP;
+                $field['type'] = TableSchemaInterface::TYPE_TIMESTAMP;
             }
         }
-        if ($field['type'] === \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE) {
+        if ($field['type'] === TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE) {
             $field['precision'] = $row['datetime_precision'];
         }
         $schema->addColumn($row['name'], $field);
@@ -252,7 +252,7 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
                 $type = $row['udt_name'];
             }
             $field = $this->_convertColumn($type);
-            if ($field['type'] === \Cake\Database\Schema\TableSchemaInterface::TYPE_BOOLEAN) {
+            if ($field['type'] === TableSchemaInterface::TYPE_BOOLEAN) {
                 if ($row['default'] === 'true') {
                     $row['default'] = 1;
                 } elseif ($row['default'] === 'false') {
@@ -268,13 +268,13 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
                 $field['length'] = $row['column_precision'];
                 $field['precision'] = $row['column_scale'] ?: null;
             }
-            if ($field['type'] === \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL) {
+            if ($field['type'] === TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL) {
                 $field['precision'] = $row['datetime_precision'];
                 if ($field['precision'] === 0) {
-                    $field['type'] = \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP;
+                    $field['type'] = TableSchemaInterface::TYPE_TIMESTAMP;
                 }
             }
-            if ($field['type'] === \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE) {
+            if ($field['type'] === TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE) {
                 $field['precision'] = $row['datetime_precision'];
             }
             if (isset($row['identity_generation']) && $row['identity_generation']) {
@@ -343,18 +343,18 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
     /**
      * @inheritDoc
      */
-    public function convertIndexDescription(\Cake\Database\Schema\TableSchema $schema, array $row): void
+    public function convertIndexDescription(TableSchema $schema, array $row): void
     {
-        $type = \Cake\Database\Schema\TableSchema::INDEX_INDEX;
+        $type = TableSchema::INDEX_INDEX;
         $name = $row['relname'];
         if ($row['indisprimary']) {
-            $name = \Cake\Database\Schema\TableSchema::CONSTRAINT_PRIMARY;
-            $type = \Cake\Database\Schema\TableSchema::CONSTRAINT_PRIMARY;
+            $name = TableSchema::CONSTRAINT_PRIMARY;
+            $type = TableSchema::CONSTRAINT_PRIMARY;
         }
-        if ($row['indisunique'] && $type === \Cake\Database\Schema\TableSchema::INDEX_INDEX) {
-            $type = \Cake\Database\Schema\TableSchema::CONSTRAINT_UNIQUE;
+        if ($row['indisunique'] && $type === TableSchema::INDEX_INDEX) {
+            $type = TableSchema::CONSTRAINT_UNIQUE;
         }
-        if ($type === \Cake\Database\Schema\TableSchema::CONSTRAINT_PRIMARY || $type === \Cake\Database\Schema\TableSchema::CONSTRAINT_UNIQUE) {
+        if ($type === TableSchema::CONSTRAINT_PRIMARY || $type === TableSchema::CONSTRAINT_UNIQUE) {
             $this->_convertConstraint($schema, $name, $type, $row);
             return;
         }
@@ -375,17 +375,17 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
         $indexes = [];
         $statement = $this->_driver->execute($sql, [$schema, $name]);
         foreach ($statement->fetchAll('assoc') as $row) {
-            $type = \Cake\Database\Schema\TableSchema::INDEX_INDEX;
+            $type = TableSchema::INDEX_INDEX;
             $name = $row['relname'];
             $constraint = null;
             $includeColumnIndex = $row['indnkeyatts'];
             if ($row['indisprimary']) {
                 $constraint = $name;
-                $name = \Cake\Database\Schema\TableSchema::CONSTRAINT_PRIMARY;
-                $type = \Cake\Database\Schema\TableSchema::CONSTRAINT_PRIMARY;
+                $name = TableSchema::CONSTRAINT_PRIMARY;
+                $type = TableSchema::CONSTRAINT_PRIMARY;
             }
-            if ($row['indisunique'] && $type === \Cake\Database\Schema\TableSchema::INDEX_INDEX) {
-                $type = \Cake\Database\Schema\TableSchema::CONSTRAINT_UNIQUE;
+            if ($row['indisunique'] && $type === TableSchema::INDEX_INDEX) {
+                $type = TableSchema::CONSTRAINT_UNIQUE;
             }
             if (!isset($indexes[$name])) {
                 $indexes[$name] = ['name' => $name, 'type' => $type, 'columns' => [], 'length' => []];
@@ -410,7 +410,7 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
      * @param array $row The metadata record to update with.
      * @return void
      */
-    protected function _convertConstraint(\Cake\Database\Schema\TableSchema $schema, string $name, string $type, array $row): void
+    protected function _convertConstraint(TableSchema $schema, string $name, string $type, array $row): void
     {
         $constraint = $schema->getConstraint($name);
         if (!$constraint) {
@@ -431,9 +431,9 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
     /**
      * @inheritDoc
      */
-    public function convertForeignKeyDescription(\Cake\Database\Schema\TableSchema $schema, array $row): void
+    public function convertForeignKeyDescription(TableSchema $schema, array $row): void
     {
-        $data = ['type' => \Cake\Database\Schema\TableSchema::CONSTRAINT_FOREIGN, 'columns' => $row['column_name'], 'references' => [$row['references_table'], $row['references_field']], 'update' => $this->_convertOnClause($row['on_update']), 'delete' => $this->_convertOnClause($row['on_delete']), 'deferrable' => $this->convertDeferrable($row)];
+        $data = ['type' => TableSchema::CONSTRAINT_FOREIGN, 'columns' => $row['column_name'], 'references' => [$row['references_table'], $row['references_field']], 'update' => $this->_convertOnClause($row['on_update']), 'delete' => $this->_convertOnClause($row['on_delete']), 'deferrable' => $this->convertDeferrable($row)];
         $schema->addConstraint($row['name'], $data);
     }
     /**
@@ -448,7 +448,7 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
         foreach ($statement->fetchAll('assoc') as $row) {
             $name = $row['name'];
             if (!isset($keys[$name])) {
-                $keys[$name] = ['name' => $name, 'type' => \Cake\Database\Schema\TableSchema::CONSTRAINT_FOREIGN, 'columns' => [], 'references' => [$row['references_table'], []], 'update' => $this->_convertOnClause($row['on_update']), 'delete' => $this->_convertOnClause($row['on_delete']), 'deferrable' => $this->convertDeferrable($row)];
+                $keys[$name] = ['name' => $name, 'type' => TableSchema::CONSTRAINT_FOREIGN, 'columns' => [], 'references' => [$row['references_table'], []], 'update' => $this->_convertOnClause($row['on_update']), 'delete' => $this->_convertOnClause($row['on_delete']), 'deferrable' => $this->convertDeferrable($row)];
             }
             // column indexes start at 1
             $columnOrder = $row['column_order'] - 1;
@@ -514,7 +514,7 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
         $statement = $this->_driver->execute($sql, [$schema, $name]);
         foreach ($statement->fetchAll('assoc') as $row) {
             $expression = preg_replace('/^CHECK \(\((.*)\)\)$/i', '$1', $row['expression']);
-            $results[] = ['name' => $row['name'], 'type' => \Cake\Database\Schema\TableSchema::CONSTRAINT_CHECK, 'expression' => $expression];
+            $results[] = ['name' => $row['name'], 'type' => TableSchema::CONSTRAINT_CHECK, 'expression' => $expression];
         }
         return $results;
     }
@@ -531,15 +531,15 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
     protected function _convertOnClause(string $clause): string
     {
         if ($clause === 'r') {
-            return \Cake\Database\Schema\TableSchema::ACTION_RESTRICT;
+            return TableSchema::ACTION_RESTRICT;
         }
         if ($clause === 'a') {
-            return \Cake\Database\Schema\TableSchema::ACTION_NO_ACTION;
+            return TableSchema::ACTION_NO_ACTION;
         }
         if ($clause === 'c') {
-            return \Cake\Database\Schema\TableSchema::ACTION_CASCADE;
+            return TableSchema::ACTION_CASCADE;
         }
-        return \Cake\Database\Schema\TableSchema::ACTION_SET_NULL;
+        return TableSchema::ACTION_SET_NULL;
     }
     /**
      * Convert deferrable option from the postgres metadata into a string
@@ -553,17 +553,17 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
             return null;
         }
         if (!$row['deferrable']) {
-            return \Cake\Database\Schema\ForeignKey::NOT_DEFERRED;
+            return ForeignKey::NOT_DEFERRED;
         }
         if (isset($row['initially_deferred']) && $row['initially_deferred']) {
-            return \Cake\Database\Schema\ForeignKey::DEFERRED;
+            return ForeignKey::DEFERRED;
         }
-        return \Cake\Database\Schema\ForeignKey::IMMEDIATE;
+        return ForeignKey::IMMEDIATE;
     }
     /**
      * @inheritDoc
      */
-    public function columnSql(\Cake\Database\Schema\TableSchema $schema, string $name): string
+    public function columnSql(TableSchema $schema, string $name): string
     {
         $data = $schema->getColumn($name);
         assert($data !== null);
@@ -572,7 +572,7 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
         if ($sql !== null) {
             return $sql;
         }
-        $autoIncrementTypes = [\Cake\Database\Schema\TableSchemaInterface::TYPE_TINYINTEGER, \Cake\Database\Schema\TableSchemaInterface::TYPE_SMALLINTEGER, \Cake\Database\Schema\TableSchemaInterface::TYPE_INTEGER, \Cake\Database\Schema\TableSchemaInterface::TYPE_BIGINTEGER];
+        $autoIncrementTypes = [TableSchemaInterface::TYPE_TINYINTEGER, TableSchemaInterface::TYPE_SMALLINTEGER, TableSchemaInterface::TYPE_INTEGER, TableSchemaInterface::TYPE_BIGINTEGER];
         $primaryKey = $schema->getPrimaryKey();
         if (in_array($data['type'], $autoIncrementTypes, \true) && $primaryKey === [$name] && $name === 'id') {
             $data['autoIncrement'] = \true;
@@ -587,8 +587,8 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
         $name = $column['name'];
         $column += ['length' => null, 'precision' => null];
         $out = $this->_driver->quoteIdentifier($name);
-        $typeMap = [\Cake\Database\Schema\TableSchemaInterface::TYPE_TINYINTEGER => ' SMALLINT', \Cake\Database\Schema\TableSchemaInterface::TYPE_SMALLINTEGER => ' SMALLINT', \Cake\Database\Schema\TableSchemaInterface::TYPE_INTEGER => ' INT', \Cake\Database\Schema\TableSchemaInterface::TYPE_BIGINTEGER => ' BIGINT', \Cake\Database\Schema\TableSchemaInterface::TYPE_BINARY => ' BYTEA', \Cake\Database\Schema\TableSchemaInterface::TYPE_BINARY_UUID => ' UUID', \Cake\Database\Schema\TableSchemaInterface::TYPE_BOOLEAN => ' BOOLEAN', \Cake\Database\Schema\TableSchemaInterface::TYPE_FLOAT => ' FLOAT', \Cake\Database\Schema\TableSchemaInterface::TYPE_DECIMAL => ' DECIMAL', \Cake\Database\Schema\TableSchemaInterface::TYPE_DATE => ' DATE', \Cake\Database\Schema\TableSchemaInterface::TYPE_TIME => ' TIME', \Cake\Database\Schema\TableSchemaInterface::TYPE_DATETIME => ' TIMESTAMP', \Cake\Database\Schema\TableSchemaInterface::TYPE_DATETIME_FRACTIONAL => ' TIMESTAMP', \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP => ' TIMESTAMP', \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL => ' TIMESTAMP', \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE => ' TIMESTAMPTZ', \Cake\Database\Schema\TableSchemaInterface::TYPE_UUID => ' UUID', \Cake\Database\Schema\TableSchemaInterface::TYPE_NATIVE_UUID => ' UUID', \Cake\Database\Schema\TableSchemaInterface::TYPE_CHAR => ' CHAR', \Cake\Database\Schema\TableSchemaInterface::TYPE_CITEXT => ' CITEXT', \Cake\Database\Schema\TableSchemaInterface::TYPE_JSON => ' JSONB', \Cake\Database\Schema\TableSchemaInterface::TYPE_INTERVAL => ' INTERVAL', \Cake\Database\Schema\TableSchemaInterface::TYPE_GEOMETRY => ' GEOGRAPHY(GEOMETRY, %s)', \Cake\Database\Schema\TableSchemaInterface::TYPE_POINT => ' GEOGRAPHY(POINT, %s)', \Cake\Database\Schema\TableSchemaInterface::TYPE_LINESTRING => ' GEOGRAPHY(LINESTRING, %s)', \Cake\Database\Schema\TableSchemaInterface::TYPE_POLYGON => ' GEOGRAPHY(POLYGON, %s)', \Cake\Database\Schema\TableSchemaInterface::TYPE_CIDR => ' CIDR', \Cake\Database\Schema\TableSchemaInterface::TYPE_INET => ' INET', \Cake\Database\Schema\TableSchemaInterface::TYPE_MACADDR => ' MACADDR'];
-        $autoIncrementTypes = [\Cake\Database\Schema\TableSchemaInterface::TYPE_TINYINTEGER, \Cake\Database\Schema\TableSchemaInterface::TYPE_SMALLINTEGER, \Cake\Database\Schema\TableSchemaInterface::TYPE_INTEGER, \Cake\Database\Schema\TableSchemaInterface::TYPE_BIGINTEGER];
+        $typeMap = [TableSchemaInterface::TYPE_TINYINTEGER => ' SMALLINT', TableSchemaInterface::TYPE_SMALLINTEGER => ' SMALLINT', TableSchemaInterface::TYPE_INTEGER => ' INT', TableSchemaInterface::TYPE_BIGINTEGER => ' BIGINT', TableSchemaInterface::TYPE_BINARY => ' BYTEA', TableSchemaInterface::TYPE_BINARY_UUID => ' UUID', TableSchemaInterface::TYPE_BOOLEAN => ' BOOLEAN', TableSchemaInterface::TYPE_FLOAT => ' FLOAT', TableSchemaInterface::TYPE_DECIMAL => ' DECIMAL', TableSchemaInterface::TYPE_DATE => ' DATE', TableSchemaInterface::TYPE_TIME => ' TIME', TableSchemaInterface::TYPE_DATETIME => ' TIMESTAMP', TableSchemaInterface::TYPE_DATETIME_FRACTIONAL => ' TIMESTAMP', TableSchemaInterface::TYPE_TIMESTAMP => ' TIMESTAMP', TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL => ' TIMESTAMP', TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE => ' TIMESTAMPTZ', TableSchemaInterface::TYPE_UUID => ' UUID', TableSchemaInterface::TYPE_NATIVE_UUID => ' UUID', TableSchemaInterface::TYPE_CHAR => ' CHAR', TableSchemaInterface::TYPE_CITEXT => ' CITEXT', TableSchemaInterface::TYPE_JSON => ' JSONB', TableSchemaInterface::TYPE_INTERVAL => ' INTERVAL', TableSchemaInterface::TYPE_GEOMETRY => ' GEOGRAPHY(GEOMETRY, %s)', TableSchemaInterface::TYPE_POINT => ' GEOGRAPHY(POINT, %s)', TableSchemaInterface::TYPE_LINESTRING => ' GEOGRAPHY(LINESTRING, %s)', TableSchemaInterface::TYPE_POLYGON => ' GEOGRAPHY(POLYGON, %s)', TableSchemaInterface::TYPE_CIDR => ' CIDR', TableSchemaInterface::TYPE_INET => ' INET', TableSchemaInterface::TYPE_MACADDR => ' MACADDR'];
+        $autoIncrementTypes = [TableSchemaInterface::TYPE_TINYINTEGER, TableSchemaInterface::TYPE_SMALLINTEGER, TableSchemaInterface::TYPE_INTEGER, TableSchemaInterface::TYPE_BIGINTEGER];
         $autoIncrement = (bool) ($column['autoIncrement'] ?? \false);
         $isAutoincrement = in_array($column['type'], $autoIncrementTypes, \true) && $autoIncrement;
         $version = $this->_driver->version();
@@ -602,11 +602,11 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
             $out .= $typeMap[$column['type']];
             $foundType = \true;
         }
-        $hasLength = [\Cake\Database\Schema\TableSchemaInterface::TYPE_CHAR, \Cake\Database\Schema\TableSchemaInterface::TYPE_STRING];
-        if ($column['type'] === \Cake\Database\Schema\TableSchemaInterface::TYPE_TEXT && $column['length'] !== \Cake\Database\Schema\TableSchema::LENGTH_TINY) {
+        $hasLength = [TableSchemaInterface::TYPE_CHAR, TableSchemaInterface::TYPE_STRING];
+        if ($column['type'] === TableSchemaInterface::TYPE_TEXT && $column['length'] !== TableSchema::LENGTH_TINY) {
             $out .= ' TEXT';
             $foundType = \true;
-        } elseif ($column['type'] === \Cake\Database\Schema\TableSchemaInterface::TYPE_STRING || $column['type'] === \Cake\Database\Schema\TableSchemaInterface::TYPE_TEXT && $column['length'] === \Cake\Database\Schema\TableSchema::LENGTH_TINY) {
+        } elseif ($column['type'] === TableSchemaInterface::TYPE_STRING || $column['type'] === TableSchemaInterface::TYPE_TEXT && $column['length'] === TableSchema::LENGTH_TINY) {
             $out .= ' VARCHAR';
             $hasLength[] = $column['type'];
             $foundType = \true;
@@ -618,18 +618,18 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
         if (in_array($column['type'], $hasLength, \true) && !empty($column['length'])) {
             $out .= '(' . $column['length'] . ')';
         }
-        $hasCollate = [\Cake\Database\Schema\TableSchemaInterface::TYPE_TEXT, \Cake\Database\Schema\TableSchemaInterface::TYPE_STRING, \Cake\Database\Schema\TableSchemaInterface::TYPE_CHAR];
+        $hasCollate = [TableSchemaInterface::TYPE_TEXT, TableSchemaInterface::TYPE_STRING, TableSchemaInterface::TYPE_CHAR];
         if (in_array($column['type'], $hasCollate, \true) && isset($column['collate']) && $column['collate'] !== '') {
             $out .= ' COLLATE "' . $column['collate'] . '"';
         }
-        $hasPrecision = [\Cake\Database\Schema\TableSchemaInterface::TYPE_FLOAT, \Cake\Database\Schema\TableSchemaInterface::TYPE_DATETIME, \Cake\Database\Schema\TableSchemaInterface::TYPE_DATETIME_FRACTIONAL, \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP, \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL, \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE];
+        $hasPrecision = [TableSchemaInterface::TYPE_FLOAT, TableSchemaInterface::TYPE_DATETIME, TableSchemaInterface::TYPE_DATETIME_FRACTIONAL, TableSchemaInterface::TYPE_TIMESTAMP, TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL, TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE];
         if (in_array($column['type'], $hasPrecision) && isset($column['precision'])) {
             $out .= '(' . $column['precision'] . ')';
         }
-        if ($column['type'] === \Cake\Database\Schema\TableSchemaInterface::TYPE_DECIMAL && (isset($column['length']) || isset($column['precision']))) {
+        if ($column['type'] === TableSchemaInterface::TYPE_DECIMAL && (isset($column['length']) || isset($column['precision']))) {
             $out .= '(' . $column['length'] . ',' . (int) $column['precision'] . ')';
         }
-        if (in_array($column['type'], \Cake\Database\Schema\TableSchemaInterface::GEOSPATIAL_TYPES)) {
+        if (in_array($column['type'], TableSchemaInterface::GEOSPATIAL_TYPES)) {
             $out = sprintf($out, $column['srid'] ?? self::DEFAULT_SRID);
         }
         if (isset($column['null']) && $column['null'] === \false) {
@@ -639,7 +639,7 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
             $generated = $column['generated'] ?? static::GENERATED_BY_DEFAULT;
             $out .= ' GENERATED ' . $generated . ' AS IDENTITY';
         }
-        $datetimeTypes = [\Cake\Database\Schema\TableSchemaInterface::TYPE_DATETIME, \Cake\Database\Schema\TableSchemaInterface::TYPE_DATETIME_FRACTIONAL, \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP, \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL, \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE];
+        $datetimeTypes = [TableSchemaInterface::TYPE_DATETIME, TableSchemaInterface::TYPE_DATETIME_FRACTIONAL, TableSchemaInterface::TYPE_TIMESTAMP, TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL, TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE];
         if (isset($column['default']) && in_array($column['type'], $datetimeTypes) && is_string($column['default']) && strtolower($column['default']) === 'current_timestamp') {
             $out .= ' DEFAULT CURRENT_TIMESTAMP';
         } elseif (isset($column['default'])) {
@@ -656,14 +656,14 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
     /**
      * @inheritDoc
      */
-    public function addConstraintSql(\Cake\Database\Schema\TableSchema $schema): array
+    public function addConstraintSql(TableSchema $schema): array
     {
         $sqlPattern = 'ALTER TABLE %s ADD %s;';
         $sql = [];
         foreach ($schema->constraints() as $name) {
             $constraint = $schema->getConstraint($name);
             assert($constraint !== null);
-            if ($constraint['type'] === \Cake\Database\Schema\TableSchema::CONSTRAINT_FOREIGN) {
+            if ($constraint['type'] === TableSchema::CONSTRAINT_FOREIGN) {
                 $tableName = $this->_driver->quoteIdentifier($schema->name());
                 $sql[] = sprintf($sqlPattern, $tableName, $this->constraintSql($schema, $name));
             }
@@ -673,14 +673,14 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
     /**
      * @inheritDoc
      */
-    public function dropConstraintSql(\Cake\Database\Schema\TableSchema $schema): array
+    public function dropConstraintSql(TableSchema $schema): array
     {
         $sqlPattern = 'ALTER TABLE %s DROP CONSTRAINT %s;';
         $sql = [];
         foreach ($schema->constraints() as $name) {
             $constraint = $schema->getConstraint($name);
             assert($constraint !== null);
-            if ($constraint['type'] === \Cake\Database\Schema\TableSchema::CONSTRAINT_FOREIGN) {
+            if ($constraint['type'] === TableSchema::CONSTRAINT_FOREIGN) {
                 $tableName = $this->_driver->quoteIdentifier($schema->name());
                 $constraintName = $this->_driver->quoteIdentifier($name);
                 $sql[] = sprintf($sqlPattern, $tableName, $constraintName);
@@ -691,7 +691,7 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
     /**
      * @inheritDoc
      */
-    public function indexSql(\Cake\Database\Schema\TableSchema $schema, string $name): string
+    public function indexSql(TableSchema $schema, string $name): string
     {
         $index = $schema->index($name);
         $columns = array_map($this->_driver->quoteIdentifier(...), (array) $index->getColumns());
@@ -705,16 +705,16 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
     /**
      * @inheritDoc
      */
-    public function constraintSql(\Cake\Database\Schema\TableSchema $schema, string $name): string
+    public function constraintSql(TableSchema $schema, string $name): string
     {
         $data = $schema->getConstraint($name);
         assert($data !== null);
         $out = 'CONSTRAINT ' . $this->_driver->quoteIdentifier($name);
-        if ($data['type'] === \Cake\Database\Schema\TableSchema::CONSTRAINT_PRIMARY) {
+        if ($data['type'] === TableSchema::CONSTRAINT_PRIMARY) {
             $out = 'PRIMARY KEY';
-        } elseif ($data['type'] === \Cake\Database\Schema\TableSchema::CONSTRAINT_UNIQUE) {
+        } elseif ($data['type'] === TableSchema::CONSTRAINT_UNIQUE) {
             $out .= ' UNIQUE';
-        } elseif ($data['type'] === \Cake\Database\Schema\TableSchema::CONSTRAINT_CHECK) {
+        } elseif ($data['type'] === TableSchema::CONSTRAINT_CHECK) {
             return $out . ' CHECK (' . $data['expression'] . ')';
         }
         return $this->_keySql($out, $data);
@@ -729,7 +729,7 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
     protected function _keySql(string $prefix, array $data): string
     {
         $columns = array_map($this->_driver->quoteIdentifier(...), $data['columns']);
-        if ($data['type'] === \Cake\Database\Schema\TableSchema::CONSTRAINT_FOREIGN) {
+        if ($data['type'] === TableSchema::CONSTRAINT_FOREIGN) {
             return $prefix . sprintf(
                 ' FOREIGN KEY (%s) REFERENCES %s (%s) ON UPDATE %s ON DELETE %s %s',
                 implode(', ', $columns),
@@ -738,7 +738,7 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
                 $this->_foreignOnClause($data['update']),
                 $this->_foreignOnClause($data['delete']),
                 // Historically CakePHP used 'DEFERRABLE INITIALLY IMEDIATE, and this maintains backwards compat.
-                $data['deferrable'] ?? \Cake\Database\Schema\ForeignKey::IMMEDIATE
+                $data['deferrable'] ?? ForeignKey::IMMEDIATE
             );
         }
         return $prefix . ' (' . implode(', ', $columns) . ')';
@@ -746,7 +746,7 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
     /**
      * @inheritDoc
      */
-    public function createTableSql(\Cake\Database\Schema\TableSchema $schema, array $columns, array $constraints, array $indexes): array
+    public function createTableSql(TableSchema $schema, array $columns, array $constraints, array $indexes): array
     {
         $content = array_merge($columns, $constraints);
         $content = implode(",\n", array_filter($content));
@@ -772,7 +772,7 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
     /**
      * @inheritDoc
      */
-    public function truncateTableSql(\Cake\Database\Schema\TableSchema $schema): array
+    public function truncateTableSql(TableSchema $schema): array
     {
         $name = $this->_driver->quoteIdentifier($schema->name());
         return [sprintf('TRUNCATE %s RESTART IDENTITY CASCADE', $name)];
@@ -783,7 +783,7 @@ class PostgresSchemaDialect extends \Cake\Database\Schema\SchemaDialect
      * @param \Cake\Database\Schema\TableSchema $schema Table instance
      * @return array SQL statements to drop a table.
      */
-    public function dropTableSql(\Cake\Database\Schema\TableSchema $schema): array
+    public function dropTableSql(TableSchema $schema): array
     {
         $sql = sprintf('DROP TABLE %s CASCADE', $this->_driver->quoteIdentifier($schema->name()));
         return [$sql];

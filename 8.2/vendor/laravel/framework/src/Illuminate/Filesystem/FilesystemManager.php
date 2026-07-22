@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Filesystem;
+namespace Odigos\Illuminate\Filesystem;
 
 use Odigos\Aws\S3\S3Client;
 use Closure;
-use Illuminate\Contracts\Filesystem\Factory as FactoryContract;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Contracts\Filesystem\Factory as FactoryContract;
+use Odigos\Illuminate\Support\Arr;
 use InvalidArgumentException;
 use Odigos\League\Flysystem\AwsS3V3\AwsS3V3Adapter as S3Adapter;
 use Odigos\League\Flysystem\AwsS3V3\PortableVisibilityConverter as AwsS3PortableVisibilityConverter;
@@ -20,7 +20,7 @@ use Odigos\League\Flysystem\PhpseclibV3\SftpConnectionProvider;
 use Odigos\League\Flysystem\ReadOnly\ReadOnlyFilesystemAdapter;
 use Odigos\League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use Odigos\League\Flysystem\Visibility;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 /**
  * @mixin \Illuminate\Contracts\Filesystem\Filesystem
  * @mixin \Illuminate\Filesystem\FilesystemAdapter
@@ -152,7 +152,7 @@ class FilesystemManager implements FactoryContract
         $visibility = PortableVisibilityConverter::fromArray($config['permissions'] ?? [], $config['directory_visibility'] ?? $config['visibility'] ?? Visibility::PRIVATE);
         $links = ($config['links'] ?? null) === 'skip' ? LocalAdapter::SKIP_LINKS : LocalAdapter::DISALLOW_LINKS;
         $adapter = new LocalAdapter($config['root'], $visibility, $config['lock'] ?? \LOCK_EX, $links);
-        return (new \Illuminate\Filesystem\LocalFilesystemAdapter($this->createFlysystem($adapter, $config), $adapter, $config))->diskName($name)->shouldServeSignedUrls($config['serve'] ?? \false, fn() => $this->app['url']);
+        return (new LocalFilesystemAdapter($this->createFlysystem($adapter, $config), $adapter, $config))->diskName($name)->shouldServeSignedUrls($config['serve'] ?? \false, fn() => $this->app['url']);
     }
     /**
      * Create an instance of the ftp driver.
@@ -166,7 +166,7 @@ class FilesystemManager implements FactoryContract
             $config['root'] = '';
         }
         $adapter = new FtpAdapter(FtpConnectionOptions::fromArray($config));
-        return new \Illuminate\Filesystem\FilesystemAdapter($this->createFlysystem($adapter, $config), $adapter, $config);
+        return new FilesystemAdapter($this->createFlysystem($adapter, $config), $adapter, $config);
     }
     /**
      * Create an instance of the sftp driver.
@@ -180,7 +180,7 @@ class FilesystemManager implements FactoryContract
         $root = $config['root'] ?? '';
         $visibility = PortableVisibilityConverter::fromArray($config['permissions'] ?? []);
         $adapter = new SftpAdapter($provider, $root, $visibility);
-        return new \Illuminate\Filesystem\FilesystemAdapter($this->createFlysystem($adapter, $config), $adapter, $config);
+        return new FilesystemAdapter($this->createFlysystem($adapter, $config), $adapter, $config);
     }
     /**
      * Create an instance of the Amazon S3 driver.
@@ -196,7 +196,7 @@ class FilesystemManager implements FactoryContract
         $streamReads = $s3Config['stream_reads'] ?? \false;
         $client = new S3Client($s3Config);
         $adapter = new S3Adapter($client, $s3Config['bucket'], $root, $visibility, null, $config['options'] ?? [], $streamReads);
-        return new \Illuminate\Filesystem\AwsS3V3Adapter($this->createFlysystem($adapter, $config), $adapter, $s3Config, $client);
+        return new AwsS3V3Adapter($this->createFlysystem($adapter, $config), $adapter, $s3Config, $client);
     }
     /**
      * Format the given S3 configuration with the default options.

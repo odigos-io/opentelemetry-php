@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Collection as BaseCollection;
+use Odigos\Illuminate\Broadcasting\InteractsWithSockets;
+use Odigos\Illuminate\Broadcasting\PrivateChannel;
+use Odigos\Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Odigos\Illuminate\Queue\SerializesModels;
+use Odigos\Illuminate\Support\Collection as BaseCollection;
 class BroadcastableModelEventOccurred implements ShouldBroadcast
 {
     use InteractsWithSockets, SerializesModels;
@@ -65,7 +65,7 @@ class BroadcastableModelEventOccurred implements ShouldBroadcast
     public function broadcastOn()
     {
         $channels = empty($this->channels) ? $this->model->broadcastOn($this->event) ?: [] : $this->channels;
-        return (new BaseCollection($channels))->map(fn($channel) => $channel instanceof \Illuminate\Database\Eloquent\Model ? new PrivateChannel($channel) : $channel)->all();
+        return (new BaseCollection($channels))->map(fn($channel) => $channel instanceof Model ? new PrivateChannel($channel) : $channel)->all();
     }
     /**
      * The name the event should broadcast as.

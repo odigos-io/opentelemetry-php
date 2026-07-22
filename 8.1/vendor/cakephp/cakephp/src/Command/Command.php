@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\BaseCommand;
-use Cake\Console\ConsoleIo;
-use Cake\Log\LogTrait;
-use Cake\ORM\Locator\LocatorAwareTrait;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\BaseCommand;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Log\LogTrait;
+use Odigos\Cake\ORM\Locator\LocatorAwareTrait;
 /**
  * Base class for commands using the full stack
  * CakePHP Framework.

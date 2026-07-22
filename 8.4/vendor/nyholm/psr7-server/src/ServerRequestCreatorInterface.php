@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Nyholm\Psr7Server;
+namespace Odigos\Nyholm\Psr7Server;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;

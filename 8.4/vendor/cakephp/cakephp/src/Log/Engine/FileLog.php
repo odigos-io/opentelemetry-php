@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         1.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Log\Engine;
+namespace Odigos\Cake\Log\Engine;
 
-use Cake\Log\Formatter\DefaultFormatter;
-use Cake\Utility\Text;
+use Odigos\Cake\Log\Formatter\DefaultFormatter;
+use Odigos\Cake\Utility\Text;
 use Stringable;
 /**
  * File Storage stream for Logging. Writes logs to different files
  * based on the level of log it is.
  */
-class FileLog extends \Cake\Log\Engine\BaseLog
+class FileLog extends BaseLog
 {
     /**
      * Default config for this class

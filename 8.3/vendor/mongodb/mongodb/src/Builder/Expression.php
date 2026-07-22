@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder;
+namespace Odigos\MongoDB\Builder;
 
 /**
  * Factories for Aggregation Pipeline Expression Operators
@@ -10,8 +10,8 @@ namespace MongoDB\Builder;
  */
 final class Expression
 {
-    use \MongoDB\Builder\Expression\ExpressionFactoryTrait;
-    use \MongoDB\Builder\Expression\FactoryTrait;
+    use Expression\ExpressionFactoryTrait;
+    use Expression\FactoryTrait;
     private function __construct()
     {
         // This class cannot be instantiated

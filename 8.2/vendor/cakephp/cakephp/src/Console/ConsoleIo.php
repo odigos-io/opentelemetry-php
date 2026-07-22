@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
-use Cake\Console\Exception\StopException;
-use Cake\Log\Engine\ConsoleLog;
-use Cake\Log\Log;
+use Odigos\Cake\Console\Exception\StopException;
+use Odigos\Cake\Log\Engine\ConsoleLog;
+use Odigos\Cake\Log\Log;
 use RuntimeException;
 use SplFileObject;
 /**
@@ -53,25 +53,25 @@ class ConsoleIo
      *
      * @var \Cake\Console\ConsoleOutput
      */
-    protected \Cake\Console\ConsoleOutput $_out;
+    protected ConsoleOutput $_out;
     /**
      * The error stream
      *
      * @var \Cake\Console\ConsoleOutput
      */
-    protected \Cake\Console\ConsoleOutput $_err;
+    protected ConsoleOutput $_err;
     /**
      * The input stream
      *
      * @var \Cake\Console\ConsoleInput
      */
-    protected \Cake\Console\ConsoleInput $_in;
+    protected ConsoleInput $_in;
     /**
      * The helper registry.
      *
      * @var \Cake\Console\HelperRegistry
      */
-    protected \Cake\Console\HelperRegistry $_helpers;
+    protected HelperRegistry $_helpers;
     /**
      * The current output level.
      *
@@ -103,12 +103,12 @@ class ConsoleIo
      * @param \Cake\Console\ConsoleInput|null $in A ConsoleInput object for stdin.
      * @param \Cake\Console\HelperRegistry|null $helpers A HelperRegistry instance
      */
-    public function __construct(?\Cake\Console\ConsoleOutput $out = null, ?\Cake\Console\ConsoleOutput $err = null, ?\Cake\Console\ConsoleInput $in = null, ?\Cake\Console\HelperRegistry $helpers = null)
+    public function __construct(?ConsoleOutput $out = null, ?ConsoleOutput $err = null, ?ConsoleInput $in = null, ?HelperRegistry $helpers = null)
     {
-        $this->_out = $out ?: new \Cake\Console\ConsoleOutput('php://stdout');
-        $this->_err = $err ?: new \Cake\Console\ConsoleOutput('php://stderr');
-        $this->_in = $in ?: new \Cake\Console\ConsoleInput('php://stdin');
-        $this->_helpers = $helpers ?: new \Cake\Console\HelperRegistry();
+        $this->_out = $out ?: new ConsoleOutput('php://stdout');
+        $this->_err = $err ?: new ConsoleOutput('php://stderr');
+        $this->_in = $in ?: new ConsoleInput('php://stdin');
+        $this->_helpers = $helpers ?: new HelperRegistry();
         $this->_helpers->setIo($this);
     }
     /**
@@ -265,7 +265,7 @@ class ConsoleIo
      * @return never
      * @throws \Cake\Console\Exception\StopException
      */
-    public function abort(string $message, int $code = \Cake\Console\CommandInterface::CODE_ERROR): never
+    public function abort(string $message, int $code = CommandInterface::CODE_ERROR): never
     {
         $this->error($message);
         throw new StopException($message, $code);
@@ -343,7 +343,7 @@ class ConsoleIo
      */
     public function nl(int $multiplier = 1): string
     {
-        return str_repeat(\Cake\Console\ConsoleOutput::LF, $multiplier);
+        return str_repeat(ConsoleOutput::LF, $multiplier);
     }
     /**
      * Outputs a series of minus characters to the standard output, acts as a visual separator.
@@ -522,7 +522,7 @@ class ConsoleIo
      * @param array<string, mixed> $config Configuration data for the helper.
      * @return \Cake\Console\Helper The created helper instance.
      */
-    public function helper(string $name, array $config = []): \Cake\Console\Helper
+    public function helper(string $name, array $config = []): Helper
     {
         $name = ucfirst($name);
         /** @var \Cake\Console\Helper */

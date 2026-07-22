@@ -13,14 +13,14 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Constraint\Response;
+namespace Odigos\Cake\TestSuite\Constraint\Response;
 
 /**
  * HeaderSet
  *
  * @internal
  */
-class HeaderNotSet extends \Cake\TestSuite\Constraint\Response\HeaderSet
+class HeaderNotSet extends HeaderSet
 {
     /**
      * Checks assertion

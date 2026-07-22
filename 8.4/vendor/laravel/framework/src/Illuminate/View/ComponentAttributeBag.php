@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\View;
+namespace Odigos\Illuminate\View;
 
 use ArrayAccess;
 use ArrayIterator;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\InteractsWithData;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\HtmlString;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\InteractsWithData;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use IteratorAggregate;
 use JsonSerializable;
 use Stringable;
@@ -214,10 +214,10 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
             return $this->shouldEscapeAttributeValue($escape, $value) ? e($value) : $value;
         }, $attributeDefaults);
         [$appendableAttributes, $nonAppendableAttributes] = (new Collection($this->attributes))->partition(function ($value, $key) use ($attributeDefaults) {
-            return $key === 'class' || $key === 'style' || isset($attributeDefaults[$key]) && $attributeDefaults[$key] instanceof \Illuminate\View\AppendableAttributeValue;
+            return $key === 'class' || $key === 'style' || isset($attributeDefaults[$key]) && $attributeDefaults[$key] instanceof AppendableAttributeValue;
         });
         $attributes = $appendableAttributes->mapWithKeys(function ($value, $key) use ($attributeDefaults, $escape) {
-            $defaultsValue = isset($attributeDefaults[$key]) && $attributeDefaults[$key] instanceof \Illuminate\View\AppendableAttributeValue ? $this->resolveAppendableAttributeDefault($attributeDefaults, $key, $escape) : $attributeDefaults[$key] ?? '';
+            $defaultsValue = isset($attributeDefaults[$key]) && $attributeDefaults[$key] instanceof AppendableAttributeValue ? $this->resolveAppendableAttributeDefault($attributeDefaults, $key, $escape) : $attributeDefaults[$key] ?? '';
             if ($key === 'style') {
                 $value = Str::finish($value, ';');
             }
@@ -247,7 +247,7 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
      */
     public function prepends($value)
     {
-        return new \Illuminate\View\AppendableAttributeValue($value);
+        return new AppendableAttributeValue($value);
     }
     /**
      * Resolve an appendable attribute value default value.

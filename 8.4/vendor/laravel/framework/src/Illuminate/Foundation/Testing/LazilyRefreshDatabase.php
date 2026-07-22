@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Foundation\Testing;
+namespace Odigos\Illuminate\Foundation\Testing;
 
 trait LazilyRefreshDatabase
 {
-    use \Illuminate\Foundation\Testing\RefreshDatabase {
+    use RefreshDatabase {
         refreshDatabase as baseRefreshDatabase;
     }
     /**
@@ -16,10 +16,10 @@ trait LazilyRefreshDatabase
     {
         $database = $this->app->make('db');
         $callback = function () {
-            if (\Illuminate\Foundation\Testing\RefreshDatabaseState::$lazilyRefreshed) {
+            if (RefreshDatabaseState::$lazilyRefreshed) {
                 return;
             }
-            \Illuminate\Foundation\Testing\RefreshDatabaseState::$lazilyRefreshed = \true;
+            RefreshDatabaseState::$lazilyRefreshed = \true;
             if (property_exists($this, 'mockConsoleOutput')) {
                 $shouldMockOutput = $this->mockConsoleOutput;
                 $this->mockConsoleOutput = \false;
@@ -32,7 +32,7 @@ trait LazilyRefreshDatabase
         $database->beforeStartingTransaction($callback);
         $database->beforeExecuting($callback);
         $this->beforeApplicationDestroyed(function () {
-            \Illuminate\Foundation\Testing\RefreshDatabaseState::$lazilyRefreshed = \false;
+            RefreshDatabaseState::$lazilyRefreshed = \false;
         });
     }
 }

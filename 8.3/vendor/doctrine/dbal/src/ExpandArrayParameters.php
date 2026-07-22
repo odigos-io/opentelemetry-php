@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL;
+namespace Odigos\Doctrine\DBAL;
 
-use Doctrine\DBAL\ArrayParameters\Exception\MissingNamedParameter;
-use Doctrine\DBAL\ArrayParameters\Exception\MissingPositionalParameter;
-use Doctrine\DBAL\SQL\Parser\Visitor;
-use Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\DBAL\ArrayParameters\Exception\MissingNamedParameter;
+use Odigos\Doctrine\DBAL\ArrayParameters\Exception\MissingPositionalParameter;
+use Odigos\Doctrine\DBAL\SQL\Parser\Visitor;
+use Odigos\Doctrine\DBAL\Types\Type;
 use function array_fill;
 use function array_key_exists;
 use function count;
@@ -67,7 +67,7 @@ final class ExpandArrayParameters implements Visitor
             return;
         }
         $type = $this->types[$key];
-        if (!$type instanceof \Doctrine\DBAL\ArrayParameterType) {
+        if (!$type instanceof ArrayParameterType) {
             $this->appendTypedParameter([$value], $type);
             return;
         }
@@ -75,7 +75,7 @@ final class ExpandArrayParameters implements Visitor
             $this->convertedSQL[] = 'NULL';
             return;
         }
-        $this->appendTypedParameter($value, \Doctrine\DBAL\ArrayParameterType::toElementParameterType($type));
+        $this->appendTypedParameter($value, ArrayParameterType::toElementParameterType($type));
     }
     /** @return array<int<0, max>,string|ParameterType|Type> */
     public function getTypes(): array
@@ -83,7 +83,7 @@ final class ExpandArrayParameters implements Visitor
         return $this->convertedTypes;
     }
     /** @param list<mixed> $values */
-    private function appendTypedParameter(array $values, string|\Doctrine\DBAL\ParameterType|Type $type): void
+    private function appendTypedParameter(array $values, string|ParameterType|Type $type): void
     {
         $this->convertedSQL[] = implode(', ', array_fill(0, count($values), '?'));
         $index = count($this->convertedParameters);

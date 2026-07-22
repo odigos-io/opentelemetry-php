@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Schema\Exception\InvalidViewDefinition;
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidViewDefinition;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
 final class ViewEditor
 {
     private ?OptionallyQualifiedName $name = null;
@@ -41,7 +41,7 @@ final class ViewEditor
         $this->sql = $sql;
         return $this;
     }
-    public function create(): \Doctrine\DBAL\Schema\View
+    public function create(): View
     {
         if ($this->name === null) {
             throw InvalidViewDefinition::nameNotSet();
@@ -49,6 +49,6 @@ final class ViewEditor
         if ($this->sql === null) {
             throw InvalidViewDefinition::sqlNotSet($this->name);
         }
-        return new \Doctrine\DBAL\Schema\View($this->name->toString(), $this->sql);
+        return new View($this->name->toString(), $this->sql);
     }
 }

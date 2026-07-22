@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 /**
  * UnauthorizedHttpException represents an "Unauthorized" HTTP exception with status code 401.
@@ -21,7 +21,7 @@ namespace yii\web;
  * @author Dan Schmidt <danschmidt5189@gmail.com>
  * @since 2.0
  */
-class UnauthorizedHttpException extends \yii\web\HttpException
+class UnauthorizedHttpException extends HttpException
 {
     /**
      * Constructor.

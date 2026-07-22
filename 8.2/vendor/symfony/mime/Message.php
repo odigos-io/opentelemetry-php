@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime;
+namespace Odigos\Symfony\Component\Mime;
 
-use Symfony\Component\Mime\Exception\LogicException;
-use Symfony\Component\Mime\Header\Headers;
-use Symfony\Component\Mime\Part\AbstractPart;
-use Symfony\Component\Mime\Part\TextPart;
+use Odigos\Symfony\Component\Mime\Exception\LogicException;
+use Odigos\Symfony\Component\Mime\Header\Headers;
+use Odigos\Symfony\Component\Mime\Part\AbstractPart;
+use Odigos\Symfony\Component\Mime\Part\TextPart;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Message extends \Symfony\Component\Mime\RawMessage
+class Message extends RawMessage
 {
     private Headers $headers;
     public function __construct(?Headers $headers = null, private ?AbstractPart $body = null)

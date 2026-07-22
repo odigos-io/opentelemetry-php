@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\Keywords;
+namespace Odigos\Doctrine\DBAL\Platforms\Keywords;
 
 /**
  * MySQL Keywordlist.
  *
  * @deprecated
  */
-class MySQLKeywords extends \Doctrine\DBAL\Platforms\Keywords\KeywordList
+class MySQLKeywords extends KeywordList
 {
     /**
      * {@inheritDoc}

@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * ActiveQuery represents a DB query associated with an Active Record class.
  *
@@ -79,10 +79,10 @@ use yii\base\InvalidConfigException;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class ActiveQuery extends \yii\db\Query implements \yii\db\ActiveQueryInterface
+class ActiveQuery extends Query implements ActiveQueryInterface
 {
-    use \yii\db\ActiveQueryTrait;
-    use \yii\db\ActiveRelationTrait;
+    use ActiveQueryTrait;
+    use ActiveRelationTrait;
     /**
      * @event Event an event that is triggered when the query is initialized via [[init()]].
      */
@@ -158,7 +158,7 @@ class ActiveQuery extends \yii\db\Query implements \yii\db\ActiveQueryInterface
         }
         if ($this->primaryModel === null) {
             // eager loading
-            $query = \yii\db\Query::create($this);
+            $query = Query::create($this);
         } else {
             // lazy loading of a relation
             $where = $this->where;
@@ -194,7 +194,7 @@ class ActiveQuery extends \yii\db\Query implements \yii\db\ActiveQueryInterface
             } else {
                 $this->filterByModels([$this->primaryModel]);
             }
-            $query = \yii\db\Query::create($this);
+            $query = Query::create($this);
             $this->where = $where;
         }
         if (!empty($this->on)) {
@@ -331,7 +331,7 @@ class ActiveQuery extends \yii\db\Query implements \yii\db\ActiveQueryInterface
         if ($this->sql === null) {
             return parent::queryScalar($selectExpression, $db);
         }
-        $command = (new \yii\db\Query())->select([$selectExpression])->from(['c' => "({$this->sql})"])->params($this->params)->createCommand($db);
+        $command = (new Query())->select([$selectExpression])->from(['c' => "({$this->sql})"])->params($this->params)->createCommand($db);
         $this->setCommandCache($command);
         return $command->queryScalar();
     }

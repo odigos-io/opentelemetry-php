@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
-use Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Core\InstanceConfigTrait;
 /**
  * Base class for Helpers.
  *
@@ -38,14 +38,14 @@ abstract class Helper
      *
      * @var \Cake\Console\ConsoleIo
      */
-    protected \Cake\Console\ConsoleIo $_io;
+    protected ConsoleIo $_io;
     /**
      * Constructor.
      *
      * @param \Cake\Console\ConsoleIo $io The ConsoleIo instance to use.
      * @param array<string, mixed> $config The settings for this helper.
      */
-    public function __construct(\Cake\Console\ConsoleIo $io, array $config = [])
+    public function __construct(ConsoleIo $io, array $config = [])
     {
         $this->_io = $io;
         $this->setConfig($config);

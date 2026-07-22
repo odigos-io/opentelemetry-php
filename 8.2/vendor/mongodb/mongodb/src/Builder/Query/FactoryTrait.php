@@ -4,7 +4,7 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Query;
+namespace Odigos\MongoDB\Builder\Query;
 
 use DateTimeInterface;
 use MongoDB\BSON\Binary;
@@ -16,13 +16,13 @@ use MongoDB\BSON\PackedArray;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\Serializable;
 use MongoDB\BSON\Type;
-use MongoDB\Builder\Expression\ResolvesToDouble;
-use MongoDB\Builder\Type\ExpressionInterface;
-use MongoDB\Builder\Type\FieldQueryInterface;
-use MongoDB\Builder\Type\GeometryInterface;
-use MongoDB\Builder\Type\Optional;
-use MongoDB\Builder\Type\QueryInterface;
-use MongoDB\Model\BSONArray;
+use Odigos\MongoDB\Builder\Expression\ResolvesToDouble;
+use Odigos\MongoDB\Builder\Type\ExpressionInterface;
+use Odigos\MongoDB\Builder\Type\FieldQueryInterface;
+use Odigos\MongoDB\Builder\Type\GeometryInterface;
+use Odigos\MongoDB\Builder\Type\Optional;
+use Odigos\MongoDB\Builder\Type\QueryInterface;
+use Odigos\MongoDB\Model\BSONArray;
 use stdClass;
 /**
  * @internal
@@ -36,9 +36,9 @@ trait FactoryTrait
      * @no-named-arguments
      * @param DateTimeInterface|FieldQueryInterface|Type|array|bool|float|int|null|stdClass|string ...$value
      */
-    public static function all(DateTimeInterface|Type|FieldQueryInterface|stdClass|array|bool|float|int|null|string ...$value): \MongoDB\Builder\Query\AllOperator
+    public static function all(DateTimeInterface|Type|FieldQueryInterface|stdClass|array|bool|float|int|null|string ...$value): AllOperator
     {
-        return new \MongoDB\Builder\Query\AllOperator(...$value);
+        return new AllOperator(...$value);
     }
     /**
      * Joins query clauses with a logical AND returns all documents that match the conditions of both clauses.
@@ -47,9 +47,9 @@ trait FactoryTrait
      * @no-named-arguments
      * @param QueryInterface|array ...$queries
      */
-    public static function and(QueryInterface|array ...$queries): \MongoDB\Builder\Query\AndOperator
+    public static function and(QueryInterface|array ...$queries): AndOperator
     {
-        return new \MongoDB\Builder\Query\AndOperator(...$queries);
+        return new AndOperator(...$queries);
     }
     /**
      * Matches numeric or binary values in which a set of bit positions all have a value of 0.
@@ -57,9 +57,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/bitsAllClear/
      * @param BSONArray|Binary|PackedArray|array|int|string $bitmask
      */
-    public static function bitsAllClear(Binary|PackedArray|BSONArray|array|int|string $bitmask): \MongoDB\Builder\Query\BitsAllClearOperator
+    public static function bitsAllClear(Binary|PackedArray|BSONArray|array|int|string $bitmask): BitsAllClearOperator
     {
-        return new \MongoDB\Builder\Query\BitsAllClearOperator($bitmask);
+        return new BitsAllClearOperator($bitmask);
     }
     /**
      * Matches numeric or binary values in which a set of bit positions all have a value of 1.
@@ -67,9 +67,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/bitsAllSet/
      * @param BSONArray|Binary|PackedArray|array|int|string $bitmask
      */
-    public static function bitsAllSet(Binary|PackedArray|BSONArray|array|int|string $bitmask): \MongoDB\Builder\Query\BitsAllSetOperator
+    public static function bitsAllSet(Binary|PackedArray|BSONArray|array|int|string $bitmask): BitsAllSetOperator
     {
-        return new \MongoDB\Builder\Query\BitsAllSetOperator($bitmask);
+        return new BitsAllSetOperator($bitmask);
     }
     /**
      * Matches numeric or binary values in which any bit from a set of bit positions has a value of 0.
@@ -77,9 +77,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/bitsAnyClear/
      * @param BSONArray|Binary|PackedArray|array|int|string $bitmask
      */
-    public static function bitsAnyClear(Binary|PackedArray|BSONArray|array|int|string $bitmask): \MongoDB\Builder\Query\BitsAnyClearOperator
+    public static function bitsAnyClear(Binary|PackedArray|BSONArray|array|int|string $bitmask): BitsAnyClearOperator
     {
-        return new \MongoDB\Builder\Query\BitsAnyClearOperator($bitmask);
+        return new BitsAnyClearOperator($bitmask);
     }
     /**
      * Matches numeric or binary values in which any bit from a set of bit positions has a value of 1.
@@ -87,9 +87,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/bitsAnySet/
      * @param BSONArray|Binary|PackedArray|array|int|string $bitmask
      */
-    public static function bitsAnySet(Binary|PackedArray|BSONArray|array|int|string $bitmask): \MongoDB\Builder\Query\BitsAnySetOperator
+    public static function bitsAnySet(Binary|PackedArray|BSONArray|array|int|string $bitmask): BitsAnySetOperator
     {
-        return new \MongoDB\Builder\Query\BitsAnySetOperator($bitmask);
+        return new BitsAnySetOperator($bitmask);
     }
     /**
      * Specifies a rectangular box using legacy coordinate pairs for $geoWithin queries. The 2d index supports $box.
@@ -97,9 +97,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/box/
      * @param BSONArray|PackedArray|array $value
      */
-    public static function box(PackedArray|BSONArray|array $value): \MongoDB\Builder\Query\BoxOperator
+    public static function box(PackedArray|BSONArray|array $value): BoxOperator
     {
-        return new \MongoDB\Builder\Query\BoxOperator($value);
+        return new BoxOperator($value);
     }
     /**
      * Specifies a circle using legacy coordinate pairs to $geoWithin queries when using planar geometry. The 2d index supports $center.
@@ -107,9 +107,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/center/
      * @param BSONArray|PackedArray|array $value
      */
-    public static function center(PackedArray|BSONArray|array $value): \MongoDB\Builder\Query\CenterOperator
+    public static function center(PackedArray|BSONArray|array $value): CenterOperator
     {
-        return new \MongoDB\Builder\Query\CenterOperator($value);
+        return new CenterOperator($value);
     }
     /**
      * Specifies a circle using either legacy coordinate pairs or GeoJSON format for $geoWithin queries when using spherical geometry. The 2dsphere and 2d indexes support $centerSphere.
@@ -117,9 +117,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/centerSphere/
      * @param BSONArray|PackedArray|array $value
      */
-    public static function centerSphere(PackedArray|BSONArray|array $value): \MongoDB\Builder\Query\CenterSphereOperator
+    public static function centerSphere(PackedArray|BSONArray|array $value): CenterSphereOperator
     {
-        return new \MongoDB\Builder\Query\CenterSphereOperator($value);
+        return new CenterSphereOperator($value);
     }
     /**
      * Adds a comment to a query predicate.
@@ -127,9 +127,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/comment/
      * @param string $comment
      */
-    public static function comment(string $comment): \MongoDB\Builder\Query\CommentOperator
+    public static function comment(string $comment): CommentOperator
     {
-        return new \MongoDB\Builder\Query\CommentOperator($comment);
+        return new CommentOperator($comment);
     }
     /**
      * The $elemMatch operator matches documents that contain an array field with at least one element that matches all the specified query criteria.
@@ -137,9 +137,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/elemMatch/
      * @param DateTimeInterface|FieldQueryInterface|QueryInterface|Type|array|bool|float|int|null|stdClass|string $query
      */
-    public static function elemMatch(DateTimeInterface|Type|FieldQueryInterface|QueryInterface|stdClass|array|bool|float|int|null|string $query): \MongoDB\Builder\Query\ElemMatchOperator
+    public static function elemMatch(DateTimeInterface|Type|FieldQueryInterface|QueryInterface|stdClass|array|bool|float|int|null|string $query): ElemMatchOperator
     {
-        return new \MongoDB\Builder\Query\ElemMatchOperator($query);
+        return new ElemMatchOperator($query);
     }
     /**
      * Matches values that are equal to a specified value.
@@ -147,9 +147,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/eq/
      * @param DateTimeInterface|Type|array|bool|float|int|null|stdClass|string $value
      */
-    public static function eq(DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value): \MongoDB\Builder\Query\EqOperator
+    public static function eq(DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value): EqOperator
     {
-        return new \MongoDB\Builder\Query\EqOperator($value);
+        return new EqOperator($value);
     }
     /**
      * Matches documents that have the specified field.
@@ -157,9 +157,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/exists/
      * @param bool $exists
      */
-    public static function exists(bool $exists = \true): \MongoDB\Builder\Query\ExistsOperator
+    public static function exists(bool $exists = \true): ExistsOperator
     {
-        return new \MongoDB\Builder\Query\ExistsOperator($exists);
+        return new ExistsOperator($exists);
     }
     /**
      * Allows use of aggregation expressions within the query language.
@@ -167,9 +167,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/expr/
      * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string $expression
      */
-    public static function expr(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): \MongoDB\Builder\Query\ExprOperator
+    public static function expr(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): ExprOperator
     {
-        return new \MongoDB\Builder\Query\ExprOperator($expression);
+        return new ExprOperator($expression);
     }
     /**
      * Selects geometries that intersect with a GeoJSON geometry. The 2dsphere index supports $geoIntersects.
@@ -177,9 +177,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/geoIntersects/
      * @param Document|GeometryInterface|Serializable|array|stdClass $geometry
      */
-    public static function geoIntersects(Document|Serializable|GeometryInterface|stdClass|array $geometry): \MongoDB\Builder\Query\GeoIntersectsOperator
+    public static function geoIntersects(Document|Serializable|GeometryInterface|stdClass|array $geometry): GeoIntersectsOperator
     {
-        return new \MongoDB\Builder\Query\GeoIntersectsOperator($geometry);
+        return new GeoIntersectsOperator($geometry);
     }
     /**
      * Specifies a geometry in GeoJSON format to geospatial query operators.
@@ -189,9 +189,9 @@ trait FactoryTrait
      * @param BSONArray|PackedArray|array $coordinates
      * @param Optional|Document|Serializable|array|stdClass $crs
      */
-    public static function geometry(string $type, PackedArray|BSONArray|array $coordinates, Optional|Document|Serializable|stdClass|array $crs = Optional::Undefined): \MongoDB\Builder\Query\GeometryOperator
+    public static function geometry(string $type, PackedArray|BSONArray|array $coordinates, Optional|Document|Serializable|stdClass|array $crs = Optional::Undefined): GeometryOperator
     {
-        return new \MongoDB\Builder\Query\GeometryOperator($type, $coordinates, $crs);
+        return new GeometryOperator($type, $coordinates, $crs);
     }
     /**
      * Selects geometries within a bounding GeoJSON geometry. The 2dsphere and 2d indexes support $geoWithin.
@@ -199,9 +199,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/geoWithin/
      * @param Document|GeometryInterface|Serializable|array|stdClass $geometry
      */
-    public static function geoWithin(Document|Serializable|GeometryInterface|stdClass|array $geometry): \MongoDB\Builder\Query\GeoWithinOperator
+    public static function geoWithin(Document|Serializable|GeometryInterface|stdClass|array $geometry): GeoWithinOperator
     {
-        return new \MongoDB\Builder\Query\GeoWithinOperator($geometry);
+        return new GeoWithinOperator($geometry);
     }
     /**
      * Matches values that are greater than a specified value.
@@ -209,9 +209,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/gt/
      * @param DateTimeInterface|Type|array|bool|float|int|null|stdClass|string $value
      */
-    public static function gt(DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value): \MongoDB\Builder\Query\GtOperator
+    public static function gt(DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value): GtOperator
     {
-        return new \MongoDB\Builder\Query\GtOperator($value);
+        return new GtOperator($value);
     }
     /**
      * Matches values that are greater than or equal to a specified value.
@@ -219,9 +219,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/gte/
      * @param DateTimeInterface|Type|array|bool|float|int|null|stdClass|string $value
      */
-    public static function gte(DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value): \MongoDB\Builder\Query\GteOperator
+    public static function gte(DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value): GteOperator
     {
-        return new \MongoDB\Builder\Query\GteOperator($value);
+        return new GteOperator($value);
     }
     /**
      * Matches any of the values specified in an array.
@@ -229,9 +229,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/in/
      * @param BSONArray|PackedArray|array $value
      */
-    public static function in(PackedArray|BSONArray|array $value): \MongoDB\Builder\Query\InOperator
+    public static function in(PackedArray|BSONArray|array $value): InOperator
     {
-        return new \MongoDB\Builder\Query\InOperator($value);
+        return new InOperator($value);
     }
     /**
      * Validate documents against the given JSON Schema.
@@ -239,9 +239,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/jsonSchema/
      * @param Document|Serializable|array|stdClass $schema
      */
-    public static function jsonSchema(Document|Serializable|stdClass|array $schema): \MongoDB\Builder\Query\JsonSchemaOperator
+    public static function jsonSchema(Document|Serializable|stdClass|array $schema): JsonSchemaOperator
     {
-        return new \MongoDB\Builder\Query\JsonSchemaOperator($schema);
+        return new JsonSchemaOperator($schema);
     }
     /**
      * Matches values that are less than a specified value.
@@ -249,9 +249,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/lt/
      * @param DateTimeInterface|Type|array|bool|float|int|null|stdClass|string $value
      */
-    public static function lt(DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value): \MongoDB\Builder\Query\LtOperator
+    public static function lt(DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value): LtOperator
     {
-        return new \MongoDB\Builder\Query\LtOperator($value);
+        return new LtOperator($value);
     }
     /**
      * Matches values that are less than or equal to a specified value.
@@ -259,9 +259,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/lte/
      * @param DateTimeInterface|Type|array|bool|float|int|null|stdClass|string $value
      */
-    public static function lte(DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value): \MongoDB\Builder\Query\LteOperator
+    public static function lte(DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value): LteOperator
     {
-        return new \MongoDB\Builder\Query\LteOperator($value);
+        return new LteOperator($value);
     }
     /**
      * Specifies a maximum distance to limit the results of $near and $nearSphere queries. The 2dsphere and 2d indexes support $maxDistance.
@@ -269,9 +269,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/maxDistance/
      * @param Decimal128|Int64|float|int $value
      */
-    public static function maxDistance(Decimal128|Int64|float|int $value): \MongoDB\Builder\Query\MaxDistanceOperator
+    public static function maxDistance(Decimal128|Int64|float|int $value): MaxDistanceOperator
     {
-        return new \MongoDB\Builder\Query\MaxDistanceOperator($value);
+        return new MaxDistanceOperator($value);
     }
     /**
      * Specifies a minimum distance to limit the results of $near and $nearSphere queries. For use with 2dsphere index only.
@@ -279,9 +279,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/minDistance/
      * @param Int64|float|int $value
      */
-    public static function minDistance(Int64|float|int $value): \MongoDB\Builder\Query\MinDistanceOperator
+    public static function minDistance(Int64|float|int $value): MinDistanceOperator
     {
-        return new \MongoDB\Builder\Query\MinDistanceOperator($value);
+        return new MinDistanceOperator($value);
     }
     /**
      * Performs a modulo operation on the value of a field and selects documents with a specified result.
@@ -290,9 +290,9 @@ trait FactoryTrait
      * @param Decimal128|Int64|float|int $divisor
      * @param Decimal128|Int64|float|int $remainder
      */
-    public static function mod(Decimal128|Int64|float|int $divisor, Decimal128|Int64|float|int $remainder): \MongoDB\Builder\Query\ModOperator
+    public static function mod(Decimal128|Int64|float|int $divisor, Decimal128|Int64|float|int $remainder): ModOperator
     {
-        return new \MongoDB\Builder\Query\ModOperator($divisor, $remainder);
+        return new ModOperator($divisor, $remainder);
     }
     /**
      * Matches all values that are not equal to a specified value.
@@ -300,9 +300,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/ne/
      * @param DateTimeInterface|Type|array|bool|float|int|null|stdClass|string $value
      */
-    public static function ne(DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value): \MongoDB\Builder\Query\NeOperator
+    public static function ne(DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value): NeOperator
     {
-        return new \MongoDB\Builder\Query\NeOperator($value);
+        return new NeOperator($value);
     }
     /**
      * Returns geospatial objects in proximity to a point. Requires a geospatial index. The 2dsphere and 2d indexes support $near.
@@ -312,9 +312,9 @@ trait FactoryTrait
      * @param Optional|Decimal128|Int64|float|int $maxDistance Distance in meters. Limits the results to those documents that are at most the specified distance from the center point.
      * @param Optional|Decimal128|Int64|float|int $minDistance Distance in meters. Limits the results to those documents that are at least the specified distance from the center point.
      */
-    public static function near(Document|Serializable|GeometryInterface|stdClass|array $geometry, Optional|Decimal128|Int64|float|int $maxDistance = Optional::Undefined, Optional|Decimal128|Int64|float|int $minDistance = Optional::Undefined): \MongoDB\Builder\Query\NearOperator
+    public static function near(Document|Serializable|GeometryInterface|stdClass|array $geometry, Optional|Decimal128|Int64|float|int $maxDistance = Optional::Undefined, Optional|Decimal128|Int64|float|int $minDistance = Optional::Undefined): NearOperator
     {
-        return new \MongoDB\Builder\Query\NearOperator($geometry, $maxDistance, $minDistance);
+        return new NearOperator($geometry, $maxDistance, $minDistance);
     }
     /**
      * Returns geospatial objects in proximity to a point on a sphere. Requires a geospatial index. The 2dsphere and 2d indexes support $nearSphere.
@@ -324,9 +324,9 @@ trait FactoryTrait
      * @param Optional|Decimal128|Int64|float|int $maxDistance Distance in meters.
      * @param Optional|Decimal128|Int64|float|int $minDistance Distance in meters. Limits the results to those documents that are at least the specified distance from the center point.
      */
-    public static function nearSphere(Document|Serializable|GeometryInterface|stdClass|array $geometry, Optional|Decimal128|Int64|float|int $maxDistance = Optional::Undefined, Optional|Decimal128|Int64|float|int $minDistance = Optional::Undefined): \MongoDB\Builder\Query\NearSphereOperator
+    public static function nearSphere(Document|Serializable|GeometryInterface|stdClass|array $geometry, Optional|Decimal128|Int64|float|int $maxDistance = Optional::Undefined, Optional|Decimal128|Int64|float|int $minDistance = Optional::Undefined): NearSphereOperator
     {
-        return new \MongoDB\Builder\Query\NearSphereOperator($geometry, $maxDistance, $minDistance);
+        return new NearSphereOperator($geometry, $maxDistance, $minDistance);
     }
     /**
      * Matches none of the values specified in an array.
@@ -334,9 +334,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/nin/
      * @param BSONArray|PackedArray|array $value
      */
-    public static function nin(PackedArray|BSONArray|array $value): \MongoDB\Builder\Query\NinOperator
+    public static function nin(PackedArray|BSONArray|array $value): NinOperator
     {
-        return new \MongoDB\Builder\Query\NinOperator($value);
+        return new NinOperator($value);
     }
     /**
      * Joins query clauses with a logical NOR returns all documents that fail to match both clauses.
@@ -345,9 +345,9 @@ trait FactoryTrait
      * @no-named-arguments
      * @param QueryInterface|array ...$queries
      */
-    public static function nor(QueryInterface|array ...$queries): \MongoDB\Builder\Query\NorOperator
+    public static function nor(QueryInterface|array ...$queries): NorOperator
     {
-        return new \MongoDB\Builder\Query\NorOperator(...$queries);
+        return new NorOperator(...$queries);
     }
     /**
      * Inverts the effect of a query expression and returns documents that do not match the query expression.
@@ -355,9 +355,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/not/
      * @param DateTimeInterface|FieldQueryInterface|Type|array|bool|float|int|null|stdClass|string $expression
      */
-    public static function not(DateTimeInterface|Type|FieldQueryInterface|stdClass|array|bool|float|int|null|string $expression): \MongoDB\Builder\Query\NotOperator
+    public static function not(DateTimeInterface|Type|FieldQueryInterface|stdClass|array|bool|float|int|null|string $expression): NotOperator
     {
-        return new \MongoDB\Builder\Query\NotOperator($expression);
+        return new NotOperator($expression);
     }
     /**
      * Joins query clauses with a logical OR returns all documents that match the conditions of either clause.
@@ -366,9 +366,9 @@ trait FactoryTrait
      * @no-named-arguments
      * @param QueryInterface|array ...$queries
      */
-    public static function or(QueryInterface|array ...$queries): \MongoDB\Builder\Query\OrOperator
+    public static function or(QueryInterface|array ...$queries): OrOperator
     {
-        return new \MongoDB\Builder\Query\OrOperator(...$queries);
+        return new OrOperator(...$queries);
     }
     /**
      * Specifies a polygon to using legacy coordinate pairs for $geoWithin queries. The 2d index supports $center.
@@ -376,18 +376,18 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/polygon/
      * @param BSONArray|PackedArray|array $points
      */
-    public static function polygon(PackedArray|BSONArray|array $points): \MongoDB\Builder\Query\PolygonOperator
+    public static function polygon(PackedArray|BSONArray|array $points): PolygonOperator
     {
-        return new \MongoDB\Builder\Query\PolygonOperator($points);
+        return new PolygonOperator($points);
     }
     /**
      * Generates a random float between 0 and 1.
      *
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/rand/
      */
-    public static function rand(): \MongoDB\Builder\Query\RandOperator
+    public static function rand(): RandOperator
     {
-        return new \MongoDB\Builder\Query\RandOperator();
+        return new RandOperator();
     }
     /**
      * Selects documents where values match a specified regular expression.
@@ -395,9 +395,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/regex/
      * @param Regex $regex
      */
-    public static function regex(Regex $regex): \MongoDB\Builder\Query\RegexOperator
+    public static function regex(Regex $regex): RegexOperator
     {
-        return new \MongoDB\Builder\Query\RegexOperator($regex);
+        return new RegexOperator($regex);
     }
     /**
      * Randomly select documents at a given rate. Although the exact number of documents selected varies on each run, the quantity chosen approximates the sample rate expressed as a percentage of the total number of documents.
@@ -406,9 +406,9 @@ trait FactoryTrait
      * @param Int64|ResolvesToDouble|float|int|string $rate The selection process uses a uniform random distribution. The sample rate is a floating point number between 0 and 1, inclusive, which represents the probability that a given document will be selected as it passes through the pipeline.
      * For example, a sample rate of 0.33 selects roughly one document in three.
      */
-    public static function sampleRate(Int64|ResolvesToDouble|float|int|string $rate): \MongoDB\Builder\Query\SampleRateOperator
+    public static function sampleRate(Int64|ResolvesToDouble|float|int|string $rate): SampleRateOperator
     {
-        return new \MongoDB\Builder\Query\SampleRateOperator($rate);
+        return new SampleRateOperator($rate);
     }
     /**
      * Selects documents if the array field is a specified size.
@@ -416,9 +416,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/size/
      * @param int $value
      */
-    public static function size(int $value): \MongoDB\Builder\Query\SizeOperator
+    public static function size(int $value): SizeOperator
     {
-        return new \MongoDB\Builder\Query\SizeOperator($value);
+        return new SizeOperator($value);
     }
     /**
      * Performs text search.
@@ -431,9 +431,9 @@ trait FactoryTrait
      * @param Optional|bool $diacriticSensitive A boolean flag to enable or disable diacritic sensitive search against version 3 text indexes. Defaults to false; i.e. the search defers to the diacritic insensitivity of the text index.
      * Text searches against earlier versions of the text index are inherently diacritic sensitive and cannot be diacritic insensitive. As such, the $diacriticSensitive option has no effect with earlier versions of the text index.
      */
-    public static function text(string $search, Optional|string $language = Optional::Undefined, Optional|bool $caseSensitive = Optional::Undefined, Optional|bool $diacriticSensitive = Optional::Undefined): \MongoDB\Builder\Query\TextOperator
+    public static function text(string $search, Optional|string $language = Optional::Undefined, Optional|bool $caseSensitive = Optional::Undefined, Optional|bool $diacriticSensitive = Optional::Undefined): TextOperator
     {
-        return new \MongoDB\Builder\Query\TextOperator($search, $language, $caseSensitive, $diacriticSensitive);
+        return new TextOperator($search, $language, $caseSensitive, $diacriticSensitive);
     }
     /**
      * Selects documents if a field is of the specified type.
@@ -442,9 +442,9 @@ trait FactoryTrait
      * @no-named-arguments
      * @param int|string ...$type
      */
-    public static function type(int|string ...$type): \MongoDB\Builder\Query\TypeOperator
+    public static function type(int|string ...$type): TypeOperator
     {
-        return new \MongoDB\Builder\Query\TypeOperator(...$type);
+        return new TypeOperator(...$type);
     }
     /**
      * Matches documents that satisfy a JavaScript expression.
@@ -452,8 +452,8 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/query/where/
      * @param Javascript|string $function
      */
-    public static function where(Javascript|string $function): \MongoDB\Builder\Query\WhereOperator
+    public static function where(Javascript|string $function): WhereOperator
     {
-        return new \MongoDB\Builder\Query\WhereOperator($function);
+        return new WhereOperator($function);
     }
 }

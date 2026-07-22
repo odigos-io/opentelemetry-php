@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Node;
+namespace Odigos\Symfony\Component\CssSelector\Node;
 
 /**
  * Represents a "<selector>:has(<subselector>)" node.
@@ -20,15 +20,15 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-class RelationNode extends \Symfony\Component\CssSelector\Node\AbstractNode
+class RelationNode extends AbstractNode
 {
     /**
      * @param list<array{0: string, 1: NodeInterface}> $arguments
      */
-    public function __construct(private \Symfony\Component\CssSelector\Node\NodeInterface $selector, private array $arguments)
+    public function __construct(private NodeInterface $selector, private array $arguments)
     {
     }
-    public function getSelector(): \Symfony\Component\CssSelector\Node\NodeInterface
+    public function getSelector(): NodeInterface
     {
         return $this->selector;
     }
@@ -39,9 +39,9 @@ class RelationNode extends \Symfony\Component\CssSelector\Node\AbstractNode
     {
         return $this->arguments;
     }
-    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
+    public function getSpecificity(): Specificity
     {
-        $argumentsSpecificity = array_reduce($this->arguments, static fn(\Symfony\Component\CssSelector\Node\Specificity $c, array $a) => 1 === $a[1]->getSpecificity()->compareTo($c) ? $a[1]->getSpecificity() : $c, new \Symfony\Component\CssSelector\Node\Specificity(0, 0, 0));
+        $argumentsSpecificity = array_reduce($this->arguments, static fn(Specificity $c, array $a) => 1 === $a[1]->getSpecificity()->compareTo($c) ? $a[1]->getSpecificity() : $c, new Specificity(0, 0, 0));
         return $this->selector->getSpecificity()->plus($argumentsSpecificity);
     }
     public function __toString(): string

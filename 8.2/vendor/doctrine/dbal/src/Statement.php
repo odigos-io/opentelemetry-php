@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL;
+namespace Odigos\Doctrine\DBAL;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Types\Type;
 use function is_string;
 /**
  * A database abstraction-level statement that implements support for logging, DBAL mapping types, etc.
@@ -38,7 +38,7 @@ class Statement
      *
      * @throws Exception
      */
-    public function __construct(protected \Doctrine\DBAL\Connection $conn, protected \Doctrine\DBAL\Driver\Statement $stmt, protected string $sql)
+    public function __construct(protected Connection $conn, protected Driver\Statement $stmt, protected string $sql)
     {
         $this->platform = $conn->getDatabasePlatform();
     }
@@ -60,7 +60,7 @@ class Statement
      *
      * @throws Exception
      */
-    public function bindValue(string|int $param, mixed $value, string|\Doctrine\DBAL\ParameterType|Type $type = \Doctrine\DBAL\ParameterType::STRING): void
+    public function bindValue(string|int $param, mixed $value, string|ParameterType|Type $type = ParameterType::STRING): void
     {
         $this->params[$param] = $value;
         $this->types[$param] = $type;
@@ -75,16 +75,16 @@ class Statement
         }
         try {
             $this->stmt->bindValue($param, $value, $bindingType);
-        } catch (\Doctrine\DBAL\Driver\Exception $e) {
+        } catch (Driver\Exception $e) {
             throw $this->conn->convertException($e);
         }
     }
     /** @throws Exception */
-    private function execute(): \Doctrine\DBAL\Result
+    private function execute(): Result
     {
         try {
-            return new \Doctrine\DBAL\Result($this->stmt->execute(), $this->conn);
-        } catch (\Doctrine\DBAL\Driver\Exception $ex) {
+            return new Result($this->stmt->execute(), $this->conn);
+        } catch (Driver\Exception $ex) {
             throw $this->conn->convertExceptionDuringQuery($ex, $this->sql, $this->params, $this->types);
         }
     }
@@ -93,7 +93,7 @@ class Statement
      *
      * @throws Exception
      */
-    public function executeQuery(): \Doctrine\DBAL\Result
+    public function executeQuery(): Result
     {
         return $this->execute();
     }
@@ -113,7 +113,7 @@ class Statement
     /**
      * Gets the wrapped driver statement.
      */
-    public function getWrappedStatement(): \Doctrine\DBAL\Driver\Statement
+    public function getWrappedStatement(): Driver\Statement
     {
         return $this->stmt;
     }

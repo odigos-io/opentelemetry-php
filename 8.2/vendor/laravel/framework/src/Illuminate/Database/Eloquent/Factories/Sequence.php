@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Factories;
+namespace Odigos\Illuminate\Database\Eloquent\Factories;
 
 use Countable;
 class Sequence implements Countable

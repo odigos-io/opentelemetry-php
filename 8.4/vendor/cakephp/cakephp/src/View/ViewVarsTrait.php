@@ -13,9 +13,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
-use Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherInterface;
 /**
  * Provides the set() method for collecting template context.
  *
@@ -29,15 +29,15 @@ trait ViewVarsTrait
      *
      * @var \Cake\View\ViewBuilder|null
      */
-    protected ?\Cake\View\ViewBuilder $_viewBuilder = null;
+    protected ?ViewBuilder $_viewBuilder = null;
     /**
      * Get the view builder being used.
      *
      * @return \Cake\View\ViewBuilder
      */
-    public function viewBuilder(): \Cake\View\ViewBuilder
+    public function viewBuilder(): ViewBuilder
     {
-        return $this->_viewBuilder ??= new \Cake\View\ViewBuilder();
+        return $this->_viewBuilder ??= new ViewBuilder();
     }
     /**
      * Constructs the view class instance based on the current configuration.
@@ -46,7 +46,7 @@ trait ViewVarsTrait
      * @return \Cake\View\View
      * @throws \Cake\View\Exception\MissingViewException If view class was not found.
      */
-    public function createView(?string $viewClass = null): \Cake\View\View
+    public function createView(?string $viewClass = null): View
     {
         $builder = $this->viewBuilder();
         if ($viewClass) {

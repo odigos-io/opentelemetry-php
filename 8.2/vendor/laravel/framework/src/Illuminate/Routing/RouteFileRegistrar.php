@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
 class RouteFileRegistrar
 {
@@ -15,7 +15,7 @@ class RouteFileRegistrar
      *
      * @param  \Illuminate\Routing\Router  $router
      */
-    public function __construct(\Illuminate\Routing\Router $router)
+    public function __construct(Router $router)
     {
         $this->router = $router;
     }

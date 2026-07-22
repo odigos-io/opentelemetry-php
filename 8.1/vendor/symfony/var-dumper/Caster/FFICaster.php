@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
 use FFI\CData;
 use FFI\CType;
-use Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * Casts FFI extension classes to array representation.
  *
@@ -39,7 +39,7 @@ final class FFICaster
         }
         $stub->class = \sprintf('%s<%s> size %d align %d', ($data ?? $type)::class, $type->getName(), $type->getSize(), $type->getAlignment());
         return match ($type->getKind()) {
-            CType::TYPE_FLOAT, CType::TYPE_DOUBLE, \defined('Odigos\FFI\CType::TYPE_LONGDOUBLE') ? CType::TYPE_LONGDOUBLE : -1, CType::TYPE_UINT8, CType::TYPE_SINT8, CType::TYPE_UINT16, CType::TYPE_SINT16, CType::TYPE_UINT32, CType::TYPE_SINT32, CType::TYPE_UINT64, CType::TYPE_SINT64, CType::TYPE_BOOL, CType::TYPE_CHAR, CType::TYPE_ENUM => null !== $data ? [\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'cdata' => $data->cdata] : [],
+            CType::TYPE_FLOAT, CType::TYPE_DOUBLE, \defined('Odigos\FFI\CType::TYPE_LONGDOUBLE') ? CType::TYPE_LONGDOUBLE : -1, CType::TYPE_UINT8, CType::TYPE_SINT8, CType::TYPE_UINT16, CType::TYPE_SINT16, CType::TYPE_UINT32, CType::TYPE_SINT32, CType::TYPE_UINT64, CType::TYPE_SINT64, CType::TYPE_BOOL, CType::TYPE_CHAR, CType::TYPE_ENUM => null !== $data ? [Caster::PREFIX_VIRTUAL . 'cdata' => $data->cdata] : [],
             CType::TYPE_POINTER => self::castFFIPointer($stub, $type, $data),
             CType::TYPE_STRUCT => self::castFFIStructLike($type, $data),
             CType::TYPE_FUNC => self::castFFIFunction($stub, $type),
@@ -67,21 +67,21 @@ final class FFICaster
         };
         $returnType = $type->getFuncReturnType();
         $stub->class = $abi . ' callable(' . implode(', ', $arguments) . '): ' . $returnType->getName();
-        return [\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'returnType' => $returnType];
+        return [Caster::PREFIX_VIRTUAL . 'returnType' => $returnType];
     }
     private static function castFFIPointer(Stub $stub, CType $type, ?CData $data = null): array
     {
         $ptr = $type->getPointerType();
         if (null === $data) {
-            return [\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . '0' => $ptr];
+            return [Caster::PREFIX_VIRTUAL . '0' => $ptr];
         }
         return match ($ptr->getKind()) {
-            CType::TYPE_CHAR => [\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'cdata' => self::castFFIStringValue($data)],
+            CType::TYPE_CHAR => [Caster::PREFIX_VIRTUAL . 'cdata' => self::castFFIStringValue($data)],
             CType::TYPE_FUNC => self::castFFIFunction($stub, $ptr),
-            default => [\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'cdata' => $data[0]],
+            default => [Caster::PREFIX_VIRTUAL . 'cdata' => $data[0]],
         };
     }
-    private static function castFFIStringValue(CData $data): string|\Symfony\Component\VarDumper\Caster\CutStub
+    private static function castFFIStringValue(CData $data): string|CutStub
     {
         $result = [];
         $ffi = \FFI::cdef(<<<C
@@ -100,7 +100,7 @@ C
             }
         }
         $string = implode('', $result);
-        $stub = new \Symfony\Component\VarDumper\Caster\CutStub($string);
+        $stub = new CutStub($string);
         $stub->cut = -1;
         $stub->value = $string;
         return $stub;
@@ -116,12 +116,12 @@ C
             // incorrect data.
             $isUnsafe = $isUnion && CType::TYPE_POINTER === $field->getKind();
             if ($isUnsafe) {
-                $result[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . $name . '?'] = $field;
+                $result[Caster::PREFIX_VIRTUAL . $name . '?'] = $field;
             } elseif (null === $data) {
-                $result[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . $name] = $field;
+                $result[Caster::PREFIX_VIRTUAL . $name] = $field;
             } else {
                 $fieldName = $data->{$name} instanceof CData ? '' : $field->getName() . ' ';
-                $result[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . $fieldName . $name] = $data->{$name};
+                $result[Caster::PREFIX_VIRTUAL . $fieldName . $name] = $data->{$name};
             }
         }
         return $result;

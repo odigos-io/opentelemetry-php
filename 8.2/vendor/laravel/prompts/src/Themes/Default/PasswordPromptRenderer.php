@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\PasswordPrompt;
-class PasswordPromptRenderer extends \Laravel\Prompts\Themes\Default\Renderer
+use Odigos\Laravel\Prompts\PasswordPrompt;
+class PasswordPromptRenderer extends Renderer
 {
-    use \Laravel\Prompts\Themes\Default\Concerns\DrawsBoxes;
+    use Concerns\DrawsBoxes;
     /**
      * Render the password prompt.
      */

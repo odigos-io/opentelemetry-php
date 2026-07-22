@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Relations\Concerns;
 
 use InvalidArgumentException;
 use UnitEnum;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 trait InteractsWithDictionary
 {
     /**

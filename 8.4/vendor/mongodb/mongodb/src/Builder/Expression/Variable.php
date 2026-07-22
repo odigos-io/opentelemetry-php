@@ -4,12 +4,12 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use function sprintf;
 use function str_starts_with;
-class Variable implements \MongoDB\Builder\Expression\ResolvesToAny
+class Variable implements ResolvesToAny
 {
     public readonly string $name;
     public function __construct(string $name)

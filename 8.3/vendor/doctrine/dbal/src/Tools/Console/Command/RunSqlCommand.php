@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Tools\Console\Command;
+namespace Odigos\Doctrine\DBAL\Tools\Console\Command;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Tools\Console\ConnectionProvider;
+use Odigos\Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Tools\Console\ConnectionProvider;
 use RuntimeException;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Style\SymfonyStyle;
 use function array_keys;
 use function assert;
 use function is_bool;

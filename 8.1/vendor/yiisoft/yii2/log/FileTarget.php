@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\log;
+namespace Odigos\yii\log;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\helpers\FileHelper;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\FileHelper;
 /**
  * FileTarget records log messages in a file.
  *
@@ -25,7 +25,7 @@ use yii\helpers\FileHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class FileTarget extends \yii\log\Target
+class FileTarget extends Target
 {
     /**
      * @var string|null log file path or [path alias](guide:concept-aliases). If not set, it will use the "@runtime/logs/app.log" file.
@@ -130,11 +130,11 @@ class FileTarget extends \yii\log\Target
             if ($error = error_get_last()) {
                 $message .= ": {$error['message']}";
             }
-            throw new \yii\log\LogRuntimeException($message);
+            throw new LogRuntimeException($message);
         }
         $textSize = strlen($text);
         if ($writeResult < $textSize) {
-            throw new \yii\log\LogRuntimeException("Unable to export whole log through file ({$this->logFile})! Wrote {$writeResult} out of {$textSize} bytes.");
+            throw new LogRuntimeException("Unable to export whole log through file ({$this->logFile})! Wrote {$writeResult} out of {$textSize} bytes.");
         }
         @fflush($fp);
         @flock($fp, \LOCK_UN);

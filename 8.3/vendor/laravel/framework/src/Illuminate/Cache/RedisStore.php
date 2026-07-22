@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Contracts\Cache\LockProvider;
-use Illuminate\Contracts\Redis\Factory as Redis;
-use Illuminate\Redis\Connections\PhpRedisClusterConnection;
-use Illuminate\Redis\Connections\PhpRedisConnection;
-use Illuminate\Redis\Connections\PredisClusterConnection;
-use Illuminate\Redis\Connections\PredisConnection;
-use Illuminate\Support\LazyCollection;
-use Illuminate\Support\Str;
-class RedisStore extends \Illuminate\Cache\TaggableStore implements LockProvider
+use Odigos\Illuminate\Contracts\Cache\LockProvider;
+use Odigos\Illuminate\Contracts\Redis\Factory as Redis;
+use Odigos\Illuminate\Redis\Connections\PhpRedisClusterConnection;
+use Odigos\Illuminate\Redis\Connections\PhpRedisConnection;
+use Odigos\Illuminate\Redis\Connections\PredisClusterConnection;
+use Odigos\Illuminate\Redis\Connections\PredisConnection;
+use Odigos\Illuminate\Support\LazyCollection;
+use Odigos\Illuminate\Support\Str;
+class RedisStore extends TaggableStore implements LockProvider
 {
-    use \Illuminate\Cache\RetrievesMultipleKeys {
+    use RetrievesMultipleKeys {
         many as private manyAlias;
         putMany as private putManyAlias;
     }
@@ -151,7 +151,7 @@ class RedisStore extends \Illuminate\Cache\TaggableStore implements LockProvider
     public function add($key, $value, $seconds)
     {
         $connection = $this->connection();
-        return (bool) $connection->eval(\Illuminate\Cache\LuaScripts::add(), 1, $this->prefix . $key, $this->pack($value, $connection), (int) max(1, $seconds));
+        return (bool) $connection->eval(LuaScripts::add(), 1, $this->prefix . $key, $this->pack($value, $connection), (int) max(1, $seconds));
     }
     /**
      * Increment the value of an item in the cache.
@@ -200,9 +200,9 @@ class RedisStore extends \Illuminate\Cache\TaggableStore implements LockProvider
         $lockName = $this->prefix . $name;
         $lockConnection = $this->lockConnection();
         if ($lockConnection instanceof PhpRedisConnection) {
-            return new \Illuminate\Cache\PhpRedisLock($lockConnection, $lockName, $seconds, $owner);
+            return new PhpRedisLock($lockConnection, $lockName, $seconds, $owner);
         }
-        return new \Illuminate\Cache\RedisLock($lockConnection, $lockName, $seconds, $owner);
+        return new RedisLock($lockConnection, $lockName, $seconds, $owner);
     }
     /**
      * Restore a lock instance using the owner identifier.
@@ -254,7 +254,7 @@ class RedisStore extends \Illuminate\Cache\TaggableStore implements LockProvider
      */
     public function tags($names)
     {
-        return new \Illuminate\Cache\RedisTaggedCache($this, new \Illuminate\Cache\RedisTagSet($this, is_array($names) ? $names : func_get_args()));
+        return new RedisTaggedCache($this, new RedisTagSet($this, is_array($names) ? $names : func_get_args()));
     }
     /**
      * Get a collection of all of the cache tags currently being used.

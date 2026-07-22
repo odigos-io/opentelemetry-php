@@ -13,7 +13,7 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Constraint\View;
+namespace Odigos\Cake\TestSuite\Constraint\View;
 
 use Odigos\PHPUnit\Framework\Constraint\Constraint;
 /**

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Schema\Exception\InvalidState;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidState;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use function array_filter;
 use function array_values;
 use function count;
@@ -32,7 +32,7 @@ class TableDiff
      * @param array<ForeignKeyConstraint> $addedForeignKeys
      * @param array<ForeignKeyConstraint> $modifiedForeignKeys
      */
-    public function __construct(private readonly \Doctrine\DBAL\Schema\Table $oldTable, private readonly array $addedColumns = [], private readonly array $changedColumns = [], private readonly array $droppedColumns = [], private array $addedIndexes = [], private readonly array $modifiedIndexes = [], private array $droppedIndexes = [], private readonly array $renamedIndexes = [], private readonly array $addedForeignKeys = [], private readonly array $modifiedForeignKeys = [], private readonly array $droppedForeignKeys = [])
+    public function __construct(private readonly Table $oldTable, private readonly array $addedColumns = [], private readonly array $changedColumns = [], private readonly array $droppedColumns = [], private array $addedIndexes = [], private readonly array $modifiedIndexes = [], private array $droppedIndexes = [], private readonly array $renamedIndexes = [], private readonly array $addedForeignKeys = [], private readonly array $modifiedForeignKeys = [], private readonly array $droppedForeignKeys = [])
     {
         if (count($this->modifiedIndexes) !== 0) {
             Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6831', 'Passing a non-empty $modifiedIndexes value to %s() is deprecated. Instead, pass dropped' . ' indexes via $droppedIndexes and added indexes via $addedIndexes.', __METHOD__);
@@ -48,7 +48,7 @@ class TableDiff
         }
         Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6827', 'Passing a non-empty $modifiedForeignKeys value to %s() is deprecated. Instead, pass dropped' . ' constraints via $droppedForeignKeys and added constraints via $addedForeignKeys.', __METHOD__);
     }
-    public function getOldTable(): \Doctrine\DBAL\Schema\Table
+    public function getOldTable(): Table
     {
         return $this->oldTable;
     }
@@ -70,7 +70,7 @@ class TableDiff
     public function getModifiedColumns(): array
     {
         Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6280', '%s is deprecated, use `getChangedColumns()` instead.', __METHOD__);
-        return array_values(array_filter($this->getChangedColumns(), static fn(\Doctrine\DBAL\Schema\ColumnDiff $diff): bool => $diff->countChangedProperties() > ($diff->hasNameChanged() ? 1 : 0)));
+        return array_values(array_filter($this->getChangedColumns(), static fn(ColumnDiff $diff): bool => $diff->countChangedProperties() > ($diff->hasNameChanged() ? 1 : 0)));
     }
     /**
      * @deprecated Use {@see getChangedColumns()} instead.
@@ -104,9 +104,9 @@ class TableDiff
      * @internal This method exists only for compatibility with the current implementation of schema managers
      *           that modify the diff while processing it.
      */
-    public function unsetAddedIndex(\Doctrine\DBAL\Schema\Index $index): void
+    public function unsetAddedIndex(Index $index): void
     {
-        $this->addedIndexes = array_filter($this->addedIndexes, static function (\Doctrine\DBAL\Schema\Index $addedIndex) use ($index): bool {
+        $this->addedIndexes = array_filter($this->addedIndexes, static function (Index $addedIndex) use ($index): bool {
             return $addedIndex !== $index;
         });
     }
@@ -129,9 +129,9 @@ class TableDiff
      * @internal This method exists only for compatibility with the current implementation of schema managers
      *           that modify the diff while processing it.
      */
-    public function unsetDroppedIndex(\Doctrine\DBAL\Schema\Index $index): void
+    public function unsetDroppedIndex(Index $index): void
     {
-        $this->droppedIndexes = array_filter($this->droppedIndexes, static function (\Doctrine\DBAL\Schema\Index $droppedIndex) use ($index): bool {
+        $this->droppedIndexes = array_filter($this->droppedIndexes, static function (Index $droppedIndex) use ($index): bool {
             return $droppedIndex !== $index;
         });
     }

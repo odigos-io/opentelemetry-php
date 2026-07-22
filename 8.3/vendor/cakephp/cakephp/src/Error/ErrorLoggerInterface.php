@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error;
+namespace Odigos\Cake\Error;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
@@ -42,5 +42,5 @@ interface ErrorLoggerInterface
      * @param bool $includeTrace Should the log message include a stacktrace.
      * @return void
      */
-    public function logError(\Cake\Error\PhpError $error, ?ServerRequestInterface $request = null, bool $includeTrace = \false): void;
+    public function logError(PhpError $error, ?ServerRequestInterface $request = null, bool $includeTrace = \false): void;
 }

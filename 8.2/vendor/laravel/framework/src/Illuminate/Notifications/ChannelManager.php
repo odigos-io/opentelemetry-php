@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Notifications;
+namespace Odigos\Illuminate\Notifications;
 
-use Illuminate\Contracts\Bus\Dispatcher as Bus;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Notifications\Dispatcher as DispatcherContract;
-use Illuminate\Contracts\Notifications\Factory as FactoryContract;
-use Illuminate\Support\Manager;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Bus\Dispatcher as Bus;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Contracts\Notifications\Dispatcher as DispatcherContract;
+use Odigos\Illuminate\Contracts\Notifications\Factory as FactoryContract;
+use Odigos\Illuminate\Support\Manager;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 class ChannelManager extends Manager implements DispatcherContract, FactoryContract
 {
@@ -70,7 +70,7 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     protected function createDatabaseDriver()
     {
-        return $this->container->make(\Illuminate\Notifications\Channels\DatabaseChannel::class);
+        return $this->container->make(Channels\DatabaseChannel::class);
     }
     /**
      * Create an instance of the broadcast driver.
@@ -79,7 +79,7 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     protected function createBroadcastDriver()
     {
-        return $this->container->make(\Illuminate\Notifications\Channels\BroadcastChannel::class);
+        return $this->container->make(Channels\BroadcastChannel::class);
     }
     /**
      * Create an instance of the mail driver.
@@ -88,7 +88,7 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     protected function createMailDriver()
     {
-        return $this->container->make(\Illuminate\Notifications\Channels\MailChannel::class);
+        return $this->container->make(Channels\MailChannel::class);
     }
     /**
      * Create a new driver instance.
@@ -116,7 +116,7 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     protected function resolveNotificationSender()
     {
-        return $this->notificationSender ??= new \Illuminate\Notifications\NotificationSender($this, $this->container->make(Bus::class), $this->container->make(Dispatcher::class), $this->locale);
+        return $this->notificationSender ??= new NotificationSender($this, $this->container->make(Bus::class), $this->container->make(Dispatcher::class), $this->locale);
     }
     /**
      * Get the default channel driver name.

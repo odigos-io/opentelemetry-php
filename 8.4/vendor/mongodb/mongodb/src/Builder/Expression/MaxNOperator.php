@@ -4,13 +4,13 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 use MongoDB\BSON\PackedArray;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Model\BSONArray;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Model\BSONArray;
 use function array_is_list;
 use function is_array;
 use function is_string;
@@ -21,20 +21,20 @@ use function str_starts_with;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/maxN-array-element/
  * @internal
  */
-final class MaxNOperator implements \MongoDB\Builder\Expression\ResolvesToArray, OperatorInterface
+final class MaxNOperator implements ResolvesToArray, OperatorInterface
 {
     public const ENCODE = Encode::Object;
     public const NAME = '$maxN';
     public const PROPERTIES = ['input' => 'input', 'n' => 'n'];
     /** @var BSONArray|PackedArray|ResolvesToArray|array|string $input An expression that resolves to the array from which to return the maximal n elements. */
-    public readonly PackedArray|\MongoDB\Builder\Expression\ResolvesToArray|BSONArray|array|string $input;
+    public readonly PackedArray|ResolvesToArray|BSONArray|array|string $input;
     /** @var ResolvesToInt|int|string $n An expression that resolves to a positive integer. The integer specifies the number of array elements that $maxN returns. */
-    public readonly \MongoDB\Builder\Expression\ResolvesToInt|int|string $n;
+    public readonly ResolvesToInt|int|string $n;
     /**
      * @param BSONArray|PackedArray|ResolvesToArray|array|string $input An expression that resolves to the array from which to return the maximal n elements.
      * @param ResolvesToInt|int|string $n An expression that resolves to a positive integer. The integer specifies the number of array elements that $maxN returns.
      */
-    public function __construct(PackedArray|\MongoDB\Builder\Expression\ResolvesToArray|BSONArray|array|string $input, \MongoDB\Builder\Expression\ResolvesToInt|int|string $n)
+    public function __construct(PackedArray|ResolvesToArray|BSONArray|array|string $input, ResolvesToInt|int|string $n)
     {
         if (is_string($input) && !str_starts_with($input, '$')) {
             throw new InvalidArgumentException('Argument $input can be an expression, field paths and variable names must be prefixed by "$" or "$$".');

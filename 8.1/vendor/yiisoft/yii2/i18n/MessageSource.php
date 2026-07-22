@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\i18n;
+namespace Odigos\yii\i18n;
 
 use Odigos\Yii;
-use yii\base\Component;
+use Odigos\yii\base\Component;
 /**
  * MessageSource is the base class for message translation repository classes.
  *
@@ -100,7 +100,7 @@ class MessageSource extends Component
         if (isset($this->_messages[$key][$message]) && $this->_messages[$key][$message] !== '') {
             return $this->_messages[$key][$message];
         } elseif ($this->hasEventHandlers(self::EVENT_MISSING_TRANSLATION)) {
-            $event = new \yii\i18n\MissingTranslationEvent(['category' => $category, 'message' => $message, 'language' => $language]);
+            $event = new MissingTranslationEvent(['category' => $category, 'message' => $message, 'language' => $language]);
             $this->trigger(self::EVENT_MISSING_TRANSLATION, $event);
             if ($event->translatedMessage !== null) {
                 return $this->_messages[$key][$message] = $event->translatedMessage;

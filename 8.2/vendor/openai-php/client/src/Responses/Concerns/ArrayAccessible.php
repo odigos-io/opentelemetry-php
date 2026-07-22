@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Concerns;
+namespace Odigos\OpenAI\Responses\Concerns;
 
 use BadMethodCallException;
 /**

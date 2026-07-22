@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Log\Engine;
+namespace Odigos\Cake\Log\Engine;
 
-use Cake\Log\Formatter\DefaultFormatter;
+use Odigos\Cake\Log\Formatter\DefaultFormatter;
 use Stringable;
 /**
  * Array logger.
@@ -25,7 +25,7 @@ use Stringable;
  * in testing where using mocks would be complicated. But can also
  * be used in scenarios where you need to capture logs in application code.
  */
-class ArrayLog extends \Cake\Log\Engine\BaseLog
+class ArrayLog extends BaseLog
 {
     /**
      * Default config for this class

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http\Testing;
+namespace Odigos\Illuminate\Http\Testing;
 
-use Illuminate\Support\Arr;
-use Symfony\Component\Mime\MimeTypes;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Symfony\Component\Mime\MimeTypes;
 class MimeType
 {
     /**

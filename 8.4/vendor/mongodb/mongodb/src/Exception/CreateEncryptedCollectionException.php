@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Exception;
+namespace Odigos\MongoDB\Exception;
 
 use Throwable;
 use function sprintf;
@@ -23,7 +23,7 @@ use function sprintf;
  * @internal
  * @see \MongoDB\Database::createEncryptedCollection()
  */
-final class CreateEncryptedCollectionException extends \MongoDB\Exception\RuntimeException
+final class CreateEncryptedCollectionException extends RuntimeException
 {
     public function __construct(Throwable $previous, private array $encryptedFields)
     {

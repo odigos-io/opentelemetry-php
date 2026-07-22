@@ -5,17 +5,17 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console\controllers;
+namespace Odigos\yii\console\controllers;
 
 use Odigos\Yii;
-use yii\base\Action;
-use yii\console\Application;
-use yii\db\Connection;
-use yii\db\Query;
-use yii\di\Instance;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Console;
-use yii\helpers\Inflector;
+use Odigos\yii\base\Action;
+use Odigos\yii\console\Application;
+use Odigos\yii\db\Connection;
+use Odigos\yii\db\Query;
+use Odigos\yii\di\Instance;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\Console;
+use Odigos\yii\helpers\Inflector;
 /**
  * Manages application migrations.
  *
@@ -76,7 +76,7 @@ use yii\helpers\Inflector;
  * @template T of Application = Application
  * @extends BaseMigrateController<T>
  */
-class MigrateController extends \yii\console\controllers\BaseMigrateController
+class MigrateController extends BaseMigrateController
 {
     /**
      * Maximum length of a migration name.

@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         5.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource\Paging;
+namespace Odigos\Cake\Datasource\Paging;
 
 use IteratorAggregate;
 use JsonSerializable;
 use Traversable;
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * Paginated result set.
  *
@@ -28,7 +28,7 @@ use function Cake\Core\deprecationWarning;
  * @implements \IteratorAggregate<TKey, TValue>
  * @implements \Cake\Datasource\Paging\PaginatedInterface<TKey, TValue>
  */
-class PaginatedResultSet implements IteratorAggregate, JsonSerializable, \Cake\Datasource\Paging\PaginatedInterface
+class PaginatedResultSet implements IteratorAggregate, JsonSerializable, PaginatedInterface
 {
     /**
      * Resultset instance.

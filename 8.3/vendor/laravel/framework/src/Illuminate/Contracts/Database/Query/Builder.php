@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Database\Query;
+namespace Odigos\Illuminate\Contracts\Database\Query;
 
 /**
  * This interface is intentionally empty and exists to improve IDE support.

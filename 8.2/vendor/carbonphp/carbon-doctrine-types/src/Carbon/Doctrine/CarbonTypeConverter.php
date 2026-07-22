@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace Carbon\Doctrine;
+namespace Odigos\Carbon\Doctrine;
 
 use Odigos\Carbon\Carbon;
 use Odigos\Carbon\CarbonInterface;
 use DateTimeInterface;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Platforms\DB2Platform;
-use Doctrine\DBAL\Platforms\OraclePlatform;
-use Doctrine\DBAL\Platforms\SQLitePlatform;
-use Doctrine\DBAL\Platforms\SQLServerPlatform;
-use Doctrine\DBAL\Types\Exception\InvalidType;
-use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Platforms\DB2Platform;
+use Odigos\Doctrine\DBAL\Platforms\OraclePlatform;
+use Odigos\Doctrine\DBAL\Platforms\SQLitePlatform;
+use Odigos\Doctrine\DBAL\Platforms\SQLServerPlatform;
+use Odigos\Doctrine\DBAL\Types\Exception\InvalidType;
+use Odigos\Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Exception;
 /**
  * @template T of CarbonInterface
@@ -35,7 +35,7 @@ trait CarbonTypeConverter
     }
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
-        $precision = min($fieldDeclaration['precision'] ?? \Carbon\Doctrine\DateTimeDefaultPrecision::get(), $this->getMaximumPrecision($platform));
+        $precision = min($fieldDeclaration['precision'] ?? DateTimeDefaultPrecision::get(), $this->getMaximumPrecision($platform));
         $type = parent::getSQLDeclaration($fieldDeclaration, $platform);
         if (!$precision) {
             return $type;

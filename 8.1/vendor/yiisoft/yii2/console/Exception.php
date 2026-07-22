@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console;
+namespace Odigos\yii\console;
 
-use yii\base\UserException;
+use Odigos\yii\base\UserException;
 /**
  * Exception represents an exception caused by incorrect usage of a console command.
  *

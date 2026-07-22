@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Encoder;
+namespace Odigos\Symfony\Component\Mime\Encoder;
 
 /**
  * @author Chris Corbyn
  */
-interface ContentEncoderInterface extends \Symfony\Component\Mime\Encoder\EncoderInterface
+interface ContentEncoderInterface extends EncoderInterface
 {
     /**
      * Encodes the stream to a Generator.

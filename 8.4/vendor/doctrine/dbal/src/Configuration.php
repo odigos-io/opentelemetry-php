@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL;
+namespace Odigos\Doctrine\DBAL;
 
-use Doctrine\DBAL\Driver\Middleware;
-use Doctrine\DBAL\Exception\InvalidArgumentException;
-use Doctrine\DBAL\Schema\SchemaManagerFactory;
+use Odigos\Doctrine\DBAL\Driver\Middleware;
+use Odigos\Doctrine\DBAL\Exception\InvalidArgumentException;
+use Odigos\Doctrine\DBAL\Schema\SchemaManagerFactory;
 use Psr\Cache\CacheItemPoolInterface;
 /**
  * Configuration container for the Doctrine DBAL.

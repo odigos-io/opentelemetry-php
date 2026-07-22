@@ -15,28 +15,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnsupportedException;
 use function array_key_exists;
 use function is_integer;
-use function MongoDB\is_document;
-use function MongoDB\is_first_key_operator;
-use function MongoDB\is_pipeline;
+use function Odigos\MongoDB\is_document;
+use function Odigos\MongoDB\is_first_key_operator;
+use function Odigos\MongoDB\is_pipeline;
 /**
  * Operation for updating a document with the findAndModify command.
  *
  * @see \MongoDB\Collection::findOneAndUpdate()
  * @see https://mongodb.com/docs/manual/reference/command/findAndModify/
  */
-final class FindOneAndUpdate implements \MongoDB\Operation\Explainable
+final class FindOneAndUpdate implements Explainable
 {
     public const RETURN_DOCUMENT_BEFORE = 1;
     public const RETURN_DOCUMENT_AFTER = 2;
-    private \MongoDB\Operation\FindAndModify $findAndModify;
+    private FindAndModify $findAndModify;
     /**
      * Constructs a findAndModify command for updating a document.
      *
@@ -124,7 +124,7 @@ final class FindOneAndUpdate implements \MongoDB\Operation\Explainable
             $options['new'] = $options['returnDocument'] === self::RETURN_DOCUMENT_AFTER;
         }
         unset($options['projection'], $options['returnDocument']);
-        $this->findAndModify = new \MongoDB\Operation\FindAndModify($databaseName, $collectionName, ['query' => $filter, 'update' => $update] + $options);
+        $this->findAndModify = new FindAndModify($databaseName, $collectionName, ['query' => $filter, 'update' => $update] + $options);
     }
     /**
      * Execute the operation.

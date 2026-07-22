@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Testing\Concerns;
+namespace Odigos\Illuminate\Testing\Concerns;
 
-use Illuminate\Testing\Assert as PHPUnit;
+use Odigos\Illuminate\Testing\Assert as PHPUnit;
 trait AssertsStatusCodes
 {
     /**

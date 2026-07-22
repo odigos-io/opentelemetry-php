@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use ArrayAccess;
 use ArrayIterator;
-use Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
-use Illuminate\Support\Traits\EnumeratesValues;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Traits\TransformsToResourceCollection;
+use Odigos\Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
+use Odigos\Illuminate\Support\Traits\EnumeratesValues;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\TransformsToResourceCollection;
 use InvalidArgumentException;
 use stdClass;
 use Traversable;
@@ -19,7 +19,7 @@ use Traversable;
  * @implements \ArrayAccess<TKey, TValue>
  * @implements \Illuminate\Support\Enumerable<TKey, TValue>
  */
-class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illuminate\Support\Enumerable
+class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerable
 {
     /**
      * @use \Illuminate\Support\Traits\EnumeratesValues<TKey, TValue>
@@ -68,7 +68,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      */
     public function lazy()
     {
-        return new \Illuminate\Support\LazyCollection($this->items);
+        return new LazyCollection($this->items);
     }
     /**
      * Get the median of a given key.
@@ -114,7 +114,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      */
     public function collapse()
     {
-        return new static(\Illuminate\Support\Arr::collapse($this->items));
+        return new static(Arr::collapse($this->items));
     }
     /**
      * Collapse the collection of items into a single array while preserving its keys.
@@ -128,7 +128,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
         }
         $results = [];
         foreach ($this->items as $key => $values) {
-            if ($values instanceof \Illuminate\Support\Collection) {
+            if ($values instanceof Collection) {
                 $values = $values->all();
             } elseif (!is_array($values)) {
                 continue;
@@ -210,7 +210,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      */
     public function crossJoin(...$lists)
     {
-        return new static(\Illuminate\Support\Arr::crossJoin($this->items, ...array_map($this->getArrayableItems(...), $lists)));
+        return new static(Arr::crossJoin($this->items, ...array_map($this->getArrayableItems(...), $lists)));
     }
     /**
      * Get the items in the collection that are not present in the given items.
@@ -335,12 +335,12 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
         if (is_null($keys)) {
             return new static($this->items);
         }
-        if ($keys instanceof \Illuminate\Support\Enumerable) {
+        if ($keys instanceof Enumerable) {
             $keys = $keys->all();
         } elseif (!is_array($keys)) {
             $keys = func_get_args();
         }
-        return new static(\Illuminate\Support\Arr::except($this->items, $keys));
+        return new static(Arr::except($this->items, $keys));
     }
     /**
      * Run a filter over each of the items.
@@ -351,7 +351,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
     public function filter(?callable $callback = null)
     {
         if ($callback) {
-            return new static(\Illuminate\Support\Arr::where($this->items, $callback));
+            return new static(Arr::where($this->items, $callback));
         }
         return new static(array_filter($this->items));
     }
@@ -366,7 +366,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      */
     public function first(?callable $callback = null, $default = null)
     {
-        return \Illuminate\Support\Arr::first($this->items, $callback, $default);
+        return Arr::first($this->items, $callback, $default);
     }
     /**
      * Get a flattened array of the items in the collection.
@@ -376,7 +376,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      */
     public function flatten($depth = \INF)
     {
-        return new static(\Illuminate\Support\Arr::flatten($this->items, $depth));
+        return new static(Arr::flatten($this->items, $depth));
     }
     /**
      * Flip the items in the collection.
@@ -542,7 +542,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
             return implode($glue ?? '', $this->map($value)->all());
         }
         $first = $this->first();
-        if (is_array($first) || is_object($first) && !$first instanceof \Illuminate\Support\Stringable) {
+        if (is_array($first) || is_object($first) && !$first instanceof Stringable) {
             return implode($glue ?? '', $this->pluck($value)->all());
         }
         return implode($value ?? '', $this->items);
@@ -681,7 +681,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      */
     public function last(?callable $callback = null, $default = null)
     {
-        return \Illuminate\Support\Arr::last($this->items, $callback, $default);
+        return Arr::last($this->items, $callback, $default);
     }
     /**
      * Get the values of a given key.
@@ -692,7 +692,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      */
     public function pluck($value, $key = null)
     {
-        return new static(\Illuminate\Support\Arr::pluck($this->items, $value, $key));
+        return new static(Arr::pluck($this->items, $value, $key));
     }
     /**
      * Run a map over each of the items.
@@ -704,7 +704,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      */
     public function map(callable $callback)
     {
-        return new static(\Illuminate\Support\Arr::map($this->items, $callback));
+        return new static(Arr::map($this->items, $callback));
     }
     /**
      * Run a dictionary map over the items.
@@ -744,7 +744,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      */
     public function mapWithKeys(callable $callback)
     {
-        return new static(\Illuminate\Support\Arr::mapWithKeys($this->items, $callback));
+        return new static(Arr::mapWithKeys($this->items, $callback));
     }
     /**
      * Merge the collection with the given items.
@@ -841,11 +841,11 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
         if (is_null($keys)) {
             return new static($this->items);
         }
-        if ($keys instanceof \Illuminate\Support\Enumerable) {
+        if ($keys instanceof Enumerable) {
             $keys = $keys->all();
         }
         $keys = is_array($keys) ? $keys : func_get_args();
-        return new static(\Illuminate\Support\Arr::only($this->items, $keys));
+        return new static(Arr::only($this->items, $keys));
     }
     /**
      * Select specific values from the items within the collection.
@@ -858,11 +858,11 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
         if (is_null($keys)) {
             return new static($this->items);
         }
-        if ($keys instanceof \Illuminate\Support\Enumerable) {
+        if ($keys instanceof Enumerable) {
             $keys = $keys->all();
         }
         $keys = is_array($keys) ? $keys : func_get_args();
-        return new static(\Illuminate\Support\Arr::select($this->items, $keys));
+        return new static(Arr::select($this->items, $keys));
     }
     /**
      * Get and remove the last N items from the collection.
@@ -897,7 +897,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      */
     public function prepend($value, $key = null)
     {
-        $this->items = \Illuminate\Support\Arr::prepend($this->items, ...func_num_args() > 1 ? func_get_args() : [$value]);
+        $this->items = Arr::prepend($this->items, ...func_num_args() > 1 ? func_get_args() : [$value]);
         return $this;
     }
     /**
@@ -952,7 +952,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      */
     public function pull($key, $default = null)
     {
-        return \Illuminate\Support\Arr::pull($this->items, $key, $default);
+        return Arr::pull($this->items, $key, $default);
     }
     /**
      * Put an item in the collection by key.
@@ -978,12 +978,12 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
     public function random($number = null, $preserveKeys = \false)
     {
         if (is_null($number)) {
-            return \Illuminate\Support\Arr::random($this->items);
+            return Arr::random($this->items);
         }
         if (is_callable($number)) {
-            return new static(\Illuminate\Support\Arr::random($this->items, $number($this), $preserveKeys));
+            return new static(Arr::random($this->items, $number($this), $preserveKeys));
         }
-        return new static(\Illuminate\Support\Arr::random($this->items, $number, $preserveKeys));
+        return new static(Arr::random($this->items, $number, $preserveKeys));
     }
     /**
      * Replace the collection items with the given items.
@@ -1102,7 +1102,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      */
     public function shuffle()
     {
-        return new static(\Illuminate\Support\Arr::shuffle($this->items));
+        return new static(Arr::shuffle($this->items));
     }
     /**
      * Create chunks representing a "sliding window" view of the items in the collection.
@@ -1228,10 +1228,10 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
         $items = $this->unless($filter == null)->filter($filter);
         $count = $items->count();
         if ($count === 0) {
-            throw new \Illuminate\Support\ItemNotFoundException();
+            throw new ItemNotFoundException();
         }
         if ($count > 1) {
-            throw new \Illuminate\Support\MultipleItemsFoundException($count);
+            throw new MultipleItemsFoundException($count);
         }
         return $items->first();
     }
@@ -1264,7 +1264,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
         $placeholder = new stdClass();
         $item = $this->first($filter, $placeholder);
         if ($item === $placeholder) {
-            throw new \Illuminate\Support\ItemNotFoundException();
+            throw new ItemNotFoundException();
         }
         return $item;
     }
@@ -1362,9 +1362,9 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
         $items = $this->items;
         uasort($items, function ($a, $b) use ($comparisons, $options) {
             foreach ($comparisons as $comparison) {
-                $comparison = \Illuminate\Support\Arr::wrap($comparison);
+                $comparison = Arr::wrap($comparison);
                 $prop = $comparison[0];
-                $ascending = \Illuminate\Support\Arr::get($comparison, 1, \true) === \true || \Illuminate\Support\Arr::get($comparison, 1, \true) === 'asc';
+                $ascending = Arr::get($comparison, 1, \true) === \true || Arr::get($comparison, 1, \true) === 'asc';
                 if (!is_string($prop) && is_callable($prop)) {
                     $result = $prop($a, $b);
                 } else {
@@ -1407,7 +1407,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
     {
         if (is_array($callback) && !is_callable($callback)) {
             foreach ($callback as $index => $key) {
-                $comparison = \Illuminate\Support\Arr::wrap($key);
+                $comparison = Arr::wrap($key);
                 $comparison[1] = 'desc';
                 $callback[$index] = $comparison;
             }
@@ -1520,7 +1520,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      */
     public function dot($depth = \INF)
     {
-        return new static(\Illuminate\Support\Arr::dot($this->all(), '', $depth));
+        return new static(Arr::dot($this->all(), '', $depth));
     }
     /**
      * Convert a flatten "dot" notation array into an expanded array.
@@ -1529,7 +1529,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      */
     public function undot()
     {
-        return new static(\Illuminate\Support\Arr::undot($this->all()));
+        return new static(Arr::undot($this->all()));
     }
     /**
      * Return only unique items from the collection array.

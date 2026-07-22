@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Validation\Rules;
+namespace Odigos\Illuminate\Validation\Rules;
 
-use Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Conditionable;
 use Stringable;
 class Exists implements Stringable
 {
-    use Conditionable, \Illuminate\Validation\Rules\DatabaseRule;
+    use Conditionable, DatabaseRule;
     /**
      * Convert the rule to a validation string.
      *

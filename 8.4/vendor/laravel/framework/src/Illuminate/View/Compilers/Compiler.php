@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\View\Compilers;
+namespace Odigos\Illuminate\View\Compilers;
 
 use ErrorException;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Str;
 use InvalidArgumentException;
 abstract class Compiler
 {

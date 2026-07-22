@@ -14,14 +14,14 @@ declare (strict_types=1);
  * @since         3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
 /**
  * A view class that is used for AJAX responses.
  * Currently, only switches the default layout and sets the response type - which just maps to
  * text/html by default.
  */
-class AjaxView extends \Cake\View\View
+class AjaxView extends View
 {
     /**
      * @inheritDoc

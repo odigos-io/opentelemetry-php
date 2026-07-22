@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 /**
  * ViewEvent represents events triggered by the [[View]] component.
@@ -13,7 +13,7 @@ namespace yii\base;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ViewEvent extends \yii\base\Event
+class ViewEvent extends Event
 {
     /**
      * @var string the view file being rendered.

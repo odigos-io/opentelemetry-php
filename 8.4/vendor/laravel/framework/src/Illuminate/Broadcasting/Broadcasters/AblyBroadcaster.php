@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Broadcasting\Broadcasters;
+namespace Odigos\Illuminate\Broadcasting\Broadcasters;
 
 use Odigos\Ably\AblyRest;
 use Odigos\Ably\Exceptions\AblyException;
 use Odigos\Ably\Models\Message as AblyMessage;
-use Illuminate\Broadcasting\BroadcastException;
-use Illuminate\Support\Str;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Odigos\Illuminate\Broadcasting\BroadcastException;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 /**
  * @author Matthew Hall (matthall28@gmail.com)
  * @author Taylor Otwell (taylor@laravel.com)
  */
-class AblyBroadcaster extends \Illuminate\Broadcasting\Broadcasters\Broadcaster
+class AblyBroadcaster extends Broadcaster
 {
     /**
      * The AblyRest SDK instance.

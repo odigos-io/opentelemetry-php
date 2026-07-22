@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Pagination;
+namespace Odigos\Illuminate\Pagination;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator as PaginatorContract;
+use Odigos\Illuminate\Contracts\Pagination\LengthAwarePaginator as PaginatorContract;
 class UrlWindow
 {
     /**

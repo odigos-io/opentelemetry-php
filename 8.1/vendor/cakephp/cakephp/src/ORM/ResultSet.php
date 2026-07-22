@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
-use Cake\Collection\Collection;
-use Cake\Datasource\ResultSetInterface;
+use Odigos\Cake\Collection\Collection;
+use Odigos\Cake\Datasource\ResultSetInterface;
 /**
  * Represents the results obtained after executing a query for a specific table
  * This object is responsible for correctly nesting result keys reported from

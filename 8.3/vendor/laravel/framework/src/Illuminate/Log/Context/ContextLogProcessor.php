@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Log\Context;
+namespace Odigos\Illuminate\Log\Context;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Log\ContextLogProcessor as ContextLogProcessorContract;
-use Illuminate\Log\Context\Repository as ContextRepository;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Log\ContextLogProcessor as ContextLogProcessorContract;
+use Odigos\Illuminate\Log\Context\Repository as ContextRepository;
 use Odigos\Monolog\LogRecord;
 class ContextLogProcessor implements ContextLogProcessorContract
 {

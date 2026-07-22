@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 /**
  * Class PdoValue represents a $value that should be bound to PDO with exact $type.
@@ -23,7 +23,7 @@ namespace yii\db;
  * @since 2.0.14
  * @phpcs:disable Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore
  */
-final class PdoValue implements \yii\db\ExpressionInterface
+final class PdoValue implements ExpressionInterface
 {
     /**
      * @var mixed

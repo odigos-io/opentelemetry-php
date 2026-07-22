@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\EventDispatcher\Debug;
+namespace Odigos\Symfony\Component\EventDispatcher\Debug;
 
 use Psr\EventDispatcher\StoppableEventInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Stopwatch\Stopwatch;
-use Symfony\Component\VarDumper\Caster\ClassStub;
+use Odigos\Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Odigos\Symfony\Component\Stopwatch\Stopwatch;
+use Odigos\Symfony\Component\VarDumper\Caster\ClassStub;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */

@@ -1,11 +1,11 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\EditsContract;
-use OpenAI\Resources\Edits;
-use OpenAI\Responses\Edits\CreateResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\EditsContract;
+use Odigos\OpenAI\Resources\Edits;
+use Odigos\OpenAI\Responses\Edits\CreateResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class EditsTestResource implements EditsContract
 {
     use Testable;

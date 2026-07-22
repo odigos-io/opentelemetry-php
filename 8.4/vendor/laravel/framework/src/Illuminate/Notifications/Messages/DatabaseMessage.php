@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Notifications\Messages;
+namespace Odigos\Illuminate\Notifications\Messages;
 
 class DatabaseMessage
 {

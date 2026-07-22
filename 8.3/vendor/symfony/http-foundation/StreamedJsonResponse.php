@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation;
+namespace Odigos\Symfony\Component\HttpFoundation;
 
 /**
  * StreamedJsonResponse represents a streamed HTTP response for JSON.
@@ -41,7 +41,7 @@ namespace Symfony\Component\HttpFoundation;
  *         ],
  *     );
  */
-class StreamedJsonResponse extends \Symfony\Component\HttpFoundation\StreamedResponse
+class StreamedJsonResponse extends StreamedResponse
 {
     private const PLACEHOLDER = '__symfony_json__';
     /**
@@ -50,7 +50,7 @@ class StreamedJsonResponse extends \Symfony\Component\HttpFoundation\StreamedRes
      * @param array<string, string|string[]> $headers         An array of HTTP headers
      * @param int                            $encodingOptions Flags for the json_encode() function
      */
-    public function __construct(private readonly iterable $data, int $status = 200, array $headers = [], private int $encodingOptions = \Symfony\Component\HttpFoundation\JsonResponse::DEFAULT_ENCODING_OPTIONS)
+    public function __construct(private readonly iterable $data, int $status = 200, array $headers = [], private int $encodingOptions = JsonResponse::DEFAULT_ENCODING_OPTIONS)
     {
         parent::__construct($this->stream(...), $status, $headers);
         if (!$this->headers->get('Content-Type')) {

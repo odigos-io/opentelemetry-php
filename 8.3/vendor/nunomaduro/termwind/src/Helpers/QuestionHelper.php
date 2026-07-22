@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Odigos\Termwind\Helpers;
 
-use Symfony\Component\Console\Formatter\OutputFormatter;
-use Symfony\Component\Console\Helper\SymfonyQuestionHelper;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatter;
+use Odigos\Symfony\Component\Console\Helper\SymfonyQuestionHelper;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Question\Question;
 /**
  * @internal
  */

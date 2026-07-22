@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Filesystem;
+namespace Odigos\Illuminate\Filesystem;
 
 use ErrorException;
 use FilesystemIterator;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\LazyCollection;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Odigos\Illuminate\Support\LazyCollection;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use RuntimeException;
 use SplFileObject;
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Mime\MimeTypes;
+use Odigos\Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+use Odigos\Symfony\Component\Finder\Finder;
+use Odigos\Symfony\Component\Mime\MimeTypes;
 class Filesystem
 {
     use Conditionable, Macroable;

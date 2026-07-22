@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Uid\Factory;
+namespace Odigos\Symfony\Component\Uid\Factory;
 
-use Symfony\Component\Uid\Exception\InvalidArgumentException;
-use Symfony\Component\Uid\Exception\LogicException;
-use Symfony\Component\Uid\TimeBasedUidInterface;
-use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Uid\UuidV1;
-use Symfony\Component\Uid\UuidV3;
-use Symfony\Component\Uid\UuidV4;
-use Symfony\Component\Uid\UuidV5;
-use Symfony\Component\Uid\UuidV6;
-class MockUuidFactory extends \Symfony\Component\Uid\Factory\UuidFactory
+use Odigos\Symfony\Component\Uid\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Uid\Exception\LogicException;
+use Odigos\Symfony\Component\Uid\TimeBasedUidInterface;
+use Odigos\Symfony\Component\Uid\Uuid;
+use Odigos\Symfony\Component\Uid\UuidV1;
+use Odigos\Symfony\Component\Uid\UuidV3;
+use Odigos\Symfony\Component\Uid\UuidV4;
+use Odigos\Symfony\Component\Uid\UuidV5;
+use Odigos\Symfony\Component\Uid\UuidV6;
+class MockUuidFactory extends UuidFactory
 {
     private \Iterator $sequence;
     /**
@@ -46,9 +46,9 @@ class MockUuidFactory extends \Symfony\Component\Uid\Factory\UuidFactory
             default => throw new InvalidArgumentException(\sprintf('Next UUID in sequence is not a valid UUID string or object: "%s" given.', get_debug_type($uuid))),
         };
     }
-    public function randomBased(): \Symfony\Component\Uid\Factory\RandomBasedUuidFactory
+    public function randomBased(): RandomBasedUuidFactory
     {
-        return new class($this->create(...)) extends \Symfony\Component\Uid\Factory\RandomBasedUuidFactory
+        return new class($this->create(...)) extends RandomBasedUuidFactory
         {
             public function __construct(private \Closure $create)
             {
@@ -62,12 +62,12 @@ class MockUuidFactory extends \Symfony\Component\Uid\Factory\UuidFactory
             }
         };
     }
-    public function timeBased(Uuid|string|null $node = null): \Symfony\Component\Uid\Factory\TimeBasedUuidFactory
+    public function timeBased(Uuid|string|null $node = null): TimeBasedUuidFactory
     {
         if (\is_string($node ??= $this->timeBasedNode)) {
             $node = Uuid::fromString($node);
         }
-        return new class($this->create(...), $node) extends \Symfony\Component\Uid\Factory\TimeBasedUuidFactory
+        return new class($this->create(...), $node) extends TimeBasedUuidFactory
         {
             public function __construct(private \Closure $create, private ?Uuid $node = null)
             {
@@ -88,12 +88,12 @@ class MockUuidFactory extends \Symfony\Component\Uid\Factory\UuidFactory
             }
         };
     }
-    public function nameBased(Uuid|string|null $namespace = null): \Symfony\Component\Uid\Factory\NameBasedUuidFactory
+    public function nameBased(Uuid|string|null $namespace = null): NameBasedUuidFactory
     {
         if (null === $namespace ??= $this->nameBasedNamespace) {
             throw new LogicException(\sprintf('A namespace should be defined when using "%s()".', __METHOD__));
         }
-        return new class($this->create(...), $namespace) extends \Symfony\Component\Uid\Factory\NameBasedUuidFactory
+        return new class($this->create(...), $namespace) extends NameBasedUuidFactory
         {
             public function __construct(private \Closure $create, private Uuid|string $namespace)
             {
@@ -103,7 +103,7 @@ class MockUuidFactory extends \Symfony\Component\Uid\Factory\UuidFactory
                 if (!($uuid = ($this->create)()) instanceof UuidV5 && !$uuid instanceof UuidV3) {
                     throw new InvalidArgumentException(\sprintf('Next UUID in sequence is not a UuidV5 or UuidV3: "%s".', get_debug_type($uuid)));
                 }
-                $factory = new \Symfony\Component\Uid\Factory\UuidFactory(nameBasedClass: $uuid::class, nameBasedNamespace: $this->namespace);
+                $factory = new UuidFactory(nameBasedClass: $uuid::class, nameBasedNamespace: $this->namespace);
                 if ($uuid->toRfc4122() !== $expectedUuid = $factory->nameBased()->create($name)->toRfc4122()) {
                     throw new InvalidArgumentException(\sprintf('Next UUID in sequence does not match the expected named UUID: "%s" != "%s".', $uuid->toRfc4122(), $expectedUuid));
                 }

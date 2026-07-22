@@ -1,11 +1,11 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\ModerationsContract;
-use OpenAI\Resources\Moderations;
-use OpenAI\Responses\Moderations\CreateResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\ModerationsContract;
+use Odigos\OpenAI\Resources\Moderations;
+use Odigos\OpenAI\Responses\Moderations\CreateResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class ModerationsTestResource implements ModerationsContract
 {
     use Testable;

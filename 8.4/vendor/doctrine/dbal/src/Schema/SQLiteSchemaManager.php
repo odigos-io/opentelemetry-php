@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Platforms\SQLite;
-use Doctrine\DBAL\Platforms\SQLitePlatform;
-use Doctrine\DBAL\Result;
-use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Platforms\SQLite;
+use Odigos\Doctrine\DBAL\Platforms\SQLitePlatform;
+use Odigos\Doctrine\DBAL\Result;
+use Odigos\Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\DBAL\Types\Types;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use function array_change_key_case;
 use function array_column;
 use function array_map;
@@ -36,18 +36,18 @@ use const CASE_LOWER;
  *
  * @extends AbstractSchemaManager<SQLitePlatform>
  */
-class SQLiteSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
+class SQLiteSchemaManager extends AbstractSchemaManager
 {
-    public function createForeignKey(\Doctrine\DBAL\Schema\ForeignKeyConstraint $foreignKey, string $table): void
+    public function createForeignKey(ForeignKeyConstraint $foreignKey, string $table): void
     {
         $table = $this->introspectTable($table);
-        $this->alterTable(new \Doctrine\DBAL\Schema\TableDiff($table, addedForeignKeys: [$foreignKey]));
+        $this->alterTable(new TableDiff($table, addedForeignKeys: [$foreignKey]));
     }
     public function dropForeignKey(string $name, string $table): void
     {
         $table = $this->introspectTable($table);
         $foreignKey = $table->getForeignKey($name);
-        $this->alterTable(new \Doctrine\DBAL\Schema\TableDiff($table, droppedForeignKeys: [$foreignKey]));
+        $this->alterTable(new TableDiff($table, droppedForeignKeys: [$foreignKey]));
     }
     /**
      * @deprecated Use the schema name and the unqualified table name separately instead.
@@ -61,7 +61,7 @@ class SQLiteSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableColumnDefinition(array $tableColumn): \Doctrine\DBAL\Schema\Column
+    protected function _getPortableTableColumnDefinition(array $tableColumn): Column
     {
         $matchResult = preg_match('/^([A-Z\s]+?)(?:\s*\((\d+)(?:,\s*(\d+))?\))?$/i', $tableColumn['type'], $matches);
         assert($matchResult === 1);
@@ -97,7 +97,7 @@ class SQLiteSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
             $fixed = \true;
         }
         $options = ['autoincrement' => $tableColumn['autoincrement'], 'comment' => $tableColumn['comment'], 'length' => $length, 'unsigned' => $unsigned, 'fixed' => $fixed, 'notnull' => $notnull, 'default' => $default, 'precision' => $precision, 'scale' => $scale];
-        $column = new \Doctrine\DBAL\Schema\Column($tableColumn['name'], Type::getType($type), $options);
+        $column = new Column($tableColumn['name'], Type::getType($type), $options);
         if ($type === Types::STRING || $type === Types::TEXT) {
             $column->setPlatformOption('collation', $tableColumn['collation'] ?? 'BINARY');
         }
@@ -106,9 +106,9 @@ class SQLiteSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableViewDefinition(array $view): \Doctrine\DBAL\Schema\View
+    protected function _getPortableViewDefinition(array $view): View
     {
-        return new \Doctrine\DBAL\Schema\View($view['name'], $view['sql']);
+        return new View($view['name'], $view['sql']);
     }
     /**
      * {@inheritDoc}
@@ -153,9 +153,9 @@ class SQLiteSchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): \Doctrine\DBAL\Schema\ForeignKeyConstraint
+    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): ForeignKeyConstraint
     {
-        return new \Doctrine\DBAL\Schema\ForeignKeyConstraint($tableForeignKey['local'], $tableForeignKey['foreignTable'], $tableForeignKey['foreign'], $tableForeignKey['name'], ['onDelete' => $tableForeignKey['onDelete'], 'onUpdate' => $tableForeignKey['onUpdate'], 'deferrable' => $tableForeignKey['deferrable'], 'deferred' => $tableForeignKey['deferred']]);
+        return new ForeignKeyConstraint($tableForeignKey['local'], $tableForeignKey['foreignTable'], $tableForeignKey['foreign'], $tableForeignKey['name'], ['onDelete' => $tableForeignKey['onDelete'], 'onUpdate' => $tableForeignKey['onUpdate'], 'deferrable' => $tableForeignKey['deferrable'], 'deferred' => $tableForeignKey['deferred']]);
     }
     private function parseColumnCollationFromSQL(string $column, string $sql): ?string
     {
@@ -246,9 +246,9 @@ SQL
         }
         return $details;
     }
-    public function createComparator(): \Doctrine\DBAL\Schema\Comparator
+    public function createComparator(): Comparator
     {
-        return new SQLite\Comparator($this->platform, func_num_args() > 0 ? func_get_arg(0) : new \Doctrine\DBAL\Schema\ComparatorConfig());
+        return new SQLite\Comparator($this->platform, func_num_args() > 0 ? func_get_arg(0) : new ComparatorConfig());
     }
     protected function selectTableNames(string $databaseName): Result
     {

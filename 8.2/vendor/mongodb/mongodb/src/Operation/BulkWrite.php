@@ -15,19 +15,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
-use MongoDB\Builder\BuilderEncoder;
-use MongoDB\BulkWriteResult;
-use MongoDB\Codec\DocumentCodec;
-use MongoDB\Codec\Encoder;
+use Odigos\MongoDB\Builder\BuilderEncoder;
+use Odigos\MongoDB\BulkWriteResult;
+use Odigos\MongoDB\Codec\DocumentCodec;
+use Odigos\MongoDB\Codec\Encoder;
 use MongoDB\Driver\BulkWrite as Bulk;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnsupportedException;
 use function array_is_list;
 use function array_key_exists;
 use function count;
@@ -35,9 +35,9 @@ use function current;
 use function is_array;
 use function is_bool;
 use function key;
-use function MongoDB\is_document;
-use function MongoDB\is_first_key_operator;
-use function MongoDB\is_pipeline;
+use function Odigos\MongoDB\is_document;
+use function Odigos\MongoDB\is_first_key_operator;
+use function Odigos\MongoDB\is_pipeline;
 use function sprintf;
 /**
  * Operation for executing multiple write operations.

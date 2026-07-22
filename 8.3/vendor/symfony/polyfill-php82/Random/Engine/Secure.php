@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Polyfill\Php82\Random\Engine;
+namespace Odigos\Symfony\Polyfill\Php82\Random\Engine;
 
 use Random\RandomException;
-use Symfony\Polyfill\Php82\NoDynamicProperties;
+use Odigos\Symfony\Polyfill\Php82\NoDynamicProperties;
 /**
  * @author Tim Düsterhus <tim@bastelstu.be>
  * @author Anton Smirnov <sandfox@sandfox.me>

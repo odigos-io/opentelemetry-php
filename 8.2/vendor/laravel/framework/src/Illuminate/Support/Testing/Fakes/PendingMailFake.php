@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Support\Testing\Fakes;
+namespace Odigos\Illuminate\Support\Testing\Fakes;
 
-use Illuminate\Contracts\Mail\Mailable;
-use Illuminate\Mail\PendingMail;
+use Odigos\Illuminate\Contracts\Mail\Mailable;
+use Odigos\Illuminate\Mail\PendingMail;
 class PendingMailFake extends PendingMail
 {
     /**

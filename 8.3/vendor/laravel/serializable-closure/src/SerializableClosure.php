@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\SerializableClosure;
+namespace Odigos\Laravel\SerializableClosure;
 
 use Closure;
-use Laravel\SerializableClosure\Exceptions\InvalidSignatureException;
-use Laravel\SerializableClosure\Serializers\Signed;
-use Laravel\SerializableClosure\Signers\Hmac;
+use Odigos\Laravel\SerializableClosure\Exceptions\InvalidSignatureException;
+use Odigos\Laravel\SerializableClosure\Serializers\Signed;
+use Odigos\Laravel\SerializableClosure\Signers\Hmac;
 class SerializableClosure
 {
     /**
@@ -22,7 +22,7 @@ class SerializableClosure
      */
     public function __construct(Closure $closure)
     {
-        $this->serializable = \Laravel\SerializableClosure\Serializers\Signed::$signer ? new \Laravel\SerializableClosure\Serializers\Signed($closure) : new \Laravel\SerializableClosure\Serializers\Native($closure);
+        $this->serializable = Serializers\Signed::$signer ? new Serializers\Signed($closure) : new Serializers\Native($closure);
     }
     /**
      * Resolve the closure with the given arguments.
@@ -50,7 +50,7 @@ class SerializableClosure
      */
     public static function unsigned(Closure $closure)
     {
-        return new \Laravel\SerializableClosure\UnsignedSerializableClosure($closure);
+        return new UnsignedSerializableClosure($closure);
     }
     /**
      * Sets the serializable closure secret key.
@@ -60,7 +60,7 @@ class SerializableClosure
      */
     public static function setSecretKey($secret)
     {
-        \Laravel\SerializableClosure\Serializers\Signed::$signer = $secret ? new Hmac($secret) : null;
+        Serializers\Signed::$signer = $secret ? new Hmac($secret) : null;
     }
     /**
      * Sets the transformer that should be used when serializing use variables.
@@ -70,7 +70,7 @@ class SerializableClosure
      */
     public static function transformUseVariablesUsing($transformer)
     {
-        \Laravel\SerializableClosure\Serializers\Native::$transformUseVariables = $transformer;
+        Serializers\Native::$transformUseVariables = $transformer;
     }
     /**
      * Sets the resolver that should be used when unserializing use variables.
@@ -80,7 +80,7 @@ class SerializableClosure
      */
     public static function resolveUseVariablesUsing($resolver)
     {
-        \Laravel\SerializableClosure\Serializers\Native::$resolveUseVariables = $resolver;
+        Serializers\Native::$resolveUseVariables = $resolver;
     }
     /**
      * Get the serializable representation of the closure.

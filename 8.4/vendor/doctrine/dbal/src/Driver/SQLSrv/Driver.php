@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\SQLSrv;
+namespace Odigos\Doctrine\DBAL\Driver\SQLSrv;
 
-use Doctrine\DBAL\Driver\AbstractSQLServerDriver;
-use Doctrine\DBAL\Driver\AbstractSQLServerDriver\Exception\PortWithoutHost;
-use Doctrine\DBAL\Driver\SQLSrv\Exception\Error;
+use Odigos\Doctrine\DBAL\Driver\AbstractSQLServerDriver;
+use Odigos\Doctrine\DBAL\Driver\AbstractSQLServerDriver\Exception\PortWithoutHost;
+use Odigos\Doctrine\DBAL\Driver\SQLSrv\Exception\Error;
 use SensitiveParameter;
 use function sqlsrv_configure;
 use function sqlsrv_connect;
@@ -20,7 +20,7 @@ final class Driver extends AbstractSQLServerDriver
     public function connect(
         #[SensitiveParameter]
         array $params
-    ): \Doctrine\DBAL\Driver\SQLSrv\Connection
+    ): Connection
     {
         $serverName = '';
         if (isset($params['host'])) {
@@ -54,6 +54,6 @@ final class Driver extends AbstractSQLServerDriver
         if ($connection === \false) {
             throw Error::new();
         }
-        return new \Doctrine\DBAL\Driver\SQLSrv\Connection($connection);
+        return new Connection($connection);
     }
 }

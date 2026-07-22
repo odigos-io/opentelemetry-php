@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Query\Expression;
+namespace Odigos\Doctrine\DBAL\Query\Expression;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Exception;
 use function implode;
 use function sprintf;
 /**
@@ -29,16 +29,16 @@ class ExpressionBuilder
     /**
      * Creates a conjunction of the given expressions.
      */
-    public function and(string|\Doctrine\DBAL\Query\Expression\CompositeExpression $expression, string|\Doctrine\DBAL\Query\Expression\CompositeExpression ...$expressions): \Doctrine\DBAL\Query\Expression\CompositeExpression
+    public function and(string|CompositeExpression $expression, string|CompositeExpression ...$expressions): CompositeExpression
     {
-        return \Doctrine\DBAL\Query\Expression\CompositeExpression::and($expression, ...$expressions);
+        return CompositeExpression::and($expression, ...$expressions);
     }
     /**
      * Creates a disjunction of the given expressions.
      */
-    public function or(string|\Doctrine\DBAL\Query\Expression\CompositeExpression $expression, string|\Doctrine\DBAL\Query\Expression\CompositeExpression ...$expressions): \Doctrine\DBAL\Query\Expression\CompositeExpression
+    public function or(string|CompositeExpression $expression, string|CompositeExpression ...$expressions): CompositeExpression
     {
-        return \Doctrine\DBAL\Query\Expression\CompositeExpression::or($expression, ...$expressions);
+        return CompositeExpression::or($expression, ...$expressions);
     }
     /**
      * Creates a comparison expression.

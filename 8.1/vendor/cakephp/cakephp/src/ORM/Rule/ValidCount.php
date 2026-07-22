@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.2.9
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Rule;
+namespace Odigos\Cake\ORM\Rule;
 
-use Cake\Datasource\EntityInterface;
-use Cake\Validation\Validation;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Validation\Validation;
 use Countable;
 /**
  * Validates the count of associated records.

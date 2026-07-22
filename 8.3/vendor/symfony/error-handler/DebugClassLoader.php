@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\ErrorHandler;
+namespace Odigos\Symfony\Component\ErrorHandler;
 
 use Composer\InstalledVersions;
-use Doctrine\Common\Persistence\Proxy as LegacyProxy;
-use Doctrine\Persistence\Proxy;
+use Odigos\Doctrine\Common\Persistence\Proxy as LegacyProxy;
+use Odigos\Doctrine\Persistence\Proxy;
 use Odigos\Mockery\MockInterface;
 use Odigos\Phake\IMock;
 use Odigos\PHPUnit\Framework\MockObject\Matcher\StatelessInvocation;
@@ -21,9 +21,9 @@ use Odigos\PHPUnit\Framework\MockObject\Stub;
 use Odigos\Prophecy\Prophecy\ProphecySubjectInterface;
 use Odigos\ProxyManager\Proxy\ProxyInterface;
 use Psr\Log\LogLevel;
-use Symfony\Component\DependencyInjection\Argument\LazyClosure;
-use Symfony\Component\ErrorHandler\Internal\TentativeTypes;
-use Symfony\Component\VarExporter\LazyObjectInterface;
+use Odigos\Symfony\Component\DependencyInjection\Argument\LazyClosure;
+use Odigos\Symfony\Component\ErrorHandler\Internal\TentativeTypes;
+use Odigos\Symfony\Component\VarExporter\LazyObjectInterface;
 /**
  * Autoloader checking if the class is really defined in the file found.
  *
@@ -134,7 +134,7 @@ class DebugClassLoader
     public static function enable(): void
     {
         // Ensures we don't hit https://bugs.php.net/42098
-        class_exists(\Symfony\Component\ErrorHandler\ErrorHandler::class);
+        class_exists(ErrorHandler::class);
         class_exists(LogLevel::class);
         if (!\is_array($functions = spl_autoload_functions())) {
             return;

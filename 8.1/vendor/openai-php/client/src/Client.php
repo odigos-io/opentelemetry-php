@@ -1,27 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI;
+namespace Odigos\OpenAI;
 
-use OpenAI\Contracts\ClientContract;
-use OpenAI\Contracts\Resources\ThreadsContract;
-use OpenAI\Contracts\Resources\VectorStoresContract;
-use OpenAI\Contracts\TransporterContract;
-use OpenAI\Resources\Assistants;
-use OpenAI\Resources\Audio;
-use OpenAI\Resources\Batches;
-use OpenAI\Resources\Chat;
-use OpenAI\Resources\Completions;
-use OpenAI\Resources\Edits;
-use OpenAI\Resources\Embeddings;
-use OpenAI\Resources\Files;
-use OpenAI\Resources\FineTunes;
-use OpenAI\Resources\FineTuning;
-use OpenAI\Resources\Images;
-use OpenAI\Resources\Models;
-use OpenAI\Resources\Moderations;
-use OpenAI\Resources\Threads;
-use OpenAI\Resources\VectorStores;
+use Odigos\OpenAI\Contracts\ClientContract;
+use Odigos\OpenAI\Contracts\Resources\ThreadsContract;
+use Odigos\OpenAI\Contracts\Resources\VectorStoresContract;
+use Odigos\OpenAI\Contracts\TransporterContract;
+use Odigos\OpenAI\Resources\Assistants;
+use Odigos\OpenAI\Resources\Audio;
+use Odigos\OpenAI\Resources\Batches;
+use Odigos\OpenAI\Resources\Chat;
+use Odigos\OpenAI\Resources\Completions;
+use Odigos\OpenAI\Resources\Edits;
+use Odigos\OpenAI\Resources\Embeddings;
+use Odigos\OpenAI\Resources\Files;
+use Odigos\OpenAI\Resources\FineTunes;
+use Odigos\OpenAI\Resources\FineTuning;
+use Odigos\OpenAI\Resources\Images;
+use Odigos\OpenAI\Resources\Models;
+use Odigos\OpenAI\Resources\Moderations;
+use Odigos\OpenAI\Resources\Threads;
+use Odigos\OpenAI\Resources\VectorStores;
 final class Client implements ClientContract
 {
     /**

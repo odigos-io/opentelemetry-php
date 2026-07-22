@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Test;
+namespace Odigos\Symfony\Component\Mailer\Test;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\Mailer\Transport\Dsn;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Odigos\Symfony\Component\EventDispatcher\EventDispatcher;
+use Odigos\Symfony\Component\HttpClient\MockHttpClient;
+use Odigos\Symfony\Component\Mailer\Transport\Dsn;
+use Odigos\Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Odigos\Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * A test case to ease testing Transport Factory.
  *
@@ -24,9 +24,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  *
  * @deprecated since Symfony 7.2, use AbstractTransportFactoryTestCase instead
  */
-abstract class TransportFactoryTestCase extends \Symfony\Component\Mailer\Test\AbstractTransportFactoryTestCase
+abstract class TransportFactoryTestCase extends AbstractTransportFactoryTestCase
 {
-    use \Symfony\Component\Mailer\Test\IncompleteDsnTestTrait;
+    use IncompleteDsnTestTrait;
     protected EventDispatcherInterface $dispatcher;
     protected HttpClientInterface $client;
     protected LoggerInterface $logger;

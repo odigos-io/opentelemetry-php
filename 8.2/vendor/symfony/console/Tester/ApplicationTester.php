@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Tester;
+namespace Odigos\Symfony\Component\Console\Tester;
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
+use Odigos\Symfony\Component\Console\Application;
+use Odigos\Symfony\Component\Console\Input\ArrayInput;
 /**
  * Eases the testing of console applications.
  *
@@ -24,7 +24,7 @@ use Symfony\Component\Console\Input\ArrayInput;
  */
 class ApplicationTester
 {
-    use \Symfony\Component\Console\Tester\TesterTrait;
+    use TesterTrait;
     public function __construct(private Application $application)
     {
     }

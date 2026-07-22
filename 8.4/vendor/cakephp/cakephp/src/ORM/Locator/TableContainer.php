@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Locator;
+namespace Odigos\Cake\ORM\Locator;
 
-use Cake\ORM\Table;
+use Odigos\Cake\ORM\Table;
 use Psr\Container\ContainerInterface;
 /**
  * Dependency injection container for Tables. Will create Tables
@@ -27,7 +27,7 @@ use Psr\Container\ContainerInterface;
  */
 class TableContainer implements ContainerInterface
 {
-    use \Cake\ORM\Locator\LocatorAwareTrait;
+    use LocatorAwareTrait;
     /**
      * @inheritDoc
      */

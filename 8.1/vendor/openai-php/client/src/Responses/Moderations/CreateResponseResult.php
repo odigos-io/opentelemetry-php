@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Moderations;
+namespace Odigos\OpenAI\Responses\Moderations;
 
-use OpenAI\Enums\Moderations\Category;
+use Odigos\OpenAI\Enums\Moderations\Category;
 final class CreateResponseResult
 {
     /**
@@ -24,9 +24,9 @@ final class CreateResponseResult
             if (!isset($attributes['category_scores'][$category->value])) {
                 continue;
             }
-            $categories[$category->value] = \OpenAI\Responses\Moderations\CreateResponseCategory::from(['category' => $category->value, 'violated' => $attributes['categories'][$category->value], 'score' => $attributes['category_scores'][$category->value]]);
+            $categories[$category->value] = CreateResponseCategory::from(['category' => $category->value, 'violated' => $attributes['categories'][$category->value], 'score' => $attributes['category_scores'][$category->value]]);
         }
-        return new \OpenAI\Responses\Moderations\CreateResponseResult($categories, $attributes['flagged']);
+        return new CreateResponseResult($categories, $attributes['flagged']);
     }
     /**
      * @return array{categories: array<string, bool>, category_scores: array<string, float>, flagged: bool}

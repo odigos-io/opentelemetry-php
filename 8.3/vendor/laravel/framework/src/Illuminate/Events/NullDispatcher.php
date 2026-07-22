@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Events;
+namespace Odigos\Illuminate\Events;
 
-use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
-use Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
 class NullDispatcher implements DispatcherContract
 {
     use ForwardsCalls;

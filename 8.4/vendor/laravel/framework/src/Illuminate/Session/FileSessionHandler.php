@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Session;
+namespace Odigos\Illuminate\Session;
 
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Carbon;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Carbon;
 use SessionHandlerInterface;
-use Symfony\Component\Finder\Finder;
+use Odigos\Symfony\Component\Finder\Finder;
 class FileSessionHandler implements SessionHandlerInterface
 {
     /**

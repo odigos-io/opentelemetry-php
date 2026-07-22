@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\SerializableClosure\Exceptions;
+namespace Odigos\Laravel\SerializableClosure\Exceptions;
 
 use Exception;
 class InvalidSignatureException extends Exception

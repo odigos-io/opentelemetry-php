@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\ExpressionInterface;
 /**
  * Describes a getter and a setter for the a field property. Useful for expressions
  * that contain an identifier to compare against.

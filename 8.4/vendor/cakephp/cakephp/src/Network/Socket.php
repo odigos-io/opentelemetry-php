@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Network;
+namespace Odigos\Cake\Network;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Core\InstanceConfigTrait;
-use Cake\Network\Exception\SocketException;
-use Cake\Validation\Validation;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Network\Exception\SocketException;
+use Odigos\Cake\Validation\Validation;
 use Composer\CaBundle\CaBundle;
 use Exception;
 use InvalidArgumentException;

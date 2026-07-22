@@ -4,11 +4,11 @@ declare (strict_types=1);
 namespace Odigos\Termwind;
 
 use ReflectionClass;
-use Symfony\Component\Console\Helper\SymfonyQuestionHelper;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Input\StreamableInputInterface;
-use Symfony\Component\Console\Question\Question as SymfonyQuestion;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Odigos\Symfony\Component\Console\Helper\SymfonyQuestionHelper;
+use Odigos\Symfony\Component\Console\Input\ArgvInput;
+use Odigos\Symfony\Component\Console\Input\StreamableInputInterface;
+use Odigos\Symfony\Component\Console\Question\Question as SymfonyQuestion;
+use Odigos\Symfony\Component\Console\Style\SymfonyStyle;
 use Odigos\Termwind\Helpers\QuestionHelper;
 /**
  * @internal

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Matcher\Dumper;
+namespace Odigos\Symfony\Component\Routing\Matcher\Dumper;
 
-use Symfony\Component\Routing\RouteCollection;
+use Odigos\Symfony\Component\Routing\RouteCollection;
 /**
  * Prefix tree of routes preserving routes order.
  *

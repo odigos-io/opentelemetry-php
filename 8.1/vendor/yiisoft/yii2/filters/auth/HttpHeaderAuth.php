@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters\auth;
+namespace Odigos\yii\filters\auth;
 
-use yii\base\Component;
+use Odigos\yii\base\Component;
 /**
  * HttpHeaderAuth is an action filter that supports HTTP authentication through HTTP Headers.
  *
@@ -35,7 +35,7 @@ use yii\base\Component;
  * @template T of Component = Component
  * @extends AuthMethod<T>
  */
-class HttpHeaderAuth extends \yii\filters\auth\AuthMethod
+class HttpHeaderAuth extends AuthMethod
 {
     /**
      * @var string the HTTP header name

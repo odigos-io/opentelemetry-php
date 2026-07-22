@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\Illuminate\Contracts\Http;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\Illuminate\Contracts\Http;
 
-use Illuminate\Contracts\Http\Kernel as KernelContract;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
+use Odigos\Illuminate\Contracts\Http\Kernel as KernelContract;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Routing\Route;
 use OpenTelemetry\API\Globals;
 use OpenTelemetry\API\Trace\Span;
 use OpenTelemetry\API\Trace\SpanInterface;
 use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\Context\Context;
-use OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHook;
-use OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHookTrait;
-use OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\PostHookTrait;
-use OpenTelemetry\Contrib\Instrumentation\Laravel\Propagators\HeadersPropagator;
-use OpenTelemetry\Contrib\Instrumentation\Laravel\Propagators\ResponsePropagationSetter;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHook;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHookTrait;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\PostHookTrait;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Propagators\HeadersPropagator;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Propagators\ResponsePropagationSetter;
 use function OpenTelemetry\Instrumentation\hook;
 use OpenTelemetry\SemConv\TraceAttributes;
-use Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpFoundation\Response;
 use Throwable;
 class Kernel implements LaravelHook
 {
@@ -32,7 +32,7 @@ class Kernel implements LaravelHook
     /** @psalm-suppress PossiblyUnusedReturnValue  */
     protected function hookHandle(): bool
     {
-        return hook(KernelContract::class, 'handle', pre: function (KernelContract $kernel, array $params, string $class, string $function, ?string $filename, ?int $lineno) {
+        return hook('Illuminate\\Contracts\\Http\\Kernel', 'handle', pre: function (object $kernel, array $params, string $class, string $function, ?string $filename, ?int $lineno) {
             $request = $params[0] instanceof Request ? $params[0] : null;
             /** @psalm-suppress ArgumentTypeCoercion */
             $builder = $this->instrumentation->tracer()->spanBuilder(sprintf('%s', $request?->method() ?? 'unknown'))->setSpanKind(SpanKind::KIND_SERVER)->setAttribute(TraceAttributes::CODE_FUNCTION_NAME, sprintf('%s::%s', $class, $function))->setAttribute(TraceAttributes::CODE_FILE_PATH, $filename)->setAttribute(TraceAttributes::CODE_LINE_NUMBER, $lineno);
@@ -47,7 +47,7 @@ class Kernel implements LaravelHook
             }
             Context::storage()->attach($span->storeInContext($parent));
             return [$request];
-        }, post: function (KernelContract $kernel, array $params, ?Response $response, ?Throwable $exception) {
+        }, post: function (object $kernel, array $params, ?object $response, ?Throwable $exception) {
             $scope = Context::storage()->scope();
             if (!$scope) {
                 return;
@@ -55,7 +55,7 @@ class Kernel implements LaravelHook
             $span = Span::fromContext($scope->context());
             $request = $params[0] instanceof Request ? $params[0] : null;
             $route = $request?->route();
-            if ($request && $route instanceof Route) {
+            if ($request && is_a($route, 'Illuminate\\Routing\\Route')) {
                 $span->updateName("{$request->method()} /" . ltrim($route->uri, '/'));
                 $span->setAttribute(TraceAttributes::HTTP_ROUTE, $route->uri);
             }
@@ -73,13 +73,13 @@ class Kernel implements LaravelHook
             $this->endSpan($exception);
         });
     }
-    private function httpTarget(Request $request): string
+    private function httpTarget(object $request): string
     {
         $query = $request->getQueryString();
         $question = $request->getBaseUrl() . $request->getPathInfo() === '/' ? '/?' : '?';
         return $query ? $request->path() . $question . $query : $request->path();
     }
-    private function httpHostName(Request $request): string
+    private function httpHostName(object $request): string
     {
         if (method_exists($request, 'host')) {
             return $request->host();

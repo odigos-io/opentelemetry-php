@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
 /**
  * An interface for shells that take a CommandCollection
@@ -28,5 +28,5 @@ interface CommandCollectionAwareInterface
      * @param \Cake\Console\CommandCollection $commands The commands to use.
      * @return void
      */
-    public function setCommandCollection(\Cake\Console\CommandCollection $commands): void;
+    public function setCommandCollection(CommandCollection $commands): void;
 }

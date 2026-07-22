@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Database\Query\Grammars;
+namespace Odigos\Illuminate\Database\Query\Grammars;
 
-use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Database\Query\Builder;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
 use InvalidArgumentException;
-class SQLiteGrammar extends \Illuminate\Database\Query\Grammars\Grammar
+class SQLiteGrammar extends Grammar
 {
     /**
      * All of the available clause operators.

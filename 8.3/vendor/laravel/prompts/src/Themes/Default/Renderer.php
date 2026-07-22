@@ -1,10 +1,10 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\Concerns\Colors;
-use Laravel\Prompts\Concerns\Truncation;
-use Laravel\Prompts\Prompt;
+use Odigos\Laravel\Prompts\Concerns\Colors;
+use Odigos\Laravel\Prompts\Concerns\Truncation;
+use Odigos\Laravel\Prompts\Prompt;
 abstract class Renderer
 {
     use Colors;

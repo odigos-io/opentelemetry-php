@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Routing\Exceptions;
+namespace Odigos\Illuminate\Routing\Exceptions;
 
 use Exception;
 class MissingRateLimiterException extends Exception

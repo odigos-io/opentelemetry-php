@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Redis;
+namespace Odigos\Illuminate\Redis;
 
 use Closure;
-use Illuminate\Contracts\Redis\Factory;
-use Illuminate\Redis\Connections\Connection;
-use Illuminate\Redis\Connectors\PhpRedisConnector;
-use Illuminate\Redis\Connectors\PredisConnector;
-use Illuminate\Support\Arr;
-use Illuminate\Support\ConfigurationUrlParser;
+use Odigos\Illuminate\Contracts\Redis\Factory;
+use Odigos\Illuminate\Redis\Connections\Connection;
+use Odigos\Illuminate\Redis\Connectors\PhpRedisConnector;
+use Odigos\Illuminate\Redis\Connectors\PredisConnector;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\ConfigurationUrlParser;
 use InvalidArgumentException;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 /**
  * @mixin \Illuminate\Redis\Connections\Connection
  */

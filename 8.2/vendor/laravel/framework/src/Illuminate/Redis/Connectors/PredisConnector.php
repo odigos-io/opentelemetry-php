@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Redis\Connectors;
+namespace Odigos\Illuminate\Redis\Connectors;
 
-use Illuminate\Contracts\Redis\Connector;
-use Illuminate\Redis\Connections\PredisClusterConnection;
-use Illuminate\Redis\Connections\PredisConnection;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Redis\Connector;
+use Odigos\Illuminate\Redis\Connections\PredisClusterConnection;
+use Odigos\Illuminate\Redis\Connections\PredisConnection;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Str;
 use Odigos\Predis\Client;
 class PredisConnector implements Connector
 {

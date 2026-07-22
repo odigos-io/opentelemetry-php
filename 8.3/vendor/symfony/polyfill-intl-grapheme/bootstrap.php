@@ -10,7 +10,7 @@ namespace Odigos;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Symfony\Polyfill\Intl\Grapheme as p;
+use Odigos\Symfony\Polyfill\Intl\Grapheme as p;
 if (\PHP_VERSION_ID >= 80000) {
     return require __DIR__ . '/bootstrap80.php';
 }

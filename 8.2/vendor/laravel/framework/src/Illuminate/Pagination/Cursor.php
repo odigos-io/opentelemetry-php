@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Pagination;
+namespace Odigos\Illuminate\Pagination;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Support\Collection;
 use UnexpectedValueException;
 /** @implements Arrayable<array-key, mixed> */
 class Cursor implements Arrayable

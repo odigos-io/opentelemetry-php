@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
-use Illuminate\Cache\DynamoDbStore;
-use Illuminate\Contracts\Cache\Factory as Cache;
-use Illuminate\Contracts\Cache\LockProvider;
-class CacheEventMutex implements \Illuminate\Console\Scheduling\EventMutex, \Illuminate\Console\Scheduling\CacheAware
+use Odigos\Illuminate\Cache\DynamoDbStore;
+use Odigos\Illuminate\Contracts\Cache\Factory as Cache;
+use Odigos\Illuminate\Contracts\Cache\LockProvider;
+class CacheEventMutex implements EventMutex, CacheAware
 {
     /**
      * The cache repository implementation.
@@ -34,7 +34,7 @@ class CacheEventMutex implements \Illuminate\Console\Scheduling\EventMutex, \Ill
      * @param  \Illuminate\Console\Scheduling\Event  $event
      * @return bool
      */
-    public function create(\Illuminate\Console\Scheduling\Event $event)
+    public function create(Event $event)
     {
         if ($this->shouldUseLocks($this->cache->store($this->store)->getStore())) {
             return $this->cache->store($this->store)->getStore()->lock($event->mutexName(), $event->expiresAt * 60)->acquire();
@@ -47,7 +47,7 @@ class CacheEventMutex implements \Illuminate\Console\Scheduling\EventMutex, \Ill
      * @param  \Illuminate\Console\Scheduling\Event  $event
      * @return bool
      */
-    public function exists(\Illuminate\Console\Scheduling\Event $event)
+    public function exists(Event $event)
     {
         if ($this->shouldUseLocks($this->cache->store($this->store)->getStore())) {
             return !$this->cache->store($this->store)->getStore()->lock($event->mutexName(), $event->expiresAt * 60)->get(fn() => \true);
@@ -60,7 +60,7 @@ class CacheEventMutex implements \Illuminate\Console\Scheduling\EventMutex, \Ill
      * @param  \Illuminate\Console\Scheduling\Event  $event
      * @return void
      */
-    public function forget(\Illuminate\Console\Scheduling\Event $event)
+    public function forget(Event $event)
     {
         if ($this->shouldUseLocks($this->cache->store($this->store)->getStore())) {
             $this->cache->store($this->store)->getStore()->lock($event->mutexName(), $event->expiresAt * 60)->forceRelease();

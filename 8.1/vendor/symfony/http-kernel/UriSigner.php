@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel;
+namespace Odigos\Symfony\Component\HttpKernel;
 
-use Symfony\Component\HttpFoundation\UriSigner as HttpFoundationUriSigner;
-trigger_deprecation('symfony/http-kernel', '6.4', 'The "%s" class is deprecated, use "%s" instead.', \Symfony\Component\HttpKernel\UriSigner::class, HttpFoundationUriSigner::class);
+use Odigos\Symfony\Component\HttpFoundation\UriSigner as HttpFoundationUriSigner;
+trigger_deprecation('symfony/http-kernel', '6.4', 'The "%s" class is deprecated, use "%s" instead.', UriSigner::class, HttpFoundationUriSigner::class);
 class_exists(HttpFoundationUriSigner::class);
 if (\false) {
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Routing\Exceptions;
+namespace Odigos\Illuminate\Routing\Exceptions;
 
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\HttpException;
 class InvalidSignatureException extends HttpException
 {
     /**

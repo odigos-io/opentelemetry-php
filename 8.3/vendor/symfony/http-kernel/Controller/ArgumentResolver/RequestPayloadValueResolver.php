@@ -8,35 +8,35 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+namespace Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Attribute\MapQueryString;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
-use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
-use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NearMissValueResolverException;
-use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException as SerializerInvalidArgumentException;
-use Symfony\Component\Serializer\Exception\NotEncodableValueException;
-use Symfony\Component\Serializer\Exception\PartialDenormalizationException;
-use Symfony\Component\Serializer\Exception\UnexpectedPropertyException;
-use Symfony\Component\Serializer\Exception\UnsupportedFormatException;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Validator\ConstraintViolationList;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Odigos\Symfony\Component\HttpFoundation\File\UploadedFile;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Odigos\Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Odigos\Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
+use Odigos\Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
+use Odigos\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Odigos\Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
+use Odigos\Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\HttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\NearMissValueResolverException;
+use Odigos\Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
+use Odigos\Symfony\Component\HttpKernel\KernelEvents;
+use Odigos\Symfony\Component\Serializer\Exception\InvalidArgumentException as SerializerInvalidArgumentException;
+use Odigos\Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Odigos\Symfony\Component\Serializer\Exception\PartialDenormalizationException;
+use Odigos\Symfony\Component\Serializer\Exception\UnexpectedPropertyException;
+use Odigos\Symfony\Component\Serializer\Exception\UnsupportedFormatException;
+use Odigos\Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Odigos\Symfony\Component\Serializer\SerializerInterface;
+use Odigos\Symfony\Component\Validator\Constraints as Assert;
+use Odigos\Symfony\Component\Validator\ConstraintViolation;
+use Odigos\Symfony\Component\Validator\ConstraintViolationList;
+use Odigos\Symfony\Component\Validator\Exception\ValidationFailedException;
+use Odigos\Symfony\Component\Validator\Validator\ValidatorInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @author Konstantin Myakshin <molodchick@gmail.com>
  *

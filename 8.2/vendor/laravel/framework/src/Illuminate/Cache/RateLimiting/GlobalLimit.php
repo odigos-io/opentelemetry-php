@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache\RateLimiting;
+namespace Odigos\Illuminate\Cache\RateLimiting;
 
-class GlobalLimit extends \Illuminate\Cache\RateLimiting\Limit
+class GlobalLimit extends Limit
 {
     /**
      * Create a new limit instance.

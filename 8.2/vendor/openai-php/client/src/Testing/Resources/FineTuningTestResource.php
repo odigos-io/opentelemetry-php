@@ -1,13 +1,13 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\FineTuningContract;
-use OpenAI\Resources\FineTuning;
-use OpenAI\Responses\FineTuning\ListJobEventsResponse;
-use OpenAI\Responses\FineTuning\ListJobsResponse;
-use OpenAI\Responses\FineTuning\RetrieveJobResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\FineTuningContract;
+use Odigos\OpenAI\Resources\FineTuning;
+use Odigos\OpenAI\Responses\FineTuning\ListJobEventsResponse;
+use Odigos\OpenAI\Responses\FineTuning\ListJobsResponse;
+use Odigos\OpenAI\Responses\FineTuning\RetrieveJobResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class FineTuningTestResource implements FineTuningContract
 {
     use Testable;

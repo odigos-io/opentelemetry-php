@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Metadata;
+namespace Odigos\Doctrine\DBAL\Schema\Metadata;
 
-use Doctrine\DBAL\Exception\InvalidArgumentException;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint\MatchType;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint\ReferentialAction;
+use Odigos\Doctrine\DBAL\Exception\InvalidArgumentException;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint\MatchType;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint\ReferentialAction;
 /**
  * A row of metadata describing a foreign key constraint column.
  */

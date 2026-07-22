@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Descriptor;
+namespace Odigos\Symfony\Component\Console\Descriptor;
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Application;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputDefinition;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 /**
  * XML descriptor.
  *
@@ -22,7 +22,7 @@ use Symfony\Component\Console\Input\InputOption;
  *
  * @internal
  */
-class XmlDescriptor extends \Symfony\Component\Console\Descriptor\Descriptor
+class XmlDescriptor extends Descriptor
 {
     public function getInputDefinitionDocument(InputDefinition $definition): \DOMDocument
     {
@@ -75,7 +75,7 @@ class XmlDescriptor extends \Symfony\Component\Console\Descriptor\Descriptor
             }
         }
         $rootXml->appendChild($commandsXML = $dom->createElement('commands'));
-        $description = new \Symfony\Component\Console\Descriptor\ApplicationDescription($application, $namespace, \true);
+        $description = new ApplicationDescription($application, $namespace, \true);
         if ($namespace) {
             $commandsXML->setAttribute('namespace', $namespace);
         }

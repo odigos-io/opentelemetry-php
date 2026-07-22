@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Events;
+namespace Odigos\Illuminate\Events;
 
 use Closure;
-if (!function_exists('Illuminate\Events\queueable')) {
+if (!function_exists('Odigos\Illuminate\Events\queueable')) {
     /**
      * Create a new queued Closure event listener.
      *
      * @param  \Closure  $closure
      */
-    function queueable(Closure $closure): \Illuminate\Events\QueuedClosure
+    function queueable(Closure $closure): QueuedClosure
     {
-        return new \Illuminate\Events\QueuedClosure($closure);
+        return new QueuedClosure($closure);
     }
 }

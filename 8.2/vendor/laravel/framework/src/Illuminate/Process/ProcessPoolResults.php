@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Process;
+namespace Odigos\Illuminate\Process;
 
 use ArrayAccess;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 class ProcessPoolResults implements ArrayAccess
 {
     /**

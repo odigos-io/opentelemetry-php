@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Middleware;
+namespace Odigos\Cake\Http\Middleware;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\InstanceConfigTrait;
 use Odigos\ParagonIE\CSPBuilder\CSPBuilder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

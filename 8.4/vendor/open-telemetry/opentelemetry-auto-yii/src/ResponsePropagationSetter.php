@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Yii;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Yii;
 
 use function assert;
 use OpenTelemetry\Context\Propagation\PropagationSetterInterface;
-use yii\web\Response;
+use Odigos\yii\web\Response;
 /**
  * @internal
  */
@@ -19,12 +19,12 @@ final class ResponsePropagationSetter implements PropagationSetterInterface
     /** @psalm-suppress InvalidReturnType */
     public function keys($carrier): array
     {
-        assert($carrier instanceof Response);
+        assert(is_a($carrier, 'yii\\web\\Response'));
         return array_keys($carrier->getHeaders()->toArray());
     }
     public function set(&$carrier, string $key, string $value): void
     {
-        assert($carrier instanceof Response);
+        assert(is_a($carrier, 'yii\\web\\Response'));
         $carrier->getHeaders()->set($key, $value);
     }
 }

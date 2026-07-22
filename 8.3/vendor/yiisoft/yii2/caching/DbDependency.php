@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
-use yii\base\InvalidConfigException;
-use yii\db\Connection;
-use yii\di\Instance;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\db\Connection;
+use Odigos\yii\di\Instance;
 /**
  * DbDependency represents a dependency based on the query result of a SQL statement.
  *
@@ -21,7 +21,7 @@ use yii\di\Instance;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class DbDependency extends \yii\caching\Dependency
+class DbDependency extends Dependency
 {
     /**
      * @var Connection|string the DB connection object or the application component ID of the DB connection.

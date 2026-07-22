@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource;
+namespace Odigos\Cake\Datasource;
 
-use Cake\Datasource\Locator\LocatorInterface;
+use Odigos\Cake\Datasource\Locator\LocatorInterface;
 use InvalidArgumentException;
 /**
  * Class FactoryLocator

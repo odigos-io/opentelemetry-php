@@ -1,7 +1,7 @@
 <?php
 
-namespace GuzzleHttp\Exception;
+namespace Odigos\GuzzleHttp\Exception;
 
-class TooManyRedirectsException extends \GuzzleHttp\Exception\RequestException
+class TooManyRedirectsException extends RequestException
 {
 }

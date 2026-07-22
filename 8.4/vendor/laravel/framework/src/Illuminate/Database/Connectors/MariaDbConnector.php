@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Connectors;
+namespace Odigos\Illuminate\Database\Connectors;
 
 use PDO;
-class MariaDbConnector extends \Illuminate\Database\Connectors\MySqlConnector
+class MariaDbConnector extends MySqlConnector
 {
     /**
      * Get the sql_mode value.

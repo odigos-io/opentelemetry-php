@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
 /**
  * Inflector pluralizes and singularizes English nouns. It also contains some other useful methods.
@@ -13,6 +13,6 @@ namespace yii\helpers;
  * @author Antonio Ramirez <amigo.cobos@gmail.com>
  * @since 2.0
  */
-class Inflector extends \yii\helpers\BaseInflector
+class Inflector extends BaseInflector
 {
 }

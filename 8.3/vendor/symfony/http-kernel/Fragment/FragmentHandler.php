@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Fragment;
+namespace Odigos\Symfony\Component\HttpKernel\Fragment;
 
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\Controller\ControllerReference;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Odigos\Symfony\Component\HttpFoundation\RequestStack;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpFoundation\StreamedResponse;
+use Odigos\Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Odigos\Symfony\Component\HttpKernel\Exception\HttpException;
 /**
  * Renders a URI that represents a resource fragment.
  *
@@ -42,7 +42,7 @@ class FragmentHandler
     /**
      * Adds a renderer.
      */
-    public function addRenderer(\Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface $renderer): void
+    public function addRenderer(FragmentRendererInterface $renderer): void
     {
         $this->renderers[$renderer->getName()] = $renderer;
     }

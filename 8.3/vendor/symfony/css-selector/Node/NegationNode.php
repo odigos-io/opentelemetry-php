@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Node;
+namespace Odigos\Symfony\Component\CssSelector\Node;
 
 /**
  * Represents a "<selector>:not(<identifier>)" node.
@@ -20,20 +20,20 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-class NegationNode extends \Symfony\Component\CssSelector\Node\AbstractNode
+class NegationNode extends AbstractNode
 {
-    public function __construct(private \Symfony\Component\CssSelector\Node\NodeInterface $selector, private \Symfony\Component\CssSelector\Node\NodeInterface $subSelector)
+    public function __construct(private NodeInterface $selector, private NodeInterface $subSelector)
     {
     }
-    public function getSelector(): \Symfony\Component\CssSelector\Node\NodeInterface
+    public function getSelector(): NodeInterface
     {
         return $this->selector;
     }
-    public function getSubSelector(): \Symfony\Component\CssSelector\Node\NodeInterface
+    public function getSubSelector(): NodeInterface
     {
         return $this->subSelector;
     }
-    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
+    public function getSpecificity(): Specificity
     {
         return $this->selector->getSpecificity()->plus($this->subSelector->getSpecificity());
     }

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Query\ForUpdate;
+namespace Odigos\Doctrine\DBAL\Query\ForUpdate;
 
 enum ConflictResolutionMode
 {

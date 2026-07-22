@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Auth;
+namespace Odigos\Illuminate\Auth;
 
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Auth\Guard;
+use Odigos\Illuminate\Contracts\Auth\UserProvider;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Support\Traits\Macroable;
 class RequestGuard implements Guard
 {
-    use \Illuminate\Auth\GuardHelpers, Macroable;
+    use GuardHelpers, Macroable;
     /**
      * The guard callback.
      *

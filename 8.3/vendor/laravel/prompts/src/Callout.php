@@ -1,9 +1,9 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
-use Laravel\Prompts\Elements\ElementContract;
-class Callout extends \Laravel\Prompts\Prompt
+use Odigos\Laravel\Prompts\Elements\ElementContract;
+class Callout extends Prompt
 {
     /**
      * Create a new Callout instance.

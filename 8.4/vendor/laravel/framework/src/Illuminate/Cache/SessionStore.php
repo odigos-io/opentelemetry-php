@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Contracts\Cache\Store;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Contracts\Cache\Store;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\InteractsWithTime;
 class SessionStore implements Store
 {
-    use InteractsWithTime, \Illuminate\Cache\RetrievesMultipleKeys;
+    use InteractsWithTime, RetrievesMultipleKeys;
     /**
      * The key for cache items.
      *

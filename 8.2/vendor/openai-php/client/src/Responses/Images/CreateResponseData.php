@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Images;
+namespace Odigos\OpenAI\Responses\Images;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
 /**
  * @implements ResponseContract<array{url: string, revised_prompt?: string}|array{b64_json: string, revised_prompt?: string}>
  */

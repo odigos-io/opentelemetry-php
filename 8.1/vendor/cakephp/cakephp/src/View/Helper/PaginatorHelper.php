@@ -14,18 +14,18 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Helper;
+namespace Odigos\Cake\View\Helper;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Datasource\Paging\PaginatedInterface;
-use Cake\Utility\Hash;
-use Cake\Utility\Inflector;
-use Cake\View\Helper;
-use Cake\View\StringTemplate;
-use Cake\View\StringTemplateTrait;
-use Cake\View\View;
-use function Cake\Core\h;
-use function Cake\I18n\__;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Datasource\Paging\PaginatedInterface;
+use Odigos\Cake\Utility\Hash;
+use Odigos\Cake\Utility\Inflector;
+use Odigos\Cake\View\Helper;
+use Odigos\Cake\View\StringTemplate;
+use Odigos\Cake\View\StringTemplateTrait;
+use Odigos\Cake\View\View;
+use function Odigos\Cake\Core\h;
+use function Odigos\Cake\I18n\__;
 /**
  * Pagination Helper class for easy generation of pagination links.
  *

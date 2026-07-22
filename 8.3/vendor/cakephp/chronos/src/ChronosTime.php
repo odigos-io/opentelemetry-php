@@ -11,7 +11,7 @@ declare (strict_types=1);
  * @link          https://cakephp.org CakePHP(tm) Project
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Chronos;
+namespace Odigos\Cake\Chronos;
 
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -67,17 +67,17 @@ class ChronosTime implements Stringable
      * @param \Cake\Chronos\ChronosTime|\DateTimeInterface|string|null $time Time
      * @param \DateTimeZone|string|null $timezone The timezone to use for now
      */
-    public function __construct(\Cake\Chronos\ChronosTime|DateTimeInterface|string|null $time = null, DateTimeZone|string|null $timezone = null)
+    public function __construct(ChronosTime|DateTimeInterface|string|null $time = null, DateTimeZone|string|null $timezone = null)
     {
         if ($time === null) {
-            $time = \Cake\Chronos\Chronos::getTestNow() ?? \Cake\Chronos\Chronos::now();
+            $time = Chronos::getTestNow() ?? Chronos::now();
             if ($timezone !== null) {
                 $time = $time->setTimezone($timezone);
             }
             $this->ticks = static::parseString($time->format('H:i:s.u'));
         } elseif (is_string($time)) {
             $this->ticks = static::parseString($time);
-        } elseif ($time instanceof \Cake\Chronos\ChronosTime) {
+        } elseif ($time instanceof ChronosTime) {
             $this->ticks = $time->ticks;
         } else {
             $this->ticks = static::parseString($time->format('H:i:s.u'));
@@ -92,7 +92,7 @@ class ChronosTime implements Stringable
      * @param \DateTimeZone|string|null $timezone The timezone to use for now
      * @return static
      */
-    public static function parse(\Cake\Chronos\ChronosTime|DateTimeInterface|string|null $time = null, DateTimeZone|string|null $timezone = null): static
+    public static function parse(ChronosTime|DateTimeInterface|string|null $time = null, DateTimeZone|string|null $timezone = null): static
     {
         return new static($time, $timezone);
     }
@@ -331,7 +331,7 @@ class ChronosTime implements Stringable
      * @param \Cake\Chronos\ChronosTime $target Target time
      * @return bool
      */
-    public function equals(\Cake\Chronos\ChronosTime $target): bool
+    public function equals(ChronosTime $target): bool
     {
         return $this->ticks === $target->ticks;
     }
@@ -341,7 +341,7 @@ class ChronosTime implements Stringable
      * @param \Cake\Chronos\ChronosTime $target Target time
      * @return bool
      */
-    public function greaterThan(\Cake\Chronos\ChronosTime $target): bool
+    public function greaterThan(ChronosTime $target): bool
     {
         return $this->ticks > $target->ticks;
     }
@@ -351,7 +351,7 @@ class ChronosTime implements Stringable
      * @param \Cake\Chronos\ChronosTime $target Target time
      * @return bool
      */
-    public function greaterThanOrEquals(\Cake\Chronos\ChronosTime $target): bool
+    public function greaterThanOrEquals(ChronosTime $target): bool
     {
         return $this->ticks >= $target->ticks;
     }
@@ -361,7 +361,7 @@ class ChronosTime implements Stringable
      * @param \Cake\Chronos\ChronosTime $target Target time
      * @return bool
      */
-    public function lessThan(\Cake\Chronos\ChronosTime $target): bool
+    public function lessThan(ChronosTime $target): bool
     {
         return $this->ticks < $target->ticks;
     }
@@ -371,7 +371,7 @@ class ChronosTime implements Stringable
      * @param \Cake\Chronos\ChronosTime $target Target time
      * @return bool
      */
-    public function lessThanOrEquals(\Cake\Chronos\ChronosTime $target): bool
+    public function lessThanOrEquals(ChronosTime $target): bool
     {
         return $this->ticks <= $target->ticks;
     }
@@ -383,7 +383,7 @@ class ChronosTime implements Stringable
      * @param bool $equals Whether to include the beginning and end of range
      * @return bool
      */
-    public function between(\Cake\Chronos\ChronosTime $start, \Cake\Chronos\ChronosTime $end, bool $equals = \true): bool
+    public function between(ChronosTime $start, ChronosTime $end, bool $equals = \true): bool
     {
         if ($start->greaterThan($end)) {
             [$start, $end] = [$end, $start];

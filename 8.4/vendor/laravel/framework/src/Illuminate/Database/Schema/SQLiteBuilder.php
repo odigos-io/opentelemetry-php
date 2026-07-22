@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Database\Schema;
+namespace Odigos\Illuminate\Database\Schema;
 
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\File;
-class SQLiteBuilder extends \Illuminate\Database\Schema\Builder
+use Odigos\Illuminate\Database\QueryException;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Facades\File;
+class SQLiteBuilder extends Builder
 {
     /**
      * Create a database in the schema.

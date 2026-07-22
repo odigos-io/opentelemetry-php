@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
-use Illuminate\Contracts\Queue\ClearableQueue;
-use Illuminate\Contracts\Queue\Queue as QueueContract;
-use Illuminate\Database\Connection;
-use Illuminate\Queue\Jobs\DatabaseJob;
-use Illuminate\Queue\Jobs\DatabaseJobRecord;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Stringable;
+use Odigos\Illuminate\Contracts\Queue\ClearableQueue;
+use Odigos\Illuminate\Contracts\Queue\Queue as QueueContract;
+use Odigos\Illuminate\Database\Connection;
+use Odigos\Illuminate\Queue\Jobs\DatabaseJob;
+use Odigos\Illuminate\Queue\Jobs\DatabaseJobRecord;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Stringable;
 use PDO;
 use Throwable;
-class DatabaseQueue extends \Illuminate\Queue\Queue implements QueueContract, ClearableQueue
+class DatabaseQueue extends Queue implements QueueContract, ClearableQueue
 {
     /**
      * The database connection instance.

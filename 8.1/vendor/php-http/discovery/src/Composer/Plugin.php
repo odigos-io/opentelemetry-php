@@ -19,7 +19,7 @@ use Composer\Repository\RepositorySet;
 use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
 use Composer\Util\Filesystem;
-use Http\Discovery\ClassDiscovery;
+use Odigos\Http\Discovery\ClassDiscovery;
 /**
  * Auto-installs missing implementations.
  *
@@ -48,7 +48,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * depending on which one is already installed on the right side.
      */
     private const STICKYNESS_RULES = ['symfony/http-client' => 'symfony/framework-bundle', 'php-http/guzzle7-adapter' => 'guzzlehttp/guzzle:^7', 'php-http/guzzle6-adapter' => 'guzzlehttp/guzzle:^6', 'php-http/guzzle5-adapter' => 'guzzlehttp/guzzle:^5', 'php-http/cakephp-adapter' => 'cakephp/cakephp', 'php-http/react-adapter' => 'react/event-loop', 'php-http/buzz-adapter' => 'kriswallsmith/buzz:^0.15.1', 'php-http/artax-adapter' => 'amphp/artax:^3', 'http-interop/http-factory-guzzle' => 'guzzlehttp/psr7:^1', 'http-interop/http-factory-slim' => 'slim/slim:^3'];
-    private const INTERFACE_MAP = ['php-http/async-client-implementation' => ['Http\Client\HttpAsyncClient'], 'php-http/client-implementation' => ['Http\Client\HttpClient'], 'psr/http-client-implementation' => ['Psr\Http\Client\ClientInterface'], 'psr/http-factory-implementation' => ['Psr\Http\Message\RequestFactoryInterface', 'Psr\Http\Message\ResponseFactoryInterface', 'Psr\Http\Message\ServerRequestFactoryInterface', 'Psr\Http\Message\StreamFactoryInterface', 'Psr\Http\Message\UploadedFileFactoryInterface', 'Psr\Http\Message\UriFactoryInterface']];
+    private const INTERFACE_MAP = ['php-http/async-client-implementation' => ['Odigos\Http\Client\HttpAsyncClient'], 'php-http/client-implementation' => ['Odigos\Http\Client\HttpClient'], 'psr/http-client-implementation' => ['Psr\Http\Client\ClientInterface'], 'psr/http-factory-implementation' => ['Psr\Http\Message\RequestFactoryInterface', 'Psr\Http\Message\ResponseFactoryInterface', 'Psr\Http\Message\ServerRequestFactoryInterface', 'Psr\Http\Message\StreamFactoryInterface', 'Psr\Http\Message\UploadedFileFactoryInterface', 'Psr\Http\Message\UriFactoryInterface']];
     public static function getSubscribedEvents(): array
     {
         return [ScriptEvents::PRE_AUTOLOAD_DUMP => 'preAutoloadDump', ScriptEvents::POST_UPDATE_CMD => 'postUpdate'];
@@ -152,7 +152,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         }
         $missingRequires = [[], [], []];
         $versionParser = new VersionParser();
-        if (ClassDiscovery::safeClassExists(\Phalcon\Http\Message\RequestFactory::class, \false)) {
+        if (ClassDiscovery::safeClassExists(\Odigos\Phalcon\Http\Message\RequestFactory::class, \false)) {
             $missingRequires[0]['psr/http-factory-implementation'] = [];
             $missingRequires[1]['psr/http-factory-implementation'] = [];
         }

@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console;
+namespace Odigos\yii\console;
 
 use Odigos\Yii;
-use yii\base\ErrorException;
-use yii\base\UserException;
-use yii\helpers\Console;
+use Odigos\yii\base\ErrorException;
+use Odigos\yii\base\UserException;
+use Odigos\yii\helpers\Console;
 /**
  * ErrorHandler handles uncaught PHP errors and exceptions.
  *
@@ -20,7 +20,7 @@ use yii\helpers\Console;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class ErrorHandler extends \yii\base\ErrorHandler
+class ErrorHandler extends \Odigos\yii\base\ErrorHandler
 {
     /**
      * Renders an exception using ansi format for console output.
@@ -29,7 +29,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
     protected function renderException($exception)
     {
         $previous = $exception->getPrevious();
-        if ($exception instanceof \yii\console\UnknownCommandException) {
+        if ($exception instanceof UnknownCommandException) {
             // display message and suggest alternatives in case of unknown command
             $message = $this->formatMessage($exception->getName() . ': ') . $exception->command;
             $alternatives = $exception->getSuggestedAlternatives();
@@ -38,10 +38,10 @@ class ErrorHandler extends \yii\base\ErrorHandler
             } elseif (count($alternatives) > 1) {
                 $message .= "\n\nDid you mean one of these?\n    - " . implode("\n    - ", $alternatives);
             }
-        } elseif ($exception instanceof UserException && ($exception instanceof \yii\console\Exception || !YII_DEBUG)) {
+        } elseif ($exception instanceof UserException && ($exception instanceof Exception || !YII_DEBUG)) {
             $message = $this->formatMessage($exception->getName() . ': ') . $exception->getMessage();
         } elseif (YII_DEBUG) {
-            if ($exception instanceof \yii\console\Exception) {
+            if ($exception instanceof Exception) {
                 $message = $this->formatMessage("Exception ({$exception->getName()})");
             } elseif ($exception instanceof ErrorException) {
                 $message = $this->formatMessage($exception->getName());
@@ -49,7 +49,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
                 $message = $this->formatMessage('Exception');
             }
             $message .= $this->formatMessage(" '" . get_class($exception) . "'", [Console::BOLD, Console::FG_BLUE]) . ' with message ' . $this->formatMessage("'{$exception->getMessage()}'", [Console::BOLD]) . "\n\nin " . dirname($exception->getFile()) . \DIRECTORY_SEPARATOR . $this->formatMessage(basename($exception->getFile()), [Console::BOLD]) . ':' . $this->formatMessage($exception->getLine(), [Console::BOLD, Console::FG_YELLOW]) . "\n";
-            if ($exception instanceof \yii\db\Exception && !empty($exception->errorInfo)) {
+            if ($exception instanceof \Odigos\yii\db\Exception && !empty($exception->errorInfo)) {
                 $message .= "\n" . $this->formatMessage("Error Info:\n", [Console::BOLD]) . print_r($exception->errorInfo, \true);
             }
             if ($previous === null) {
@@ -84,7 +84,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
     {
         $stream = \PHP_SAPI === 'cli' ? \STDERR : \STDOUT;
         // try controller first to allow check for --color switch
-        if (Yii::$app->controller instanceof \yii\console\Controller && Yii::$app->controller->isColorEnabled($stream) || Yii::$app instanceof \yii\console\Application && Console::streamSupportsAnsiColors($stream)) {
+        if (Yii::$app->controller instanceof \Odigos\yii\console\Controller && Yii::$app->controller->isColorEnabled($stream) || Yii::$app instanceof \Odigos\yii\console\Application && Console::streamSupportsAnsiColors($stream)) {
             $message = Console::ansiFormat($message, $format);
         }
         return $message;

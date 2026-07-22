@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Cache\Events\CacheFlushed;
-use Illuminate\Cache\Events\CacheFlushing;
-use Illuminate\Contracts\Cache\Store;
-class TaggedCache extends \Illuminate\Cache\Repository
+use Odigos\Illuminate\Cache\Events\CacheFlushed;
+use Odigos\Illuminate\Cache\Events\CacheFlushing;
+use Odigos\Illuminate\Contracts\Cache\Store;
+class TaggedCache extends Repository
 {
-    use \Illuminate\Cache\RetrievesMultipleKeys {
+    use RetrievesMultipleKeys {
         putMany as putManyAlias;
     }
     /**
@@ -22,7 +22,7 @@ class TaggedCache extends \Illuminate\Cache\Repository
      * @param  \Illuminate\Contracts\Cache\Store  $store
      * @param  \Illuminate\Cache\TagSet  $tags
      */
-    public function __construct(Store $store, \Illuminate\Cache\TagSet $tags)
+    public function __construct(Store $store, TagSet $tags)
     {
         parent::__construct($store);
         $this->tags = $tags;

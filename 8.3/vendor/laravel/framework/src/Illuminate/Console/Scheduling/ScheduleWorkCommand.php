@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
-use Illuminate\Console\Application;
-use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\ProcessUtils;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
+use Odigos\Illuminate\Console\Application;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\ProcessUtils;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Process\Process;
 #[AsCommand(name: 'schedule:work')]
 class ScheduleWorkCommand extends Command
 {

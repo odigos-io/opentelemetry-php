@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenAI\Client;
-use OpenAI\Factory;
+use Odigos\OpenAI\Client;
+use Odigos\OpenAI\Factory;
 final class OpenAI
 {
     /**

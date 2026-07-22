@@ -13,17 +13,17 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Constraint\Response;
+namespace Odigos\Cake\TestSuite\Constraint\Response;
 
-use Cake\Http\Response;
-use Cake\Utility\CookieCryptTrait;
+use Odigos\Cake\Http\Response;
+use Odigos\Cake\Utility\CookieCryptTrait;
 use Psr\Http\Message\ResponseInterface;
 /**
  * CookieEncryptedEquals
  *
  * @internal
  */
-class CookieEncryptedEquals extends \Cake\TestSuite\Constraint\Response\CookieEquals
+class CookieEncryptedEquals extends CookieEquals
 {
     use CookieCryptTrait;
     /**

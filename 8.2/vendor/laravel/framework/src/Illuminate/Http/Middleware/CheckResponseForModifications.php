@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http\Middleware;
+namespace Odigos\Illuminate\Http\Middleware;
 
 use Closure;
-use Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpFoundation\Response;
 class CheckResponseForModifications
 {
     /**

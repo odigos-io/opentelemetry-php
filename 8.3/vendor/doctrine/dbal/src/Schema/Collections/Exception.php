@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Collections;
+namespace Odigos\Doctrine\DBAL\Schema\Collections;
 
-use Doctrine\DBAL\Schema\SchemaException;
+use Odigos\Doctrine\DBAL\Schema\SchemaException;
 /** @internal */
 interface Exception extends SchemaException
 {

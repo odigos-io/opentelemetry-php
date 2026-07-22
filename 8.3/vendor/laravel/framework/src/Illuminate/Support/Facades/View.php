@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static \Illuminate\Contracts\View\View file(string $path, \Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
@@ -85,7 +85,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\View\Factory
  */
-class View extends \Illuminate\Support\Facades\Facade
+class View extends Facade
 {
     /**
      * Get the registered name of the component.

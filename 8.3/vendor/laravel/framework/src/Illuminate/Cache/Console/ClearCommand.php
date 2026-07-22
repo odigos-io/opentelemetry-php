@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Cache\Console;
+namespace Odigos\Illuminate\Cache\Console;
 
-use Illuminate\Cache\CacheManager;
-use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Illuminate\Cache\CacheManager;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'cache:clear')]
 class ClearCommand extends Command
 {

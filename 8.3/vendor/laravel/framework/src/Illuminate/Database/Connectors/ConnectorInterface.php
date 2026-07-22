@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Connectors;
+namespace Odigos\Illuminate\Database\Connectors;
 
 interface ConnectorInterface
 {

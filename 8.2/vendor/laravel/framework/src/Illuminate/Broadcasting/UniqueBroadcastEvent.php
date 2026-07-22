@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Broadcasting;
+namespace Odigos\Illuminate\Broadcasting;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Cache\Repository;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-class UniqueBroadcastEvent extends \Illuminate\Broadcasting\BroadcastEvent implements ShouldBeUnique
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Cache\Repository;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeUnique;
+class UniqueBroadcastEvent extends BroadcastEvent implements ShouldBeUnique
 {
     /**
      * The unique lock identifier.

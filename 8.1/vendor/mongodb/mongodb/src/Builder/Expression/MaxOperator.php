@@ -4,14 +4,14 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 use DateTimeInterface;
 use MongoDB\BSON\Type;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\ExpressionInterface;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\ExpressionInterface;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function array_is_list;
 /**
@@ -21,7 +21,7 @@ use function array_is_list;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/max/
  * @internal
  */
-final class MaxOperator implements \MongoDB\Builder\Expression\ResolvesToAny, OperatorInterface
+final class MaxOperator implements ResolvesToAny, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$max';

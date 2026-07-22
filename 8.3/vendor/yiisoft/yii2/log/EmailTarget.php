@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\log;
+namespace Odigos\yii\log;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\di\Instance;
-use yii\mail\MailerInterface;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\di\Instance;
+use Odigos\yii\mail\MailerInterface;
 /**
  * EmailTarget sends selected log messages to the specified email addresses.
  *
@@ -41,7 +41,7 @@ use yii\mail\MailerInterface;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class EmailTarget extends \yii\log\Target
+class EmailTarget extends Target
 {
     /**
      * @var array the configuration array for creating a [[\yii\mail\MessageInterface|message]] object.
@@ -64,7 +64,7 @@ class EmailTarget extends \yii\log\Target
         if (empty($this->message['to'])) {
             throw new InvalidConfigException('The "to" option must be set for EmailTarget::message.');
         }
-        $this->mailer = Instance::ensure($this->mailer, 'yii\mail\MailerInterface');
+        $this->mailer = Instance::ensure($this->mailer, 'Odigos\yii\mail\MailerInterface');
     }
     /**
      * Sends log messages to specified email addresses.
@@ -82,7 +82,7 @@ class EmailTarget extends \yii\log\Target
         $body = wordwrap(implode("\n", $messages), 70);
         $message = $this->composeMessage($body);
         if (!$message->send($this->mailer)) {
-            throw new \yii\log\LogRuntimeException('Unable to export log through email!');
+            throw new LogRuntimeException('Unable to export log through email!');
         }
     }
     /**

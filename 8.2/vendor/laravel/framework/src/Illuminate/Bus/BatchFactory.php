@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Bus;
+namespace Odigos\Illuminate\Bus;
 
 use Odigos\Carbon\CarbonImmutable;
-use Illuminate\Contracts\Queue\Factory as QueueFactory;
+use Odigos\Illuminate\Contracts\Queue\Factory as QueueFactory;
 class BatchFactory
 {
     /**
@@ -37,8 +37,8 @@ class BatchFactory
      * @param  \Carbon\CarbonImmutable|null  $finishedAt
      * @return \Illuminate\Bus\Batch
      */
-    public function make(\Illuminate\Bus\BatchRepository $repository, string $id, string $name, int $totalJobs, int $pendingJobs, int $failedJobs, array $failedJobIds, array $options, CarbonImmutable $createdAt, ?CarbonImmutable $cancelledAt, ?CarbonImmutable $finishedAt)
+    public function make(BatchRepository $repository, string $id, string $name, int $totalJobs, int $pendingJobs, int $failedJobs, array $failedJobIds, array $options, CarbonImmutable $createdAt, ?CarbonImmutable $cancelledAt, ?CarbonImmutable $finishedAt)
     {
-        return new \Illuminate\Bus\Batch($this->queue, $repository, $id, $name, $totalJobs, $pendingJobs, $failedJobs, $failedJobIds, $options, $createdAt, $cancelledAt, $finishedAt);
+        return new Batch($this->queue, $repository, $id, $name, $totalJobs, $pendingJobs, $failedJobs, $failedJobIds, $options, $createdAt, $cancelledAt, $finishedAt);
     }
 }

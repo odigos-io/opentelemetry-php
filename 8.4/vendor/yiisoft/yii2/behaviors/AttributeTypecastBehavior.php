@@ -5,16 +5,16 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\behaviors;
+namespace Odigos\yii\behaviors;
 
-use yii\base\Behavior;
-use yii\base\InvalidArgumentException;
-use yii\base\Model;
-use yii\db\BaseActiveRecord;
-use yii\helpers\StringHelper;
-use yii\validators\BooleanValidator;
-use yii\validators\NumberValidator;
-use yii\validators\StringValidator;
+use Odigos\yii\base\Behavior;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\Model;
+use Odigos\yii\db\BaseActiveRecord;
+use Odigos\yii\helpers\StringHelper;
+use Odigos\yii\validators\BooleanValidator;
+use Odigos\yii\validators\NumberValidator;
+use Odigos\yii\validators\StringValidator;
 /**
  * AttributeTypecastBehavior provides an ability of automatic model attribute typecasting.
  * This behavior is very useful in case of usage of ActiveRecord for the schema-less databases like MongoDB or Redis.

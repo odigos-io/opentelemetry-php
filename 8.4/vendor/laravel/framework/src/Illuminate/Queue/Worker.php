@@ -1,24 +1,24 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
-use Illuminate\Contracts\Cache\Repository as CacheContract;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Queue\Factory as QueueManager;
-use Illuminate\Database\DetectsLostConnections;
-use Illuminate\Queue\Events\JobAttempted;
-use Illuminate\Queue\Events\JobExceptionOccurred;
-use Illuminate\Queue\Events\JobPopped;
-use Illuminate\Queue\Events\JobPopping;
-use Illuminate\Queue\Events\JobProcessed;
-use Illuminate\Queue\Events\JobProcessing;
-use Illuminate\Queue\Events\JobReleasedAfterException;
-use Illuminate\Queue\Events\JobTimedOut;
-use Illuminate\Queue\Events\Looping;
-use Illuminate\Queue\Events\WorkerStarting;
-use Illuminate\Queue\Events\WorkerStopping;
-use Illuminate\Support\Carbon;
+use Odigos\Illuminate\Contracts\Cache\Repository as CacheContract;
+use Odigos\Illuminate\Contracts\Debug\ExceptionHandler;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Contracts\Queue\Factory as QueueManager;
+use Odigos\Illuminate\Database\DetectsLostConnections;
+use Odigos\Illuminate\Queue\Events\JobAttempted;
+use Odigos\Illuminate\Queue\Events\JobExceptionOccurred;
+use Odigos\Illuminate\Queue\Events\JobPopped;
+use Odigos\Illuminate\Queue\Events\JobPopping;
+use Odigos\Illuminate\Queue\Events\JobProcessed;
+use Odigos\Illuminate\Queue\Events\JobProcessing;
+use Odigos\Illuminate\Queue\Events\JobReleasedAfterException;
+use Odigos\Illuminate\Queue\Events\JobTimedOut;
+use Odigos\Illuminate\Queue\Events\Looping;
+use Odigos\Illuminate\Queue\Events\WorkerStarting;
+use Odigos\Illuminate\Queue\Events\WorkerStopping;
+use Odigos\Illuminate\Support\Carbon;
 use Throwable;
 class Worker
 {
@@ -135,7 +135,7 @@ class Worker
      * @param  \Illuminate\Queue\WorkerOptions  $options
      * @return int
      */
-    public function daemon($connectionName, $queue, \Illuminate\Queue\WorkerOptions $options)
+    public function daemon($connectionName, $queue, WorkerOptions $options)
     {
         if ($supportsAsyncSignals = $this->supportsAsyncSignals()) {
             $this->listenForSignals();
@@ -197,7 +197,7 @@ class Worker
      * @param  \Illuminate\Queue\WorkerOptions  $options
      * @return void
      */
-    protected function registerTimeoutHandler($job, \Illuminate\Queue\WorkerOptions $options)
+    protected function registerTimeoutHandler($job, WorkerOptions $options)
     {
         // We will register a signal handler for the alarm signal so that we can kill this
         // process if it is running too long because it has frozen. This uses the async
@@ -209,7 +209,7 @@ class Worker
                 $this->markJobAsFailedIfItShouldFailOnTimeout($job->getConnectionName(), $job, $e);
                 $this->events->dispatch(new JobTimedOut($job->getConnectionName(), $job));
             }
-            $this->kill(static::EXIT_ERROR, $options, \Illuminate\Queue\WorkerStopReason::TimedOut);
+            $this->kill(static::EXIT_ERROR, $options, WorkerStopReason::TimedOut);
         }, \true);
         pcntl_alarm(max($this->timeoutForJob($job, $options), 0));
     }
@@ -229,7 +229,7 @@ class Worker
      * @param  \Illuminate\Queue\WorkerOptions  $options
      * @return int
      */
-    protected function timeoutForJob($job, \Illuminate\Queue\WorkerOptions $options)
+    protected function timeoutForJob($job, WorkerOptions $options)
     {
         return $job && !is_null($job->timeout()) ? $job->timeout() : $options->timeout;
     }
@@ -241,7 +241,7 @@ class Worker
      * @param  string  $queue
      * @return bool
      */
-    protected function daemonShouldRun(\Illuminate\Queue\WorkerOptions $options, $connectionName, $queue)
+    protected function daemonShouldRun(WorkerOptions $options, $connectionName, $queue)
     {
         return !(($this->isDownForMaintenance)() && !$options->force || $this->paused || $this->events->until(new Looping($connectionName, $queue)) === \false);
     }
@@ -255,7 +255,7 @@ class Worker
      * @param  int|float|null  $lastJobProcessedAt
      * @return array|null
      */
-    protected function pauseWorker(\Illuminate\Queue\WorkerOptions $options, $lastRestart, $startTime = 0, $jobsProcessed = 0, $lastJobProcessedAt = null)
+    protected function pauseWorker(WorkerOptions $options, $lastRestart, $startTime = 0, $jobsProcessed = 0, $lastJobProcessedAt = null)
     {
         $this->sleep($options->sleep > 0 ? $options->sleep : 1);
         return $this->stopIfNecessary($options, $lastRestart, $startTime, $jobsProcessed, null, $lastJobProcessedAt);
@@ -271,17 +271,17 @@ class Worker
      * @param  int|float|null  $lastJobProcessedAt
      * @return array|null
      */
-    protected function stopIfNecessary(\Illuminate\Queue\WorkerOptions $options, $lastRestart, $startTime = 0, $jobsProcessed = 0, $job = null, $lastJobProcessedAt = null)
+    protected function stopIfNecessary(WorkerOptions $options, $lastRestart, $startTime = 0, $jobsProcessed = 0, $job = null, $lastJobProcessedAt = null)
     {
         return match (\true) {
-            $this->lostConnection => [static::EXIT_SUCCESS, \Illuminate\Queue\WorkerStopReason::LostConnection],
-            $this->shouldQuit => [static::EXIT_SUCCESS, \Illuminate\Queue\WorkerStopReason::Interrupted],
-            $this->memoryExceeded($options->memory) => [static::$memoryExceededExitCode ?? static::EXIT_MEMORY_LIMIT, \Illuminate\Queue\WorkerStopReason::MaxMemoryExceeded],
-            $this->queueShouldRestart($lastRestart) => [static::EXIT_SUCCESS, \Illuminate\Queue\WorkerStopReason::ReceivedRestartSignal],
-            $options->stopWhenEmpty && is_null($job) => [static::EXIT_SUCCESS, \Illuminate\Queue\WorkerStopReason::QueueEmpty],
-            $options->stopWhenEmptyFor && is_null($job) && $this->currentTime() - ($lastJobProcessedAt ?? $startTime) >= $options->stopWhenEmptyFor => [static::EXIT_SUCCESS, \Illuminate\Queue\WorkerStopReason::QueueEmptyFor],
-            $options->maxTime && $this->currentTime() - $startTime >= $options->maxTime => [static::EXIT_SUCCESS, \Illuminate\Queue\WorkerStopReason::MaxTimeExceeded],
-            $options->maxJobs && $jobsProcessed >= $options->maxJobs => [static::EXIT_SUCCESS, \Illuminate\Queue\WorkerStopReason::MaxJobsExceeded],
+            $this->lostConnection => [static::EXIT_SUCCESS, WorkerStopReason::LostConnection],
+            $this->shouldQuit => [static::EXIT_SUCCESS, WorkerStopReason::Interrupted],
+            $this->memoryExceeded($options->memory) => [static::$memoryExceededExitCode ?? static::EXIT_MEMORY_LIMIT, WorkerStopReason::MaxMemoryExceeded],
+            $this->queueShouldRestart($lastRestart) => [static::EXIT_SUCCESS, WorkerStopReason::ReceivedRestartSignal],
+            $options->stopWhenEmpty && is_null($job) => [static::EXIT_SUCCESS, WorkerStopReason::QueueEmpty],
+            $options->stopWhenEmptyFor && is_null($job) && $this->currentTime() - ($lastJobProcessedAt ?? $startTime) >= $options->stopWhenEmptyFor => [static::EXIT_SUCCESS, WorkerStopReason::QueueEmptyFor],
+            $options->maxTime && $this->currentTime() - $startTime >= $options->maxTime => [static::EXIT_SUCCESS, WorkerStopReason::MaxTimeExceeded],
+            $options->maxJobs && $jobsProcessed >= $options->maxJobs => [static::EXIT_SUCCESS, WorkerStopReason::MaxJobsExceeded],
             default => null,
         };
     }
@@ -293,7 +293,7 @@ class Worker
      * @param  \Illuminate\Queue\WorkerOptions  $options
      * @return void
      */
-    public function runNextJob($connectionName, $queue, \Illuminate\Queue\WorkerOptions $options)
+    public function runNextJob($connectionName, $queue, WorkerOptions $options)
     {
         $job = $this->getNextJob($this->manager->connection($connectionName), $queue);
         // If we're able to pull a job off of the stack, we will process it and then return
@@ -361,7 +361,7 @@ class Worker
      * @param  \Illuminate\Queue\WorkerOptions  $options
      * @return void
      */
-    protected function runJob($job, $connectionName, \Illuminate\Queue\WorkerOptions $options)
+    protected function runJob($job, $connectionName, WorkerOptions $options)
     {
         try {
             return $this->process($connectionName, $job, $options);
@@ -392,7 +392,7 @@ class Worker
      *
      * @throws \Throwable
      */
-    public function process($connectionName, $job, \Illuminate\Queue\WorkerOptions $options)
+    public function process($connectionName, $job, WorkerOptions $options)
     {
         try {
             // First we will raise the before job event and determine if the job has already run
@@ -426,7 +426,7 @@ class Worker
      *
      * @throws \Throwable
      */
-    protected function handleJobException($connectionName, $job, \Illuminate\Queue\WorkerOptions $options, Throwable $e)
+    protected function handleJobException($connectionName, $job, WorkerOptions $options, Throwable $e)
     {
         try {
             // First, we will go ahead and mark the job as failed if it will exceed the maximum
@@ -546,7 +546,7 @@ class Worker
      * @param  \Illuminate\Queue\WorkerOptions  $options
      * @return int
      */
-    protected function calculateBackoff($job, \Illuminate\Queue\WorkerOptions $options)
+    protected function calculateBackoff($job, WorkerOptions $options)
     {
         $backoff = explode(',', method_exists($job, 'backoff') && !is_null($job->backoff()) ? $job->backoff() : $options->backoff);
         return (int) ($backoff[$job->attempts() - 1] ?? last($backoff));
@@ -716,7 +716,7 @@ class Worker
      */
     protected function maxAttemptsExceededException($job)
     {
-        return \Illuminate\Queue\MaxAttemptsExceededException::forJob($job);
+        return MaxAttemptsExceededException::forJob($job);
     }
     /**
      * Create an instance of TimeoutExceededException.
@@ -726,7 +726,7 @@ class Worker
      */
     protected function timeoutExceededException($job)
     {
-        return \Illuminate\Queue\TimeoutExceededException::forJob($job);
+        return TimeoutExceededException::forJob($job);
     }
     /**
      * Sleep the script for a given number of seconds.

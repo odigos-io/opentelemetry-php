@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
 /**
  * Exception for a non-unique/ambiguous specified field name in a statement detected in the driver.
  */
-class NonUniqueFieldNameException extends \Doctrine\DBAL\Exception\ServerException
+class NonUniqueFieldNameException extends ServerException
 {
 }

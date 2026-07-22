@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core\Retry;
+namespace Odigos\Cake\Core\Retry;
 
 use Closure;
 use Exception;
@@ -31,7 +31,7 @@ class CommandRetry
      *
      * @var \Cake\Core\Retry\RetryStrategyInterface
      */
-    protected \Cake\Core\Retry\RetryStrategyInterface $strategy;
+    protected RetryStrategyInterface $strategy;
     /**
      * @var int
      */
@@ -46,7 +46,7 @@ class CommandRetry
      * @param \Cake\Core\Retry\RetryStrategyInterface $strategy The strategy to follow should the action fail
      * @param int $maxRetries The maximum number of retry attempts allowed
      */
-    public function __construct(\Cake\Core\Retry\RetryStrategyInterface $strategy, int $maxRetries = 1)
+    public function __construct(RetryStrategyInterface $strategy, int $maxRetries = 1)
     {
         $this->strategy = $strategy;
         $this->maxRetries = $maxRetries;

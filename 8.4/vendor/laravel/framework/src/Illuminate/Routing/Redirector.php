@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Session\Store as SessionStore;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Http\RedirectResponse;
+use Odigos\Illuminate\Session\Store as SessionStore;
+use Odigos\Illuminate\Support\Traits\Macroable;
 class Redirector
 {
     use Macroable;
@@ -25,7 +25,7 @@ class Redirector
      *
      * @param  \Illuminate\Routing\UrlGenerator  $generator
      */
-    public function __construct(\Illuminate\Routing\UrlGenerator $generator)
+    public function __construct(UrlGenerator $generator)
     {
         $this->generator = $generator;
     }

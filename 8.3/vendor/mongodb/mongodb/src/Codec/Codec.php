@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Codec;
+namespace Odigos\MongoDB\Codec;
 
 /**
  * The Codec interface allows decoding BSON data to native PHP types and back
@@ -26,6 +26,6 @@ namespace MongoDB\Codec;
  * @template-extends Decoder<BSONType, NativeType>
  * @template-extends Encoder<BSONType, NativeType>
  */
-interface Codec extends \MongoDB\Codec\Decoder, \MongoDB\Codec\Encoder
+interface Codec extends Decoder, Encoder
 {
 }

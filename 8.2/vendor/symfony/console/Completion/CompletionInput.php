@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Completion;
+namespace Odigos\Symfony\Component\Console\Completion;
 
-use Symfony\Component\Console\Exception\RuntimeException;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Exception\RuntimeException;
+use Odigos\Symfony\Component\Console\Input\ArgvInput;
+use Odigos\Symfony\Component\Console\Input\InputDefinition;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 /**
  * An input specialized for shell completion.
  *

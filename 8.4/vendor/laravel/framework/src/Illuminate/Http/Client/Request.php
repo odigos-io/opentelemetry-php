@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Http\Client;
+namespace Odigos\Illuminate\Http\Client;
 
 use ArrayAccess;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use LogicException;
 class Request implements ArrayAccess
 {

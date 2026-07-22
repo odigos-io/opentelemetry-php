@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\i18n;
+namespace Odigos\yii\i18n;
 
 use Odigos\Yii;
-use yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidArgumentException;
 /**
  * PhpMessageSource represents a message source that stores translated messages in PHP scripts.
  *
@@ -31,7 +31,7 @@ use yii\base\InvalidArgumentException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class PhpMessageSource extends \yii\i18n\MessageSource
+class PhpMessageSource extends MessageSource
 {
     /**
      * @var string the base path for all translated messages. Defaults to '@app/messages'.

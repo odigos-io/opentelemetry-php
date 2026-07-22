@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         4.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Retry;
+namespace Odigos\Cake\Database\Retry;
 
-use Cake\Core\Retry\RetryStrategyInterface;
+use Odigos\Cake\Core\Retry\RetryStrategyInterface;
 use Exception;
 use PDOException;
 /**

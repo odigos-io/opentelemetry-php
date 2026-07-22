@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Connectors;
+namespace Odigos\Illuminate\Database\Connectors;
 
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Arr;
 use PDO;
-class SqlServerConnector extends \Illuminate\Database\Connectors\Connector implements \Illuminate\Database\Connectors\ConnectorInterface
+class SqlServerConnector extends Connector implements ConnectorInterface
 {
     /**
      * The PDO connection options.

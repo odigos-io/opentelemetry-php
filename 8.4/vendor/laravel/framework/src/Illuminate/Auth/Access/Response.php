@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Auth\Access;
+namespace Odigos\Illuminate\Auth\Access;
 
-use Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
 use Stringable;
 class Response implements Arrayable, Stringable
 {
@@ -134,7 +134,7 @@ class Response implements Arrayable, Stringable
     public function authorize()
     {
         if ($this->denied()) {
-            throw (new \Illuminate\Auth\Access\AuthorizationException($this->message(), $this->code()))->setResponse($this)->withStatus($this->status);
+            throw (new AuthorizationException($this->message(), $this->code()))->setResponse($this)->withStatus($this->status);
         }
         return $this;
     }

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\AbstractOracleDriver;
+namespace Odigos\Doctrine\DBAL\Driver\AbstractOracleDriver;
 
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use function implode;
 use function is_array;
 use function sprintf;

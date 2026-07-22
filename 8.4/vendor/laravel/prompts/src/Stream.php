@@ -1,9 +1,9 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
-use Laravel\Prompts\Themes\Default\Concerns\InteractsWithStrings;
-class Stream extends \Laravel\Prompts\Prompt
+use Odigos\Laravel\Prompts\Themes\Default\Concerns\InteractsWithStrings;
+class Stream extends Prompt
 {
     use InteractsWithStrings;
     protected int $minWidth = 0;

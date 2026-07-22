@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Threads\Runs\Steps\Delta;
+namespace Odigos\OpenAI\Responses\Threads\Runs\Steps\Delta;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{id: ?string, object: string, delta: array{step_details: array{type: 'tool_calls', tool_calls: array<int, array{id: ?string, type: 'code_interpreter', code_interpreter: array{input?: string, outputs?: array<int, array{type: 'image', image: array{file_id: string}}|array{type: 'logs', logs: string}>}}|array{id: string, type: 'file_search', file_search: array<string, string>}|array{id: ?string, type: 'function', function: array{name: ?string, arguments: string, output: ?string}}>}|array{type: 'message_creation', message_creation: array{message_id: string}}}}>
  */
@@ -16,7 +16,7 @@ final class ThreadRunStepDeltaResponse implements ResponseContract
      */
     use ArrayAccessible;
     use Fakeable;
-    private function __construct(public ?string $id, public string $object, public \OpenAI\Responses\Threads\Runs\Steps\Delta\ThreadRunStepDeltaObject $delta)
+    private function __construct(public ?string $id, public string $object, public ThreadRunStepDeltaObject $delta)
     {
     }
     /**
@@ -26,7 +26,7 @@ final class ThreadRunStepDeltaResponse implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        return new self($attributes['id'] ?? null, $attributes['object'], \OpenAI\Responses\Threads\Runs\Steps\Delta\ThreadRunStepDeltaObject::from($attributes['delta']));
+        return new self($attributes['id'] ?? null, $attributes['object'], ThreadRunStepDeltaObject::from($attributes['delta']));
     }
     /**
      * {@inheritDoc}

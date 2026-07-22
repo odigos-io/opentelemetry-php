@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Console;
+namespace Odigos\Illuminate\Console;
 
-use Illuminate\Console\Concerns\CreatesMatchingTest;
-use Illuminate\Console\Concerns\FindsAvailableModels;
-use Illuminate\Contracts\Console\PromptsForMissingInput;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Symfony\Component\Console\Completion\CompletionInput;
-use Symfony\Component\Console\Completion\CompletionSuggestions;
-use Symfony\Component\Console\Completion\Suggestion;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Finder\Finder;
-abstract class GeneratorCommand extends \Illuminate\Console\Command implements PromptsForMissingInput
+use Odigos\Illuminate\Console\Concerns\CreatesMatchingTest;
+use Odigos\Illuminate\Console\Concerns\FindsAvailableModels;
+use Odigos\Illuminate\Contracts\Console\PromptsForMissingInput;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Symfony\Component\Console\Completion\CompletionInput;
+use Odigos\Symfony\Component\Console\Completion\CompletionSuggestions;
+use Odigos\Symfony\Component\Console\Completion\Suggestion;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Finder\Finder;
+abstract class GeneratorCommand extends Command implements PromptsForMissingInput
 {
     use FindsAvailableModels;
     /**

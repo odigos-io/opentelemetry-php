@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Bootstrap;
+namespace Odigos\Illuminate\Foundation\Bootstrap;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Http\Request;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Http\Request;
 class SetRequestForConsole
 {
     /**

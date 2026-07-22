@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
-use yii\base\Exception;
+use Odigos\yii\base\Exception;
 /**
  * HeadersAlreadySentException represents an exception caused by
  * any headers that were already sent before web response was sent.

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Exception;
+namespace Odigos\Symfony\Component\Translation\Exception;
 
-class IncompleteDsnException extends \Symfony\Component\Translation\Exception\InvalidArgumentException
+class IncompleteDsnException extends InvalidArgumentException
 {
     public function __construct(string $message, ?string $dsn = null, ?\Throwable $previous = null)
     {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\Concerns\CreatesMatchingTest;
-use Illuminate\Console\GeneratorCommand;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Illuminate\Console\Concerns\CreatesMatchingTest;
+use Odigos\Illuminate\Console\GeneratorCommand;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'make:job-middleware')]
 class JobMiddlewareMakeCommand extends GeneratorCommand
 {

@@ -14,19 +14,19 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource\Paging;
+namespace Odigos\Cake\Datasource\Paging;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Core\InstanceConfigTrait;
-use Cake\Datasource\Paging\Exception\PageOutOfBoundsException;
-use Cake\Datasource\QueryInterface;
-use Cake\Datasource\RepositoryInterface;
-use Cake\Datasource\ResultSetInterface;
-use function Cake\Core\triggerWarning;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Datasource\Paging\Exception\PageOutOfBoundsException;
+use Odigos\Cake\Datasource\QueryInterface;
+use Odigos\Cake\Datasource\RepositoryInterface;
+use Odigos\Cake\Datasource\ResultSetInterface;
+use function Odigos\Cake\Core\triggerWarning;
 /**
  * This class is used to handle automatic model data pagination.
  */
-class NumericPaginator implements \Cake\Datasource\Paging\PaginatorInterface
+class NumericPaginator implements PaginatorInterface
 {
     use InstanceConfigTrait;
     /**
@@ -192,7 +192,7 @@ class NumericPaginator implements \Cake\Datasource\Paging\PaginatorInterface
      * @return \Cake\Datasource\Paging\PaginatedInterface
      * @throws \Cake\Datasource\Paging\Exception\PageOutOfBoundsException
      */
-    public function paginate(mixed $target, array $params = [], array $settings = []): \Cake\Datasource\Paging\PaginatedInterface
+    public function paginate(mixed $target, array $params = [], array $settings = []): PaginatedInterface
     {
         $query = null;
         if ($target instanceof QueryInterface) {
@@ -222,9 +222,9 @@ class NumericPaginator implements \Cake\Datasource\Paging\PaginatorInterface
      * @param array $pagingParams
      * @return \Cake\Datasource\Paging\PaginatedInterface
      */
-    protected function buildPaginated(ResultSetInterface $items, array $pagingParams): \Cake\Datasource\Paging\PaginatedInterface
+    protected function buildPaginated(ResultSetInterface $items, array $pagingParams): PaginatedInterface
     {
-        return new \Cake\Datasource\Paging\PaginatedResultSet($items, $pagingParams);
+        return new PaginatedResultSet($items, $pagingParams);
     }
     /**
      * Get query for fetching paginated results.
@@ -316,7 +316,7 @@ class NumericPaginator implements \Cake\Datasource\Paging\PaginatorInterface
         // Add sortableFields configuration for view helpers
         if (isset($data['options']['sortableFields'])) {
             $sortableFields = $data['options']['sortableFields'];
-            if ($sortableFields instanceof \Cake\Datasource\Paging\SortableFieldsBuilder) {
+            if ($sortableFields instanceof SortableFieldsBuilder) {
                 $this->pagingParams['sortableFields'] = $sortableFields->toArray();
             }
         }
@@ -476,7 +476,7 @@ class NumericPaginator implements \Cake\Datasource\Paging\PaginatorInterface
     {
         // Check if we have sortableFields configured
         $sortableFields = $options['sortableFields'] ?? null;
-        $builder = $sortableFields instanceof \Cake\Datasource\Paging\SortableFieldsBuilder ? $sortableFields : \Cake\Datasource\Paging\SortableFieldsBuilder::create($sortableFields);
+        $builder = $sortableFields instanceof SortableFieldsBuilder ? $sortableFields : SortableFieldsBuilder::create($sortableFields);
         // Store the converted builder for later use in paging params
         if ($builder !== null) {
             $options['sortableFields'] = $builder;
@@ -608,7 +608,7 @@ class NumericPaginator implements \Cake\Datasource\Paging\PaginatorInterface
     protected function parseSortParams(array $options): array
     {
         $sortKey = $options['sort'];
-        $direction = isset($options['direction']) ? strtolower($options['direction']) : \Cake\Datasource\Paging\SortField::ASC;
+        $direction = isset($options['direction']) ? strtolower($options['direction']) : SortField::ASC;
         $directionSpecified = isset($options['direction']);
         // Check for combined sort-direction format (e.g., 'title-asc' or 'title-desc')
         if (preg_match('/^(.+)-(asc|desc)$/i', $sortKey, $matches)) {
@@ -617,8 +617,8 @@ class NumericPaginator implements \Cake\Datasource\Paging\PaginatorInterface
             $directionSpecified = \true;
         }
         // Validate direction
-        if (!in_array($direction, [\Cake\Datasource\Paging\SortField::ASC, \Cake\Datasource\Paging\SortField::DESC], \true)) {
-            $direction = \Cake\Datasource\Paging\SortField::ASC;
+        if (!in_array($direction, [SortField::ASC, SortField::DESC], \true)) {
+            $direction = SortField::ASC;
         }
         return ['sortKey' => $sortKey, 'direction' => $direction, 'directionSpecified' => $directionSpecified];
     }

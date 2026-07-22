@@ -8,51 +8,51 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console;
+namespace Odigos\Symfony\Component\Console;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Command\CompleteCommand;
-use Symfony\Component\Console\Command\DumpCompletionCommand;
-use Symfony\Component\Console\Command\HelpCommand;
-use Symfony\Component\Console\Command\LazyCommand;
-use Symfony\Component\Console\Command\ListCommand;
-use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
-use Symfony\Component\Console\Completion\CompletionInput;
-use Symfony\Component\Console\Completion\CompletionSuggestions;
-use Symfony\Component\Console\Completion\Suggestion;
-use Symfony\Component\Console\Event\ConsoleAlarmEvent;
-use Symfony\Component\Console\Event\ConsoleCommandEvent;
-use Symfony\Component\Console\Event\ConsoleErrorEvent;
-use Symfony\Component\Console\Event\ConsoleSignalEvent;
-use Symfony\Component\Console\Event\ConsoleTerminateEvent;
-use Symfony\Component\Console\Exception\CommandNotFoundException;
-use Symfony\Component\Console\Exception\ExceptionInterface;
-use Symfony\Component\Console\Exception\LogicException;
-use Symfony\Component\Console\Exception\NamespaceNotFoundException;
-use Symfony\Component\Console\Exception\RuntimeException;
-use Symfony\Component\Console\Formatter\OutputFormatter;
-use Symfony\Component\Console\Helper\DebugFormatterHelper;
-use Symfony\Component\Console\Helper\DescriptorHelper;
-use Symfony\Component\Console\Helper\FormatterHelper;
-use Symfony\Component\Console\Helper\Helper;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Helper\ProcessHelper;
-use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputAwareInterface;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\SignalRegistry\SignalRegistry;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\ErrorHandler\ErrorHandler;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Symfony\Contracts\Service\ResetInterface;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Command\CompleteCommand;
+use Odigos\Symfony\Component\Console\Command\DumpCompletionCommand;
+use Odigos\Symfony\Component\Console\Command\HelpCommand;
+use Odigos\Symfony\Component\Console\Command\LazyCommand;
+use Odigos\Symfony\Component\Console\Command\ListCommand;
+use Odigos\Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
+use Odigos\Symfony\Component\Console\Completion\CompletionInput;
+use Odigos\Symfony\Component\Console\Completion\CompletionSuggestions;
+use Odigos\Symfony\Component\Console\Completion\Suggestion;
+use Odigos\Symfony\Component\Console\Event\ConsoleAlarmEvent;
+use Odigos\Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Odigos\Symfony\Component\Console\Event\ConsoleErrorEvent;
+use Odigos\Symfony\Component\Console\Event\ConsoleSignalEvent;
+use Odigos\Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use Odigos\Symfony\Component\Console\Exception\CommandNotFoundException;
+use Odigos\Symfony\Component\Console\Exception\ExceptionInterface;
+use Odigos\Symfony\Component\Console\Exception\LogicException;
+use Odigos\Symfony\Component\Console\Exception\NamespaceNotFoundException;
+use Odigos\Symfony\Component\Console\Exception\RuntimeException;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatter;
+use Odigos\Symfony\Component\Console\Helper\DebugFormatterHelper;
+use Odigos\Symfony\Component\Console\Helper\DescriptorHelper;
+use Odigos\Symfony\Component\Console\Helper\FormatterHelper;
+use Odigos\Symfony\Component\Console\Helper\Helper;
+use Odigos\Symfony\Component\Console\Helper\HelperSet;
+use Odigos\Symfony\Component\Console\Helper\ProcessHelper;
+use Odigos\Symfony\Component\Console\Helper\QuestionHelper;
+use Odigos\Symfony\Component\Console\Input\ArgvInput;
+use Odigos\Symfony\Component\Console\Input\ArrayInput;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputAwareInterface;
+use Odigos\Symfony\Component\Console\Input\InputDefinition;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutput;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\SignalRegistry\SignalRegistry;
+use Odigos\Symfony\Component\Console\Style\SymfonyStyle;
+use Odigos\Symfony\Component\ErrorHandler\ErrorHandler;
+use Odigos\Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Odigos\Symfony\Contracts\Service\ResetInterface;
 /**
  * An Application is the container for a collection of commands.
  *
@@ -80,7 +80,7 @@ class Application implements ResetInterface
     private InputDefinition $definition;
     private HelperSet $helperSet;
     private ?EventDispatcherInterface $dispatcher = null;
-    private \Symfony\Component\Console\Terminal $terminal;
+    private Terminal $terminal;
     private string $defaultCommand;
     private bool $singleCommand = \false;
     private bool $initialized = \false;
@@ -89,7 +89,7 @@ class Application implements ResetInterface
     private ?int $alarmInterval = null;
     public function __construct(private string $name = 'UNKNOWN', private string $version = 'UNKNOWN')
     {
-        $this->terminal = new \Symfony\Component\Console\Terminal();
+        $this->terminal = new Terminal();
         $this->defaultCommand = 'list';
         if (\defined('SIGINT') && SignalRegistry::isSupported()) {
             $this->signalRegistry = new SignalRegistry();
@@ -270,7 +270,7 @@ class Application implements ResetInterface
                 if (!$style->confirm(\sprintf('Do you want to run "%s" instead? ', $alternative), \false)) {
                     if (null !== $this->dispatcher) {
                         $event = new ConsoleErrorEvent($input, $output, $e);
-                        $this->dispatcher->dispatch($event, \Symfony\Component\Console\ConsoleEvents::ERROR);
+                        $this->dispatcher->dispatch($event, ConsoleEvents::ERROR);
                         return $event->getExitCode();
                     }
                     return 1;
@@ -279,7 +279,7 @@ class Application implements ResetInterface
             } else {
                 if (null !== $this->dispatcher) {
                     $event = new ConsoleErrorEvent($input, $output, $e);
-                    $this->dispatcher->dispatch($event, \Symfony\Component\Console\ConsoleEvents::ERROR);
+                    $this->dispatcher->dispatch($event, ConsoleEvents::ERROR);
                     if (0 === $event->getExitCode()) {
                         return 0;
                     }
@@ -856,7 +856,7 @@ class Application implements ResetInterface
                     $signalEvent = new ConsoleSignalEvent($command, $input, $output, $signal);
                     $alarmEvent = \SIGALRM === $signal ? new ConsoleAlarmEvent($command, $input, $output) : null;
                     $signalRegistry->register($signal, function ($signal) use ($signalEvent, $alarmEvent, $command, $commandSignals, $input, $output) {
-                        $this->dispatcher->dispatch($signalEvent, \Symfony\Component\Console\ConsoleEvents::SIGNAL);
+                        $this->dispatcher->dispatch($signalEvent, ConsoleEvents::SIGNAL);
                         $exitCode = $signalEvent->getExitCode();
                         if (null !== $alarmEvent) {
                             if (\false !== $exitCode) {
@@ -876,7 +876,7 @@ class Application implements ResetInterface
                         }
                         if (\false !== $exitCode) {
                             $event = new ConsoleTerminateEvent($command, $input, $output, $exitCode, $signal);
-                            $this->dispatcher->dispatch($event, \Symfony\Component\Console\ConsoleEvents::TERMINATE);
+                            $this->dispatcher->dispatch($event, ConsoleEvents::TERMINATE);
                             exit($event->getExitCode());
                         }
                     });
@@ -914,7 +914,7 @@ class Application implements ResetInterface
         $event = new ConsoleCommandEvent($command, $input, $output);
         $e = null;
         try {
-            $this->dispatcher->dispatch($event, \Symfony\Component\Console\ConsoleEvents::COMMAND);
+            $this->dispatcher->dispatch($event, ConsoleEvents::COMMAND);
             if ($event->commandShouldRun()) {
                 $exitCode = $command->run($input, $output);
             } else {
@@ -922,7 +922,7 @@ class Application implements ResetInterface
             }
         } catch (\Throwable $e) {
             $event = new ConsoleErrorEvent($input, $output, $e, $command);
-            $this->dispatcher->dispatch($event, \Symfony\Component\Console\ConsoleEvents::ERROR);
+            $this->dispatcher->dispatch($event, ConsoleEvents::ERROR);
             $e = $event->getError();
             if (0 === $exitCode = $event->getExitCode()) {
                 $e = null;
@@ -933,7 +933,7 @@ class Application implements ResetInterface
             }
         }
         $event = new ConsoleTerminateEvent($command, $input, $output, $exitCode);
-        $this->dispatcher->dispatch($event, \Symfony\Component\Console\ConsoleEvents::TERMINATE);
+        $this->dispatcher->dispatch($event, ConsoleEvents::TERMINATE);
         if (null !== $e) {
             throw $e;
         }

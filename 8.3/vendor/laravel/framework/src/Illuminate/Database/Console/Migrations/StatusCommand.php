@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Database\Console\Migrations;
+namespace Odigos\Illuminate\Database\Console\Migrations;
 
-use Illuminate\Database\Migrations\Migrator;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Stringable;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Illuminate\Database\Migrations\Migrator;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Stringable;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'migrate:status')]
-class StatusCommand extends \Illuminate\Database\Console\Migrations\BaseCommand
+class StatusCommand extends BaseCommand
 {
     /**
      * The console command name.

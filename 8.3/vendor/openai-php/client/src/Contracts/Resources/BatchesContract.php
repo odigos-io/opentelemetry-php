@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Batches\BatchListResponse;
-use OpenAI\Responses\Batches\BatchResponse;
+use Odigos\OpenAI\Responses\Batches\BatchListResponse;
+use Odigos\OpenAI\Responses\Batches\BatchResponse;
 interface BatchesContract
 {
     /**

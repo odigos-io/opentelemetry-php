@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses\Tool;
+namespace Odigos\OpenAI\Responses\Responses\Tool;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type UserLocationType from WebSearchUserLocation
  *
@@ -24,7 +24,7 @@ final class WebSearchTool implements ResponseContract
      * @param  'web_search'|'web_search_preview'|'web_search_preview_2025_03_11'  $type
      * @param  'low'|'medium'|'high'  $searchContextSize
      */
-    private function __construct(public readonly string $type, public readonly string $searchContextSize, public readonly ?\OpenAI\Responses\Responses\Tool\WebSearchUserLocation $userLocation)
+    private function __construct(public readonly string $type, public readonly string $searchContextSize, public readonly ?WebSearchUserLocation $userLocation)
     {
     }
     /**
@@ -32,7 +32,7 @@ final class WebSearchTool implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        return new self(type: $attributes['type'], searchContextSize: $attributes['search_context_size'], userLocation: isset($attributes['user_location']) ? \OpenAI\Responses\Responses\Tool\WebSearchUserLocation::from($attributes['user_location']) : null);
+        return new self(type: $attributes['type'], searchContextSize: $attributes['search_context_size'], userLocation: isset($attributes['user_location']) ? WebSearchUserLocation::from($attributes['user_location']) : null);
     }
     /**
      * {@inheritDoc}

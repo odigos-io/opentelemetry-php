@@ -14,29 +14,29 @@ declare (strict_types=1);
  * @since         0.10.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
-use Cake\Cache\Cache;
-use Cake\Core\App;
-use Cake\Core\Exception\CakeException;
-use Cake\Core\InstanceConfigTrait;
-use Cake\Core\Plugin;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
-use Cake\Event\EventManagerInterface;
-use Cake\Http\Response;
-use Cake\Http\ServerRequest;
-use Cake\Log\LogTrait;
-use Cake\Routing\Router;
-use Cake\Utility\Inflector;
-use Cake\View\Exception\MissingElementException;
-use Cake\View\Exception\MissingLayoutException;
-use Cake\View\Exception\MissingTemplateException;
+use Odigos\Cake\Cache\Cache;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Event\EventManagerInterface;
+use Odigos\Cake\Http\Response;
+use Odigos\Cake\Http\ServerRequest;
+use Odigos\Cake\Log\LogTrait;
+use Odigos\Cake\Routing\Router;
+use Odigos\Cake\Utility\Inflector;
+use Odigos\Cake\View\Exception\MissingElementException;
+use Odigos\Cake\View\Exception\MissingLayoutException;
+use Odigos\Cake\View\Exception\MissingTemplateException;
 use Generator;
 use InvalidArgumentException;
 use LogicException;
 use Throwable;
-use function Cake\Core\pluginSplit;
+use function Odigos\Cake\Core\pluginSplit;
 /**
  * View, the V in the MVC triad. View interacts with Helpers and view variables passed
  * in from the controller to render the results of the controller action. Often this is HTML,
@@ -74,7 +74,7 @@ use function Cake\Core\pluginSplit;
  */
 class View implements EventDispatcherInterface
 {
-    use \Cake\View\CellTrait {
+    use CellTrait {
         cell as public;
     }
     /**
@@ -88,13 +88,13 @@ class View implements EventDispatcherInterface
      *
      * @var \Cake\View\HelperRegistry|null
      */
-    protected ?\Cake\View\HelperRegistry $_helpers = null;
+    protected ?HelperRegistry $_helpers = null;
     /**
      * ViewBlock instance.
      *
      * @var \Cake\View\ViewBlock
      */
-    protected \Cake\View\ViewBlock $Blocks;
+    protected ViewBlock $Blocks;
     /**
      * The name of the plugin.
      *
@@ -250,7 +250,7 @@ class View implements EventDispatcherInterface
      * @var string
      * @phpstan-var class-string<\Cake\View\ViewBlock>
      */
-    protected string $_viewBlockClass = \Cake\View\ViewBlock::class;
+    protected string $_viewBlockClass = ViewBlock::class;
     /**
      * Constant for view file type 'template'.
      *
@@ -847,7 +847,7 @@ class View implements EventDispatcherInterface
      */
     public function prepend(string $name, mixed $value)
     {
-        $this->Blocks->concat($name, $value, \Cake\View\ViewBlock::PREPEND);
+        $this->Blocks->concat($name, $value, ViewBlock::PREPEND);
         return $this;
     }
     /**
@@ -964,7 +964,7 @@ class View implements EventDispatcherInterface
      * @param string $name Name of the attribute to get.
      * @return \Cake\View\Helper|null
      */
-    public function __get(string $name): ?\Cake\View\Helper
+    public function __get(string $name): ?Helper
     {
         return $this->helpers()->{$name};
     }
@@ -1045,9 +1045,9 @@ class View implements EventDispatcherInterface
      *
      * @return \Cake\View\HelperRegistry
      */
-    public function helpers(): \Cake\View\HelperRegistry
+    public function helpers(): HelperRegistry
     {
-        return $this->_helpers ??= new \Cake\View\HelperRegistry($this);
+        return $this->_helpers ??= new HelperRegistry($this);
     }
     /**
      * Adds a helper from within `initialize()` method.
@@ -1074,7 +1074,7 @@ class View implements EventDispatcherInterface
      * @return \Cake\View\Helper a constructed helper object.
      * @see \Cake\View\HelperRegistry::load()
      */
-    public function loadHelper(string $name, array $config = []): \Cake\View\Helper
+    public function loadHelper(string $name, array $config = []): Helper
     {
         /** @var \Cake\View\Helper */
         return $this->helpers()->load($name, $config);

@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Database\Schema;
+namespace Odigos\Illuminate\Database\Schema;
 
 use Exception;
-use Illuminate\Database\Connection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Database\Connection;
+use Odigos\Illuminate\Support\Str;
 use Pdo\Mysql;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
-class MySqlSchemaState extends \Illuminate\Database\Schema\SchemaState
+use Odigos\Symfony\Component\Process\Exception\ProcessFailedException;
+use Odigos\Symfony\Component\Process\Process;
+class MySqlSchemaState extends SchemaState
 {
     /**
      * Dump the database's schema into a file.

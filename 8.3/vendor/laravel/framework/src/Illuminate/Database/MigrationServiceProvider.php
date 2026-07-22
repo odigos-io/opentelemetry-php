@@ -1,21 +1,21 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Database\Console\Migrations\FreshCommand;
-use Illuminate\Database\Console\Migrations\InstallCommand;
-use Illuminate\Database\Console\Migrations\MigrateCommand;
-use Illuminate\Database\Console\Migrations\MigrateMakeCommand;
-use Illuminate\Database\Console\Migrations\RefreshCommand;
-use Illuminate\Database\Console\Migrations\ResetCommand;
-use Illuminate\Database\Console\Migrations\RollbackCommand;
-use Illuminate\Database\Console\Migrations\StatusCommand;
-use Illuminate\Database\Migrations\DatabaseMigrationRepository;
-use Illuminate\Database\Migrations\MigrationCreator;
-use Illuminate\Database\Migrations\Migrator;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Contracts\Support\DeferrableProvider;
+use Odigos\Illuminate\Database\Console\Migrations\FreshCommand;
+use Odigos\Illuminate\Database\Console\Migrations\InstallCommand;
+use Odigos\Illuminate\Database\Console\Migrations\MigrateCommand;
+use Odigos\Illuminate\Database\Console\Migrations\MigrateMakeCommand;
+use Odigos\Illuminate\Database\Console\Migrations\RefreshCommand;
+use Odigos\Illuminate\Database\Console\Migrations\ResetCommand;
+use Odigos\Illuminate\Database\Console\Migrations\RollbackCommand;
+use Odigos\Illuminate\Database\Console\Migrations\StatusCommand;
+use Odigos\Illuminate\Database\Migrations\DatabaseMigrationRepository;
+use Odigos\Illuminate\Database\Migrations\MigrationCreator;
+use Odigos\Illuminate\Database\Migrations\Migrator;
+use Odigos\Illuminate\Support\ServiceProvider;
 class MigrationServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**

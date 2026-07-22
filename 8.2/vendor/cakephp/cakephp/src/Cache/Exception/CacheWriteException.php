@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         4.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Cache\Exception;
+namespace Odigos\Cake\Cache\Exception;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 /**
  * Exception raised when cache writing failed for some reason.
  * Replaces triggering an error.

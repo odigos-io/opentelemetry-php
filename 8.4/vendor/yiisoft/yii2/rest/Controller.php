@@ -5,16 +5,16 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rest;
+namespace Odigos\yii\rest;
 
 use Odigos\Yii;
-use yii\filters\auth\CompositeAuth;
-use yii\filters\ContentNegotiator;
-use yii\filters\RateLimiter;
-use yii\filters\VerbFilter;
-use yii\web\Response;
-use yii\web\Controller as WebController;
-use yii\base\Module;
+use Odigos\yii\filters\auth\CompositeAuth;
+use Odigos\yii\filters\ContentNegotiator;
+use Odigos\yii\filters\RateLimiter;
+use Odigos\yii\filters\VerbFilter;
+use Odigos\yii\web\Response;
+use Odigos\yii\web\Controller as WebController;
+use Odigos\yii\base\Module;
 /**
  * Controller is the base class for RESTful API controller classes.
  *
@@ -39,7 +39,7 @@ class Controller extends WebController
     /**
      * @var string|array the configuration for creating the serializer that formats the response data.
      */
-    public $serializer = 'yii\rest\Serializer';
+    public $serializer = 'Odigos\yii\rest\Serializer';
     /**
      * {@inheritdoc}
      */

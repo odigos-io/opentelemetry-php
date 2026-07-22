@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\CacheWarmer;
+namespace Odigos\Symfony\Component\HttpKernel\CacheWarmer;
 
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Odigos\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Aggregates several cache warmers into a single one.
  *
@@ -18,7 +18,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * @final
  */
-class CacheWarmerAggregate implements \Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface
+class CacheWarmerAggregate implements CacheWarmerInterface
 {
     private iterable $warmers;
     private bool $debug;

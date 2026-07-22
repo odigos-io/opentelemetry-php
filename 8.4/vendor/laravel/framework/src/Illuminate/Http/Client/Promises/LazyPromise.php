@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http\Client\Promises;
+namespace Odigos\Illuminate\Http\Client\Promises;
 
 use Closure;
-use GuzzleHttp\Promise\PromiseInterface;
+use Odigos\GuzzleHttp\Promise\PromiseInterface;
 use RuntimeException;
 class LazyPromise implements PromiseInterface
 {

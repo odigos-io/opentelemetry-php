@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Log\Context;
+namespace Odigos\Illuminate\Log\Context;
 
-use Illuminate\Contracts\Log\ContextLogProcessor as ContextLogProcessorContract;
-use Illuminate\Queue\Events\JobProcessing;
-use Illuminate\Queue\Queue;
-use Illuminate\Support\Env;
-use Illuminate\Support\Facades\Context;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Log\ContextLogProcessor as ContextLogProcessorContract;
+use Odigos\Illuminate\Queue\Events\JobProcessing;
+use Odigos\Illuminate\Queue\Queue;
+use Odigos\Illuminate\Support\Env;
+use Odigos\Illuminate\Support\Facades\Context;
+use Odigos\Illuminate\Support\ServiceProvider;
 class ContextServiceProvider extends ServiceProvider
 {
     /**
@@ -17,16 +17,16 @@ class ContextServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->scoped(\Illuminate\Log\Context\Repository::class);
+        $this->app->scoped(Repository::class);
         if ($this->app->runningInConsole()) {
-            $this->app->resolving(\Illuminate\Log\Context\Repository::class, function (\Illuminate\Log\Context\Repository $repository) {
+            $this->app->resolving(Repository::class, function (Repository $repository) {
                 $context = Env::get('__LARAVEL_CONTEXT');
                 if ($context && $context = json_decode($context, associative: \true)) {
                     $repository->hydrate($context);
                 }
             });
         }
-        $this->app->bind(ContextLogProcessorContract::class, fn() => new \Illuminate\Log\Context\ContextLogProcessor());
+        $this->app->bind(ContextLogProcessorContract::class, fn() => new ContextLogProcessor());
     }
     /**
      * Boot the application services.

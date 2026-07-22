@@ -5,15 +5,15 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\behaviors;
+namespace Odigos\yii\behaviors;
 
-use yii\base\Behavior;
-use yii\base\InvalidConfigException;
-use yii\base\Widget;
-use yii\base\WidgetEvent;
-use yii\caching\CacheInterface;
-use yii\caching\Dependency;
-use yii\di\Instance;
+use Odigos\yii\base\Behavior;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\Widget;
+use Odigos\yii\base\WidgetEvent;
+use Odigos\yii\caching\CacheInterface;
+use Odigos\yii\caching\Dependency;
+use Odigos\yii\di\Instance;
 /**
  * Cacheable widget behavior automatically caches widget contents according to duration and dependencies specified.
  *
@@ -150,7 +150,7 @@ class CacheableWidgetBehavior extends Behavior
      */
     private function getCacheInstance()
     {
-        $cacheInterface = 'yii\caching\CacheInterface';
+        $cacheInterface = 'Odigos\yii\caching\CacheInterface';
         return Instance::ensure($this->cache, $cacheInterface);
     }
     /**

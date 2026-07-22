@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Database\Query\Grammars;
+namespace Odigos\Illuminate\Database\Query\Grammars;
 
-use Illuminate\Contracts\Database\Query\Expression;
-use Illuminate\Database\Concerns\CompilesJsonPaths;
-use Illuminate\Database\Grammar as BaseGrammar;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\JoinClause;
-use Illuminate\Database\Query\JoinLateralClause;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Database\Query\Expression;
+use Odigos\Illuminate\Database\Concerns\CompilesJsonPaths;
+use Odigos\Illuminate\Database\Grammar as BaseGrammar;
+use Odigos\Illuminate\Database\Query\Builder;
+use Odigos\Illuminate\Database\Query\JoinClause;
+use Odigos\Illuminate\Database\Query\JoinLateralClause;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 use RuntimeException;
 class Grammar extends BaseGrammar
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\Output\BufferedConsoleOutput;
-use Laravel\Prompts\Table;
-use Symfony\Component\Console\Helper\Table as SymfonyTable;
-use Symfony\Component\Console\Helper\TableStyle;
-class TableRenderer extends \Laravel\Prompts\Themes\Default\Renderer
+use Odigos\Laravel\Prompts\Output\BufferedConsoleOutput;
+use Odigos\Laravel\Prompts\Table;
+use Odigos\Symfony\Component\Console\Helper\Table as SymfonyTable;
+use Odigos\Symfony\Component\Console\Helper\TableStyle;
+class TableRenderer extends Renderer
 {
     /**
      * Render the table.

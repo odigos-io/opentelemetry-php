@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
-use Illuminate\Queue\Attributes\WithoutRelations;
+use Odigos\Illuminate\Queue\Attributes\WithoutRelations;
 use ReflectionClass;
 use ReflectionProperty;
 trait SerializesModels
 {
-    use \Illuminate\Queue\SerializesAndRestoresModelIdentifiers;
+    use SerializesAndRestoresModelIdentifiers;
     /**
      * Prepare the instance values for serialization.
      *

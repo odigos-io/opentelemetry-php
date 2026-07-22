@@ -5,24 +5,24 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\cubrid;
+namespace Odigos\yii\db\cubrid;
 
-use yii\base\InvalidArgumentException;
-use yii\base\NotSupportedException;
-use yii\db\Exception;
-use yii\db\Expression;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\NotSupportedException;
+use Odigos\yii\db\Exception;
+use Odigos\yii\db\Expression;
 /**
  * QueryBuilder is the query builder for CUBRID databases (version 9.3.x and higher).
  *
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class QueryBuilder extends \yii\db\QueryBuilder
+class QueryBuilder extends \Odigos\yii\db\QueryBuilder
 {
     /**
      * @var array mapping from abstract column types (keys) to physical column types (values).
      */
-    public $typeMap = [\yii\db\cubrid\Schema::TYPE_PK => 'int NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\cubrid\Schema::TYPE_UPK => 'int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\cubrid\Schema::TYPE_BIGPK => 'bigint NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\cubrid\Schema::TYPE_UBIGPK => 'bigint UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\cubrid\Schema::TYPE_CHAR => 'char(1)', \yii\db\cubrid\Schema::TYPE_STRING => 'varchar(255)', \yii\db\cubrid\Schema::TYPE_TEXT => 'varchar', \yii\db\cubrid\Schema::TYPE_TINYINT => 'smallint', \yii\db\cubrid\Schema::TYPE_SMALLINT => 'smallint', \yii\db\cubrid\Schema::TYPE_INTEGER => 'int', \yii\db\cubrid\Schema::TYPE_BIGINT => 'bigint', \yii\db\cubrid\Schema::TYPE_FLOAT => 'float(7)', \yii\db\cubrid\Schema::TYPE_DOUBLE => 'double(15)', \yii\db\cubrid\Schema::TYPE_DECIMAL => 'decimal(10,0)', \yii\db\cubrid\Schema::TYPE_DATETIME => 'datetime', \yii\db\cubrid\Schema::TYPE_TIMESTAMP => 'timestamp', \yii\db\cubrid\Schema::TYPE_TIME => 'time', \yii\db\cubrid\Schema::TYPE_DATE => 'date', \yii\db\cubrid\Schema::TYPE_BINARY => 'blob', \yii\db\cubrid\Schema::TYPE_BOOLEAN => 'smallint', \yii\db\cubrid\Schema::TYPE_MONEY => 'decimal(19,4)'];
+    public $typeMap = [Schema::TYPE_PK => 'int NOT NULL AUTO_INCREMENT PRIMARY KEY', Schema::TYPE_UPK => 'int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY', Schema::TYPE_BIGPK => 'bigint NOT NULL AUTO_INCREMENT PRIMARY KEY', Schema::TYPE_UBIGPK => 'bigint UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY', Schema::TYPE_CHAR => 'char(1)', Schema::TYPE_STRING => 'varchar(255)', Schema::TYPE_TEXT => 'varchar', Schema::TYPE_TINYINT => 'smallint', Schema::TYPE_SMALLINT => 'smallint', Schema::TYPE_INTEGER => 'int', Schema::TYPE_BIGINT => 'bigint', Schema::TYPE_FLOAT => 'float(7)', Schema::TYPE_DOUBLE => 'double(15)', Schema::TYPE_DECIMAL => 'decimal(10,0)', Schema::TYPE_DATETIME => 'datetime', Schema::TYPE_TIMESTAMP => 'timestamp', Schema::TYPE_TIME => 'time', Schema::TYPE_DATE => 'date', Schema::TYPE_BINARY => 'blob', Schema::TYPE_BOOLEAN => 'smallint', Schema::TYPE_MONEY => 'decimal(19,4)'];
     /**
      * {@inheritdoc}
      */

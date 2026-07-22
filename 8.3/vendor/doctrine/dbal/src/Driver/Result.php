@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver;
+namespace Odigos\Doctrine\DBAL\Driver;
 
 /**
  * Driver-level statement execution result.

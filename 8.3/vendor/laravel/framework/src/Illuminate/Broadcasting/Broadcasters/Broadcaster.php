@@ -1,20 +1,20 @@
 <?php
 
-namespace Illuminate\Broadcasting\Broadcasters;
+namespace Odigos\Illuminate\Broadcasting\Broadcasters;
 
 use Closure;
 use Exception;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Broadcasting\Broadcaster as BroadcasterContract;
-use Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
-use Illuminate\Contracts\Routing\BindingRegistrar;
-use Illuminate\Contracts\Routing\UrlRoutable;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Reflector;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Broadcasting\Broadcaster as BroadcasterContract;
+use Odigos\Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
+use Odigos\Illuminate\Contracts\Routing\BindingRegistrar;
+use Odigos\Illuminate\Contracts\Routing\UrlRoutable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Reflector;
 use ReflectionClass;
 use ReflectionFunction;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 abstract class Broadcaster implements BroadcasterContract
 {
     /**

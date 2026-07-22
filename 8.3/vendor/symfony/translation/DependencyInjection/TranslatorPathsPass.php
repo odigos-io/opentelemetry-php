@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\DependencyInjection;
+namespace Odigos\Symfony\Component\Translation\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\ServiceLocator;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver;
+use Odigos\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass;
+use Odigos\Symfony\Component\DependencyInjection\ContainerBuilder;
+use Odigos\Symfony\Component\DependencyInjection\Definition;
+use Odigos\Symfony\Component\DependencyInjection\Reference;
+use Odigos\Symfony\Component\DependencyInjection\ServiceLocator;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver;
 /**
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */

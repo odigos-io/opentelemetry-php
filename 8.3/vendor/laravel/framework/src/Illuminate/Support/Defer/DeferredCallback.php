@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support\Defer;
+namespace Odigos\Illuminate\Support\Defer;
 
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Str;
 class DeferredCallback
 {
     /**

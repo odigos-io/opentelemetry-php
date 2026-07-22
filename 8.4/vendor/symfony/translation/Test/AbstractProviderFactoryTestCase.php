@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Test;
+namespace Odigos\Symfony\Component\Translation\Test;
 
 use Odigos\PHPUnit\Framework\Attributes\DataProvider;
 use Odigos\PHPUnit\Framework\TestCase;
-use Symfony\Component\Translation\Exception\UnsupportedSchemeException;
-use Symfony\Component\Translation\Provider\Dsn;
-use Symfony\Component\Translation\Provider\ProviderFactoryInterface;
+use Odigos\Symfony\Component\Translation\Exception\UnsupportedSchemeException;
+use Odigos\Symfony\Component\Translation\Provider\Dsn;
+use Odigos\Symfony\Component\Translation\Provider\ProviderFactoryInterface;
 abstract class AbstractProviderFactoryTestCase extends TestCase
 {
     abstract public function createFactory(): ProviderFactoryInterface;

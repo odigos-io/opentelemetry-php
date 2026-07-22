@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\JsonSchema\Types;
+namespace Odigos\Illuminate\JsonSchema\Types;
 
 use BackedEnum;
-use Illuminate\JsonSchema\JsonSchema;
-use Illuminate\JsonSchema\Serializer;
+use Odigos\Illuminate\JsonSchema\JsonSchema;
+use Odigos\Illuminate\JsonSchema\Serializer;
 use InvalidArgumentException;
 abstract class Type extends JsonSchema
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Foundation\MaintenanceModeManager;
+use Odigos\Illuminate\Foundation\MaintenanceModeManager;
 /**
  * @method static string getDefaultDriver()
  * @method static mixed driver(string|null $driver = null)
@@ -14,7 +14,7 @@ use Illuminate\Foundation\MaintenanceModeManager;
  *
  * @see \Illuminate\Foundation\MaintenanceModeManager
  */
-class MaintenanceMode extends \Illuminate\Support\Facades\Facade
+class MaintenanceMode extends Facade
 {
     /**
      * Get the registered name of the component.

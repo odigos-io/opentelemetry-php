@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Factories;
+namespace Odigos\Illuminate\Database\Eloquent\Factories;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
-use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Odigos\Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Odigos\Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
 class Relationship
 {
     /**
@@ -26,7 +26,7 @@ class Relationship
      * @param  \Illuminate\Database\Eloquent\Factories\Factory  $factory
      * @param  string  $relationship
      */
-    public function __construct(\Illuminate\Database\Eloquent\Factories\Factory $factory, $relationship)
+    public function __construct(Factory $factory, $relationship)
     {
         $this->factory = $factory;
         $this->relationship = $relationship;

@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Matcher\Dumper;
+namespace Odigos\Symfony\Component\Routing\Matcher\Dumper;
 
-use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\RouteCollection;
+use Odigos\Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
+use Odigos\Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Odigos\Symfony\Component\Routing\Route;
+use Odigos\Symfony\Component\Routing\RouteCollection;
 /**
  * CompiledUrlMatcherDumper creates PHP arrays to be used with CompiledUrlMatcher.
  *
@@ -22,7 +22,7 @@ use Symfony\Component\Routing\RouteCollection;
  * @author Arnaud Le Blanc <arnaud.lb@gmail.com>
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class CompiledUrlMatcherDumper extends \Symfony\Component\Routing\Matcher\Dumper\MatcherDumper
+class CompiledUrlMatcherDumper extends MatcherDumper
 {
     private ExpressionLanguage $expressionLanguage;
     private ?\Exception $signalingException = null;
@@ -56,7 +56,7 @@ EOF;
     {
         // Group hosts by same-suffix, re-order when possible
         $matchHost = \false;
-        $routes = new \Symfony\Component\Routing\Matcher\Dumper\StaticPrefixCollection();
+        $routes = new StaticPrefixCollection();
         foreach ($this->getRoutes()->all() as $name => $route) {
             if ($host = $route->getHost()) {
                 $matchHost = \true;
@@ -280,7 +280,7 @@ EOF;
                     $state->regex .= $rx;
                     $prev = \true;
                 }
-                $tree = new \Symfony\Component\Routing\Matcher\Dumper\StaticPrefixCollection();
+                $tree = new StaticPrefixCollection();
                 foreach ($routes->all() as $name => $route) {
                     preg_match('#^.\^(.*)\$.[a-zA-Z]*$#', $route->compile()->getRegex(), $rx);
                     $state->vars = [];
@@ -320,13 +320,13 @@ EOF;
      * @param \stdClass $state A simple state object that keeps track of the progress of the compilation,
      *                         and gathers the generated switch's "case" and "default" statements
      */
-    private function compileStaticPrefixCollection(\Symfony\Component\Routing\Matcher\Dumper\StaticPrefixCollection $tree, \stdClass $state, int $prefixLen, array &$conditions): string
+    private function compileStaticPrefixCollection(StaticPrefixCollection $tree, \stdClass $state, int $prefixLen, array &$conditions): string
     {
         $code = '';
         $prevRegex = null;
         $routes = $tree->getRoutes();
         foreach ($routes as $i => $route) {
-            if ($route instanceof \Symfony\Component\Routing\Matcher\Dumper\StaticPrefixCollection) {
+            if ($route instanceof StaticPrefixCollection) {
                 $prevRegex = null;
                 $prefix = substr($route->getPrefix(), $prefixLen);
                 $state->mark += \strlen($rx = "|{$prefix}(?");

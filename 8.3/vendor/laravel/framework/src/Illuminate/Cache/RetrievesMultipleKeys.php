@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 trait RetrievesMultipleKeys
 {
     /**

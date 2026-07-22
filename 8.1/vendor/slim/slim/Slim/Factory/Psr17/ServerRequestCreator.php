@@ -6,11 +6,11 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Factory\Psr17;
+namespace Odigos\Slim\Factory\Psr17;
 
 use Closure;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Interfaces\ServerRequestCreatorInterface;
+use Odigos\Slim\Interfaces\ServerRequestCreatorInterface;
 class ServerRequestCreator implements ServerRequestCreatorInterface
 {
     /**

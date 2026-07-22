@@ -2,8 +2,8 @@
 
 namespace Odigos\TijsVerkoyen\CssToInlineStyles;
 
-use Symfony\Component\CssSelector\CssSelectorConverter;
-use Symfony\Component\CssSelector\Exception\ExceptionInterface;
+use Odigos\Symfony\Component\CssSelector\CssSelectorConverter;
+use Odigos\Symfony\Component\CssSelector\Exception\ExceptionInterface;
 use Odigos\TijsVerkoyen\CssToInlineStyles\Css\Processor;
 use Odigos\TijsVerkoyen\CssToInlineStyles\Css\Property\Processor as PropertyProcessor;
 use Odigos\TijsVerkoyen\CssToInlineStyles\Css\Property\Property;

@@ -1,20 +1,20 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
 use BackedEnum;
 use Closure;
-use Illuminate\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Illuminate\Contracts\Routing\UrlRoutable;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\InteractsWithTime;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Odigos\Illuminate\Contracts\Routing\UrlRoutable;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Odigos\Symfony\Component\Routing\Exception\RouteNotFoundException;
 class UrlGenerator implements UrlGeneratorContract
 {
     use InteractsWithTime, Macroable;
@@ -109,7 +109,7 @@ class UrlGenerator implements UrlGeneratorContract
      * @param  \Illuminate\Http\Request  $request
      * @param  string|null  $assetRoot
      */
-    public function __construct(\Illuminate\Routing\RouteCollectionInterface $routes, Request $request, $assetRoot = null)
+    public function __construct(RouteCollectionInterface $routes, Request $request, $assetRoot = null)
     {
         $this->routes = $routes;
         $this->assetRoot = $assetRoot;
@@ -568,7 +568,7 @@ class UrlGenerator implements UrlGeneratorContract
     protected function routeUrl()
     {
         if (!$this->routeGenerator) {
-            $this->routeGenerator = new \Illuminate\Routing\RouteUrlGenerator($this, $this->request);
+            $this->routeGenerator = new RouteUrlGenerator($this, $this->request);
         }
         return $this->routeGenerator;
     }
@@ -713,7 +713,7 @@ class UrlGenerator implements UrlGeneratorContract
      * @param  \Illuminate\Routing\RouteCollectionInterface  $routes
      * @return $this
      */
-    public function setRoutes(\Illuminate\Routing\RouteCollectionInterface $routes)
+    public function setRoutes(RouteCollectionInterface $routes)
     {
         $this->routes = $routes;
         return $this;

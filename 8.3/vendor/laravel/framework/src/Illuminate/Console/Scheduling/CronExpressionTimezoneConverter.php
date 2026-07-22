@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
 use DateTimeZone;
-use Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Carbon;
 class CronExpressionTimezoneConverter
 {
     /**
@@ -15,7 +15,7 @@ class CronExpressionTimezoneConverter
      * @param  \DateTimeZone  $timezone
      * @return array<string>
      */
-    public static function forEvent(\Illuminate\Console\Scheduling\Event $event, DateTimeZone $timezone)
+    public static function forEvent(Event $event, DateTimeZone $timezone)
     {
         $eventTimezone = static::resolveEventTimezone($event, $timezone);
         [$totalOffsetMinutes, $hourOffset, $minuteOffset] = static::offsetComponents($eventTimezone, $timezone);
@@ -45,7 +45,7 @@ class CronExpressionTimezoneConverter
      * @param  \DateTimeZone  $defaultTimezone
      * @return \DateTimeZone
      */
-    protected static function resolveEventTimezone(\Illuminate\Console\Scheduling\Event $event, DateTimeZone $defaultTimezone)
+    protected static function resolveEventTimezone(Event $event, DateTimeZone $defaultTimezone)
     {
         return $event->timezone instanceof DateTimeZone ? $event->timezone : new DateTimeZone($event->timezone ?? $defaultTimezone->getName());
     }

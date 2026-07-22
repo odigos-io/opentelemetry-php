@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\FineTunes;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\FineTunes;
 
 final class ListEventsResponseFixture
 {

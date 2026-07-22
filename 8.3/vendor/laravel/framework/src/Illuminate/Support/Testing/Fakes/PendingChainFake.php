@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Support\Testing\Fakes;
+namespace Odigos\Illuminate\Support\Testing\Fakes;
 
 use Closure;
-use Illuminate\Foundation\Bus\PendingChain;
-use Illuminate\Queue\CallQueuedClosure;
+use Odigos\Illuminate\Foundation\Bus\PendingChain;
+use Odigos\Illuminate\Queue\CallQueuedClosure;
 class PendingChainFake extends PendingChain
 {
     /**
@@ -20,7 +20,7 @@ class PendingChainFake extends PendingChain
      * @param  mixed  $job
      * @param  array  $chain
      */
-    public function __construct(\Illuminate\Support\Testing\Fakes\BusFake $bus, $job, $chain)
+    public function __construct(BusFake $bus, $job, $chain)
     {
         $this->bus = $bus;
         $this->job = $job;

@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rbac;
+namespace Odigos\yii\rbac;
 
 use Odigos\Yii;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidCallException;
-use yii\helpers\VarDumper;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidCallException;
+use Odigos\yii\helpers\VarDumper;
 /**
  * PhpManager represents an authorization manager that stores authorization
  * information in terms of a PHP script file.
@@ -33,7 +33,7 @@ use yii\helpers\VarDumper;
  * @author Alexander Makarov <sam@rmcreative.ru>
  * @since 2.0
  */
-class PhpManager extends \yii\rbac\BaseManager
+class PhpManager extends BaseManager
 {
     /**
      * @var string the path of the PHP script that contains the authorization items.
@@ -134,7 +134,7 @@ class PhpManager extends \yii\rbac\BaseManager
         }
         /** @var Item $item */
         $item = $this->items[$itemName];
-        Yii::debug($item instanceof \yii\rbac\Role ? "Checking role: {$itemName}" : "Checking permission : {$itemName}", __METHOD__);
+        Yii::debug($item instanceof Role ? "Checking role: {$itemName}" : "Checking permission : {$itemName}", __METHOD__);
         if (!$this->executeRule($user, $item, $params)) {
             return \false;
         }
@@ -167,7 +167,7 @@ class PhpManager extends \yii\rbac\BaseManager
         if ($parent->name === $child->name) {
             throw new InvalidArgumentException("Cannot add '{$parent->name} ' as a child of itself.");
         }
-        if ($parent instanceof \yii\rbac\Permission && $child instanceof \yii\rbac\Role) {
+        if ($parent instanceof Permission && $child instanceof Role) {
             throw new InvalidArgumentException('Cannot add a role as a child of a permission.');
         }
         if ($this->detectLoop($parent, $child)) {
@@ -244,7 +244,7 @@ class PhpManager extends \yii\rbac\BaseManager
         } elseif (isset($this->assignments[$userId][$role->name])) {
             throw new InvalidArgumentException("Authorization item '{$role->name}' has already been assigned to user '{$userId}'.");
         }
-        $this->assignments[$userId][$role->name] = new \yii\rbac\Assignment(['userId' => $userId, 'roleName' => $role->name, 'createdAt' => time()]);
+        $this->assignments[$userId][$role->name] = new Assignment(['userId' => $userId, 'roleName' => $role->name, 'createdAt' => time()]);
         $this->saveAssignments();
         return $this->assignments[$userId][$role->name];
     }
@@ -356,7 +356,7 @@ class PhpManager extends \yii\rbac\BaseManager
         $roles = $this->getDefaultRoleInstances();
         foreach ($this->getAssignments($userId) as $name => $assignment) {
             $item = $this->items[$assignment->roleName];
-            if ($item->type === \yii\rbac\Item::TYPE_ROLE) {
+            if ($item->type === Item::TYPE_ROLE) {
                 /** @var Role $item */
                 $roles[$name] = $item;
             }
@@ -375,7 +375,7 @@ class PhpManager extends \yii\rbac\BaseManager
         $result = [];
         $this->getChildrenRecursive($roleName, $result);
         $roles = [$roleName => $role];
-        $roles += array_filter($this->getRoles(), function (\yii\rbac\Role $roleItem) use ($result) {
+        $roles += array_filter($this->getRoles(), function (Role $roleItem) use ($result) {
             return array_key_exists($roleItem->name, $result);
         });
         return $roles;
@@ -392,7 +392,7 @@ class PhpManager extends \yii\rbac\BaseManager
         }
         $permissions = [];
         foreach (array_keys($result) as $itemName) {
-            if (isset($this->items[$itemName]) && $this->items[$itemName] instanceof \yii\rbac\Permission) {
+            if (isset($this->items[$itemName]) && $this->items[$itemName] instanceof Permission) {
                 $permissions[$itemName] = $this->items[$itemName];
             }
         }
@@ -433,7 +433,7 @@ class PhpManager extends \yii\rbac\BaseManager
         $permissions = [];
         foreach ($this->getAssignments($userId) as $name => $assignment) {
             $item = $this->items[$assignment->roleName];
-            if ($item->type === \yii\rbac\Item::TYPE_PERMISSION) {
+            if ($item->type === Item::TYPE_PERMISSION) {
                 /** @var Permission $item */
                 $permissions[$name] = $item;
             }
@@ -458,7 +458,7 @@ class PhpManager extends \yii\rbac\BaseManager
         }
         $permissions = [];
         foreach (array_keys($result) as $itemName) {
-            if (isset($this->items[$itemName]) && $this->items[$itemName] instanceof \yii\rbac\Permission) {
+            if (isset($this->items[$itemName]) && $this->items[$itemName] instanceof Permission) {
                 $permissions[$itemName] = $this->items[$itemName];
             }
         }
@@ -487,14 +487,14 @@ class PhpManager extends \yii\rbac\BaseManager
      */
     public function removeAllPermissions()
     {
-        $this->removeAllItems(\yii\rbac\Item::TYPE_PERMISSION);
+        $this->removeAllItems(Item::TYPE_PERMISSION);
     }
     /**
      * {@inheritdoc}
      */
     public function removeAllRoles()
     {
-        $this->removeAllItems(\yii\rbac\Item::TYPE_ROLE);
+        $this->removeAllItems(Item::TYPE_ROLE);
     }
     /**
      * Removes all auth items of the specified type.
@@ -643,7 +643,7 @@ class PhpManager extends \yii\rbac\BaseManager
         $assignmentsMtime = @filemtime($this->assignmentFile);
         $rules = $this->loadFromFile($this->ruleFile);
         foreach ($items as $name => $item) {
-            $class = $item['type'] == \yii\rbac\Item::TYPE_PERMISSION ? \yii\rbac\Permission::className() : \yii\rbac\Role::className();
+            $class = $item['type'] == Item::TYPE_PERMISSION ? Permission::className() : Role::className();
             $this->items[$name] = new $class(['name' => $name, 'description' => isset($item['description']) ? $item['description'] : null, 'ruleName' => isset($item['ruleName']) ? $item['ruleName'] : null, 'data' => isset($item['data']) ? $item['data'] : null, 'createdAt' => $itemsMtime, 'updatedAt' => $itemsMtime]);
         }
         foreach ($items as $name => $item) {
@@ -657,7 +657,7 @@ class PhpManager extends \yii\rbac\BaseManager
         }
         foreach ($assignments as $userId => $roles) {
             foreach ($roles as $role) {
-                $this->assignments[$userId][$role] = new \yii\rbac\Assignment(['userId' => $userId, 'roleName' => $role, 'createdAt' => $assignmentsMtime]);
+                $this->assignments[$userId][$role] = new Assignment(['userId' => $userId, 'roleName' => $role, 'createdAt' => $assignmentsMtime]);
             }
         }
         foreach ($rules as $name => $ruleData) {

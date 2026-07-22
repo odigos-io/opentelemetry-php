@@ -14,25 +14,25 @@ declare (strict_types=1);
  * @since         3.5.4
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Cache\Engine;
+namespace Odigos\Cake\Cache\Engine;
 
 use APCUIterator;
-use Cake\Cache\CacheEngine;
-use Cake\Cache\Event\CacheAfterAddEvent;
-use Cake\Cache\Event\CacheAfterDecrementEvent;
-use Cake\Cache\Event\CacheAfterDeleteEvent;
-use Cake\Cache\Event\CacheAfterGetEvent;
-use Cake\Cache\Event\CacheAfterIncrementEvent;
-use Cake\Cache\Event\CacheAfterSetEvent;
-use Cake\Cache\Event\CacheBeforeAddEvent;
-use Cake\Cache\Event\CacheBeforeDecrementEvent;
-use Cake\Cache\Event\CacheBeforeDeleteEvent;
-use Cake\Cache\Event\CacheBeforeGetEvent;
-use Cake\Cache\Event\CacheBeforeIncrementEvent;
-use Cake\Cache\Event\CacheBeforeSetEvent;
-use Cake\Cache\Event\CacheClearedEvent;
-use Cake\Cache\Event\CacheGroupClearEvent;
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Cache\CacheEngine;
+use Odigos\Cake\Cache\Event\CacheAfterAddEvent;
+use Odigos\Cake\Cache\Event\CacheAfterDecrementEvent;
+use Odigos\Cake\Cache\Event\CacheAfterDeleteEvent;
+use Odigos\Cake\Cache\Event\CacheAfterGetEvent;
+use Odigos\Cake\Cache\Event\CacheAfterIncrementEvent;
+use Odigos\Cake\Cache\Event\CacheAfterSetEvent;
+use Odigos\Cake\Cache\Event\CacheBeforeAddEvent;
+use Odigos\Cake\Cache\Event\CacheBeforeDecrementEvent;
+use Odigos\Cake\Cache\Event\CacheBeforeDeleteEvent;
+use Odigos\Cake\Cache\Event\CacheBeforeGetEvent;
+use Odigos\Cake\Cache\Event\CacheBeforeIncrementEvent;
+use Odigos\Cake\Cache\Event\CacheBeforeSetEvent;
+use Odigos\Cake\Cache\Event\CacheClearedEvent;
+use Odigos\Cake\Cache\Event\CacheGroupClearEvent;
+use Odigos\Cake\Core\Exception\CakeException;
 use DateInterval;
 /**
  * APCu storage engine for cache

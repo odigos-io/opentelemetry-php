@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Model;
+namespace Odigos\MongoDB\Model;
 
 use IteratorIterator;
 use MongoDB\BSON\Document;
@@ -26,16 +26,16 @@ use MongoDB\Driver\Monitoring\CommandStartedEvent;
 use MongoDB\Driver\Monitoring\CommandSubscriber;
 use MongoDB\Driver\Monitoring\CommandSucceededEvent;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\ResumeTokenException;
-use MongoDB\Exception\UnexpectedValueException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\ResumeTokenException;
+use Odigos\MongoDB\Exception\UnexpectedValueException;
 use function assert;
 use function count;
 use function is_array;
 use function is_object;
 use function MongoDB\Driver\Monitoring\addSubscriber;
 use function MongoDB\Driver\Monitoring\removeSubscriber;
-use function MongoDB\is_document;
+use function Odigos\MongoDB\is_document;
 /**
  * ChangeStreamIterator wraps a change stream's tailable cursor.
  *

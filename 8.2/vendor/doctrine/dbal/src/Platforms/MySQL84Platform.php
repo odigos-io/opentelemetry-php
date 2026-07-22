@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms;
+namespace Odigos\Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
-use Doctrine\DBAL\Platforms\Keywords\MySQL84Keywords;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\KeywordList;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\MySQL84Keywords;
+use Odigos\Doctrine\Deprecations\Deprecation;
 /**
  * Provides the behavior, features and SQL dialect of the MySQL 8.4 database platform.
  *
  * @deprecated Please use {@link MySQLPlatform} instead.
  */
-class MySQL84Platform extends \Doctrine\DBAL\Platforms\MySQL80Platform
+class MySQL84Platform extends MySQL80Platform
 {
     /** @deprecated */
     protected function createReservedKeywordsList(): KeywordList

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception\InvalidColumnType;
+namespace Odigos\Doctrine\DBAL\Exception\InvalidColumnType;
 
-use Doctrine\DBAL\Exception\InvalidColumnType;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnType;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
 use function get_debug_type;
 use function sprintf;
 /** @internal */

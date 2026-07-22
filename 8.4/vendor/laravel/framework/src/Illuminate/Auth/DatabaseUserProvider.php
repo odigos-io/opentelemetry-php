@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Auth;
+namespace Odigos\Illuminate\Auth;
 
 use Closure;
-use Illuminate\Contracts\Auth\Authenticatable as UserContract;
-use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Contracts\Hashing\Hasher as HasherContract;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\ConnectionInterface;
+use Odigos\Illuminate\Contracts\Auth\Authenticatable as UserContract;
+use Odigos\Illuminate\Contracts\Auth\UserProvider;
+use Odigos\Illuminate\Contracts\Hashing\Hasher as HasherContract;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Database\ConnectionInterface;
 class DatabaseUserProvider implements UserProvider
 {
     /**
@@ -126,7 +126,7 @@ class DatabaseUserProvider implements UserProvider
     protected function getGenericUser($user)
     {
         if (!is_null($user)) {
-            return new \Illuminate\Auth\GenericUser((array) $user);
+            return new GenericUser((array) $user);
         }
     }
     /**

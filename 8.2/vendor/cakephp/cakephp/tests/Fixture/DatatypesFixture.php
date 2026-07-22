@@ -13,9 +13,9 @@
  * @since         3.3.4
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Test\Fixture;
+namespace Odigos\Cake\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
+use Odigos\Cake\TestSuite\Fixture\TestFixture;
 /**
  * Fixture for testing decimal, float and bigint types
  */

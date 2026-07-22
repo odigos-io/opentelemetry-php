@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
-use Illuminate\Foundation\Precognition;
+use Odigos\Illuminate\Foundation\Precognition;
 /**
  * Provides default implementation of ValidatesWhenResolved contract.
  */
@@ -63,7 +63,7 @@ trait ValidatesWhenResolvedTrait
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    protected function failedValidation(\Illuminate\Validation\Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         $exception = $validator->getException();
         throw new $exception($validator);
@@ -89,6 +89,6 @@ trait ValidatesWhenResolvedTrait
      */
     protected function failedAuthorization()
     {
-        throw new \Illuminate\Validation\UnauthorizedException();
+        throw new UnauthorizedException();
     }
 }

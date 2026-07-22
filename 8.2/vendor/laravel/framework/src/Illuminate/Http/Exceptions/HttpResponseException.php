@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http\Exceptions;
+namespace Odigos\Illuminate\Http\Exceptions;
 
 use RuntimeException;
-use Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpFoundation\Response;
 use Throwable;
 class HttpResponseException extends RuntimeException
 {

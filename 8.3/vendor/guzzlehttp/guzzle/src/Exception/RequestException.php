@@ -1,16 +1,16 @@
 <?php
 
-namespace GuzzleHttp\Exception;
+namespace Odigos\GuzzleHttp\Exception;
 
-use GuzzleHttp\BodySummarizer;
-use GuzzleHttp\BodySummarizerInterface;
+use Odigos\GuzzleHttp\BodySummarizer;
+use Odigos\GuzzleHttp\BodySummarizerInterface;
 use Psr\Http\Client\RequestExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 /**
  * HTTP Request exception
  */
-class RequestException extends \GuzzleHttp\Exception\TransferException implements RequestExceptionInterface
+class RequestException extends TransferException implements RequestExceptionInterface
 {
     /**
      * @var RequestInterface
@@ -38,10 +38,10 @@ class RequestException extends \GuzzleHttp\Exception\TransferException implement
      *
      * @deprecated since 7.11. Create a RequestException directly instead.
      */
-    public static function wrapException(RequestInterface $request, \Throwable $e): \GuzzleHttp\Exception\RequestException
+    public static function wrapException(RequestInterface $request, \Throwable $e): RequestException
     {
         \Odigos\trigger_deprecation('guzzlehttp/guzzle', '7.11', '%s::wrapException() is deprecated and will be removed in 8.0. Create a %s directly instead.', self::class, self::class);
-        return $e instanceof \GuzzleHttp\Exception\RequestException ? $e : new \GuzzleHttp\Exception\RequestException($e->getMessage(), $request, null, $e);
+        return $e instanceof RequestException ? $e : new RequestException($e->getMessage(), $request, null, $e);
     }
     /**
      * Factory method to create a new exception with a normalized error message
@@ -60,15 +60,15 @@ class RequestException extends \GuzzleHttp\Exception\TransferException implement
         $level = (int) \floor($response->getStatusCode() / 100);
         if ($level === 4) {
             $label = 'Client error';
-            $className = \GuzzleHttp\Exception\ClientException::class;
+            $className = ClientException::class;
         } elseif ($level === 5) {
             $label = 'Server error';
-            $className = \GuzzleHttp\Exception\ServerException::class;
+            $className = ServerException::class;
         } else {
             $label = 'Unsuccessful request';
             $className = __CLASS__;
         }
-        $uri = \GuzzleHttp\Psr7\Utils::redactUserInfo($request->getUri());
+        $uri = \Odigos\GuzzleHttp\Psr7\Utils::redactUserInfo($request->getUri());
         // Client Error: `GET /` resulted in a `404 Not Found` response:
         // <html> ... (truncated)
         $message = \sprintf('%s: `%s %s` resulted in a `%s %s` response', $label, $request->getMethod(), $uri->__toString(), $response->getStatusCode(), $response->getReasonPhrase());

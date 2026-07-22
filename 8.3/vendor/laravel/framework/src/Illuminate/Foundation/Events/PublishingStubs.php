@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Foundation\Events;
+namespace Odigos\Illuminate\Foundation\Events;
 
 class PublishingStubs
 {
-    use \Illuminate\Foundation\Events\Dispatchable;
+    use Dispatchable;
     /**
      * The stubs being published.
      *

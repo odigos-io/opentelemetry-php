@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Actions\Responses;
+namespace Odigos\OpenAI\Actions\Responses;
 
-use OpenAI\Responses\Responses\ToolChoice\FunctionToolChoice;
-use OpenAI\Responses\Responses\ToolChoice\HostedToolChoice;
+use Odigos\OpenAI\Responses\Responses\ToolChoice\FunctionToolChoice;
+use Odigos\OpenAI\Responses\Responses\ToolChoice\HostedToolChoice;
 /**
  * @phpstan-import-type FunctionToolChoiceType from FunctionToolChoice
  * @phpstan-import-type HostedToolChoiceType from HostedToolChoice

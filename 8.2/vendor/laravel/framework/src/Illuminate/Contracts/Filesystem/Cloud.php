@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Contracts\Filesystem;
+namespace Odigos\Illuminate\Contracts\Filesystem;
 
-interface Cloud extends \Illuminate\Contracts\Filesystem\Filesystem
+interface Cloud extends Filesystem
 {
     /**
      * Get the URL for the file at the given path.

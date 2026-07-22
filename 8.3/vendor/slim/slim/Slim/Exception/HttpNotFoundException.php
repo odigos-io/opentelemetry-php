@@ -6,9 +6,9 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Exception;
+namespace Odigos\Slim\Exception;
 
-class HttpNotFoundException extends \Slim\Exception\HttpSpecializedException
+class HttpNotFoundException extends HttpSpecializedException
 {
     /**
      * @var int

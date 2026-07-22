@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Schema\Exception\InvalidUniqueConstraintDefinition;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidUniqueConstraintDefinition;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
 use function array_map;
 use function array_merge;
 use function array_values;
@@ -64,11 +64,11 @@ final class UniqueConstraintEditor
         $this->isClustered = $isClustered;
         return $this;
     }
-    public function create(): \Doctrine\DBAL\Schema\UniqueConstraint
+    public function create(): UniqueConstraint
     {
         if (count($this->columnNames) < 1) {
             throw InvalidUniqueConstraintDefinition::columnNamesAreNotSet($this->name);
         }
-        return new \Doctrine\DBAL\Schema\UniqueConstraint($this->name?->toString() ?? '', array_map(static fn(UnqualifiedName $columnName) => $columnName->toString(), $this->columnNames), $this->isClustered ? ['clustered'] : []);
+        return new UniqueConstraint($this->name?->toString() ?? '', array_map(static fn(UnqualifiedName $columnName) => $columnName->toString(), $this->columnNames), $this->isClustered ? ['clustered'] : []);
     }
 }

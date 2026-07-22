@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
 /**
  * Exception for a foreign key constraint violation detected in the driver.
  */
-class ForeignKeyConstraintViolationException extends \Doctrine\DBAL\Exception\ConstraintViolationException
+class ForeignKeyConstraintViolationException extends ConstraintViolationException
 {
 }

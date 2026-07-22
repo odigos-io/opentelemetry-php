@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Auth\Listeners;
+namespace Odigos\Illuminate\Auth\Listeners;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Odigos\Illuminate\Auth\Events\Registered;
+use Odigos\Illuminate\Contracts\Auth\MustVerifyEmail;
 class SendEmailVerificationNotification
 {
     /**

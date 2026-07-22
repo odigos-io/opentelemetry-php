@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Filesystem;
+namespace Odigos\Illuminate\Filesystem;
 
-use Illuminate\Contracts\Filesystem\LockTimeoutException;
+use Odigos\Illuminate\Contracts\Filesystem\LockTimeoutException;
 class LockableFile
 {
     /**

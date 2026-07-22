@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Notifications\Events;
+namespace Odigos\Illuminate\Notifications\Events;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
+use Odigos\Illuminate\Bus\Queueable;
+use Odigos\Illuminate\Queue\SerializesModels;
 class NotificationFailed
 {
     use Queueable, SerializesModels;

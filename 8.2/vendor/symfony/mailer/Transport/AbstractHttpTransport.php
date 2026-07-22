@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport;
+namespace Odigos\Symfony\Component\Mailer\Transport;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\Mailer\Exception\HttpTransportException;
-use Symfony\Component\Mailer\SentMessage;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
+use Odigos\Symfony\Component\HttpClient\HttpClient;
+use Odigos\Symfony\Component\Mailer\Exception\HttpTransportException;
+use Odigos\Symfony\Component\Mailer\SentMessage;
+use Odigos\Symfony\Contracts\HttpClient\HttpClientInterface;
+use Odigos\Symfony\Contracts\HttpClient\ResponseInterface;
 /**
  * @author Victor Bocharsky <victor@symfonycasts.com>
  */
-abstract class AbstractHttpTransport extends \Symfony\Component\Mailer\Transport\AbstractTransport
+abstract class AbstractHttpTransport extends AbstractTransport
 {
     protected ?string $host = null;
     protected ?int $port = null;

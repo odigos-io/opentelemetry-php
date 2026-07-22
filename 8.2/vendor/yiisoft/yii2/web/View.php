@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
-use yii\helpers\Url;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\Html;
+use Odigos\yii\helpers\Url;
 /**
  * View represents a view object in the MVC pattern.
  *
@@ -54,7 +54,7 @@ use yii\helpers\Url;
  * ...
  * }
  */
-class View extends \yii\base\View
+class View extends \Odigos\yii\base\View
 {
     /**
      * @event Event an event that is triggered by [[beginBody()]].
@@ -450,7 +450,7 @@ class View extends \yii\base\View
         $key = $key ?: md5($js);
         $this->js[$position][$key] = $js;
         if ($position === self::POS_READY || $position === self::POS_LOAD) {
-            \yii\web\JqueryAsset::register($this);
+            JqueryAsset::register($this);
         }
     }
     /**
@@ -505,7 +505,7 @@ class View extends \yii\base\View
                 $this->cssFiles[$key] = Html::cssFile($url, $options);
             }
         } else {
-            $this->getAssetManager()->bundles[$key] = Yii::createObject(['class' => \yii\web\AssetBundle::className(), 'baseUrl' => '', 'basePath' => '@webroot', (string) $type => [ArrayHelper::merge([!Url::isRelative($url) ? $url : ltrim($url, '/')], $originalOptions)], "{$type}Options" => $options, 'depends' => (array) $depends]);
+            $this->getAssetManager()->bundles[$key] = Yii::createObject(['class' => AssetBundle::className(), 'baseUrl' => '', 'basePath' => '@webroot', (string) $type => [ArrayHelper::merge([!Url::isRelative($url) ? $url : ltrim($url, '/')], $originalOptions)], "{$type}Options" => $options, 'depends' => (array) $depends]);
             $this->registerAssetBundle($key);
         }
     }
@@ -560,7 +560,7 @@ class View extends \yii\base\View
      */
     public function registerJsVar($name, $value, $position = self::POS_HEAD)
     {
-        $js = sprintf('var %s = %s;', $name, \yii\helpers\Json::htmlEncode($value));
+        $js = sprintf('var %s = %s;', $name, \Odigos\yii\helpers\Json::htmlEncode($value));
         $this->registerJs($js, $position, $name);
     }
     /**

@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Console;
+namespace Odigos\Illuminate\Console;
 
 use Psr\Container\ContainerInterface;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
-use Symfony\Component\Console\Exception\CommandNotFoundException;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
+use Odigos\Symfony\Component\Console\Exception\CommandNotFoundException;
 class ContainerCommandLoader implements CommandLoaderInterface
 {
     /**

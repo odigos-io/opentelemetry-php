@@ -1,9 +1,9 @@
 <?php
 
-namespace Http\Discovery;
+namespace Odigos\Http\Discovery;
 
-use Http\Discovery\Exception\DiscoveryFailedException;
-use Http\Discovery\Exception\NotFoundException as RealNotFoundException;
+use Odigos\Http\Discovery\Exception\DiscoveryFailedException;
+use Odigos\Http\Discovery\Exception\NotFoundException as RealNotFoundException;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
@@ -15,9 +15,9 @@ use Psr\Http\Message\UriFactoryInterface;
  *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-final class Psr17FactoryDiscovery extends \Http\Discovery\ClassDiscovery
+final class Psr17FactoryDiscovery extends ClassDiscovery
 {
-    private static function createException($type, \Http\Discovery\Exception $e)
+    private static function createException($type, Exception $e)
     {
         return new RealNotFoundException('No PSR-17 ' . $type . ' found. Install a package from this list: https://packagist.org/providers/psr/http-factory-implementation', 0, $e);
     }

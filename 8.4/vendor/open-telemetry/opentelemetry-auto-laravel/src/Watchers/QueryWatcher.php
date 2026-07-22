@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Database\Events\QueryExecuted;
+use Odigos\Illuminate\Support\Str;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\SemConv\TraceAttributes;
-class QueryWatcher extends \OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers\Watcher
+class QueryWatcher extends Watcher
 {
     public function __construct(private CachedInstrumentation $instrumentation)
     {
     }
     /** @psalm-suppress UndefinedInterfaceMethod */
-    public function register(Application $app): void
+    public function register(object $app): void
     {
         /** @phan-suppress-next-line PhanTypeArraySuspicious */
         $app['events']->listen(QueryExecuted::class, [$this, 'recordQuery']);
@@ -24,7 +24,7 @@ class QueryWatcher extends \OpenTelemetry\Contrib\Instrumentation\Laravel\Watche
      * Record a query.
      * @psalm-suppress PossiblyUnusedMethod
      */
-    public function recordQuery(QueryExecuted $query): void
+    public function recordQuery(object $query): void
     {
         $nowInNs = (int) (microtime(\true) * 1000000000.0);
         $operationName = Str::upper(Str::before($query->sql, ' '));

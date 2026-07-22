@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Contracts\HttpClient;
+namespace Odigos\Symfony\Contracts\HttpClient;
 
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Odigos\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Odigos\Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Odigos\Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Odigos\Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Odigos\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 /**
  * A (lazily retrieved) HTTP response.
  *

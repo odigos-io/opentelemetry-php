@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 use Odigos\Yii;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidConfigException;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Inflector;
-use yii\helpers\StringHelper;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\Inflector;
+use Odigos\yii\helpers\StringHelper;
 /**
  * ActiveRecord is the base class for classes representing relational data in terms of objects.
  *
@@ -73,7 +73,7 @@ use yii\helpers\StringHelper;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class ActiveRecord extends \yii\db\BaseActiveRecord
+class ActiveRecord extends BaseActiveRecord
 {
     /**
      * The insert operation. This is mainly used when overriding [[transactions()]] to specify which operations are transactional.
@@ -165,7 +165,7 @@ class ActiveRecord extends \yii\db\BaseActiveRecord
     protected static function findByCondition($condition)
     {
         $query = static::find();
-        if (!ArrayHelper::isAssociative($condition) && !$condition instanceof \yii\db\ExpressionInterface) {
+        if (!ArrayHelper::isAssociative($condition) && !$condition instanceof ExpressionInterface) {
             // query by primary key
             $primaryKey = static::primaryKey();
             if (isset($primaryKey[0])) {
@@ -193,7 +193,7 @@ class ActiveRecord extends \yii\db\BaseActiveRecord
      * @since 2.0.17
      * @internal
      */
-    protected static function filterValidAliases(\yii\db\Query $query)
+    protected static function filterValidAliases(Query $query)
     {
         $tables = $query->getTablesUsedInFrom();
         $aliases = array_diff(array_keys($tables), $tables);
@@ -332,7 +332,7 @@ class ActiveRecord extends \yii\db\BaseActiveRecord
     {
         $n = 0;
         foreach ($counters as $name => $value) {
-            $counters[$name] = new \yii\db\Expression("[[{$name}]]+:bp{$n}", [":bp{$n}" => $value]);
+            $counters[$name] = new Expression("[[{$name}]]+:bp{$n}", [":bp{$n}" => $value]);
             $n++;
         }
         $command = static::getDb()->createCommand();
@@ -380,7 +380,7 @@ class ActiveRecord extends \yii\db\BaseActiveRecord
      */
     public static function find()
     {
-        return Yii::createObject(\yii\db\ActiveQuery::className(), [get_called_class()]);
+        return Yii::createObject(ActiveQuery::className(), [get_called_class()]);
     }
     /**
      * Declares the name of the database table associated with this AR class.
@@ -733,7 +733,7 @@ class ActiveRecord extends \yii\db\BaseActiveRecord
         }
         $result = static::deleteAll($condition);
         if ($lock !== null && !$result) {
-            throw new \yii\db\StaleObjectException('The object being deleted is outdated.');
+            throw new StaleObjectException('The object being deleted is outdated.');
         }
         $this->setOldAttributes(null);
         $this->afterDelete();

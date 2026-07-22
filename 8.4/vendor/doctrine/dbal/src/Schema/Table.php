@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Schema\Exception\ColumnAlreadyExists;
-use Doctrine\DBAL\Schema\Exception\ColumnDoesNotExist;
-use Doctrine\DBAL\Schema\Exception\ForeignKeyDoesNotExist;
-use Doctrine\DBAL\Schema\Exception\IndexAlreadyExists;
-use Doctrine\DBAL\Schema\Exception\IndexDoesNotExist;
-use Doctrine\DBAL\Schema\Exception\IndexNameInvalid;
-use Doctrine\DBAL\Schema\Exception\InvalidState;
-use Doctrine\DBAL\Schema\Exception\InvalidTableName;
-use Doctrine\DBAL\Schema\Exception\PrimaryKeyAlreadyExists;
-use Doctrine\DBAL\Schema\Exception\UniqueConstraintDoesNotExist;
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
-use Doctrine\DBAL\Schema\Name\Parser\OptionallyQualifiedNameParser;
-use Doctrine\DBAL\Schema\Name\Parsers;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\DBAL\Types\Exception\TypesException;
-use Doctrine\DBAL\Types\Type;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Schema\Exception\ColumnAlreadyExists;
+use Odigos\Doctrine\DBAL\Schema\Exception\ColumnDoesNotExist;
+use Odigos\Doctrine\DBAL\Schema\Exception\ForeignKeyDoesNotExist;
+use Odigos\Doctrine\DBAL\Schema\Exception\IndexAlreadyExists;
+use Odigos\Doctrine\DBAL\Schema\Exception\IndexDoesNotExist;
+use Odigos\Doctrine\DBAL\Schema\Exception\IndexNameInvalid;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidState;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidTableName;
+use Odigos\Doctrine\DBAL\Schema\Exception\PrimaryKeyAlreadyExists;
+use Odigos\Doctrine\DBAL\Schema\Exception\UniqueConstraintDoesNotExist;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\OptionallyQualifiedNameParser;
+use Odigos\Doctrine\DBAL\Schema\Name\Parsers;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Types\Exception\TypesException;
+use Odigos\Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use LogicException;
 use function array_diff_key;
 use function array_map;
@@ -38,7 +38,7 @@ use function strtolower;
  * @final
  * @extends AbstractNamedObject<OptionallyQualifiedName>
  */
-class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
+class Table extends AbstractNamedObject
 {
     /** @var Column[] */
     protected array $_columns = [];
@@ -62,10 +62,10 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
     /** @var mixed[] */
     protected array $_options = ['create_options' => []];
     /** @deprecated Pass a {@link TableConfiguration} instance to the constructor instead. */
-    protected ?\Doctrine\DBAL\Schema\SchemaConfig $_schemaConfig = null;
+    protected ?SchemaConfig $_schemaConfig = null;
     /** @var positive-int */
     private int $maxIdentifierLength;
-    private ?\Doctrine\DBAL\Schema\PrimaryKeyConstraint $primaryKeyConstraint = null;
+    private ?PrimaryKeyConstraint $primaryKeyConstraint = null;
     private bool $failedToParsePrimaryKeyConstraint = \false;
     /**
      * @param array<Column>               $columns
@@ -74,13 +74,13 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
      * @param array<ForeignKeyConstraint> $fkConstraints
      * @param array<string, mixed>        $options
      */
-    public function __construct(string $name, array $columns = [], array $indexes = [], array $uniqueConstraints = [], array $fkConstraints = [], array $options = [], ?\Doctrine\DBAL\Schema\TableConfiguration $configuration = null, ?\Doctrine\DBAL\Schema\PrimaryKeyConstraint $primaryKeyConstraint = null)
+    public function __construct(string $name, array $columns = [], array $indexes = [], array $uniqueConstraints = [], array $fkConstraints = [], array $options = [], ?TableConfiguration $configuration = null, ?PrimaryKeyConstraint $primaryKeyConstraint = null)
     {
         if ($name === '') {
             throw InvalidTableName::new($name);
         }
         parent::__construct($name);
-        $configuration ??= (new \Doctrine\DBAL\Schema\SchemaConfig())->toTableConfiguration();
+        $configuration ??= (new SchemaConfig())->toTableConfiguration();
         $this->maxIdentifierLength = $configuration->getMaxIdentifierLength();
         foreach ($columns as $column) {
             $this->_addColumn($column);
@@ -104,7 +104,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
         return Parsers::getOptionallyQualifiedNameParser();
     }
     /** @deprecated Pass a {@link TableConfiguration} instance to the constructor instead. */
-    public function setSchemaConfig(\Doctrine\DBAL\Schema\SchemaConfig $schemaConfig): void
+    public function setSchemaConfig(SchemaConfig $schemaConfig): void
     {
         Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6635', '%s is deprecated. Pass TableConfiguration to the constructor instead.', __METHOD__);
         $this->_schemaConfig = $schemaConfig;
@@ -133,7 +133,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
         }
         return $this;
     }
-    public function addPrimaryKeyConstraint(\Doctrine\DBAL\Schema\PrimaryKeyConstraint $primaryKeyConstraint): self
+    public function addPrimaryKeyConstraint(PrimaryKeyConstraint $primaryKeyConstraint): self
     {
         $this->setPrimaryKey(array_map(static fn(UnqualifiedName $columnName): string => $columnName->toString(), $primaryKeyConstraint->getColumnNames()), $primaryKeyConstraint->getObjectName()?->toString());
         // there is no way to set a primary index with flags. we have to set it and then add the flag
@@ -254,9 +254,9 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
      *
      * @throws TypesException
      */
-    public function addColumn(string $name, string $typeName, array $options = []): \Doctrine\DBAL\Schema\Column
+    public function addColumn(string $name, string $typeName, array $options = []): Column
     {
-        $column = new \Doctrine\DBAL\Schema\Column($name, Type::getType($typeName), $options);
+        $column = new Column($name, Type::getType($typeName), $options);
         $this->_addColumn($column);
         return $column;
     }
@@ -271,7 +271,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
      *
      * @throws LogicException
      */
-    final public function renameColumn(string $oldName, string $newName): \Doctrine\DBAL\Schema\Column
+    final public function renameColumn(string $oldName, string $newName): Column
     {
         $oldName = $this->normalizeIdentifier($oldName);
         $newName = $this->normalizeIdentifier($newName);
@@ -341,7 +341,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
                 throw ColumnDoesNotExist::new($columnName, $this->_name);
             }
         }
-        $constraint = new \Doctrine\DBAL\Schema\ForeignKeyConstraint($localColumnNames, $foreignTableName, $foreignColumnNames, $name, $options);
+        $constraint = new ForeignKeyConstraint($localColumnNames, $foreignTableName, $foreignColumnNames, $name, $options);
         return $this->_addForeignKeyConstraint($constraint);
     }
     public function addOption(string $name, mixed $value): self
@@ -360,7 +360,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
     /**
      * Returns the foreign key constraint with the given name.
      */
-    public function getForeignKey(string $name): \Doctrine\DBAL\Schema\ForeignKeyConstraint
+    public function getForeignKey(string $name): ForeignKeyConstraint
     {
         $name = $this->normalizeIdentifier($name);
         if (!$this->hasForeignKey($name)) {
@@ -400,7 +400,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
     /**
      * Returns the unique constraint with the given name.
      */
-    public function getUniqueConstraint(string $name): \Doctrine\DBAL\Schema\UniqueConstraint
+    public function getUniqueConstraint(string $name): UniqueConstraint
     {
         $name = $this->normalizeIdentifier($name);
         if (!$this->hasUniqueConstraint($name)) {
@@ -450,7 +450,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
     /**
      * Returns the Column with the given name.
      */
-    public function getColumn(string $name): \Doctrine\DBAL\Schema\Column
+    public function getColumn(string $name): Column
     {
         $name = $this->normalizeIdentifier($name);
         if (!$this->hasColumn($name)) {
@@ -463,7 +463,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
      *
      * @deprecated Use {@see getPrimaryKeyConstraint()} instead.
      */
-    public function getPrimaryKey(): ?\Doctrine\DBAL\Schema\Index
+    public function getPrimaryKey(): ?Index
     {
         Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6867', '%s() is deprecated. Use Table::getPrimaryKeyConstraint() instead.', __METHOD__);
         if ($this->_primaryKeyName !== null) {
@@ -471,7 +471,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
         }
         return null;
     }
-    public function getPrimaryKeyConstraint(): ?\Doctrine\DBAL\Schema\PrimaryKeyConstraint
+    public function getPrimaryKeyConstraint(): ?PrimaryKeyConstraint
     {
         if ($this->failedToParsePrimaryKeyConstraint) {
             throw InvalidState::tableHasInvalidPrimaryKeyConstraint($this->getName());
@@ -489,7 +489,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
     /**
      * Returns the Index with the given name.
      */
-    public function getIndex(string $name): \Doctrine\DBAL\Schema\Index
+    public function getIndex(string $name): Index
     {
         $name = $this->normalizeIdentifier($name);
         if (!$this->hasIndex($name)) {
@@ -558,7 +558,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
         Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6635', '%s is deprecated.', __METHOD__);
         return $this->maxIdentifierLength;
     }
-    protected function _addColumn(\Doctrine\DBAL\Schema\Column $column): void
+    protected function _addColumn(Column $column): void
     {
         $columnName = $column->getName();
         $columnName = $this->normalizeIdentifier($columnName);
@@ -570,7 +570,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
     /**
      * Adds an index to the table.
      */
-    protected function _addIndex(\Doctrine\DBAL\Schema\Index $index): self
+    protected function _addIndex(Index $index): self
     {
         $indexName = $this->normalizeIdentifier($index->getName());
         $replacedImplicitIndexNames = [];
@@ -605,7 +605,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
         $this->_indexes[$indexName] = $index;
         return $this;
     }
-    private function parsePrimaryKeyConstraint(\Doctrine\DBAL\Schema\Index $index): ?\Doctrine\DBAL\Schema\PrimaryKeyConstraint
+    private function parsePrimaryKeyConstraint(Index $index): ?PrimaryKeyConstraint
     {
         $indexedColumns = $index->getIndexedColumns();
         $columnNames = [];
@@ -617,9 +617,9 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
         }
         // Do not derive the constraint name from the index name in the upgrade path. The primary index name defaults to
         // "PRIMARY", while the default constraint name is null (unspecified, to be generated by the database platform).
-        return new \Doctrine\DBAL\Schema\PrimaryKeyConstraint(null, $columnNames, !$index->hasFlag('nonclustered'));
+        return new PrimaryKeyConstraint(null, $columnNames, !$index->hasFlag('nonclustered'));
     }
-    protected function _addUniqueConstraint(\Doctrine\DBAL\Schema\UniqueConstraint $constraint): self
+    protected function _addUniqueConstraint(UniqueConstraint $constraint): self
     {
         $name = $constraint->getName() !== '' ? $constraint->getName() : $this->_generateIdentifierName(array_merge((array) $this->getName(), $constraint->getColumns()), 'fk', $this->_getMaxIdentifierLength());
         $name = $this->normalizeIdentifier($name);
@@ -637,7 +637,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
         $this->implicitIndexNames[$this->normalizeIdentifier($indexName)] = \true;
         return $this;
     }
-    protected function _addForeignKeyConstraint(\Doctrine\DBAL\Schema\ForeignKeyConstraint $constraint): self
+    protected function _addForeignKeyConstraint(ForeignKeyConstraint $constraint): self
     {
         $name = $constraint->getName() !== '' ? $constraint->getName() : $this->_generateIdentifierName(array_merge((array) $this->getName(), $constraint->getLocalColumns()), 'fk', $this->_getMaxIdentifierLength());
         $name = $this->normalizeIdentifier($name);
@@ -685,14 +685,14 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
     /**
      * Instantiates a new table editor.
      */
-    public static function editor(): \Doctrine\DBAL\Schema\TableEditor
+    public static function editor(): TableEditor
     {
-        return new \Doctrine\DBAL\Schema\TableEditor();
+        return new TableEditor();
     }
     /**
      * Instantiates a new table editor and initializes it with the table's properties.
      */
-    public function edit(): \Doctrine\DBAL\Schema\TableEditor
+    public function edit(): TableEditor
     {
         $editor = self::editor()->setName($this->getObjectName())->setColumns(...array_values($this->_columns))->setIndexes(...array_values(array_diff_key($this->_indexes, $this->implicitIndexNames)))->setPrimaryKeyConstraint($this->primaryKeyConstraint)->setUniqueConstraints(...array_values($this->uniqueConstraints))->setForeignKeyConstraints(...array_values($this->_fkConstraints));
         $options = $this->_options;
@@ -700,14 +700,14 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
             $editor->setComment($options['comment']);
             unset($options['comment']);
         }
-        return $editor->setOptions($options)->setConfiguration(new \Doctrine\DBAL\Schema\TableConfiguration($this->maxIdentifierLength));
+        return $editor->setOptions($options)->setConfiguration(new TableConfiguration($this->maxIdentifierLength));
     }
     /**
      * @param non-empty-list<string> $columns
      * @param array<int, string>     $flags
      * @param array<string, mixed>   $options
      */
-    private function _createUniqueConstraint(array $columns, string $indexName, array $flags = [], array $options = []): \Doctrine\DBAL\Schema\UniqueConstraint
+    private function _createUniqueConstraint(array $columns, string $indexName, array $flags = [], array $options = []): UniqueConstraint
     {
         if (preg_match('(([^a-zA-Z0-9_]+))', $this->normalizeIdentifier($indexName)) === 1) {
             throw IndexNameInvalid::new($indexName);
@@ -717,14 +717,14 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
                 throw ColumnDoesNotExist::new($columnName, $this->_name);
             }
         }
-        return new \Doctrine\DBAL\Schema\UniqueConstraint($indexName, $columns, $flags, $options);
+        return new UniqueConstraint($indexName, $columns, $flags, $options);
     }
     /**
      * @param non-empty-list<string> $columns
      * @param array<int, string>     $flags
      * @param array<string, mixed>   $options
      */
-    private function _createIndex(array $columns, string $indexName, bool $isUnique, bool $isPrimary, array $flags = [], array $options = []): \Doctrine\DBAL\Schema\Index
+    private function _createIndex(array $columns, string $indexName, bool $isUnique, bool $isPrimary, array $flags = [], array $options = []): Index
     {
         if (preg_match('(([^a-zA-Z0-9_]+))', $this->normalizeIdentifier($indexName)) === 1) {
             throw IndexNameInvalid::new($indexName);
@@ -734,7 +734,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
                 throw ColumnDoesNotExist::new($columnName, $this->_name);
             }
         }
-        return new \Doctrine\DBAL\Schema\Index($indexName, $columns, $isUnique, $isPrimary, $flags, $options);
+        return new Index($indexName, $columns, $isUnique, $isPrimary, $flags, $options);
     }
     /** @param non-empty-string $newName */
     private function renameColumnInIndexes(string $oldName, string $newName): void
@@ -753,7 +753,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
             if (!$modified) {
                 continue;
             }
-            $this->_indexes[$key] = new \Doctrine\DBAL\Schema\Index($index->getName(), $columns, $index->isUnique(), $index->isPrimary(), $index->getFlags(), $index->getOptions());
+            $this->_indexes[$key] = new Index($index->getName(), $columns, $index->isUnique(), $index->isPrimary(), $index->getFlags(), $index->getOptions());
         }
     }
     /**
@@ -776,7 +776,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
             if (!$modified) {
                 continue;
             }
-            $this->_fkConstraints[$key] = new \Doctrine\DBAL\Schema\ForeignKeyConstraint(
+            $this->_fkConstraints[$key] = new ForeignKeyConstraint(
                 $localColumns,
                 // @phpstan-ignore argument.type
                 $constraint->getForeignTableName(),
@@ -807,7 +807,7 @@ class Table extends \Doctrine\DBAL\Schema\AbstractNamedObject
             if (!$modified) {
                 continue;
             }
-            $this->uniqueConstraints[$key] = new \Doctrine\DBAL\Schema\UniqueConstraint(
+            $this->uniqueConstraints[$key] = new UniqueConstraint(
                 $constraint->getName(),
                 $columns,
                 // @phpstan-ignore argument.type

@@ -6,19 +6,19 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Middleware;
+namespace Odigos\Slim\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use RuntimeException;
-use Slim\Exception\HttpMethodNotAllowedException;
-use Slim\Exception\HttpNotFoundException;
-use Slim\Interfaces\RouteParserInterface;
-use Slim\Interfaces\RouteResolverInterface;
-use Slim\Routing\RouteContext;
-use Slim\Routing\RoutingResults;
+use Odigos\Slim\Exception\HttpMethodNotAllowedException;
+use Odigos\Slim\Exception\HttpNotFoundException;
+use Odigos\Slim\Interfaces\RouteParserInterface;
+use Odigos\Slim\Interfaces\RouteResolverInterface;
+use Odigos\Slim\Routing\RouteContext;
+use Odigos\Slim\Routing\RoutingResults;
 class RoutingMiddleware implements MiddlewareInterface
 {
     protected RouteResolverInterface $routeResolver;

@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Concerns;
 
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Str;
 trait HasVersion4Uuids
 {
-    use \Illuminate\Database\Eloquent\Concerns\HasUuids;
+    use HasUuids;
     /**
      * Generate a new UUID (version 4) for the model.
      *

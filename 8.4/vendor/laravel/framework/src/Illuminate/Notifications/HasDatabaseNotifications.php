@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Notifications;
+namespace Odigos\Illuminate\Notifications;
 
 trait HasDatabaseNotifications
 {
@@ -11,7 +11,7 @@ trait HasDatabaseNotifications
      */
     public function notifications()
     {
-        return $this->morphMany(\Illuminate\Notifications\DatabaseNotification::class, 'notifiable')->latest();
+        return $this->morphMany(DatabaseNotification::class, 'notifiable')->latest();
     }
     /**
      * Get the entity's read notifications.

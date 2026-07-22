@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
 use Closure;
-use Illuminate\Console\Command;
-use Illuminate\Console\ManuallyFailedException;
-use Illuminate\Support\Facades\Schedule;
-use Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Console\ManuallyFailedException;
+use Odigos\Illuminate\Support\Facades\Schedule;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
 use ReflectionFunction;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @mixin \Illuminate\Console\Scheduling\Event
  */

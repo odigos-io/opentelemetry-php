@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\Keywords;
+namespace Odigos\Doctrine\DBAL\Platforms\Keywords;
 
 /**
  * SQLite Keywordlist.
  *
  * @deprecated
  */
-class SQLiteKeywords extends \Doctrine\DBAL\Platforms\Keywords\KeywordList
+class SQLiteKeywords extends KeywordList
 {
     /**
      * {@inheritDoc}

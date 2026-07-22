@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL;
+namespace Odigos\Doctrine\DBAL;
 
-use Doctrine\DBAL\Driver\Exception as DriverException;
-use Doctrine\DBAL\Driver\Result as DriverResult;
-use Doctrine\DBAL\Exception\NoKeyValue;
+use Odigos\Doctrine\DBAL\Driver\Exception as DriverException;
+use Odigos\Doctrine\DBAL\Driver\Result as DriverResult;
+use Odigos\Doctrine\DBAL\Exception\NoKeyValue;
 use LogicException;
 use Traversable;
 use function array_shift;
@@ -17,7 +17,7 @@ use function sprintf;
 class Result
 {
     /** @internal The result can be only instantiated by {@see Connection} or {@see Statement}. */
-    public function __construct(private readonly DriverResult $result, private readonly \Doctrine\DBAL\Connection $connection)
+    public function __construct(private readonly DriverResult $result, private readonly Connection $connection)
     {
     }
     /**

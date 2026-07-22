@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder\Type;
+namespace Odigos\MongoDB\Builder\Type;
 
 use MongoDB\BSON\Type;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function array_is_list;
 use function array_key_exists;
@@ -23,7 +23,7 @@ use function str_starts_with;
  *
  * @internal
  */
-final class CombinedFieldQuery implements \MongoDB\Builder\Type\FieldQueryInterface
+final class CombinedFieldQuery implements FieldQueryInterface
 {
     /** @var list<QueryInterface|FieldQueryInterface|Type|stdClass|array|bool|float|int|string|null> $fieldQueries */
     public readonly array $fieldQueries;
@@ -41,8 +41,8 @@ final class CombinedFieldQuery implements \MongoDB\Builder\Type\FieldQueryInterf
              *
              * @return list<QueryInterface|FieldQueryInterface|Type|stdClass|array|bool|float|int|string|null>
              */
-            static function (array $fieldQueries, \MongoDB\Builder\Type\QueryInterface|\MongoDB\Builder\Type\FieldQueryInterface|Type|stdClass|array|bool|float|int|string|null $fieldQuery): array {
-                if ($fieldQuery instanceof \MongoDB\Builder\Type\CombinedFieldQuery) {
+            static function (array $fieldQueries, QueryInterface|FieldQueryInterface|Type|stdClass|array|bool|float|int|string|null $fieldQuery): array {
+                if ($fieldQuery instanceof CombinedFieldQuery) {
                     return array_merge($fieldQueries, $fieldQuery->fieldQueries);
                 }
                 $fieldQueries[] = $fieldQuery;
@@ -57,7 +57,7 @@ final class CombinedFieldQuery implements \MongoDB\Builder\Type\FieldQueryInterf
             if ($fieldQuery instanceof stdClass) {
                 $fieldQuery = get_object_vars($fieldQuery);
             }
-            if ($fieldQuery instanceof \MongoDB\Builder\Type\FieldQueryInterface && $fieldQuery instanceof \MongoDB\Builder\Type\OperatorInterface) {
+            if ($fieldQuery instanceof FieldQueryInterface && $fieldQuery instanceof OperatorInterface) {
                 $operator = $fieldQuery::NAME;
             } elseif (is_array($fieldQuery)) {
                 if (count($fieldQuery) !== 1) {

@@ -1,15 +1,15 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
-use Laravel\Prompts\Support\Utils;
-class MultiSearchPrompt extends \Laravel\Prompts\Prompt
+use Odigos\Laravel\Prompts\Support\Utils;
+class MultiSearchPrompt extends Prompt
 {
-    use \Laravel\Prompts\Concerns\HasInfo;
-    use \Laravel\Prompts\Concerns\Scrolling;
-    use \Laravel\Prompts\Concerns\Truncation;
-    use \Laravel\Prompts\Concerns\TypedValue;
+    use Concerns\HasInfo;
+    use Concerns\Scrolling;
+    use Concerns\Truncation;
+    use Concerns\TypedValue;
     /**
      * The cached matches.
      *
@@ -33,18 +33,18 @@ class MultiSearchPrompt extends \Laravel\Prompts\Prompt
      */
     public function __construct(public string $label, public Closure $options, public string $placeholder = '', public int $scroll = 5, public bool|string $required = \false, public mixed $validate = null, public string $hint = '', public ?Closure $transform = null, public string|Closure $info = '')
     {
-        $this->trackTypedValue(submit: \false, ignore: fn($key) => \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::SPACE, \Laravel\Prompts\Key::HOME, \Laravel\Prompts\Key::END, \Laravel\Prompts\Key::CTRL_A, \Laravel\Prompts\Key::CTRL_E], $key) && $this->highlighted !== null);
+        $this->trackTypedValue(submit: \false, ignore: fn($key) => Key::oneOf([Key::SPACE, Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E], $key) && $this->highlighted !== null);
         $this->initializeScrolling(null);
         $this->on('key', fn($key) => match ($key) {
-            \Laravel\Prompts\Key::UP, \Laravel\Prompts\Key::UP_ARROW, \Laravel\Prompts\Key::SHIFT_TAB => $this->highlightPrevious(count($this->matches), \true),
-            \Laravel\Prompts\Key::DOWN, \Laravel\Prompts\Key::DOWN_ARROW, \Laravel\Prompts\Key::TAB => $this->highlightNext(count($this->matches), \true),
-            \Laravel\Prompts\Key::oneOf(\Laravel\Prompts\Key::HOME, $key) => $this->highlighted !== null ? $this->highlight(0) : null,
-            \Laravel\Prompts\Key::oneOf(\Laravel\Prompts\Key::END, $key) => $this->highlighted !== null ? $this->highlight(count($this->matches()) - 1) : null,
-            \Laravel\Prompts\Key::SPACE => $this->highlighted !== null ? $this->toggleHighlighted() : null,
-            \Laravel\Prompts\Key::CTRL_A => $this->highlighted !== null ? $this->toggleAll() : null,
-            \Laravel\Prompts\Key::CTRL_E => null,
-            \Laravel\Prompts\Key::ENTER => $this->submit(),
-            \Laravel\Prompts\Key::LEFT, \Laravel\Prompts\Key::LEFT_ARROW, \Laravel\Prompts\Key::RIGHT, \Laravel\Prompts\Key::RIGHT_ARROW => $this->highlighted = null,
+            Key::UP, Key::UP_ARROW, Key::SHIFT_TAB => $this->highlightPrevious(count($this->matches), \true),
+            Key::DOWN, Key::DOWN_ARROW, Key::TAB => $this->highlightNext(count($this->matches), \true),
+            Key::oneOf(Key::HOME, $key) => $this->highlighted !== null ? $this->highlight(0) : null,
+            Key::oneOf(Key::END, $key) => $this->highlighted !== null ? $this->highlight(count($this->matches()) - 1) : null,
+            Key::SPACE => $this->highlighted !== null ? $this->toggleHighlighted() : null,
+            Key::CTRL_A => $this->highlighted !== null ? $this->toggleAll() : null,
+            Key::CTRL_E => null,
+            Key::ENTER => $this->submit(),
+            Key::LEFT, Key::LEFT_ARROW, Key::RIGHT, Key::RIGHT_ARROW => $this->highlighted = null,
             default => $this->search(),
         });
     }

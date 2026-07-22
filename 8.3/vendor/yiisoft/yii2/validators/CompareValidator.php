@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\helpers\Html;
-use yii\helpers\Json;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\Html;
+use Odigos\yii\helpers\Json;
 /**
  * CompareValidator compares the specified attribute value with another value.
  *
@@ -31,7 +31,7 @@ use yii\helpers\Json;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class CompareValidator extends \yii\validators\Validator
+class CompareValidator extends Validator
 {
     /**
      * Constant for specifying the comparison [[type]] by numeric values.
@@ -225,7 +225,7 @@ class CompareValidator extends \yii\validators\Validator
         if ($this->compareValue != null && $this->compareValue instanceof \Closure) {
             $this->compareValue = call_user_func($this->compareValue);
         }
-        \yii\validators\ValidationAsset::register($view);
+        ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
         return 'yii.validation.compare(value, messages, ' . Json::htmlEncode($options) . ', $form);';
     }

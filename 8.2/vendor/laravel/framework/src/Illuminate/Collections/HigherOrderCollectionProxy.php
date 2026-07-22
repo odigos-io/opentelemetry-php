@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 /**
  * @template TKey of array-key
@@ -30,7 +30,7 @@ class HigherOrderCollectionProxy
      * @param  \Illuminate\Support\Enumerable<TKey, TValue>  $collection
      * @param  string  $method
      */
-    public function __construct(\Illuminate\Support\Enumerable $collection, $method)
+    public function __construct(Enumerable $collection, $method)
     {
         $this->method = $method;
         $this->collection = $collection;

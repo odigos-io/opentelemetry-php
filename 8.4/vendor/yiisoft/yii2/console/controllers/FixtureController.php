@@ -5,19 +5,19 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console\controllers;
+namespace Odigos\yii\console\controllers;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\base\InvalidParamException;
-use yii\console\Application;
-use yii\console\Controller;
-use yii\console\Exception;
-use yii\console\ExitCode;
-use yii\helpers\Console;
-use yii\helpers\FileHelper;
-use yii\test\Fixture;
-use yii\test\FixtureTrait;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidParamException;
+use Odigos\yii\console\Application;
+use Odigos\yii\console\Controller;
+use Odigos\yii\console\Exception;
+use Odigos\yii\console\ExitCode;
+use Odigos\yii\helpers\Console;
+use Odigos\yii\helpers\FileHelper;
+use Odigos\yii\test\Fixture;
+use Odigos\yii\test\FixtureTrait;
 /**
  * Manages fixture data loading and unloading.
  *
@@ -61,7 +61,7 @@ class FixtureController extends Controller
      * @var array global fixtures that should be applied when loading and unloading. By default it is set to `InitDbFixture`
      * that disables and enables integrity check, so your data can be safely loaded.
      */
-    public $globalFixtures = ['yii\test\InitDbFixture'];
+    public $globalFixtures = ['Odigos\yii\test\InitDbFixture'];
     /**
      * {@inheritdoc}
      */

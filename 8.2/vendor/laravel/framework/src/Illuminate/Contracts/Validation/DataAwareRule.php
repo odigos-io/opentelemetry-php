@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Validation;
+namespace Odigos\Illuminate\Contracts\Validation;
 
 interface DataAwareRule
 {

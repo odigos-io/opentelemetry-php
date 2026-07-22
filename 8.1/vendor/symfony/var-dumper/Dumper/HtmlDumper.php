@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Dumper;
+namespace Odigos\Symfony\Component\VarDumper\Dumper;
 
-use Symfony\Component\VarDumper\Cloner\Cursor;
-use Symfony\Component\VarDumper\Cloner\Data;
+use Odigos\Symfony\Component\VarDumper\Cloner\Cursor;
+use Odigos\Symfony\Component\VarDumper\Cloner\Data;
 /**
  * HtmlDumper dumps variables as HTML.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class HtmlDumper extends \Symfony\Component\VarDumper\Dumper\CliDumper
+class HtmlDumper extends CliDumper
 {
     /** @var callable|resource|string|null */
     public static $defaultOutput = 'php://output';
@@ -34,7 +34,7 @@ class HtmlDumper extends \Symfony\Component\VarDumper\Dumper\CliDumper
     private array $extraDisplayOptions = [];
     public function __construct($output = null, ?string $charset = null, int $flags = 0)
     {
-        \Symfony\Component\VarDumper\Dumper\AbstractDumper::__construct($output, $charset, $flags);
+        AbstractDumper::__construct($output, $charset, $flags);
         $this->dumpId = 'sf-dump-' . mt_rand();
         $this->displayOptions['fileLinkFormat'] = \ini_get('xdebug.file_link_format') ?: get_cfg_var('xdebug.file_link_format');
         $this->styles = static::$themes['dark'] ?? self::$themes['dark'];
@@ -890,9 +890,9 @@ EOHTML
         $this->lastDepth = $depth;
         $this->line = mb_encode_numericentity($this->line, [0x80, 0x10ffff, 0, 0x1fffff], 'UTF-8');
         if (-1 === $depth) {
-            \Symfony\Component\VarDumper\Dumper\AbstractDumper::dumpLine(0);
+            AbstractDumper::dumpLine(0);
         }
-        \Symfony\Component\VarDumper\Dumper\AbstractDumper::dumpLine($depth);
+        AbstractDumper::dumpLine($depth);
     }
     private function getSourceLink(string $file, int $line): string|false
     {

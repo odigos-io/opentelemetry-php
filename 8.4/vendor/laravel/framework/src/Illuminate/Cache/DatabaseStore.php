@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
 use Closure;
-use Illuminate\Contracts\Cache\LockProvider;
-use Illuminate\Contracts\Cache\Store;
-use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\PostgresConnection;
-use Illuminate\Database\QueryException;
-use Illuminate\Database\SQLiteConnection;
-use Illuminate\Database\SqlServerConnection;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\InteractsWithTime;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Cache\LockProvider;
+use Odigos\Illuminate\Contracts\Cache\Store;
+use Odigos\Illuminate\Database\ConnectionInterface;
+use Odigos\Illuminate\Database\PostgresConnection;
+use Odigos\Illuminate\Database\QueryException;
+use Odigos\Illuminate\Database\SQLiteConnection;
+use Odigos\Illuminate\Database\SqlServerConnection;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Support\Str;
 class DatabaseStore implements LockProvider, Store
 {
     use InteractsWithTime;
@@ -279,7 +279,7 @@ class DatabaseStore implements LockProvider, Store
      */
     public function lock($name, $seconds = 0, $owner = null)
     {
-        return new \Illuminate\Cache\DatabaseLock($this->lockConnection ?? $this->connection, $this->lockTable, $this->prefix . $name, $seconds, $owner, $this->lockLottery, $this->defaultLockTimeoutInSeconds);
+        return new DatabaseLock($this->lockConnection ?? $this->connection, $this->lockTable, $this->prefix . $name, $seconds, $owner, $this->lockLottery, $this->defaultLockTimeoutInSeconds);
     }
     /**
      * Restore a lock instance using the owner identifier.

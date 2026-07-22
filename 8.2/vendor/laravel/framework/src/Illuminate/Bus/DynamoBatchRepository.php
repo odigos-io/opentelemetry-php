@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Bus;
+namespace Odigos\Illuminate\Bus;
 
 use Odigos\Aws\DynamoDb\DynamoDbClient;
 use Odigos\Aws\DynamoDb\Marshaler;
 use Odigos\Carbon\CarbonImmutable;
 use Closure;
-use Illuminate\Support\Str;
-class DynamoBatchRepository implements \Illuminate\Bus\BatchRepository
+use Odigos\Illuminate\Support\Str;
+class DynamoBatchRepository implements BatchRepository
 {
     /**
      * The batch factory instance.
@@ -54,7 +54,7 @@ class DynamoBatchRepository implements \Illuminate\Bus\BatchRepository
     /**
      * Create a new batch repository instance.
      */
-    public function __construct(\Illuminate\Bus\BatchFactory $factory, DynamoDbClient $dynamoDbClient, string $applicationName, string $table, ?int $ttl, ?string $ttlAttribute)
+    public function __construct(BatchFactory $factory, DynamoDbClient $dynamoDbClient, string $applicationName, string $table, ?int $ttl, ?string $ttlAttribute)
     {
         $this->factory = $factory;
         $this->dynamoDbClient = $dynamoDbClient;
@@ -110,7 +110,7 @@ class DynamoBatchRepository implements \Illuminate\Bus\BatchRepository
      * @param  \Illuminate\Bus\PendingBatch  $batch
      * @return \Illuminate\Bus\Batch
      */
-    public function store(\Illuminate\Bus\PendingBatch $batch)
+    public function store(PendingBatch $batch)
     {
         $id = (string) Str::orderedUuid();
         $batch = ['id' => $id, 'name' => $batch->name, 'total_jobs' => 0, 'pending_jobs' => 0, 'failed_jobs' => 0, 'failed_job_ids' => [], 'options' => $this->serialize($batch->options ?? []), 'created_at' => time(), 'cancelled_at' => null, 'finished_at' => null];
@@ -150,7 +150,7 @@ class DynamoBatchRepository implements \Illuminate\Bus\BatchRepository
         }
         $batch = $this->dynamoDbClient->updateItem(array_filter(['TableName' => $this->table, 'Key' => ['application' => ['S' => $this->applicationName], 'id' => ['S' => $batchId]], 'UpdateExpression' => $update, 'ExpressionAttributeValues' => array_filter([':inc' => ['N' => '1'], ':ttl' => array_filter(['N' => $this->getExpiryTime()])]), 'ExpressionAttributeNames' => $this->ttlExpressionAttributeName(), 'ReturnValues' => 'ALL_NEW']));
         $values = $this->marshaler->unmarshalItem($batch['Attributes']);
-        return new \Illuminate\Bus\UpdatedBatchJobCounts($values['pending_jobs'], $values['failed_jobs']);
+        return new UpdatedBatchJobCounts($values['pending_jobs'], $values['failed_jobs']);
     }
     /**
      * Increment the total number of failed jobs for the batch.
@@ -167,7 +167,7 @@ class DynamoBatchRepository implements \Illuminate\Bus\BatchRepository
         }
         $batch = $this->dynamoDbClient->updateItem(array_filter(['TableName' => $this->table, 'Key' => ['application' => ['S' => $this->applicationName], 'id' => ['S' => $batchId]], 'UpdateExpression' => $update, 'ExpressionAttributeValues' => array_filter([':jobId' => $this->marshaler->marshalValue([$jobId]), ':inc' => ['N' => '1'], ':ttl' => array_filter(['N' => $this->getExpiryTime()])]), 'ExpressionAttributeNames' => $this->ttlExpressionAttributeName(), 'ReturnValues' => 'ALL_NEW']));
         $values = $this->marshaler->unmarshalItem($batch['Attributes']);
-        return new \Illuminate\Bus\UpdatedBatchJobCounts($values['pending_jobs'], $values['failed_jobs']);
+        return new UpdatedBatchJobCounts($values['pending_jobs'], $values['failed_jobs']);
     }
     /**
      * Mark the batch that has the given ID as finished.

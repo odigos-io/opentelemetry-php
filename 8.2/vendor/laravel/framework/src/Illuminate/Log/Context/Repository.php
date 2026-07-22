@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Log\Context;
+namespace Odigos\Illuminate\Log\Context;
 
 use __PHP_Incomplete_Class;
 use Closure;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Log\Context\Events\ContextDehydrating as Dehydrating;
-use Illuminate\Log\Context\Events\ContextHydrated as Hydrated;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Database\Eloquent\ModelNotFoundException;
+use Odigos\Illuminate\Log\Context\Events\ContextDehydrating as Dehydrating;
+use Odigos\Illuminate\Log\Context\Events\ContextHydrated as Hydrated;
+use Odigos\Illuminate\Queue\SerializesModels;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use RuntimeException;
 use Throwable;
 class Repository

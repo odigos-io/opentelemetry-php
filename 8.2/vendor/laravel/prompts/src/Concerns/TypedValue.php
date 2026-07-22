@@ -1,9 +1,9 @@
 <?php
 
-namespace Laravel\Prompts\Concerns;
+namespace Odigos\Laravel\Prompts\Concerns;
 
 use IntlBreakIterator;
-use Laravel\Prompts\Key;
+use Odigos\Laravel\Prompts\Key;
 trait TypedValue
 {
     /**

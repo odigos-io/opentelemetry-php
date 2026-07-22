@@ -7,7 +7,7 @@ namespace Odigos;
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-use yii\db\Migration;
+use Odigos\yii\db\Migration;
 /**
  * Initializes i18n messages tables.
  *

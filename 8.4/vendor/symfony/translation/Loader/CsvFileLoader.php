@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Loader;
+namespace Odigos\Symfony\Component\Translation\Loader;
 
-use Symfony\Component\Translation\Exception\NotFoundResourceException;
+use Odigos\Symfony\Component\Translation\Exception\NotFoundResourceException;
 /**
  * CsvFileLoader loads translations from CSV files.
  *
  * @author Saša Stamenković <umpirsky@gmail.com>
  */
-class CsvFileLoader extends \Symfony\Component\Translation\Loader\FileLoader
+class CsvFileLoader extends FileLoader
 {
     private string $delimiter = ';';
     private string $enclosure = '"';

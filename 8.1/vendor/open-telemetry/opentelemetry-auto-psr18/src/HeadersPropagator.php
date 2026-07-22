@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Psr18;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Psr18;
 
 use function assert;
 use OpenTelemetry\Context\Propagation\PropagationSetterInterface;

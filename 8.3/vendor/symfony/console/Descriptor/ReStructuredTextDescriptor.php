@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Descriptor;
+namespace Odigos\Symfony\Component\Console\Descriptor;
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Helper;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\String\UnicodeString;
-class ReStructuredTextDescriptor extends \Symfony\Component\Console\Descriptor\Descriptor
+use Odigos\Symfony\Component\Console\Application;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Helper\Helper;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputDefinition;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\String\UnicodeString;
+class ReStructuredTextDescriptor extends Descriptor
 {
     // <h1>
     private string $partChar = '=';
@@ -107,7 +107,7 @@ class ReStructuredTextDescriptor extends \Symfony\Component\Console\Descriptor\D
     }
     protected function describeApplication(Application $application, array $options = []): void
     {
-        $description = new \Symfony\Component\Console\Descriptor\ApplicationDescription($application, $options['namespace'] ?? null);
+        $description = new ApplicationDescription($application, $options['namespace'] ?? null);
         $title = $this->getApplicationTitle($application);
         $this->write($title . "\n" . str_repeat($this->partChar, Helper::width($title)));
         $this->createTableOfContents($description, $application);
@@ -141,7 +141,7 @@ class ReStructuredTextDescriptor extends \Symfony\Component\Console\Descriptor\D
             }
         }
     }
-    private function createTableOfContents(\Symfony\Component\Console\Descriptor\ApplicationDescription $description, Application $application): void
+    private function createTableOfContents(ApplicationDescription $description, Application $application): void
     {
         $this->setVisibleNamespaces($description);
         $chapterTitle = 'Table of Contents';
@@ -171,7 +171,7 @@ class ReStructuredTextDescriptor extends \Symfony\Component\Console\Descriptor\D
         }
         return $nonDefaultOptions;
     }
-    private function setVisibleNamespaces(\Symfony\Component\Console\Descriptor\ApplicationDescription $description): void
+    private function setVisibleNamespaces(ApplicationDescription $description): void
     {
         $commands = $description->getCommands();
         foreach ($description->getNamespaces() as $namespace) {

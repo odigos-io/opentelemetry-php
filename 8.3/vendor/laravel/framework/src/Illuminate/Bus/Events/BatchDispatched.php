@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Bus\Events;
+namespace Odigos\Illuminate\Bus\Events;
 
-use Illuminate\Bus\Batch;
+use Odigos\Illuminate\Bus\Batch;
 class BatchDispatched
 {
     /**

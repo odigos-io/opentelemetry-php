@@ -1,7 +1,7 @@
 <?php
 
-namespace GuzzleHttp\Exception;
+namespace Odigos\GuzzleHttp\Exception;
 
-class TransferException extends \RuntimeException implements \GuzzleHttp\Exception\GuzzleException
+class TransferException extends \RuntimeException implements GuzzleException
 {
 }

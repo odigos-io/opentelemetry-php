@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace OpenTelemetry\SDK\Trace;
 
-use Http\Discovery\Exception\NotFoundException;
-use Http\Discovery\Psr17FactoryDiscovery;
-use Nyholm\Psr7Server\ServerRequestCreator;
+use Odigos\Http\Discovery\Exception\NotFoundException;
+use Odigos\Http\Discovery\Psr17FactoryDiscovery;
+use Odigos\Nyholm\Psr7Server\ServerRequestCreator;
 use OpenTelemetry\API\Behavior\LogsMessagesTrait;
 use OpenTelemetry\API\Common\Time\ClockInterface;
 use OpenTelemetry\API\Globals;

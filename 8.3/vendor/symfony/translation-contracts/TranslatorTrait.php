@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Contracts\Translation;
+namespace Odigos\Symfony\Contracts\Translation;
 
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Translation\Exception\InvalidArgumentException;
 /**
  * A trait to help implement TranslatorInterface and LocaleAwareInterface.
  *
@@ -36,7 +36,7 @@ trait TranslatorTrait
             return '';
         }
         foreach ($parameters as $k => $v) {
-            if ($v instanceof \Symfony\Contracts\Translation\TranslatableInterface) {
+            if ($v instanceof TranslatableInterface) {
                 $parameters[$k] = $v->trans($this, $locale);
             }
         }

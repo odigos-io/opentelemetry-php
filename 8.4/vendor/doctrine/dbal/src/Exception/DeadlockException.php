@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
 /**
  * Exception for a deadlock error of a transaction detected in the driver.
  */
-class DeadlockException extends \Doctrine\DBAL\Exception\ServerException implements \Doctrine\DBAL\Exception\RetryableException
+class DeadlockException extends ServerException implements RetryableException
 {
 }

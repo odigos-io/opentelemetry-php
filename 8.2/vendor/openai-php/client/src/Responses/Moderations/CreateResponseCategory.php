@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Moderations;
+namespace Odigos\OpenAI\Responses\Moderations;
 
-use OpenAI\Enums\Moderations\Category;
+use Odigos\OpenAI\Enums\Moderations\Category;
 final class CreateResponseCategory
 {
     private function __construct(public readonly Category $category, public readonly bool $violated, public readonly float $score)

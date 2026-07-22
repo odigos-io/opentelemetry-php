@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default\Concerns;
+namespace Odigos\Laravel\Prompts\Themes\Default\Concerns;
 
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 trait DrawsScrollbars
 {
     /**

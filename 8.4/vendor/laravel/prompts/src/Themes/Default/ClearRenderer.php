@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-class ClearRenderer extends \Laravel\Prompts\Themes\Default\Renderer
+class ClearRenderer extends Renderer
 {
     /**
      * Clear the terminal.

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Console;
+namespace Odigos\Illuminate\Console;
 
-use Illuminate\Filesystem\Filesystem;
-use function Illuminate\Filesystem\join_paths;
-abstract class MigrationGeneratorCommand extends \Illuminate\Console\Command
+use Odigos\Illuminate\Filesystem\Filesystem;
+use function Odigos\Illuminate\Filesystem\join_paths;
+abstract class MigrationGeneratorCommand extends Command
 {
     /**
      * The filesystem instance.

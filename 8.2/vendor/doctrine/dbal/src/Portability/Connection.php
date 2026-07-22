@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Portability;
+namespace Odigos\Doctrine\DBAL\Portability;
 
-use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
-use Doctrine\DBAL\Driver\Middleware\AbstractConnectionMiddleware;
+use Odigos\Doctrine\DBAL\Driver\Connection as ConnectionInterface;
+use Odigos\Doctrine\DBAL\Driver\Middleware\AbstractConnectionMiddleware;
 /**
  * Portability wrapper for a Connection.
  */
@@ -15,16 +15,16 @@ final class Connection extends AbstractConnectionMiddleware
     public const PORTABILITY_RTRIM = 1;
     public const PORTABILITY_EMPTY_TO_NULL = 4;
     public const PORTABILITY_FIX_CASE = 8;
-    public function __construct(ConnectionInterface $connection, private readonly \Doctrine\DBAL\Portability\Converter $converter)
+    public function __construct(ConnectionInterface $connection, private readonly Converter $converter)
     {
         parent::__construct($connection);
     }
-    public function prepare(string $sql): \Doctrine\DBAL\Portability\Statement
+    public function prepare(string $sql): Statement
     {
-        return new \Doctrine\DBAL\Portability\Statement(parent::prepare($sql), $this->converter);
+        return new Statement(parent::prepare($sql), $this->converter);
     }
-    public function query(string $sql): \Doctrine\DBAL\Portability\Result
+    public function query(string $sql): Result
     {
-        return new \Doctrine\DBAL\Portability\Result(parent::query($sql), $this->converter);
+        return new Result(parent::query($sql), $this->converter);
     }
 }

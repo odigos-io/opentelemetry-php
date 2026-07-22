@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\test;
+namespace Odigos\yii\test;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * FileFixtureTrait provides functionalities for loading data fixture from file.
  *

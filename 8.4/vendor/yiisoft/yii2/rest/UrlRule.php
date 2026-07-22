@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rest;
+namespace Odigos\yii\rest;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\helpers\Inflector;
-use yii\web\CompositeUrlRule;
-use yii\web\UrlRule as WebUrlRule;
-use yii\web\UrlRuleInterface;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\Inflector;
+use Odigos\yii\web\CompositeUrlRule;
+use Odigos\yii\web\UrlRule as WebUrlRule;
+use Odigos\yii\web\UrlRuleInterface;
 /**
  * UrlRule is provided to simplify the creation of URL rules for RESTful API support.
  *
@@ -117,7 +117,7 @@ class UrlRule extends CompositeUrlRule
     /**
      * @var array the default configuration for creating each URL rule contained by this rule.
      */
-    public $ruleConfig = ['class' => 'yii\web\UrlRule'];
+    public $ruleConfig = ['class' => 'Odigos\yii\web\UrlRule'];
     /**
      * @var bool whether to automatically pluralize the URL names for controllers.
      * If true, a controller ID will appear in plural form in URLs. For example, `user` controller

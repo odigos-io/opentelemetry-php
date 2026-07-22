@@ -1,25 +1,25 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
 use BadMethodCallException;
 use Closure;
 use Exception;
-use Illuminate\Contracts\Database\Eloquent\Builder as BuilderContract;
-use Illuminate\Contracts\Database\Query\Expression;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Concerns\BuildsQueries;
-use Illuminate\Database\Eloquent\Concerns\QueriesRelationships;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Database\RecordsNotFoundException;
-use Illuminate\Database\UniqueConstraintViolationException;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection as BaseCollection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Contracts\Database\Eloquent\Builder as BuilderContract;
+use Odigos\Illuminate\Contracts\Database\Query\Expression;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Database\Concerns\BuildsQueries;
+use Odigos\Illuminate\Database\Eloquent\Concerns\QueriesRelationships;
+use Odigos\Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Odigos\Illuminate\Database\Eloquent\Relations\Relation;
+use Odigos\Illuminate\Database\Query\Builder as QueryBuilder;
+use Odigos\Illuminate\Database\RecordsNotFoundException;
+use Odigos\Illuminate\Database\UniqueConstraintViolationException;
+use Odigos\Illuminate\Pagination\Paginator;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection as BaseCollection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
 use ReflectionClass;
 use ReflectionMethod;
 /**
@@ -208,7 +208,7 @@ class Builder implements BuilderContract
      */
     public function whereKey($id)
     {
-        if ($id instanceof \Illuminate\Database\Eloquent\Model) {
+        if ($id instanceof Model) {
             $id = $id->getKey();
         }
         if (is_array($id) || $id instanceof Arrayable) {
@@ -232,7 +232,7 @@ class Builder implements BuilderContract
      */
     public function whereKeyNot($id)
     {
-        if ($id instanceof \Illuminate\Database\Eloquent\Model) {
+        if ($id instanceof Model) {
             $id = $id->getKey();
         }
         if (is_array($id) || $id instanceof Arrayable) {
@@ -256,7 +256,7 @@ class Builder implements BuilderContract
      */
     public function except($models)
     {
-        return $this->whereKeyNot($models instanceof \Illuminate\Database\Eloquent\Model ? $models->getKey() : \Illuminate\Database\Eloquent\Collection::wrap($models)->modelKeys());
+        return $this->whereKeyNot($models instanceof Model ? $models->getKey() : Collection::wrap($models)->modelKeys());
     }
     /**
      * Add a basic where clause to the query.
@@ -369,7 +369,7 @@ class Builder implements BuilderContract
         return $instance->newCollection(array_map(function ($item) use ($items, $instance) {
             $model = $instance->newFromBuilder($item);
             if (count($items) > 1) {
-                $model->preventsLazyLoading = \Illuminate\Database\Eloquent\Model::preventsLazyLoading();
+                $model->preventsLazyLoading = Model::preventsLazyLoading();
             }
             return $model;
         }, $items));
@@ -494,12 +494,12 @@ class Builder implements BuilderContract
         $id = $id instanceof Arrayable ? $id->toArray() : $id;
         if (is_array($id)) {
             if (count($result) !== count(array_unique($id))) {
-                throw (new \Illuminate\Database\Eloquent\ModelNotFoundException())->setModel(get_class($this->model), array_diff($id, $result->modelKeys()));
+                throw (new ModelNotFoundException())->setModel(get_class($this->model), array_diff($id, $result->modelKeys()));
             }
             return $result;
         }
         if (is_null($result)) {
-            throw (new \Illuminate\Database\Eloquent\ModelNotFoundException())->setModel(get_class($this->model), $id);
+            throw (new ModelNotFoundException())->setModel(get_class($this->model), $id);
         }
         return $result;
     }
@@ -631,7 +631,7 @@ class Builder implements BuilderContract
         if (!is_null($model = $this->first($columns))) {
             return $model;
         }
-        throw (new \Illuminate\Database\Eloquent\ModelNotFoundException())->setModel(get_class($this->model));
+        throw (new ModelNotFoundException())->setModel(get_class($this->model));
     }
     /**
      * Execute the query and get the first result or call a callback.
@@ -667,7 +667,7 @@ class Builder implements BuilderContract
         try {
             return $this->baseSole($columns);
         } catch (RecordsNotFoundException) {
-            throw (new \Illuminate\Database\Eloquent\ModelNotFoundException())->setModel(get_class($this->model));
+            throw (new ModelNotFoundException())->setModel(get_class($this->model));
         }
     }
     /**
@@ -791,7 +791,7 @@ class Builder implements BuilderContract
             try {
                 return $this->getModel()->newInstance()->{$name}();
             } catch (BadMethodCallException) {
-                throw \Illuminate\Database\Eloquent\RelationNotFoundException::make($this->getModel(), $name);
+                throw RelationNotFoundException::make($this->getModel(), $name);
             }
         });
         $nested = $this->relationsNestedUnder($name);
@@ -1000,7 +1000,7 @@ class Builder implements BuilderContract
      */
     public function createQuietly(array $attributes = [])
     {
-        return \Illuminate\Database\Eloquent\Model::withoutEvents(fn() => $this->create($attributes));
+        return Model::withoutEvents(fn() => $this->create($attributes));
     }
     /**
      * Save a new model and return the instance. Allow mass-assignment.
@@ -1022,7 +1022,7 @@ class Builder implements BuilderContract
      */
     public function forceCreateQuietly(array $attributes = [])
     {
-        return \Illuminate\Database\Eloquent\Model::withoutEvents(fn() => $this->forceCreate($attributes));
+        return Model::withoutEvents(fn() => $this->forceCreate($attributes));
     }
     /**
      * Update records in the database.
@@ -1271,7 +1271,7 @@ class Builder implements BuilderContract
                 // If the scope is a scope object, we will call the apply method on this scope
                 // passing in the builder and the model instance. After we run all of these
                 // scopes we will return back the builder instance to the outside caller.
-                if ($scope instanceof \Illuminate\Database\Eloquent\Scope) {
+                if ($scope instanceof Scope) {
                     $scope->apply($builder, $this->getModel());
                 }
             });
@@ -1701,7 +1701,7 @@ class Builder implements BuilderContract
      * @param  TModelNew  $model
      * @return static<TModelNew>
      */
-    public function setModel(\Illuminate\Database\Eloquent\Model $model)
+    public function setModel(Model $model)
     {
         $this->model = $model;
         $this->query->from($model->getTable());
@@ -1779,7 +1779,7 @@ class Builder implements BuilderContract
     public function __get($key)
     {
         if (in_array($key, ['orWhere', 'whereNot', 'orWhereNot'])) {
-            return new \Illuminate\Database\Eloquent\HigherOrderBuilderProxy($this, $key);
+            return new HigherOrderBuilderProxy($this, $key);
         }
         if (in_array($key, $this->propertyPassthru)) {
             return $this->toBase()->{$key};

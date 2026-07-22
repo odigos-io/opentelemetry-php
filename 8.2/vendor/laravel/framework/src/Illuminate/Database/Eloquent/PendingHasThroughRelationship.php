@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
 use BadMethodCallException;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
-use Illuminate\Support\Str;
-use Illuminate\Support\Stringable;
+use Odigos\Illuminate\Database\Eloquent\Relations\HasMany;
+use Odigos\Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Stringable;
 /**
  * @template TIntermediateModel of \Illuminate\Database\Eloquent\Model
  * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model

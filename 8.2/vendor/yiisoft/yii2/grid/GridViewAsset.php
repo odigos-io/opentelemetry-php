@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\grid;
+namespace Odigos\yii\grid;
 
-use yii\web\AssetBundle;
+use Odigos\yii\web\AssetBundle;
 /**
  * This asset bundle provides the javascript files for the [[GridView]] widget.
  *
@@ -18,5 +18,5 @@ class GridViewAsset extends AssetBundle
 {
     public $sourcePath = '@yii/assets';
     public $js = ['yii.gridView.js'];
-    public $depends = ['yii\web\YiiAsset'];
+    public $depends = ['Odigos\yii\web\YiiAsset'];
 }

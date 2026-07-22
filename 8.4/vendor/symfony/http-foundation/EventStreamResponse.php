@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation;
+namespace Odigos\Symfony\Component\HttpFoundation;
 
 /**
  * Represents a streaming HTTP response for sending server events
@@ -33,7 +33,7 @@ namespace Symfony\Component\HttpFoundation;
  *         yield new ServerEvent(time());
  *     });
  */
-class EventStreamResponse extends \Symfony\Component\HttpFoundation\StreamedResponse
+class EventStreamResponse extends StreamedResponse
 {
     /**
      * @param int|null $retry The number of milliseconds the client should wait
@@ -66,7 +66,7 @@ class EventStreamResponse extends \Symfony\Component\HttpFoundation\StreamedResp
      *
      * @return $this
      */
-    public function sendEvent(\Symfony\Component\HttpFoundation\ServerEvent $event): static
+    public function sendEvent(ServerEvent $event): static
     {
         if ($this->retry > 0 && !$event->getRetry()) {
             $event->setRetry($this->retry);

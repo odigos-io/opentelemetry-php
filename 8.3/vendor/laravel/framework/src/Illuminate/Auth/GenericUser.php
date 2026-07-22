@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Auth;
+namespace Odigos\Illuminate\Auth;
 
-use Illuminate\Contracts\Auth\Authenticatable as UserContract;
+use Odigos\Illuminate\Contracts\Auth\Authenticatable as UserContract;
 class GenericUser implements UserContract
 {
     /**

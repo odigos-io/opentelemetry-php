@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\EventListener;
+namespace Odigos\Symfony\Component\HttpKernel\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\UriSigner;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\KernelEvents;
+use Odigos\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\UriSigner;
+use Odigos\Symfony\Component\HttpKernel\Event\RequestEvent;
+use Odigos\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Odigos\Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Handles content fragments represented by special URIs.
  *

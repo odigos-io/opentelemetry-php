@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\View;
+namespace Odigos\Illuminate\View;
 
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\View\Factory as FactoryContract;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\View\Engines\EngineResolver;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\View\Factory as FactoryContract;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\View\Engines\EngineResolver;
 use InvalidArgumentException;
 class Factory implements FactoryContract
 {
-    use Macroable, \Illuminate\View\Concerns\ManagesComponents, \Illuminate\View\Concerns\ManagesEvents, \Illuminate\View\Concerns\ManagesFragments, \Illuminate\View\Concerns\ManagesLayouts, \Illuminate\View\Concerns\ManagesLoops, \Illuminate\View\Concerns\ManagesStacks, \Illuminate\View\Concerns\ManagesTranslations;
+    use Macroable, Concerns\ManagesComponents, Concerns\ManagesEvents, Concerns\ManagesFragments, Concerns\ManagesLayouts, Concerns\ManagesLoops, Concerns\ManagesStacks, Concerns\ManagesTranslations;
     /**
      * The engine implementation.
      *
@@ -86,7 +86,7 @@ class Factory implements FactoryContract
      * @param  \Illuminate\View\ViewFinderInterface  $finder
      * @param  \Illuminate\Contracts\Events\Dispatcher  $events
      */
-    public function __construct(EngineResolver $engines, \Illuminate\View\ViewFinderInterface $finder, Dispatcher $events)
+    public function __construct(EngineResolver $engines, ViewFinderInterface $finder, Dispatcher $events)
     {
         $this->finder = $finder;
         $this->events = $events;
@@ -208,7 +208,7 @@ class Factory implements FactoryContract
      */
     protected function normalizeName($name)
     {
-        return $this->normalizedNameCache[$name] ??= \Illuminate\View\ViewName::normalize($name);
+        return $this->normalizedNameCache[$name] ??= ViewName::normalize($name);
     }
     /**
      * Parse the given data into a raw array.
@@ -230,7 +230,7 @@ class Factory implements FactoryContract
      */
     protected function viewInstance($view, $path, $data)
     {
-        return new \Illuminate\View\View($this, $this->getEngineFromPath($path), $view, $path, $data);
+        return new View($this, $this->getEngineFromPath($path), $view, $path, $data);
     }
     /**
      * Determine if a given view exists.
@@ -472,7 +472,7 @@ class Factory implements FactoryContract
      * @param  \Illuminate\View\ViewFinderInterface  $finder
      * @return void
      */
-    public function setFinder(\Illuminate\View\ViewFinderInterface $finder)
+    public function setFinder(ViewFinderInterface $finder)
     {
         $this->finder = $finder;
     }

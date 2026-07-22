@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\DataCollector;
+namespace Odigos\Symfony\Component\Translation\DataCollector;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\DataCollector\DataCollector;
-use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
-use Symfony\Component\Translation\DataCollectorTranslator;
-use Symfony\Component\VarDumper\Cloner\Data;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use Odigos\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
+use Odigos\Symfony\Component\Translation\DataCollectorTranslator;
+use Odigos\Symfony\Component\VarDumper\Cloner\Data;
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  *

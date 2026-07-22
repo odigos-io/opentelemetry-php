@@ -15,13 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use function MongoDB\document_to_array;
-use function MongoDB\is_document;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use function Odigos\MongoDB\document_to_array;
+use function Odigos\MongoDB\is_document;
 /**
  * Drop an encrypted collection.
  *
@@ -37,7 +37,7 @@ use function MongoDB\is_document;
  */
 final class DropEncryptedCollection
 {
-    private \MongoDB\Operation\DropCollection $dropCollection;
+    private DropCollection $dropCollection;
     /** @var list<DropCollection> */
     private array $dropMetadataCollections;
     /**
@@ -66,10 +66,10 @@ final class DropEncryptedCollection
         }
         /** @psalm-var array{ecocCollection?: ?string, escCollection?: ?string} */
         $encryptedFields = document_to_array($options['encryptedFields']);
-        $this->dropMetadataCollections = [new \MongoDB\Operation\DropCollection($databaseName, $encryptedFields['escCollection'] ?? 'enxcol_.' . $collectionName . '.esc'), new \MongoDB\Operation\DropCollection($databaseName, $encryptedFields['ecocCollection'] ?? 'enxcol_.' . $collectionName . '.ecoc')];
+        $this->dropMetadataCollections = [new DropCollection($databaseName, $encryptedFields['escCollection'] ?? 'enxcol_.' . $collectionName . '.esc'), new DropCollection($databaseName, $encryptedFields['ecocCollection'] ?? 'enxcol_.' . $collectionName . '.ecoc')];
         // DropCollection does not use the "encryptedFields" option
         unset($options['encryptedFields']);
-        $this->dropCollection = new \MongoDB\Operation\DropCollection($databaseName, $collectionName, $options);
+        $this->dropCollection = new DropCollection($databaseName, $collectionName, $options);
     }
     /** @throws DriverRuntimeException for other driver errors (e.g. connection errors) */
     public function execute(Server $server): void

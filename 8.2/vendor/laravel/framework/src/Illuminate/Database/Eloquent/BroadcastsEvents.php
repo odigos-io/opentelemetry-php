@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Arr;
 trait BroadcastsEvents
 {
     /**
@@ -119,7 +119,7 @@ trait BroadcastsEvents
      */
     protected function newBroadcastableEvent(string $event)
     {
-        return new \Illuminate\Database\Eloquent\BroadcastableModelEventOccurred($this, $event);
+        return new BroadcastableModelEventOccurred($this, $event);
     }
     /**
      * Get the channels that model events should broadcast on.

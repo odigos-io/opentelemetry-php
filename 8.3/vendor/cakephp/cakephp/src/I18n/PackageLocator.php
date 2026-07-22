@@ -15,9 +15,9 @@ declare (strict_types=1);
  * @since         4.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\I18n;
+namespace Odigos\Cake\I18n;
 
-use Cake\I18n\Exception\I18nException;
+use Odigos\Cake\I18n\Exception\I18nException;
 /**
  * A ServiceLocator implementation for loading and retaining package objects.
  *
@@ -64,10 +64,10 @@ class PackageLocator
      * @param \Cake\I18n\Package|callable $spec A callable that returns a package or Package instance.
      * @return void
      */
-    public function set(string $name, string $locale, \Cake\I18n\Package|callable $spec): void
+    public function set(string $name, string $locale, Package|callable $spec): void
     {
         $this->registry[$name][$locale] = $spec;
-        $this->converted[$name][$locale] = $spec instanceof \Cake\I18n\Package;
+        $this->converted[$name][$locale] = $spec instanceof Package;
     }
     /**
      * Gets a Package object.
@@ -76,7 +76,7 @@ class PackageLocator
      * @param string $locale The locale for the package.
      * @return \Cake\I18n\Package
      */
-    public function get(string $name, string $locale): \Cake\I18n\Package
+    public function get(string $name, string $locale): Package
     {
         if (!isset($this->registry[$name][$locale])) {
             throw new I18nException(sprintf('Package `%s` with locale `%s` is not registered.', $name, $locale));

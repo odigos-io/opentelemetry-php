@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Hashing;
+namespace Odigos\Illuminate\Hashing;
 
 abstract class AbstractHasher
 {

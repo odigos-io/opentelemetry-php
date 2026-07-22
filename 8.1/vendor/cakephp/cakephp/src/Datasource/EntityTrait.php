@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource;
+namespace Odigos\Cake\Datasource;
 
-use Cake\Collection\Collection;
-use Cake\Datasource\Exception\MissingPropertyException;
-use Cake\ORM\Entity;
-use Cake\Utility\Hash;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Collection\Collection;
+use Odigos\Cake\Datasource\Exception\MissingPropertyException;
+use Odigos\Cake\ORM\Entity;
+use Odigos\Cake\Utility\Hash;
+use Odigos\Cake\Utility\Inflector;
 use InvalidArgumentException;
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * An entity represents a single result row from a repository. It exposes the
  * methods for retrieving and storing fields associated in this row.
@@ -315,7 +315,7 @@ trait EntityTrait
         if (($value === null || is_scalar($value)) && $existing === $value) {
             return \false;
         }
-        if (is_object($value) && !$value instanceof \Cake\Datasource\EntityInterface && $existing == $value) {
+        if (is_object($value) && !$value instanceof EntityInterface && $existing == $value) {
             return \false;
         }
         return \true;
@@ -592,13 +592,13 @@ trait EntityTrait
             if (is_array($value)) {
                 $result[$field] = [];
                 foreach ($value as $k => $entity) {
-                    if ($entity instanceof \Cake\Datasource\EntityInterface) {
+                    if ($entity instanceof EntityInterface) {
                         $result[$field][$k] = $entity->toArray();
                     } else {
                         $result[$field][$k] = $entity;
                     }
                 }
-            } elseif ($value instanceof \Cake\Datasource\EntityInterface) {
+            } elseif ($value instanceof EntityInterface) {
                 $result[$field] = $value->toArray();
             } else {
                 $result[$field] = $value;
@@ -925,7 +925,7 @@ trait EntityTrait
         $this->_hasBeenVisited = \true;
         try {
             $errors = $this->_errors + (new Collection($diff))->filter(function ($value) {
-                return is_array($value) || $value instanceof \Cake\Datasource\EntityInterface;
+                return is_array($value) || $value instanceof EntityInterface;
             })->map(function ($value) {
                 return $this->_readError($value);
             })->filter()->toArray();
@@ -1017,7 +1017,7 @@ trait EntityTrait
                 return [];
             }
             $entity = $this->get($field);
-            if ($entity instanceof \Cake\Datasource\EntityInterface || is_iterable($entity)) {
+            if ($entity instanceof EntityInterface || is_iterable($entity)) {
                 return $this->_readError($entity);
             }
             return [];
@@ -1037,14 +1037,14 @@ trait EntityTrait
             $part = array_shift($path);
             $len = count($path);
             $val = null;
-            if ($entity instanceof \Cake\Datasource\EntityInterface) {
+            if ($entity instanceof EntityInterface) {
                 if ($entity->has($part)) {
                     $val = $entity->get($part);
                 }
             } elseif (is_array($entity)) {
                 $val = $entity[$part] ?? \false;
             }
-            if (is_iterable($val) || $val instanceof \Cake\Datasource\EntityInterface) {
+            if (is_iterable($val) || $val instanceof EntityInterface) {
                 $entity = $val;
             } else {
                 $path[] = $part;
@@ -1064,7 +1064,7 @@ trait EntityTrait
      */
     protected function _readHasErrors(mixed $object): bool
     {
-        if ($object instanceof \Cake\Datasource\EntityInterface && $object->hasErrors()) {
+        if ($object instanceof EntityInterface && $object->hasErrors()) {
             return \true;
         }
         if (is_array($object)) {
@@ -1083,16 +1083,16 @@ trait EntityTrait
      * @param string|null $path The field name for errors.
      * @return array
      */
-    protected function _readError(\Cake\Datasource\EntityInterface|iterable $object, ?string $path = null): array
+    protected function _readError(EntityInterface|iterable $object, ?string $path = null): array
     {
-        if ($path !== null && $object instanceof \Cake\Datasource\EntityInterface) {
+        if ($path !== null && $object instanceof EntityInterface) {
             return $object->getError($path);
         }
-        if ($object instanceof \Cake\Datasource\EntityInterface) {
+        if ($object instanceof EntityInterface) {
             return $object->getErrors();
         }
         $array = array_map(function ($val) {
-            if ($val instanceof \Cake\Datasource\EntityInterface) {
+            if ($val instanceof EntityInterface) {
                 return $val->getErrors();
             }
         }, (array) $object);

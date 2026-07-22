@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Model;
+namespace Odigos\MongoDB\Model;
 
 use Iterator;
 use IteratorIterator;

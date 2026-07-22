@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Adapter\HttpDiscovery;
 
-use Http\Discovery\Psr17FactoryDiscovery;
+use Odigos\Http\Discovery\Psr17FactoryDiscovery;
 use OpenTelemetry\SDK\Common\Http\Psr\Message\FactoryResolverInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;

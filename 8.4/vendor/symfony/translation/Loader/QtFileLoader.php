@@ -8,20 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Loader;
+namespace Odigos\Symfony\Component\Translation\Loader;
 
-use Symfony\Component\Config\Resource\FileResource;
-use Symfony\Component\Config\Util\XmlUtils;
-use Symfony\Component\Translation\Exception\InvalidResourceException;
-use Symfony\Component\Translation\Exception\NotFoundResourceException;
-use Symfony\Component\Translation\Exception\RuntimeException;
-use Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Config\Resource\FileResource;
+use Odigos\Symfony\Component\Config\Util\XmlUtils;
+use Odigos\Symfony\Component\Translation\Exception\InvalidResourceException;
+use Odigos\Symfony\Component\Translation\Exception\NotFoundResourceException;
+use Odigos\Symfony\Component\Translation\Exception\RuntimeException;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
 /**
  * QtFileLoader loads translations from QT Translations XML files.
  *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  */
-class QtFileLoader implements \Symfony\Component\Translation\Loader\LoaderInterface
+class QtFileLoader implements LoaderInterface
 {
     public function load(mixed $resource, string $locale, string $domain = 'messages'): MessageCatalogue
     {

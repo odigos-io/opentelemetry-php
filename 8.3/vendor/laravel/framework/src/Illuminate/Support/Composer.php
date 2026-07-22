@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Closure;
-use Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Filesystem\Filesystem;
 use RuntimeException;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Process\Process;
 class Composer
 {
     /**
@@ -56,7 +56,7 @@ class Composer
      */
     public function requirePackages(array $packages, bool $dev = \false, Closure|OutputInterface|null $output = null, $composerBinary = null)
     {
-        $command = (new \Illuminate\Support\Collection([...$this->findComposer($composerBinary), 'require', ...$packages]))->when($dev, function ($command) {
+        $command = (new Collection([...$this->findComposer($composerBinary), 'require', ...$packages]))->when($dev, function ($command) {
             $command->push('--dev');
         })->all();
         return 0 === $this->getProcess($command, ['COMPOSER_MEMORY_LIMIT' => '-1'])->run($output instanceof OutputInterface ? function ($type, $line) use ($output) {
@@ -74,7 +74,7 @@ class Composer
      */
     public function removePackages(array $packages, bool $dev = \false, Closure|OutputInterface|null $output = null, $composerBinary = null)
     {
-        $command = (new \Illuminate\Support\Collection([...$this->findComposer($composerBinary), 'remove', ...$packages]))->when($dev, function ($command) {
+        $command = (new Collection([...$this->findComposer($composerBinary), 'remove', ...$packages]))->when($dev, function ($command) {
             $command->push('--dev');
         })->all();
         return 0 === $this->getProcess($command, ['COMPOSER_MEMORY_LIMIT' => '-1'])->run($output instanceof OutputInterface ? function ($type, $line) use ($output) {

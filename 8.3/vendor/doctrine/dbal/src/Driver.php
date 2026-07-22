@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL;
+namespace Odigos\Doctrine\DBAL;
 
-use Doctrine\DBAL\Driver\API\ExceptionConverter;
-use Doctrine\DBAL\Driver\Connection as DriverConnection;
-use Doctrine\DBAL\Driver\Exception;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Platforms\Exception\PlatformException;
+use Odigos\Doctrine\DBAL\Driver\API\ExceptionConverter;
+use Odigos\Doctrine\DBAL\Driver\Connection as DriverConnection;
+use Odigos\Doctrine\DBAL\Driver\Exception;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Platforms\Exception\PlatformException;
 use SensitiveParameter;
 /**
  * Driver interface.
@@ -39,7 +39,7 @@ interface Driver
      *
      * @throws PlatformException
      */
-    public function getDatabasePlatform(\Doctrine\DBAL\ServerVersionProvider $versionProvider): AbstractPlatform;
+    public function getDatabasePlatform(ServerVersionProvider $versionProvider): AbstractPlatform;
     /**
      * Gets the ExceptionConverter that can be used to convert driver-level exceptions into DBAL exceptions.
      */

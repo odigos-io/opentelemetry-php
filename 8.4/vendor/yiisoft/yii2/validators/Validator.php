@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\NotSupportedException;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\NotSupportedException;
 /**
  * Validator is the base class for all validators.
  *
@@ -58,7 +58,7 @@ class Validator extends Component
     /**
      * @var array list of built-in validators (name => class or configuration)
      */
-    public static $builtInValidators = ['boolean' => 'yii\validators\BooleanValidator', 'captcha' => 'yii\captcha\CaptchaValidator', 'compare' => 'yii\validators\CompareValidator', 'date' => 'yii\validators\DateValidator', 'datetime' => ['class' => 'yii\validators\DateValidator', 'type' => \yii\validators\DateValidator::TYPE_DATETIME], 'time' => ['class' => 'yii\validators\DateValidator', 'type' => \yii\validators\DateValidator::TYPE_TIME], 'default' => 'yii\validators\DefaultValueValidator', 'double' => 'yii\validators\NumberValidator', 'each' => 'yii\validators\EachValidator', 'email' => 'yii\validators\EmailValidator', 'exist' => 'yii\validators\ExistValidator', 'file' => 'yii\validators\FileValidator', 'filter' => 'yii\validators\FilterValidator', 'image' => 'yii\validators\ImageValidator', 'in' => 'yii\validators\RangeValidator', 'integer' => ['class' => 'yii\validators\NumberValidator', 'integerOnly' => \true], 'match' => 'yii\validators\RegularExpressionValidator', 'number' => 'yii\validators\NumberValidator', 'required' => 'yii\validators\RequiredValidator', 'safe' => 'yii\validators\SafeValidator', 'string' => 'yii\validators\StringValidator', 'trim' => ['class' => 'yii\validators\TrimValidator', 'skipOnArray' => \true], 'unique' => 'yii\validators\UniqueValidator', 'url' => 'yii\validators\UrlValidator', 'ip' => 'yii\validators\IpValidator'];
+    public static $builtInValidators = ['boolean' => 'Odigos\yii\validators\BooleanValidator', 'captcha' => 'Odigos\yii\captcha\CaptchaValidator', 'compare' => 'Odigos\yii\validators\CompareValidator', 'date' => 'Odigos\yii\validators\DateValidator', 'datetime' => ['class' => 'Odigos\yii\validators\DateValidator', 'type' => DateValidator::TYPE_DATETIME], 'time' => ['class' => 'Odigos\yii\validators\DateValidator', 'type' => DateValidator::TYPE_TIME], 'default' => 'Odigos\yii\validators\DefaultValueValidator', 'double' => 'Odigos\yii\validators\NumberValidator', 'each' => 'Odigos\yii\validators\EachValidator', 'email' => 'Odigos\yii\validators\EmailValidator', 'exist' => 'Odigos\yii\validators\ExistValidator', 'file' => 'Odigos\yii\validators\FileValidator', 'filter' => 'Odigos\yii\validators\FilterValidator', 'image' => 'Odigos\yii\validators\ImageValidator', 'in' => 'Odigos\yii\validators\RangeValidator', 'integer' => ['class' => 'Odigos\yii\validators\NumberValidator', 'integerOnly' => \true], 'match' => 'Odigos\yii\validators\RegularExpressionValidator', 'number' => 'Odigos\yii\validators\NumberValidator', 'required' => 'Odigos\yii\validators\RequiredValidator', 'safe' => 'Odigos\yii\validators\SafeValidator', 'string' => 'Odigos\yii\validators\StringValidator', 'trim' => ['class' => 'Odigos\yii\validators\TrimValidator', 'skipOnArray' => \true], 'unique' => 'Odigos\yii\validators\UniqueValidator', 'url' => 'Odigos\yii\validators\UrlValidator', 'ip' => 'Odigos\yii\validators\IpValidator'];
     /**
      * @var array|string attributes to be validated by this validator. For multiple attributes,
      * please specify them as an array; for single attribute, you may use either a string or an array.

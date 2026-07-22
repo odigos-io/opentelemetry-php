@@ -16,7 +16,7 @@ namespace Odigos;
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  * @var \Cake\Core\Exception\CakeException $error
  */
-use function Cake\Core\h;
+use function Odigos\Cake\Core\h;
 $this->layout = 'dev_error';
 $this->assign('title', 'Fatal Error');
 $this->assign('templateName', 'fatal_error.php');

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
 use DateTime;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Exception\InvalidFormat;
-use Doctrine\DBAL\Types\Exception\InvalidType;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Types\Exception\InvalidFormat;
+use Odigos\Doctrine\DBAL\Types\Exception\InvalidType;
 /**
  * DateTime type accepting additional information about timezone offsets.
  *
@@ -24,7 +24,7 @@ use Doctrine\DBAL\Types\Exception\InvalidType;
  * the offset and re-created from persistence with only the offset, not the original timezone
  * attached.
  */
-class DateTimeTzType extends \Doctrine\DBAL\Types\Type implements \Doctrine\DBAL\Types\PhpDateTimeMappingType
+class DateTimeTzType extends Type implements PhpDateTimeMappingType
 {
     /**
      * {@inheritDoc}

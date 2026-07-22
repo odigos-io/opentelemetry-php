@@ -12,13 +12,13 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Exception;
+namespace Odigos\Cake\Http\Exception;
 
 use Throwable;
 /**
  * Represents an HTTP 400 error.
  */
-class BadRequestException extends \Cake\Http\Exception\HttpException
+class BadRequestException extends HttpException
 {
     /**
      * @inheritDoc

@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Testing;
+namespace Odigos\Illuminate\Testing;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Testing\Assert as PHPUnit;
-use Illuminate\Testing\Constraints\SeeInOrder;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Testing\Assert as PHPUnit;
+use Odigos\Illuminate\Testing\Constraints\SeeInOrder;
 use Stringable;
 class TestComponent implements Stringable
 {

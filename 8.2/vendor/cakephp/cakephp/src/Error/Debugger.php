@@ -14,35 +14,35 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error;
+namespace Odigos\Cake\Error;
 
-use Cake\Core\Configure;
-use Cake\Core\Exception\CakeException;
-use Cake\Core\InstanceConfigTrait;
-use Cake\Error\Debug\ArrayItemNode;
-use Cake\Error\Debug\ArrayNode;
-use Cake\Error\Debug\ClassNode;
-use Cake\Error\Debug\ConsoleFormatter;
-use Cake\Error\Debug\DebugContext;
-use Cake\Error\Debug\FormatterInterface;
-use Cake\Error\Debug\HtmlFormatter;
-use Cake\Error\Debug\NodeInterface;
-use Cake\Error\Debug\PropertyNode;
-use Cake\Error\Debug\ReferenceNode;
-use Cake\Error\Debug\ScalarNode;
-use Cake\Error\Debug\SpecialNode;
-use Cake\Error\Debug\TextFormatter;
-use Cake\Log\Log;
-use Cake\Utility\Hash;
-use Cake\Utility\Security;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Error\Debug\ArrayItemNode;
+use Odigos\Cake\Error\Debug\ArrayNode;
+use Odigos\Cake\Error\Debug\ClassNode;
+use Odigos\Cake\Error\Debug\ConsoleFormatter;
+use Odigos\Cake\Error\Debug\DebugContext;
+use Odigos\Cake\Error\Debug\FormatterInterface;
+use Odigos\Cake\Error\Debug\HtmlFormatter;
+use Odigos\Cake\Error\Debug\NodeInterface;
+use Odigos\Cake\Error\Debug\PropertyNode;
+use Odigos\Cake\Error\Debug\ReferenceNode;
+use Odigos\Cake\Error\Debug\ScalarNode;
+use Odigos\Cake\Error\Debug\SpecialNode;
+use Odigos\Cake\Error\Debug\TextFormatter;
+use Odigos\Cake\Log\Log;
+use Odigos\Cake\Utility\Hash;
+use Odigos\Cake\Utility\Security;
 use Closure;
 use Exception;
 use InvalidArgumentException;
 use ReflectionObject;
 use ReflectionProperty;
 use Throwable;
-use function Cake\Core\h;
-use function Cake\Core\pr;
+use function Odigos\Cake\Core\h;
+use function Odigos\Cake\Core\pr;
 /**
  * Provide custom logging and error handling.
  *
@@ -101,7 +101,7 @@ class Debugger
             $instance[0] = new $class();
         }
         if (!$instance) {
-            $instance[0] = new \Cake\Error\Debugger();
+            $instance[0] = new Debugger();
         }
         /** @var static */
         return $instance[0];
@@ -284,7 +284,7 @@ class Debugger
         // Remove the frame for Debugger::trace()
         $backtrace = debug_backtrace();
         array_shift($backtrace);
-        return \Cake\Error\Debugger::formatTrace($backtrace, $options);
+        return Debugger::formatTrace($backtrace, $options);
     }
     /**
      * Formats a stack trace based on the supplied options.
@@ -325,7 +325,7 @@ class Debugger
                 if ($options['args'] && isset($frame['args'])) {
                     $args = [];
                     foreach ($frame['args'] as $arg) {
-                        $args[] = \Cake\Error\Debugger::exportVar($arg);
+                        $args[] = Debugger::exportVar($arg);
                     }
                     $reference .= implode(', ', $args);
                 }

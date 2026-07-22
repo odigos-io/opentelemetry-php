@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Queue\Connectors;
+namespace Odigos\Illuminate\Queue\Connectors;
 
-use Illuminate\Queue\SyncQueue;
-class SyncConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
+use Odigos\Illuminate\Queue\SyncQueue;
+class SyncConnector implements ConnectorInterface
 {
     /**
      * Establish a queue connection.

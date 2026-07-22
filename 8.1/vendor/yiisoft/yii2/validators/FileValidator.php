@@ -5,15 +5,15 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
 use Odigos\Yii;
-use yii\helpers\FileHelper;
-use yii\helpers\Html;
-use yii\helpers\Json;
-use yii\helpers\StringHelper;
-use yii\web\JsExpression;
-use yii\web\UploadedFile;
+use Odigos\yii\helpers\FileHelper;
+use Odigos\yii\helpers\Html;
+use Odigos\yii\helpers\Json;
+use Odigos\yii\helpers\StringHelper;
+use Odigos\yii\web\JsExpression;
+use Odigos\yii\web\UploadedFile;
 /**
  * FileValidator verifies if an attribute is receiving a valid uploaded file.
  *
@@ -24,7 +24,7 @@ use yii\web\UploadedFile;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class FileValidator extends \yii\validators\Validator
+class FileValidator extends Validator
 {
     /**
      * @var array|string|null a list of file name extensions that are allowed to be uploaded.
@@ -348,7 +348,7 @@ class FileValidator extends \yii\validators\Validator
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
-        \yii\validators\ValidationAsset::register($view);
+        ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
         return 'yii.validation.file(attribute, messages, ' . Json::htmlEncode($options) . ');';
     }

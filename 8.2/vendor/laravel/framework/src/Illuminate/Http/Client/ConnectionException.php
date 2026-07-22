@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Http\Client;
+namespace Odigos\Illuminate\Http\Client;
 
-class ConnectionException extends \Illuminate\Http\Client\HttpClientException
+class ConnectionException extends HttpClientException
 {
     //
 }

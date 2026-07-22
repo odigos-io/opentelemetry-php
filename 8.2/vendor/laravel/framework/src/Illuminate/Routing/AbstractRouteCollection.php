@@ -1,20 +1,20 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
 use ArrayIterator;
 use Countable;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Http\Response;
+use Odigos\Illuminate\Support\Str;
 use IteratorAggregate;
 use LogicException;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
-use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
+use Odigos\Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Odigos\Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
+use Odigos\Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
 use Traversable;
-abstract class AbstractRouteCollection implements Countable, IteratorAggregate, \Illuminate\Routing\RouteCollectionInterface
+abstract class AbstractRouteCollection implements Countable, IteratorAggregate, RouteCollectionInterface
 {
     /**
      * Handle the matched route.
@@ -47,7 +47,7 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
      */
     protected function checkForAlternateVerbs($request)
     {
-        $methods = array_diff(\Illuminate\Routing\Router::$verbs, [$request->getMethod()]);
+        $methods = array_diff(Router::$verbs, [$request->getMethod()]);
         // Here we will spin through all verbs except for the current request verb and
         // check to see if any routes respond to them. If they do, we will return a
         // proper error response with the correct headers on the response string.
@@ -89,7 +89,7 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
     protected function getRouteForMethods($request, array $methods)
     {
         if ($request->isMethod('OPTIONS')) {
-            return (new \Illuminate\Routing\Route('OPTIONS', $request->path(), function () use ($methods) {
+            return (new Route('OPTIONS', $request->path(), function () use ($methods) {
                 return new Response('', 200, ['Allow' => implode(',', $methods)]);
             }))->bind($request);
         }
@@ -177,7 +177,7 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
      *
      * @throws \LogicException
      */
-    protected function addToSymfonyRoutesCollection(SymfonyRouteCollection $symfonyRoutes, \Illuminate\Routing\Route $route)
+    protected function addToSymfonyRoutesCollection(SymfonyRouteCollection $symfonyRoutes, Route $route)
     {
         $name = $route->getName();
         if (!is_null($name) && str_ends_with($name, '.') && !is_null($symfonyRoutes->get($name))) {

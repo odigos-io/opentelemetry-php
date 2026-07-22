@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Broadcasting;
+namespace Odigos\Illuminate\Contracts\Broadcasting;
 
 interface Factory
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace GuzzleHttp;
+namespace Odigos\GuzzleHttp;
 
 /**
  * This class contains a list of built-in Guzzle request options.

@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
-use Cake\Core\Plugin;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOptionParser;
+use Odigos\Cake\Core\Plugin;
 /**
  * Displays all currently loaded plugins.
  */
-class PluginLoadedCommand extends \Cake\Command\Command
+class PluginLoadedCommand extends Command
 {
     /**
      * @inheritDoc

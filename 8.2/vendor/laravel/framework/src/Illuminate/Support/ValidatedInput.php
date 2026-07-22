@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use ArrayIterator;
-use Illuminate\Contracts\Support\ValidatedData;
-use Illuminate\Support\Traits\Dumpable;
-use Illuminate\Support\Traits\InteractsWithData;
+use Odigos\Illuminate\Contracts\Support\ValidatedData;
+use Odigos\Illuminate\Support\Traits\Dumpable;
+use Odigos\Illuminate\Support\Traits\InteractsWithData;
 use Traversable;
 class ValidatedInput implements ValidatedData
 {
@@ -48,7 +48,7 @@ class ValidatedInput implements ValidatedData
         }
         $input = [];
         foreach (is_array($keys) ? $keys : func_get_args() as $key) {
-            \Illuminate\Support\Arr::set($input, $key, \Illuminate\Support\Arr::get($this->input, $key));
+            Arr::set($input, $key, Arr::get($this->input, $key));
         }
         return $input;
     }

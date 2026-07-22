@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\Mysqli\Initializer;
+namespace Odigos\Doctrine\DBAL\Driver\Mysqli\Initializer;
 
-use Doctrine\DBAL\Driver\Mysqli\Exception\InvalidCharset;
-use Doctrine\DBAL\Driver\Mysqli\Initializer;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Exception\InvalidCharset;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Initializer;
 use mysqli;
 use mysqli_sql_exception;
 final class Charset implements Initializer

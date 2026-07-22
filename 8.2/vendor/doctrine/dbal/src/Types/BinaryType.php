@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\ParameterType;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
+use Odigos\Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use function is_resource;
 use function is_string;
 use function stream_get_contents;
 /**
  * Type that maps ab SQL BINARY/VARBINARY to a PHP resource stream.
  */
-class BinaryType extends \Doctrine\DBAL\Types\Type
+class BinaryType extends Type
 {
     /**
      * {@inheritDoc}
@@ -30,7 +30,7 @@ class BinaryType extends \Doctrine\DBAL\Types\Type
             $value = stream_get_contents($value);
         }
         if (!is_string($value)) {
-            throw ValueNotConvertible::new($value, \Doctrine\DBAL\Types\Types::BINARY);
+            throw ValueNotConvertible::new($value, Types::BINARY);
         }
         return $value;
     }

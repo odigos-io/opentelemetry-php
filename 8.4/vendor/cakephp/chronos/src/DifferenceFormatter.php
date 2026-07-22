@@ -12,7 +12,7 @@ declare (strict_types=1);
  * @link          https://cakephp.org CakePHP(tm) Project
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Chronos;
+namespace Odigos\Cake\Chronos;
 
 use DateTimeInterface;
 /**
@@ -23,37 +23,37 @@ use DateTimeInterface;
  *
  * @internal
  */
-class DifferenceFormatter implements \Cake\Chronos\DifferenceFormatterInterface
+class DifferenceFormatter implements DifferenceFormatterInterface
 {
     /**
      * The text translator object
      *
      * @var \Cake\Chronos\Translator
      */
-    protected \Cake\Chronos\Translator $translate;
+    protected Translator $translate;
     /**
      * Constructor.
      *
      * @param \Cake\Chronos\Translator|null $translate The text translator object.
      */
-    public function __construct(?\Cake\Chronos\Translator $translate = null)
+    public function __construct(?Translator $translate = null)
     {
-        $this->translate = $translate ?: new \Cake\Chronos\Translator();
+        $this->translate = $translate ?: new Translator();
     }
     /**
      * @inheritDoc
      */
-    public function diffForHumans(\Cake\Chronos\ChronosDate|DateTimeInterface $first, \Cake\Chronos\ChronosDate|DateTimeInterface|null $second = null, bool $absolute = \false): string
+    public function diffForHumans(ChronosDate|DateTimeInterface $first, ChronosDate|DateTimeInterface|null $second = null, bool $absolute = \false): string
     {
         $isNow = $second === null;
         if ($second === null) {
-            if ($first instanceof \Cake\Chronos\ChronosDate) {
-                $second = new \Cake\Chronos\ChronosDate(\Cake\Chronos\Chronos::now());
+            if ($first instanceof ChronosDate) {
+                $second = new ChronosDate(Chronos::now());
             } else {
-                $second = \Cake\Chronos\Chronos::now($first->getTimezone());
+                $second = Chronos::now($first->getTimezone());
             }
         }
-        assert($first instanceof \Cake\Chronos\ChronosDate && $second instanceof \Cake\Chronos\ChronosDate || $first instanceof DateTimeInterface && $second instanceof DateTimeInterface);
+        assert($first instanceof ChronosDate && $second instanceof ChronosDate || $first instanceof DateTimeInterface && $second instanceof DateTimeInterface);
         $diffInterval = $first->diff($second);
         switch (\true) {
             case $diffInterval->y > 0:
@@ -64,9 +64,9 @@ class DifferenceFormatter implements \Cake\Chronos\DifferenceFormatterInterface
                 $unit = 'month';
                 $count = $diffInterval->m;
                 break;
-            case $diffInterval->days >= \Cake\Chronos\Chronos::DAYS_PER_WEEK * 3:
+            case $diffInterval->days >= Chronos::DAYS_PER_WEEK * 3:
                 $unit = 'week';
-                $count = (int) ($diffInterval->days / \Cake\Chronos\Chronos::DAYS_PER_WEEK);
+                $count = (int) ($diffInterval->days / Chronos::DAYS_PER_WEEK);
                 break;
             case $diffInterval->d > 0:
                 $unit = 'day';

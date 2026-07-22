@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource;
+namespace Odigos\Cake\Datasource;
 
 /**
  * Defines the interface that testing fixtures use.
@@ -30,14 +30,14 @@ interface FixtureInterface
      *   into which the records will be inserted.
      * @return bool
      */
-    public function insert(\Cake\Datasource\ConnectionInterface $connection): bool;
+    public function insert(ConnectionInterface $connection): bool;
     /**
      * Truncates the current fixture.
      *
      * @param \Cake\Datasource\ConnectionInterface $connection A reference to a db instance
      * @return bool
      */
-    public function truncate(\Cake\Datasource\ConnectionInterface $connection): bool;
+    public function truncate(ConnectionInterface $connection): bool;
     /**
      * Get the connection name this fixture should be inserted into.
      *

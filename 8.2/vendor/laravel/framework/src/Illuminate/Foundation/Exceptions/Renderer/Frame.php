@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Foundation\Exceptions\Renderer;
+namespace Odigos\Illuminate\Foundation\Exceptions\Renderer;
 
-use Illuminate\Foundation\Concerns\ResolvesDumpSource;
-use Symfony\Component\ErrorHandler\Exception\FlattenException;
-use function Illuminate\Filesystem\join_paths;
+use Odigos\Illuminate\Foundation\Concerns\ResolvesDumpSource;
+use Odigos\Symfony\Component\ErrorHandler\Exception\FlattenException;
+use function Odigos\Illuminate\Filesystem\join_paths;
 class Frame
 {
     use ResolvesDumpSource;
@@ -53,7 +53,7 @@ class Frame
      * @param  string  $basePath
      * @param  \Illuminate\Foundation\Exceptions\Renderer\Frame|null  $previous
      */
-    public function __construct(FlattenException $exception, array $classMap, array $frame, string $basePath, ?\Illuminate\Foundation\Exceptions\Renderer\Frame $previous = null)
+    public function __construct(FlattenException $exception, array $classMap, array $frame, string $basePath, ?Frame $previous = null)
     {
         $this->exception = $exception;
         $this->classMap = $classMap;

@@ -1,39 +1,39 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses;
+namespace Odigos\OpenAI\Responses\Responses;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Exceptions\UnknownEventException;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Responses\Streaming\CodeInterpreterCall;
-use OpenAI\Responses\Responses\Streaming\CodeInterpreterCodeDelta;
-use OpenAI\Responses\Responses\Streaming\CodeInterpreterCodeDone;
-use OpenAI\Responses\Responses\Streaming\ContentPart;
-use OpenAI\Responses\Responses\Streaming\Error;
-use OpenAI\Responses\Responses\Streaming\FileSearchCall;
-use OpenAI\Responses\Responses\Streaming\FunctionCallArgumentsDelta;
-use OpenAI\Responses\Responses\Streaming\FunctionCallArgumentsDone;
-use OpenAI\Responses\Responses\Streaming\ImageGenerationPart;
-use OpenAI\Responses\Responses\Streaming\ImageGenerationPartialImage;
-use OpenAI\Responses\Responses\Streaming\McpCall;
-use OpenAI\Responses\Responses\Streaming\McpCallArgumentsDelta;
-use OpenAI\Responses\Responses\Streaming\McpCallArgumentsDone;
-use OpenAI\Responses\Responses\Streaming\McpListTools;
-use OpenAI\Responses\Responses\Streaming\McpListToolsInProgress;
-use OpenAI\Responses\Responses\Streaming\OutputItem;
-use OpenAI\Responses\Responses\Streaming\OutputTextAnnotationAdded;
-use OpenAI\Responses\Responses\Streaming\OutputTextDelta;
-use OpenAI\Responses\Responses\Streaming\OutputTextDone;
-use OpenAI\Responses\Responses\Streaming\ReasoningSummaryPart;
-use OpenAI\Responses\Responses\Streaming\ReasoningSummaryTextDelta;
-use OpenAI\Responses\Responses\Streaming\ReasoningSummaryTextDone;
-use OpenAI\Responses\Responses\Streaming\ReasoningTextDelta;
-use OpenAI\Responses\Responses\Streaming\ReasoningTextDone;
-use OpenAI\Responses\Responses\Streaming\RefusalDelta;
-use OpenAI\Responses\Responses\Streaming\RefusalDone;
-use OpenAI\Responses\Responses\Streaming\WebSearchCall;
-use OpenAI\Testing\Responses\Concerns\FakeableForStreamedResponse;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Exceptions\UnknownEventException;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Responses\Streaming\CodeInterpreterCall;
+use Odigos\OpenAI\Responses\Responses\Streaming\CodeInterpreterCodeDelta;
+use Odigos\OpenAI\Responses\Responses\Streaming\CodeInterpreterCodeDone;
+use Odigos\OpenAI\Responses\Responses\Streaming\ContentPart;
+use Odigos\OpenAI\Responses\Responses\Streaming\Error;
+use Odigos\OpenAI\Responses\Responses\Streaming\FileSearchCall;
+use Odigos\OpenAI\Responses\Responses\Streaming\FunctionCallArgumentsDelta;
+use Odigos\OpenAI\Responses\Responses\Streaming\FunctionCallArgumentsDone;
+use Odigos\OpenAI\Responses\Responses\Streaming\ImageGenerationPart;
+use Odigos\OpenAI\Responses\Responses\Streaming\ImageGenerationPartialImage;
+use Odigos\OpenAI\Responses\Responses\Streaming\McpCall;
+use Odigos\OpenAI\Responses\Responses\Streaming\McpCallArgumentsDelta;
+use Odigos\OpenAI\Responses\Responses\Streaming\McpCallArgumentsDone;
+use Odigos\OpenAI\Responses\Responses\Streaming\McpListTools;
+use Odigos\OpenAI\Responses\Responses\Streaming\McpListToolsInProgress;
+use Odigos\OpenAI\Responses\Responses\Streaming\OutputItem;
+use Odigos\OpenAI\Responses\Responses\Streaming\OutputTextAnnotationAdded;
+use Odigos\OpenAI\Responses\Responses\Streaming\OutputTextDelta;
+use Odigos\OpenAI\Responses\Responses\Streaming\OutputTextDone;
+use Odigos\OpenAI\Responses\Responses\Streaming\ReasoningSummaryPart;
+use Odigos\OpenAI\Responses\Responses\Streaming\ReasoningSummaryTextDelta;
+use Odigos\OpenAI\Responses\Responses\Streaming\ReasoningSummaryTextDone;
+use Odigos\OpenAI\Responses\Responses\Streaming\ReasoningTextDelta;
+use Odigos\OpenAI\Responses\Responses\Streaming\ReasoningTextDone;
+use Odigos\OpenAI\Responses\Responses\Streaming\RefusalDelta;
+use Odigos\OpenAI\Responses\Responses\Streaming\RefusalDone;
+use Odigos\OpenAI\Responses\Responses\Streaming\WebSearchCall;
+use Odigos\OpenAI\Testing\Responses\Concerns\FakeableForStreamedResponse;
 /**
  * @phpstan-type CreateStreamedResponseType array{event: string, data: array<string, mixed>}
  *
@@ -46,7 +46,7 @@ final class CreateStreamedResponse implements ResponseContract
      */
     use ArrayAccessible;
     use FakeableForStreamedResponse;
-    private function __construct(public readonly string $event, public readonly \OpenAI\Responses\Responses\CreateResponse|OutputItem|ContentPart|OutputTextDelta|OutputTextAnnotationAdded|OutputTextDone|RefusalDelta|RefusalDone|FunctionCallArgumentsDelta|FunctionCallArgumentsDone|FileSearchCall|WebSearchCall|CodeInterpreterCall|CodeInterpreterCodeDelta|CodeInterpreterCodeDone|ReasoningSummaryPart|ReasoningSummaryTextDelta|ReasoningSummaryTextDone|ReasoningTextDelta|ReasoningTextDone|McpListTools|McpListToolsInProgress|McpCall|McpCallArgumentsDelta|McpCallArgumentsDone|ImageGenerationPart|ImageGenerationPartialImage|Error $response)
+    private function __construct(public readonly string $event, public readonly CreateResponse|OutputItem|ContentPart|OutputTextDelta|OutputTextAnnotationAdded|OutputTextDone|RefusalDelta|RefusalDone|FunctionCallArgumentsDelta|FunctionCallArgumentsDone|FileSearchCall|WebSearchCall|CodeInterpreterCall|CodeInterpreterCodeDelta|CodeInterpreterCodeDone|ReasoningSummaryPart|ReasoningSummaryTextDelta|ReasoningSummaryTextDone|ReasoningTextDelta|ReasoningTextDone|McpListTools|McpListToolsInProgress|McpCall|McpCallArgumentsDelta|McpCallArgumentsDone|ImageGenerationPart|ImageGenerationPartialImage|Error $response)
     {
     }
     /**
@@ -58,7 +58,7 @@ final class CreateStreamedResponse implements ResponseContract
         $meta = $attributes['__meta'];
         unset($attributes['__meta']);
         $response = match ($event) {
-            'response.created', 'response.in_progress', 'response.completed', 'response.failed', 'response.incomplete' => \OpenAI\Responses\Responses\CreateResponse::from($attributes['response'], $meta),
+            'response.created', 'response.in_progress', 'response.completed', 'response.failed', 'response.incomplete' => CreateResponse::from($attributes['response'], $meta),
             // @phpstan-ignore-line
             'response.output_item.added', 'response.output_item.done' => OutputItem::from($attributes, $meta),
             // @phpstan-ignore-line

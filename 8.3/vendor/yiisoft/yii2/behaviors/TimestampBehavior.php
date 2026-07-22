@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\behaviors;
+namespace Odigos\yii\behaviors;
 
-use yii\base\InvalidCallException;
-use yii\db\BaseActiveRecord;
+use Odigos\yii\base\InvalidCallException;
+use Odigos\yii\db\BaseActiveRecord;
 /**
  * TimestampBehavior automatically fills the specified attributes with the current timestamp.
  *
@@ -71,7 +71,7 @@ use yii\db\BaseActiveRecord;
  * @template T of BaseActiveRecord = BaseActiveRecord
  * @extends AttributeBehavior<T>
  */
-class TimestampBehavior extends \yii\behaviors\AttributeBehavior
+class TimestampBehavior extends AttributeBehavior
 {
     /**
      * @var string the attribute that will receive timestamp value

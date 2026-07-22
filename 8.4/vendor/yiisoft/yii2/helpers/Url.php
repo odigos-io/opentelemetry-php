@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
 /**
  * Url provides a set of static methods for managing URLs.
@@ -15,6 +15,6 @@ namespace yii\helpers;
  * @author Alexander Makarov <sam@rmcreative.ru>
  * @since 2.0
  */
-class Url extends \yii\helpers\BaseUrl
+class Url extends BaseUrl
 {
 }

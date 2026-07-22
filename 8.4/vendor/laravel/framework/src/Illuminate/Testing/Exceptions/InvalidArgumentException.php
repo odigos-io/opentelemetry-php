@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Testing\Exceptions;
+namespace Odigos\Illuminate\Testing\Exceptions;
 
 use Odigos\PHPUnit\Framework\Exception;
 class InvalidArgumentException extends Exception

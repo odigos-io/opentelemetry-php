@@ -1,10 +1,10 @@
 <?php
 
-namespace GuzzleHttp\Exception;
+namespace Odigos\GuzzleHttp\Exception;
 
 /**
  * Exception when a server error is encountered (5xx codes)
  */
-class ServerException extends \GuzzleHttp\Exception\BadResponseException
+class ServerException extends BadResponseException
 {
 }

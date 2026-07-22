@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\Inflector\Rules\NorwegianBokmal;
+namespace Odigos\Doctrine\Inflector\Rules\NorwegianBokmal;
 
-use Doctrine\Inflector\Rules\Pattern;
+use Odigos\Doctrine\Inflector\Rules\Pattern;
 final class Uninflected
 {
     /** @return Pattern[] */
