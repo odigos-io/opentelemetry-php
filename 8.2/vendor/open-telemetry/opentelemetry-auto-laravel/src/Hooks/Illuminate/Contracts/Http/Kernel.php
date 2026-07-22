@@ -33,7 +33,7 @@ class Kernel implements LaravelHook
     protected function hookHandle(): bool
     {
         return hook('Illuminate\\Contracts\\Http\\Kernel', 'handle', pre: function (object $kernel, array $params, string $class, string $function, ?string $filename, ?int $lineno) {
-            $request = $params[0] instanceof Request ? $params[0] : null;
+            $request = is_a($params[0], 'Illuminate\\Http\\Request') ? $params[0] : null;
             /** @psalm-suppress ArgumentTypeCoercion */
             $builder = $this->instrumentation->tracer()->spanBuilder(sprintf('%s', $request?->method() ?? 'unknown'))->setSpanKind(SpanKind::KIND_SERVER)->setAttribute(TraceAttributes::CODE_FUNCTION_NAME, sprintf('%s::%s', $class, $function))->setAttribute(TraceAttributes::CODE_FILE_PATH, $filename)->setAttribute(TraceAttributes::CODE_LINE_NUMBER, $lineno);
             $parent = Context::getCurrent();
@@ -53,7 +53,7 @@ class Kernel implements LaravelHook
                 return;
             }
             $span = Span::fromContext($scope->context());
-            $request = $params[0] instanceof Request ? $params[0] : null;
+            $request = is_a($params[0], 'Illuminate\\Http\\Request') ? $params[0] : null;
             $route = $request?->route();
             if ($request && is_a($route, 'Illuminate\\Routing\\Route')) {
                 $span->updateName("{$request->method()} /" . ltrim($route->uri, '/'));

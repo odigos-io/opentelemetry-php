@@ -46,7 +46,7 @@ class Worker implements LaravelHook
                 return;
             }
             $span = Span::fromContext($scope->context());
-            $job = $params[1] instanceof Job ? $params[1] : null;
+            $job = is_a($params[1], 'Illuminate\\Contracts\\Queue\\Job') ? $params[1] : null;
             $span->setAttributes(['messaging.message.deleted' => $job?->isDeleted(), 'messaging.message.released' => $job?->isReleased()]);
             $this->endSpan($exception);
         });

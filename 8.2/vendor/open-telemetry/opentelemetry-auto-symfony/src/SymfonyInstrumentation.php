@@ -26,7 +26,7 @@ final class SymfonyInstrumentation
         $instrumentation = new CachedInstrumentation('io.opentelemetry.contrib.php.symfony', null, Version::VERSION_1_32_0->url());
         /** @psalm-suppress UnusedFunctionCall */
         hook('Symfony\\Component\\HttpKernel\\HttpKernel', 'handle', pre: static function (object $kernel, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation): array {
-            $request = $params[0] instanceof Request ? $params[0] : null;
+            $request = is_a($params[0], 'Symfony\\Component\\HttpFoundation\\Request') ? $params[0] : null;
             $type = $params[1] ?? HttpKernelInterface::MAIN_REQUEST;
             $method = $request?->getMethod() ?? 'unknown';
             $controller = $request?->attributes?->get('_controller');
@@ -65,8 +65,8 @@ final class SymfonyInstrumentation
             }
             $scope->detach();
             $span = Span::fromContext($scope->context());
-            $request = $params[0] instanceof Request ? $params[0] : null;
-            $response = $params[1] instanceof Response ? $params[1] : null;
+            $request = is_a($params[0], 'Symfony\\Component\\HttpFoundation\\Request') ? $params[0] : null;
+            $response = is_a($params[1], 'Symfony\\Component\\HttpFoundation\\Response') ? $params[1] : null;
             if (null !== $request) {
                 $routeName = $request->attributes->get('_route', '');
                 if ('' !== $routeName) {

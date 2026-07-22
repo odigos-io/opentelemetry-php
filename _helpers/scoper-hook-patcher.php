@@ -165,17 +165,21 @@ return static function (string $filePath, string $prefix, string $content): stri
     ) ?? $content;
 
     // --- 3) instanceof Target → is_a(..., 'Original\\FQCN') --------------
+    // Match `$var` and `$params[0]` (array offset). Leaving `$obj->prop instanceof`
+    // alone is intentional — those are rare here and often check non-target types
+    // (e.g. Throwable). Missing `$params[N] instanceof Request` is fatal: hooks
+    // that `return [$request]` would replace the real request with null.
     $content = preg_replace_callback(
-        '/\$([A-Za-z_][\w]*)\s+instanceof\s+(\??\\\\?[A-Za-z_][\w\\\\]*)/',
+        '/(\$[A-Za-z_][\w]*(?:\[[^\]]+\])*)\s+instanceof\s+(\??\\\\?[A-Za-z_][\w\\\\]*)/',
         static function (array $m) use ($resolve, $isTargetFqcn, $toStringLiteral): string {
-            $var = '$' . $m[1];
+            $expr = $m[1];
             $type = ltrim($m[2], '?');
             $fqcn = $resolve($type);
             $original = $isTargetFqcn($fqcn);
             if ($original === null) {
                 return $m[0];
             }
-            return 'is_a(' . $var . ', ' . $toStringLiteral($original) . ')';
+            return 'is_a(' . $expr . ', ' . $toStringLiteral($original) . ')';
         },
         $content
     ) ?? $content;
