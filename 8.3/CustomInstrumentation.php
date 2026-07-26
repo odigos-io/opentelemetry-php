@@ -16,14 +16,14 @@ use Throwable;
 /**
  * Registers OpenTelemetry hooks for user-configured PHP custom instrumentation probes.
  *
- * Probe configuration is delivered by Odigos via the ODIGOS_AGENT_CUSTOM_INSTRUMENTATIONS
+ * Probe configuration is delivered by Odigos via the ODIGOS_PHP_AGENT_CUSTOM_INSTRUMENTATIONS
  * environment variable (JSON matching the CustomInstrumentations API shape).
  */
 final class Registrar
 {
     public const NAME = 'odigos-custom';
 
-    private const ENV_VAR = 'ODIGOS_AGENT_CUSTOM_INSTRUMENTATIONS';
+    private const ENV_VAR = 'ODIGOS_PHP_AGENT_CUSTOM_INSTRUMENTATIONS';
 
     public static function register(): void
     {

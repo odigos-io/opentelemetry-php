@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * Loaded via auto_prepend_file. First loads Composer autoload (community
  * auto-instrumentation packages), then registers Odigos custom instrumentation
- * hooks from ODIGOS_AGENT_CUSTOM_INSTRUMENTATIONS.
+ * hooks from ODIGOS_PHP_AGENT_CUSTOM_INSTRUMENTATIONS.
  */
 
 require_once __DIR__ . '/vendor/autoload.php';

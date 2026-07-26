@@ -27,7 +27,7 @@ To deploy an agent & auto-instrument PHP with OpenTelemetry, we need a few thing
 
 3. We need to tell the instrumented app where to find our script and binaries, to do that we need to give the container an env called `PHP_INI_SCAN_DIR`, it should point at the dir that contains the agent files (e.g `:/var/odigos/php/8.2`).
 
-4. Optional: to enable Custom Instrumentation Rule probes, Odigos injects `ODIGOS_AGENT_CUSTOM_INSTRUMENTATIONS` with a JSON payload of PHP class/function probes. Changes require a pod restart.
+4. Optional: to enable Custom Instrumentation Rule probes, Odigos injects `ODIGOS_PHP_AGENT_CUSTOM_INSTRUMENTATIONS` with a JSON payload of PHP class/function probes. Changes require a pod restart.
 
 NOTE: for step 3 we used a colon at the start of the appointed dir, that is required by the env itself, here's why:
 
