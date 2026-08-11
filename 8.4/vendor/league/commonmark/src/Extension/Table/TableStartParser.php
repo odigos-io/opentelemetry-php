@@ -87,7 +87,7 @@ final class TableStartParser implements BlockStartParserInterface
                         $left = \true;
                         $cursor->advanceBy(1);
                     }
-                    if ($cursor->match('/^-+/') === null) {
+                    if ($cursor->matchInPlace('/\G-+/') === null) {
                         // Need at least one dash
                         return [];
                     }

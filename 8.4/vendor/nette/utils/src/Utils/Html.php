@@ -8,8 +8,8 @@ declare (strict_types=1);
 namespace Odigos\Nette\Utils;
 
 use Odigos\Nette\HtmlStringable;
-use function array_merge, array_splice, count, explode, func_num_args, html_entity_decode, htmlspecialchars, http_build_query, implode, is_array, is_bool, is_float, is_object, is_string, json_encode, max, number_format, rtrim, str_contains, str_repeat, str_replace, strip_tags, strncmp, strpbrk, substr;
-use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES;
+use function array_merge, array_splice, count, explode, func_num_args, html_entity_decode, htmlspecialchars, http_build_query, implode, is_array, is_bool, is_float, is_object, is_string, json_encode, max, number_format, rtrim, str_contains, str_repeat, str_replace, strip_tags, strncmp, strpbrk, substr, trigger_error, ucfirst;
+use const E_USER_DEPRECATED, ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES;
 /**
  * Generates HTML elements with automatic attribute escaping.
  *
@@ -227,6 +227,9 @@ use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES;
  * @method self width(?int $val)
  * @method self wrap(?string $val)
  *
+ * @method static static text(mixed $text)
+ * @method static static html(mixed $html)
+ *
  * @implements \IteratorAggregate<int, self|string>
  * @implements \ArrayAccess<int, self|string>
  */
@@ -263,7 +266,16 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
         return $el;
     }
     /**
+     * Creates a nameless element (fragment) containing the given children.
+     * Everything except HtmlStringable is escaped; use Html::html() for raw HTML. Nulls are skipped.
+     */
+    public static function fragment(HtmlStringable|\Stringable|string|int|null ...$children): static
+    {
+        return (new static())->add(...$children);
+    }
+    /**
      * Returns an object representing HTML text.
+     * @deprecated  use Html::html()
      */
     public static function fromHtml(string $html): static
     {
@@ -271,6 +283,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
     }
     /**
      * Returns an object representing plain text.
+     * @deprecated  use Html::text()
      */
     public static function fromText(string $text): static
     {
@@ -416,6 +429,9 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
      */
     final public function __call(string $m, array $args): mixed
     {
+        if ($m === 'text' || $m === 'html') {
+            trigger_error("Method \$el->{$m}() is deprecated, use set" . ucfirst($m) . "() for content or setAttribute() for the '{$m}' attribute; Html::{$m}() is a static factory.", E_USER_DEPRECATED);
+        }
         $p = substr($m, 0, 3);
         if ($p === 'get' || $p === 'set' || $p === 'add') {
             $m = substr($m, 3);
@@ -436,6 +452,18 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
             $this->appendAttribute($m, $args[0], $args[1]);
         }
         return $this;
+    }
+    /**
+     * Creates element with escaped text (Html::text()) or raw HTML (Html::html()) content.
+     * @param  mixed[]  $args
+     */
+    final public static function __callStatic(string $name, array $args): static
+    {
+        return match ($name) {
+            'text' => (new static())->setText(...$args),
+            'html' => (new static())->setHtml(...$args),
+            default => ObjectHelpers::strictStaticCall(static::class, $name),
+        };
     }
     /**
      * Special setter for element's attribute.
@@ -496,6 +524,18 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
     final public function getText(): string
     {
         return self::htmlToText($this->getHtml());
+    }
+    /**
+     * Appends the given children. Everything except HtmlStringable is escaped; use Html::html() for raw HTML. Nulls are skipped.
+     */
+    public function add(HtmlStringable|\Stringable|string|int|null ...$children): static
+    {
+        foreach ($children as $child) {
+            if ($child !== null) {
+                $this->addText($child);
+            }
+        }
+        return $this;
     }
     /**
      * Adds new element's child.
@@ -684,7 +724,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
                 $value = (string) $value;
             }
             $q = str_contains($value, '"') ? "'" : '"';
-            $s .= ' ' . $key . '=' . $q . str_replace(['&', $q, '<'], ['&amp;', $q === '"' ? '&quot;' : '&#39;', '<'], $value) . (str_contains($value, '`') && strpbrk($value, ' <>"\'') === \false ? ' ' : '') . $q;
+            $s .= ' ' . $key . '=' . $q . str_replace(['&', $q], ['&amp;', $q === '"' ? '&quot;' : '&#39;'], $value) . (str_contains($value, '`') && strpbrk($value, ' <>"\'') === \false ? ' ' : '') . $q;
         }
         $s = str_replace('@', '&#64;', $s);
         return $s;
