@@ -175,7 +175,7 @@ final class Iterables
         {
             public function __construct(
                 /** @var \Closure(): iterable<mixed, mixed> */
-                private \Closure $factory
+                private readonly \Closure $factory
             )
             {
             }
