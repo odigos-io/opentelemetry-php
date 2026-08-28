@@ -35,12 +35,14 @@ on:
         type: string
 
 env:
-  ECR_REPO: public.ecr.aws/odigos/agents/php-community
+  DOCKER_REPOSITORY_NAME: php-community
+  ECR_REGISTRY: public.ecr.aws/odigos/agents
+  DEPOT_REGISTRY: p0xd21zf5r.registry.depot.dev
 
 jobs:
   # ── 1. Calculate the next version ─────────────────────────────────────────
   calculate:
-    runs-on: ubuntu-latest
+    runs-on: depot-ubuntu-latest
     permissions:
       contents: read
     outputs:
@@ -50,7 +52,7 @@ jobs:
       release_branch: ${{ steps.calc.outputs.release_branch }}
       is_prerelease: ${{ steps.meta.outputs.is_prerelease }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.base_branch }}
           fetch-depth: 0
@@ -77,11 +79,11 @@ jobs:
   # ── 2. Build image (no push) to validate before tagging ──────────────────
   build:
     needs: calculate
-    runs-on: ubuntu-latest
+    runs-on: depot-ubuntu-24.04-4
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.base_branch }}
 
@@ -103,7 +105,7 @@ jobs:
   # ── 3. Human approval ────────────────────────────────────────────────────
   confirm:
     needs: [calculate, build]
-    runs-on: ubuntu-latest
+    runs-on: depot-ubuntu-latest
     environment: release-gate
     steps:
       - name: Release approved
@@ -112,12 +114,12 @@ jobs:
   # ── 4. Create tag + GitHub release ───────────────────────────────────────
   tag:
     needs: [calculate, confirm]
-    runs-on: ubuntu-latest
+    runs-on: depot-ubuntu-latest
     permissions:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.base_branch }}
           fetch-depth: 0
@@ -140,12 +142,12 @@ jobs:
   # ── 5. Push image + notify ──────────────────────────────────────────────
   publish:
     needs: [calculate, tag]
-    runs-on: ubuntu-latest
+    runs-on: depot-ubuntu-latest
     permissions:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ needs.calculate.outputs.new_version }}
 
@@ -166,15 +168,18 @@ jobs:
           aws ecr-public get-login-password --region us-east-1 \
           | docker login --username AWS --password-stdin public.ecr.aws
 
+      - name: Login to Depot Registry
+        run: docker login --username x-token --password ${{ secrets.DEPOT_PUSH_TOKEN }} ${DEPOT_REGISTRY}
+
       - name: Compute Docker tags
         id: docker-tags
         env:
           NEW_VERSION: ${{ needs.calculate.outputs.new_version }}
           IS_PRERELEASE: ${{ needs.calculate.outputs.is_prerelease }}
         run: |
-          TAGS="${ECR_REPO}:${NEW_VERSION}"
+          TAGS="${ECR_REGISTRY}/${DOCKER_REPOSITORY_NAME}:${NEW_VERSION},${DEPOT_REGISTRY}/${DOCKER_REPOSITORY_NAME}:${NEW_VERSION}"
           if [[ "${IS_PRERELEASE}" == "false" ]]; then
-            TAGS="${TAGS},${ECR_REPO}:latest"
+            TAGS="${TAGS},${ECR_REGISTRY}/${DOCKER_REPOSITORY_NAME}:latest,${DEPOT_REGISTRY}/${DOCKER_REPOSITORY_NAME}:latest"
           fi
           echo "tags=${TAGS}" >> "$GITHUB_OUTPUT"
 
@@ -200,7 +205,7 @@ jobs:
   # ── 6. Trigger Odigos version update (OSS, Enterprise, VM Agent) ──────────
   trigger-odigos-update:
     needs: [calculate, publish]
-    runs-on: ubuntu-latest
+    runs-on: depot-ubuntu-latest
     permissions:
       id-token: write
       contents: read
