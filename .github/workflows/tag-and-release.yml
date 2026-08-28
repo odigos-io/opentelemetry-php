@@ -169,7 +169,7 @@ jobs:
           | docker login --username AWS --password-stdin public.ecr.aws
 
       - name: Login to Depot Registry
-        run: docker login --username x-token --password ${{ secrets.DEPOT_PUSH_TOKEN }} ${DEPOT_REGISTRY}
+        run: echo "${{ secrets.DEPOT_PUSH_TOKEN }}" | docker login ${DEPOT_REGISTRY} -u x-token --password-stdin
 
       - name: Compute Docker tags
         id: docker-tags
