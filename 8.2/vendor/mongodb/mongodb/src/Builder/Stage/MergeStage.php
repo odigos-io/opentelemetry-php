@@ -13,7 +13,7 @@ use Odigos\MongoDB\Builder\Pipeline;
 use Odigos\MongoDB\Builder\Type\Encode;
 use Odigos\MongoDB\Builder\Type\OperatorInterface;
 use Odigos\MongoDB\Builder\Type\Optional;
-use Odigos\MongoDB\Builder\Type\StageInterface;
+use Odigos\MongoDB\Builder\Type\OutputStageInterface;
 use Odigos\MongoDB\Exception\InvalidArgumentException;
 use Odigos\MongoDB\Model\BSONArray;
 use stdClass;
@@ -21,12 +21,11 @@ use function array_is_list;
 use function is_array;
 /**
  * Writes the resulting documents of the aggregation pipeline to a collection. The stage can incorporate (insert new documents, merge documents, replace documents, keep existing documents, fail the operation, process documents with a custom update pipeline) the results into an output collection. To use the $merge stage, it must be the last stage in the pipeline.
- * New in MongoDB 4.2.
  *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/merge/
  * @internal
  */
-final class MergeStage implements StageInterface, OperatorInterface
+final class MergeStage implements OutputStageInterface, OperatorInterface
 {
     public const ENCODE = Encode::Object;
     public const NAME = '$merge';

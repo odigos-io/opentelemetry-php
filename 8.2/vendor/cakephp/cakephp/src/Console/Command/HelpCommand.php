@@ -236,7 +236,8 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
             $io->out('<info>Available Commands:</info>');
             foreach ($singleCommands as $prefix => $cmd) {
                 $description = $cmd['description'];
-                $linePrefix = '  ' . str_pad($prefix, $nameColumnWidth - 2);
+                $padding = str_repeat(' ', $nameColumnWidth - 2 - strlen($prefix));
+                $linePrefix = '  <info>' . $prefix . '</info>' . $padding;
                 if ($description !== '') {
                     $description = strtok($description, "\n");
                     $this->outputWrappedLine($io, $linePrefix, $description, $maxWidth);
@@ -255,7 +256,8 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
             foreach ($cmds as $cmd) {
                 $fullName = $cmd['subcommand'] !== null ? $prefix . ' ' . $cmd['subcommand'] : $prefix;
                 $description = $cmd['description'];
-                $linePrefix = '  ' . str_pad($fullName, $nameColumnWidth - 2);
+                $padding = str_repeat(' ', $nameColumnWidth - 2 - strlen($fullName));
+                $linePrefix = '  <info>' . $fullName . '</info>' . $padding;
                 if ($description !== '') {
                     $description = strtok($description, "\n");
                     $this->outputWrappedLine($io, $linePrefix, $description, $maxWidth);
@@ -278,7 +280,8 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
      */
     protected function outputWrappedLine(ConsoleIo $io, string $prefix, string $description, int $maxWidth, int $maxChars = 200): void
     {
-        $availableWidth = $maxWidth - strlen($prefix);
+        $prefixLength = strlen($this->stripMarkup($prefix));
+        $availableWidth = $maxWidth - $prefixLength;
         if ($availableWidth <= 10) {
             $io->out($prefix);
             return;
@@ -292,7 +295,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
             return;
         }
         // Wrap description across multiple lines
-        $indent = str_repeat(' ', strlen($prefix));
+        $indent = str_repeat(' ', $prefixLength);
         $remaining = $description;
         $firstLine = \true;
         while ($remaining !== '') {
@@ -369,9 +372,8 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
         $io->out('');
     }
     /**
-     * @param array<string> $names Names
+     * @param non-empty-array<string> $names Names
      * @return string
-     * @phpstan-param non-empty-array<string> $names
      */
     protected function getShortestName(array $names): string
     {
@@ -379,6 +381,16 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
             return strlen($a) - strlen($b);
         });
         return array_shift($names);
+    }
+    /**
+     * Strip ConsoleOutput markup tags from a string.
+     *
+     * @param string $text Text that may contain markup tags
+     * @return string Text with markup tags removed
+     */
+    protected function stripMarkup(string $text): string
+    {
+        return preg_replace('/<\/?[a-z]+>/', '', $text) ?? $text;
     }
     /**
      * Output as XML

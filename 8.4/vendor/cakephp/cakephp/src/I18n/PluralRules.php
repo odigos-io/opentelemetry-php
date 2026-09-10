@@ -21,7 +21,7 @@ use InvalidArgumentException;
 use Locale;
 /**
  * Utility class used to determine the plural number to be used for a variable
- * base on the locale.
+ * based on the locale.
  *
  * @internal
  */

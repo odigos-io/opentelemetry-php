@@ -112,7 +112,7 @@ class SqlserverSchemaDialect extends SchemaDialect
         if ($type !== null) {
             return $type;
         }
-        if (in_array($col, ['date', 'time'])) {
+        if (in_array($col, ['date', 'time'], \true)) {
             return ['type' => $col, 'length' => null];
         }
         if ($col === 'datetime') {
@@ -169,7 +169,7 @@ class SqlserverSchemaDialect extends SchemaDialect
         }
         if ($col === 'image' || str_contains($col, 'binary')) {
             // -1 is the value for MAX which we treat as a 'long' binary
-            if ($length == -1) {
+            if ($length === -1) {
                 $length = TableSchema::LENGTH_LONG;
             }
             return ['type' => TableSchemaInterface::TYPE_BINARY, 'length' => $length];

@@ -8,6 +8,9 @@ declare (strict_types=1);
 namespace Odigos\Nette\Schema;
 
 use function count;
+/**
+ * Accumulates errors and warnings during schema validation and tracks the current path.
+ */
 final class Context
 {
     public bool $skipDefaults = \false;
@@ -31,7 +34,10 @@ final class Context
     {
         return $this->warnings[] = new Message($message, $code, $this->path, $variables);
     }
-    /** @return \Closure(): bool */
+    /**
+     * Returns a closure that returns true as long as no new errors have been added since the call.
+     * @return \Closure(): bool
+     */
     public function createChecker(): \Closure
     {
         $count = count($this->errors);

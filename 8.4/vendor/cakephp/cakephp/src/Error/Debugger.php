@@ -49,7 +49,7 @@ use function Odigos\Cake\Core\pr;
  * Debugger extends PHP's default error handling and gives
  * simpler to use more powerful interfaces.
  *
- * @link https://book.cakephp.org/5/en/development/debugging.html#namespace-Cake\Error
+ * @link https://book.cakephp.org/5/en/development/debugging.html#using-the-debugger-class
  */
 class Debugger
 {
@@ -59,7 +59,7 @@ class Debugger
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = ['outputMask' => [], 'exportFormatter' => null, 'editor' => 'phpstorm', 'editorBasePath' => null];
+    protected array $_defaultConfig = ['outputMask' => ['password' => '********', 'login' => '********', 'host' => '********', 'database' => '********', 'port' => '********', 'prefix' => '********', 'schema' => '********'], 'exportFormatter' => null, 'editor' => 'phpstorm', 'editorBasePath' => null];
     /**
      * A map of editors to their link templates.
      *
@@ -553,7 +553,7 @@ class Debugger
     /**
      * Export an array type object. Filters out keys used in datasource configuration.
      *
-     * The following keys are replaced with ***'s
+     * By default the following keys are replaced with ***'s
      *
      * - password
      * - login

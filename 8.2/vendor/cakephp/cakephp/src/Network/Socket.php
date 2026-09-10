@@ -201,7 +201,7 @@ class Socket
         unset($this->_config['context']['ssl']['verify_host']);
     }
     /**
-     * socket_stream_client() does not populate errNum, or $errStr when there are
+     * stream_socket_client() does not populate errNum, or $errStr when there are
      * connection errors, as in the case of SSL verification failure.
      *
      * Instead, we need to handle those errors manually.
@@ -360,7 +360,7 @@ class Socket
         $this->disconnect();
     }
     /**
-     * Resets the state of this Socket instance to it's initial state (before Object::__construct got executed)
+     * Resets the state of this Socket instance to its initial state (before __construct() got executed)
      *
      * @param array|null $state Array with key and values to reset
      * @return void

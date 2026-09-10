@@ -12,6 +12,7 @@ use Odigos\MongoDB\Builder\Type\Encode;
 use Odigos\MongoDB\Builder\Type\ExpressionInterface;
 use Odigos\MongoDB\Builder\Type\OperatorInterface;
 use Odigos\MongoDB\Builder\Type\StageInterface;
+use Odigos\MongoDB\Builder\Type\UpdateStageInterface;
 use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function is_string;
@@ -21,16 +22,14 @@ use function is_string;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/addFields/
  * @internal
  */
-final class AddFieldsStage implements StageInterface, OperatorInterface
+final class AddFieldsStage implements StageInterface, UpdateStageInterface, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$addFields';
     public const PROPERTIES = ['expression' => 'expression'];
     /** @var stdClass<DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string> $expression Specify the name of each field to add and set its value to an aggregation expression or an empty object. */
     public readonly stdClass $expression;
-    /**
-     * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string ...$expression Specify the name of each field to add and set its value to an aggregation expression or an empty object.
-     */
+    /** @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string ...$expression Specify the name of each field to add and set its value to an aggregation expression or an empty object. */
     public function __construct(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string ...$expression)
     {
         if (\count($expression) < 1) {

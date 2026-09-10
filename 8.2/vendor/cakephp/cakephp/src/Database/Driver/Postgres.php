@@ -196,7 +196,7 @@ class Postgres extends Driver
         return [IdentifierExpression::class => '_transformIdentifierExpression', FunctionExpression::class => '_transformFunctionExpression', StringExpression::class => '_transformStringExpression'];
     }
     /**
-     * Changes identifer expression into postgresql format.
+     * Changes identifier expression into postgresql format.
      *
      * @param \Cake\Database\Expression\IdentifierExpression $expression The expression to transform.
      * @return void
@@ -263,9 +263,7 @@ class Postgres extends Driver
             case 'JSON_VALUE':
                 $expression->setName('JSONB_PATH_QUERY')->iterateParts(function ($p, $key) {
                     if ($key === 0) {
-                        $p = sprintf('%s::jsonb', $p);
-                    } elseif ($key === 1) {
-                        $p = sprintf("'%s'::jsonpath", $this->quoteIdentifier($p['value']));
+                        return sprintf('%s::jsonb', $p);
                     }
                     return $p;
                 });

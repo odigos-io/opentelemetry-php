@@ -41,6 +41,8 @@ use RedisClusterException;
 use RedisException;
 /**
  * Redis storage engine for cache.
+ *
+ * @extends \Cake\Cache\CacheEngine<\Cake\Cache\Engine\RedisEngine>
  */
 class RedisEngine extends CacheEngine
 {
@@ -81,10 +83,16 @@ class RedisEngine extends CacheEngine
      * - `clearUsesFlushDb` Enable clear() and clearBlocking() to use FLUSHDB. This will be
      *   faster than standard clear()/clearBlocking() but will ignore prefixes and will
      *   cause dataloss if other applications are sharing a redis database.
+     * - `allowedClasses` Controls the `allowed_classes` option passed to `unserialize()`
+     *   when reading values back. Set to `false` to disallow all object unserialization
+     *   (safest when the cache only stores scalar/array values), or provide an array of
+     *   fully qualified class names to allow only those classes. Useful for hardening
+     *   against PHP object injection when a cache backend is shared across applications.
+     *   Defaults to `true` (allow all) for backwards compatibility.
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = ['clusterName' => null, 'database' => 0, 'duration' => 3600, 'groups' => [], 'password' => \false, 'persistent' => \true, 'port' => 6379, 'tls' => \false, 'prefix' => 'cake_', 'host' => null, 'server' => '127.0.0.1', 'timeout' => 0, 'unix_socket' => \false, 'scanCount' => 10, 'readTimeout' => 0, 'nodes' => [], 'failover' => null, 'clearUsesFlushDb' => \false];
+    protected array $_defaultConfig = ['clusterName' => null, 'database' => 0, 'duration' => 3600, 'groups' => [], 'password' => \false, 'persistent' => \true, 'port' => 6379, 'tls' => \false, 'prefix' => 'cake_', 'host' => null, 'server' => '127.0.0.1', 'timeout' => 0, 'unix_socket' => \false, 'scanCount' => 10, 'readTimeout' => 0, 'nodes' => [], 'failover' => null, 'clearUsesFlushDb' => \false, 'allowedClasses' => \true];
     /**
      * Initialize the Cache Engine
      *
@@ -505,6 +513,10 @@ class RedisEngine extends CacheEngine
         if (preg_match('/^[-]?\d+$/', $value)) {
             return (int) $value;
         }
+        $allowedClasses = $this->getConfig('allowedClasses');
+        if ($allowedClasses !== \true) {
+            return unserialize($value, ['allowed_classes' => $allowedClasses]);
+        }
         return unserialize($value);
     }
     /**
@@ -563,7 +575,6 @@ class RedisEngine extends CacheEngine
     {
         if ($this->_Redis instanceof RedisCluster) {
             foreach ($this->_Redis->_masters() as $node) {
-                // @phpstan-ignore arguments.count
                 $this->_Redis->flushDB($node, $async);
             }
         } else {
@@ -575,7 +586,7 @@ class RedisEngine extends CacheEngine
      */
     public function __destruct()
     {
-        if (isset($this->_Redis) && empty($this->_config['persistent'])) {
+        if (isset($this->_Redis) && !($this->_config['persistent'] ?? \true)) {
             $this->_Redis->close();
         }
     }

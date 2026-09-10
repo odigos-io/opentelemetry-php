@@ -79,7 +79,7 @@ class SmtpTransport extends AbstractTransport
     /**
      * Returns only serializable properties
      *
-     * @return array<string>
+     * @return array
      */
     public function __serialize(): array
     {
@@ -171,8 +171,7 @@ class SmtpTransport extends AbstractTransport
      * Send mail
      *
      * @param \Cake\Mailer\Message $message Message instance
-     * @return array<string, mixed> Contains 'headers' and 'message' keys. Additional keys allowed.
-     * @phpstan-return array{headers: string, message: string, ...}
+     * @return array{headers: string, message: string, ...} Contains 'headers' and 'message' keys. Additional keys allowed.
      * @throws \Cake\Network\Exception\SocketException
      */
     public function send(Message $message): array
@@ -464,7 +463,9 @@ class SmtpTransport extends AbstractTransport
     protected function _sendData(Message $message): void
     {
         $this->_smtpSend('DATA', '354');
-        $headers = $message->getHeadersString(['from', 'sender', 'replyTo', 'readReceipt', 'to', 'cc', 'subject', 'returnPath']);
+        $headers = $message->getHeadersString(['from', 'sender', 'replyTo', 'readReceipt', 'to', 'cc', 'subject', 'returnPath'], "\r\n", function (string $val): string {
+            return str_replace("\r\n", '', $val);
+        });
         $message = $this->_prepareMessage($message);
         $this->_smtpSend($headers . "\r\n\r\n" . $message . "\r\n\r\n\r\n.");
         $this->_content = ['headers' => $headers, 'message' => $message];

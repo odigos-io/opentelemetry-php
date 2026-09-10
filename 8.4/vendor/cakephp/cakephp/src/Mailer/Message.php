@@ -37,13 +37,13 @@ use function Odigos\Cake\Core\env;
 class Message implements JsonSerializable
 {
     /**
-     * Line length - no should more - RFC 2822 - 2.1.1
+     * Line length - should not exceed - RFC 2822 - 2.1.1
      *
      * @var int
      */
     public const LINE_LENGTH_SHOULD = 78;
     /**
-     * Line length - no must more - RFC 2822 - 2.1.1
+     * Line length - must not exceed - RFC 2822 - 2.1.1
      *
      * @var int
      */
@@ -780,7 +780,7 @@ class Message implements JsonSerializable
         $headersMultipleEmails = ['to', 'cc', 'bcc', 'replyTo'];
         foreach ($relation as $var => $header) {
             if ($include[$var]) {
-                if (in_array($var, $headersMultipleEmails)) {
+                if (in_array($var, $headersMultipleEmails, \true)) {
                     $headers[$header] = implode(', ', $this->formatAddress($this->{$var}));
                 } else {
                     $headers[$header] = (string) current($this->formatAddress($this->{$var}));
@@ -1077,7 +1077,7 @@ class Message implements JsonSerializable
      * @param array $attachments Array of filenames.
      * @return $this
      * @throws \InvalidArgumentException
-     * @see \Cake\Mailer\Email::setAttachments()
+     * @see Message::setAttachments()
      */
     public function addAttachments(array $attachments)
     {

@@ -24,6 +24,7 @@ use Odigos\Cake\Http\ServerRequestFactory;
 use Odigos\Cake\Routing\Router;
 use Odigos\Cake\Routing\RoutingApplicationInterface;
 use Psr\Http\Message\ResponseInterface;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * Dispatches a request capturing the response for integration
  * testing purposes into the Cake\Http stack.
@@ -56,6 +57,7 @@ class MiddlewareDispatcher
      */
     public function resolveUrl(array|string $url): string
     {
+        deprecationWarning('5.1.0', 'MiddlewareDispatcher::resolveUrl() is deprecated. Use IntegrationTestTrait::resolveUrl() instead.');
         // If we need to resolve a Route URL but there are no routes, load routes.
         if (is_array($url) && Router::getRouteCollection()->routes() === []) {
             return $this->resolveRoute($url);
@@ -71,6 +73,7 @@ class MiddlewareDispatcher
      */
     protected function resolveRoute(array $url): string
     {
+        deprecationWarning('5.1.0', 'MiddlewareDispatcher::resolveRoute() is deprecated. Use IntegrationTestTrait::resolveRoute() instead.');
         // Simulate application bootstrap and route loading.
         // We need both to ensure plugins are loaded.
         $this->app->bootstrap();
@@ -101,6 +104,7 @@ class MiddlewareDispatcher
             $spec['environment']['CAKEPHP_INPUT'] = $spec['input'];
         }
         $environment = array_merge(array_merge($_SERVER, ['REQUEST_URI' => $spec['url']]), $spec['environment']);
+        /** @phpstan-ignore offsetAccess.notFound */
         if (str_contains($environment['PHP_SELF'], 'phpunit')) {
             $environment['PHP_SELF'] = '/';
         }

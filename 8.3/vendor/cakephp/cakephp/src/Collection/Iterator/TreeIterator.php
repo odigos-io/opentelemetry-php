@@ -24,26 +24,27 @@ use RecursiveIteratorIterator;
  * A Recursive iterator used to flatten nested structures and also exposes
  * all Collection methods
  *
- * @template-extends \RecursiveIteratorIterator<\RecursiveIterator>
+ * @template TKey
+ * @template TValue
+ * @template-extends \RecursiveIteratorIterator<\RecursiveIterator<TKey, TValue>>
+ * @implements \Cake\Collection\CollectionInterface<TKey, TValue>
  */
 class TreeIterator extends RecursiveIteratorIterator implements CollectionInterface
 {
+    /** @use \Cake\Collection\CollectionTrait<TKey, TValue> */
     use CollectionTrait;
     /**
      * The iteration mode
      *
-     * @var int
-     * @phpstan-var \RecursiveIteratorIterator::LEAVES_ONLY|\RecursiveIteratorIterator::SELF_FIRST|\RecursiveIteratorIterator::CHILD_FIRST
+     * @var \RecursiveIteratorIterator::LEAVES_ONLY|\RecursiveIteratorIterator::SELF_FIRST|\RecursiveIteratorIterator::CHILD_FIRST
      */
     protected int $_mode;
     /**
      * Constructor
      *
      * @param \RecursiveIterator<mixed, mixed> $items The iterator to flatten.
-     * @param int $mode Iterator mode.
-     * @param int $flags Iterator flags.
-     * @phpstan-param \RecursiveIteratorIterator::LEAVES_ONLY|\RecursiveIteratorIterator::SELF_FIRST|\RecursiveIteratorIterator::CHILD_FIRST $mode
-     * @phpstan-param \RecursiveIteratorIterator::LEAVES_ONLY|\RecursiveIteratorIterator::CATCH_GET_CHILD $flags
+     * @param \RecursiveIteratorIterator::LEAVES_ONLY|\RecursiveIteratorIterator::SELF_FIRST|\RecursiveIteratorIterator::CHILD_FIRST $mode Iterator mode.
+     * @param \RecursiveIteratorIterator::LEAVES_ONLY|\RecursiveIteratorIterator::CATCH_GET_CHILD $flags Iterator flags.
      */
     public function __construct(RecursiveIterator $items, int $mode = RecursiveIteratorIterator::SELF_FIRST, int $flags = 0)
     {
@@ -86,7 +87,7 @@ class TreeIterator extends RecursiveIteratorIterator implements CollectionInterf
      * callable returning the key value.
      * @param string $spacer The string to use for prefixing the values according to
      * their depth in the tree
-     * @return \Cake\Collection\Iterator\TreePrinter
+     * @return \Cake\Collection\Iterator\TreePrinter<TKey, TValue>
      */
     public function printer(callable|string $valuePath, callable|string|null $keyPath = null, string $spacer = '__'): TreePrinter
     {
@@ -96,7 +97,7 @@ class TreeIterator extends RecursiveIteratorIterator implements CollectionInterf
                 return $counter++;
             };
         }
-        /** @var \RecursiveIterator $iterator */
+        /** @var \RecursiveIterator<TKey, TValue> $iterator */
         $iterator = $this->getInnerIterator();
         return new TreePrinter($iterator, $valuePath, $keyPath, $spacer, $this->_mode);
     }

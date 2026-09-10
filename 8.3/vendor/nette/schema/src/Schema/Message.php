@@ -7,7 +7,10 @@ declare (strict_types=1);
  */
 namespace Odigos\Nette\Schema;
 
-use function implode, preg_replace_callback;
+use function array_key_exists, implode, preg_replace_callback;
+/**
+ * Represents a single validation error or warning with a message template, error code, path, and variables.
+ */
 final class Message
 {
     /** variables: {value: mixed, expected: string} */
@@ -52,6 +55,9 @@ final class Message
     )
     {
     }
+    /**
+     * Formats the message template by substituting %variable% placeholders with their values.
+     */
     public function toString(): string
     {
         $vars = $this->variables;
@@ -60,7 +66,7 @@ final class Message
         $vars['value'] = Helpers::formatValue($vars['value'] ?? null);
         return preg_replace_callback('~( ?)%(\w+)%~', function ($m) use ($vars) {
             [, $space, $key] = $m;
-            return $vars[$key] === null ? '' : $space . $vars[$key];
+            return array_key_exists($key, $vars) ? $vars[$key] === null ? '' : $space . $vars[$key] : $m[0];
         }, $this->message);
     }
 }

@@ -22,9 +22,7 @@ final class SkipStage implements StageInterface, OperatorInterface
     public const PROPERTIES = ['skip' => 'skip'];
     /** @var int $skip */
     public readonly int $skip;
-    /**
-     * @param int $skip
-     */
+    /** @param int $skip */
     public function __construct(int $skip)
     {
         $this->skip = $skip;

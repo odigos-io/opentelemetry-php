@@ -26,7 +26,7 @@ use RuntimeException;
 /**
  * Cache provides a consistent interface to Caching in your application. It allows you
  * to use several different Cache engines, without coupling your application to a specific
- * implementation. It also allows you to change out cache storage or configuration without effecting
+ * implementation. It also allows you to change out cache storage or configuration without affecting
  * the rest of your application.
  *
  * ### Configuring Cache engines
@@ -55,10 +55,9 @@ use RuntimeException;
  * - `FileEngine` - Uses simple files to store content. Poor performance, but good for
  *    storing large objects, or things that are not IO sensitive. Well suited to development
  *    as it is an easy cache to inspect and manually flush.
- * - `MemcacheEngine` - Uses the PECL::Memcache extension and Memcached for storage.
- *    Fast reads/writes, and benefits from memcache being distributed.
+ * - `MemcachedEngine` - Uses the PECL::Memcached extension and Memcached for storage.
+ *    Fast reads/writes, and benefits from memcached being distributed.
  * - `RedisEngine` - Uses redis and php-redis extension to store cache data.
- * - `XcacheEngine` - Uses the Xcache extension, an alternative to APCu.
  *
  * See Cache engine documentation for expected configuration keys.
  *
@@ -71,8 +70,7 @@ class Cache
      * An array mapping URL schemes to fully qualified caching engine
      * class names.
      *
-     * @var array<string, string>
-     * @phpstan-var array<string, class-string>
+     * @var array<string, class-string>
      */
     protected static array $_dsnClassMap = ['array' => Engine\ArrayEngine::class, 'apcu' => Engine\ApcuEngine::class, 'file' => Engine\FileEngine::class, 'memcached' => Engine\MemcachedEngine::class, 'null' => Engine\NullEngine::class, 'redis' => Engine\RedisEngine::class];
     /**
@@ -90,13 +88,13 @@ class Cache
     /**
      * Cache Registry used for creating and using cache adapters.
      *
-     * @var \Cake\Cache\CacheRegistry
+     * @var \Cake\Cache\CacheRegistry<\Cake\Cache\CacheEngine<object>>
      */
     protected static CacheRegistry $_registry;
     /**
      * Returns the Cache Registry instance used for creating and using cache adapters.
      *
-     * @return \Cake\Cache\CacheRegistry
+     * @return \Cake\Cache\CacheRegistry<\Cake\Cache\CacheEngine<object>>
      */
     public static function getRegistry(): CacheRegistry
     {
@@ -107,7 +105,7 @@ class Cache
      *
      * Also allows for injecting of a new registry instance.
      *
-     * @param \Cake\Cache\CacheRegistry $registry Injectable registry object.
+     * @param \Cake\Cache\CacheRegistry<\Cake\Cache\CacheEngine<object>> $registry Injectable registry object.
      * @return void
      */
     public static function setRegistry(CacheRegistry $registry): void
@@ -133,6 +131,7 @@ class Cache
             $registry->load($name, $config);
         } catch (RuntimeException $e) {
             if (!array_key_exists('fallback', $config)) {
+                // @phpstan-ignore argument.type (NullEngine is valid fallback)
                 $registry->set($name, new NullEngine());
                 trigger_error($e->getMessage(), \E_USER_WARNING);
                 return;
@@ -497,7 +496,7 @@ class Cache
      * @param string $config The cache configuration to use for this operation.
      *   Defaults to default.
      * @return mixed If the key is found: the cached data.
-     *   If the key is not found the value returned by the the default callback.
+     *   If the key is not found the value returned by the default callback.
      */
     public static function remember(string $key, Closure $default, string $config = 'default'): mixed
     {

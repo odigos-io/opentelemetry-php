@@ -16,6 +16,7 @@ declare (strict_types=1);
  */
 namespace Odigos\Cake\Database\Schema;
 
+use Odigos\Cake\Database\Driver\Mysql;
 use Odigos\Cake\Database\DriverFeatureEnum;
 use Odigos\Cake\Database\Exception\DatabaseException;
 use PDOException;
@@ -120,12 +121,12 @@ class MysqlSchemaDialect extends SchemaDialect
             $field = $this->_convertColumn($row['Type']);
             $default = $this->parseDefault($field['type'], $row);
             $field += ['name' => $row['Field'], 'null' => $row['Null'] === 'YES', 'default' => $default, 'collate' => $row['Collation'], 'comment' => $row['Comment'], 'length' => null];
-            if (isset($row['Extra']) && $row['Extra'] === 'auto_increment') {
+            $extra = trim($row['Extra'] ?? '');
+            if ($extra === 'auto_increment') {
                 $field['autoIncrement'] = \true;
             }
-            if ($row['Extra'] === 'on update CURRENT_TIMESTAMP') {
-                $field['onUpdate'] = 'CURRENT_TIMESTAMP';
-            } elseif ($row['Extra'] === 'on update current_timestamp()') {
+            // Depending on the MySQL Version the extra column can contain/start with DEFAULT_GENERATED as well
+            if (str_ends_with($extra, 'on update CURRENT_TIMESTAMP') || str_ends_with($extra, 'on update current_timestamp()')) {
                 $field['onUpdate'] = 'CURRENT_TIMESTAMP';
             }
             $srid = $geometryColumns[$field['name']]['srid'] ?? null;
@@ -137,8 +138,9 @@ class MysqlSchemaDialect extends SchemaDialect
         return $columns;
     }
     /**
-     * Describes geoemetry-specific column information.
+     * Describes geometry-specific column information.
      *
+     * @param string $table The table name.
      * @return array<string, array{name: string, srid: int}> The column information.
      */
     private function describeGeometryColumns(string $table): array
@@ -170,7 +172,7 @@ SQL;
     protected function parseDefault(string $type, array $row): ?string
     {
         $default = $row['Default'];
-        if (is_string($default) && in_array($type, array_merge(TableSchema::GEOSPATIAL_TYPES, [TableSchema::TYPE_BINARY, TableSchema::TYPE_JSON, TableSchema::TYPE_TEXT]))) {
+        if (is_string($default) && in_array($type, array_merge(TableSchema::GEOSPATIAL_TYPES, [TableSchema::TYPE_BINARY, TableSchema::TYPE_JSON, TableSchema::TYPE_TEXT]), \true)) {
             // The default that comes back from MySQL for these types prefixes the collation type and
             // surrounds the value with escaped single quotes, for example "_utf8mbf4\'abc\'", and so
             // this converts that then down to the default value of "abc" to correspond to what the user
@@ -179,6 +181,9 @@ SQL;
             // If the default is wrapped in a function, and has a collation marker on it, strip
             // the collation marker out
             $default = (string) preg_replace("/^(?<prefix>[a-zA-Z0-9_]*\\()(?<collation>_[a-zA-Z0-9]+)\\\\'(?<args>.*)\\\\'\\)\$/", "\\1'\\3')", $default);
+        }
+        if ($this->_driver instanceof Mysql && $this->_driver->isMariaDb() && $default === 'current_timestamp()') {
+            return 'CURRENT_TIMESTAMP';
         }
         return $default;
     }
@@ -291,10 +296,10 @@ SQL;
         if ($type !== null) {
             return $type;
         }
-        if (in_array($col, ['date', 'time', 'year'])) {
+        if (in_array($col, ['date', 'time', 'year'], \true)) {
             return ['type' => $col, 'length' => null];
         }
-        if (in_array($col, ['datetime', 'timestamp'])) {
+        if (in_array($col, ['datetime', 'timestamp'], \true)) {
             $typeName = $col;
             if ($length > 0) {
                 $typeName = $col . 'fractional';
@@ -304,8 +309,11 @@ SQL;
         if ($col === 'tinyint' && $length === 1 || $col === 'boolean') {
             return ['type' => TableSchemaInterface::TYPE_BOOLEAN, 'length' => null];
         }
+        if ($col === 'bit') {
+            return ['type' => TableSchemaInterface::TYPE_BIT, 'length' => $length];
+        }
         $unsigned = isset($matches[3]) && strtolower($matches[3]) === 'unsigned';
-        if (str_contains($col, 'bigint') || $col === 'bigint') {
+        if (str_contains($col, 'bigint')) {
             return ['type' => TableSchemaInterface::TYPE_BIGINTEGER, 'length' => null, 'unsigned' => $unsigned];
         }
         if ($col === 'tinyint') {
@@ -314,7 +322,7 @@ SQL;
         if ($col === 'smallint') {
             return ['type' => TableSchemaInterface::TYPE_SMALLINTEGER, 'length' => null, 'unsigned' => $unsigned];
         }
-        if (in_array($col, ['int', 'integer', 'mediumint'])) {
+        if (in_array($col, ['int', 'integer', 'mediumint'], \true)) {
             return ['type' => TableSchemaInterface::TYPE_INTEGER, 'length' => null, 'unsigned' => $unsigned];
         }
         if ($col === 'char' && $length === 36) {
@@ -337,10 +345,14 @@ SQL;
         if ($col === 'uuid') {
             return ['type' => TableSchemaInterface::TYPE_NATIVE_UUID, 'length' => null];
         }
-        if (str_contains($col, 'blob') || in_array($col, ['binary', 'varbinary'])) {
+        if (str_contains($col, 'blob') || in_array($col, ['binary', 'varbinary'], \true)) {
             $lengthName = substr($col, 0, -4);
             $length = TableSchema::$columnLengths[$lengthName] ?? $length;
-            return ['type' => TableSchemaInterface::TYPE_BINARY, 'length' => $length];
+            $result = ['type' => TableSchemaInterface::TYPE_BINARY, 'length' => $length];
+            if ($col === 'binary') {
+                $result['fixed'] = \true;
+            }
+            return $result;
         }
         if (str_contains($col, 'float') || str_contains($col, 'double')) {
             return ['type' => TableSchemaInterface::TYPE_FLOAT, 'length' => $length, 'precision' => $precision, 'unsigned' => $unsigned];
@@ -351,7 +363,7 @@ SQL;
         if (str_contains($col, 'json')) {
             return ['type' => TableSchemaInterface::TYPE_JSON, 'length' => null];
         }
-        if (in_array($col, TableSchemaInterface::GEOSPATIAL_TYPES)) {
+        if (in_array($col, TableSchemaInterface::GEOSPATIAL_TYPES, \true)) {
             // TODO how can srid be preserved? It doesn't come back
             // in the output of show full columns from ...
             return ['type' => $col, 'length' => null];
@@ -537,7 +549,7 @@ SQL;
         $column += ['length' => null];
         $out = $this->_driver->quoteIdentifier($name);
         $nativeJson = $this->_driver->supports(DriverFeatureEnum::JSON);
-        $typeMap = [TableSchemaInterface::TYPE_TINYINTEGER => ' TINYINT', TableSchemaInterface::TYPE_SMALLINTEGER => ' SMALLINT', TableSchemaInterface::TYPE_INTEGER => ' INTEGER', TableSchemaInterface::TYPE_BIGINTEGER => ' BIGINT', TableSchemaInterface::TYPE_BINARY_UUID => ' BINARY(16)', TableSchemaInterface::TYPE_BOOLEAN => ' BOOLEAN', TableSchemaInterface::TYPE_FLOAT => ' FLOAT', TableSchemaInterface::TYPE_DECIMAL => ' DECIMAL', TableSchemaInterface::TYPE_DATE => ' DATE', TableSchemaInterface::TYPE_TIME => ' TIME', TableSchemaInterface::TYPE_DATETIME => ' DATETIME', TableSchemaInterface::TYPE_DATETIME_FRACTIONAL => ' DATETIME', TableSchemaInterface::TYPE_TIMESTAMP => ' TIMESTAMP', TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL => ' TIMESTAMP', TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE => ' TIMESTAMP', TableSchemaInterface::TYPE_CHAR => ' CHAR', TableSchemaInterface::TYPE_UUID => ' CHAR(36)', TableSchemaInterface::TYPE_NATIVE_UUID => ' UUID', TableSchemaInterface::TYPE_JSON => $nativeJson ? ' JSON' : ' LONGTEXT', TableSchemaInterface::TYPE_GEOMETRY => ' GEOMETRY', TableSchemaInterface::TYPE_POINT => ' POINT', TableSchemaInterface::TYPE_LINESTRING => ' LINESTRING', TableSchemaInterface::TYPE_POLYGON => ' POLYGON'];
+        $typeMap = [TableSchemaInterface::TYPE_TINYINTEGER => ' TINYINT', TableSchemaInterface::TYPE_SMALLINTEGER => ' SMALLINT', TableSchemaInterface::TYPE_INTEGER => ' INTEGER', TableSchemaInterface::TYPE_BIGINTEGER => ' BIGINT', TableSchemaInterface::TYPE_BINARY_UUID => ' BINARY(16)', TableSchemaInterface::TYPE_BOOLEAN => ' BOOLEAN', TableSchemaInterface::TYPE_FLOAT => ' FLOAT', TableSchemaInterface::TYPE_DECIMAL => ' DECIMAL', TableSchemaInterface::TYPE_DATE => ' DATE', TableSchemaInterface::TYPE_TIME => ' TIME', TableSchemaInterface::TYPE_DATETIME => ' DATETIME', TableSchemaInterface::TYPE_DATETIME_FRACTIONAL => ' DATETIME', TableSchemaInterface::TYPE_TIMESTAMP => ' TIMESTAMP', TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL => ' TIMESTAMP', TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE => ' TIMESTAMP', TableSchemaInterface::TYPE_CHAR => ' CHAR', TableSchemaInterface::TYPE_UUID => ' CHAR(36)', TableSchemaInterface::TYPE_NATIVE_UUID => ' UUID', TableSchemaInterface::TYPE_JSON => $nativeJson ? ' JSON' : ' LONGTEXT', TableSchemaInterface::TYPE_GEOMETRY => ' GEOMETRY', TableSchemaInterface::TYPE_POINT => ' POINT', TableSchemaInterface::TYPE_LINESTRING => ' LINESTRING', TableSchemaInterface::TYPE_POLYGON => ' POLYGON', TableSchemaInterface::TYPE_BIT => ' BIT'];
         $specialMap = ['string' => \true, 'text' => \true, 'char' => \true, 'binary' => \true];
         if (isset($typeMap[$column['type']])) {
             $out .= $typeMap[$column['type']];
@@ -573,15 +585,15 @@ SQL;
                         $out .= ' BLOB';
                         break;
                     }
-                    if ($column['length'] > 2) {
-                        $out .= ' VARBINARY';
-                    } else {
+                    if (!empty($column['fixed'])) {
                         $out .= ' BINARY';
+                    } else {
+                        $out .= ' VARBINARY';
                     }
                     break;
             }
         }
-        $hasLength = [TableSchemaInterface::TYPE_INTEGER, TableSchemaInterface::TYPE_CHAR, TableSchemaInterface::TYPE_SMALLINTEGER, TableSchemaInterface::TYPE_TINYINTEGER, TableSchemaInterface::TYPE_STRING, TableSchemaInterface::TYPE_BINARY];
+        $hasLength = [TableSchemaInterface::TYPE_INTEGER, TableSchemaInterface::TYPE_CHAR, TableSchemaInterface::TYPE_SMALLINTEGER, TableSchemaInterface::TYPE_TINYINTEGER, TableSchemaInterface::TYPE_STRING, TableSchemaInterface::TYPE_BINARY, TableSchemaInterface::TYPE_BIT];
         if (!isset($typeMap[$column['type']]) && !isset($specialMap[$column['type']])) {
             $out .= ' ' . strtoupper($column['type']);
             $hasLength[] = $column['type'];
@@ -605,7 +617,7 @@ SQL;
         if (in_array($column['type'], $hasUnsigned, \true) && isset($column['unsigned']) && $column['unsigned'] === \true) {
             $out .= ' UNSIGNED';
         }
-        $hasCollate = [TableSchemaInterface::TYPE_TEXT, TableSchemaInterface::TYPE_CHAR, TableSchemaInterface::TYPE_STRING];
+        $hasCollate = [TableSchemaInterface::TYPE_TEXT, TableSchemaInterface::TYPE_CHAR, TableSchemaInterface::TYPE_STRING, TableSchemaInterface::TYPE_UUID];
         if (in_array($column['type'], $hasCollate, \true) && isset($column['collate']) && $column['collate'] !== '') {
             $out .= ' COLLATE ' . $column['collate'];
         }
@@ -659,7 +671,7 @@ SQL;
     {
         $data = $schema->getColumn($name);
         assert($data !== null);
-        // TODO deprecrate Type defined schema mappings?
+        // TODO deprecate Type defined schema mappings?
         $sql = $this->_getTypeSpecificColumnSql($data['type'], $schema, $name);
         if ($sql !== null) {
             return $sql;

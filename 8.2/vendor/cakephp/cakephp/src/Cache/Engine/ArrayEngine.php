@@ -39,6 +39,8 @@ use DateInterval;
  * or console tools where you don't want the overhead of interacting
  * with a cache servers, but want the work saving properties a cache
  * provides.
+ *
+ * @extends \Cake\Cache\CacheEngine<\Cake\Cache\Engine\ArrayEngine>
  */
 class ArrayEngine extends CacheEngine
 {
@@ -158,9 +160,9 @@ class ArrayEngine extends CacheEngine
         return \true;
     }
     /**
-     * Delete all keys from the cache. This will clear every cache config using APC.
+     * Delete all keys from the cache.
      *
-     * @return bool True Returns true.
+     * @return bool True on success.
      */
     public function clear(): bool
     {

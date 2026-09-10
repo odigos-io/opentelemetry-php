@@ -152,17 +152,17 @@
         },
         {
             "name": "cakephp/cakephp",
-            "version": "5.3.1",
-            "version_normalized": "5.3.1.0",
+            "version": "5.3.7",
+            "version_normalized": "5.3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "ae91c0950fd1a4ee9b97b31a8db744721cdb9bd0"
+                "reference": "c0d21e0da4216d51268691af3ad803f0eecb3a11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/ae91c0950fd1a4ee9b97b31a8db744721cdb9bd0",
-                "reference": "ae91c0950fd1a4ee9b97b31a8db744721cdb9bd0",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/c0d21e0da4216d51268691af3ad803f0eecb3a11",
+                "reference": "c0d21e0da4216d51268691af3ad803f0eecb3a11",
                 "shasum": ""
             },
             "require": {
@@ -215,18 +215,18 @@
                 "mikey179/vfsstream": "^1.6.12",
                 "mockery/mockery": "^1.6",
                 "paragonie/csp-builder": "^2.3 || ^3.0",
-                "phpunit/phpunit": "^11.5.3 || ^12.1.3"
+                "phpunit/phpunit": "^11.5.3 || ^12.1.3 || ^13.0"
             },
             "suggest": {
                 "ext-curl": "To enable more efficient network calls in Http\\Client.",
                 "ext-openssl": "To use Security::encrypt() or have secure CSRF token generation.",
                 "paragonie/csp-builder": "CSP builder, to use the CSP Middleware"
             },
-            "time": "2026-01-14T05:03:03+00:00",
+            "time": "2026-07-14T03:04:24+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-5.next": "5.3.x-dev"
+                    "dev-5.next": "5.4.x-dev"
                 }
             },
             "installation-source": "dist",
@@ -276,17 +276,17 @@
         },
         {
             "name": "cakephp/chronos",
-            "version": "3.3.1",
-            "version_normalized": "3.3.1.0",
+            "version": "3.5.1",
+            "version_normalized": "3.5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/chronos.git",
-                "reference": "1e417fdd4a3c6602b6c4634cf54aa9b065127fa2"
+                "reference": "00c16f165a762226d58f9cf88f43e54e41093f84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/chronos/zipball/1e417fdd4a3c6602b6c4634cf54aa9b065127fa2",
-                "reference": "1e417fdd4a3c6602b6c4634cf54aa9b065127fa2",
+                "url": "https://api.github.com/repos/cakephp/chronos/zipball/00c16f165a762226d58f9cf88f43e54e41093f84",
+                "reference": "00c16f165a762226d58f9cf88f43e54e41093f84",
                 "shasum": ""
             },
             "require": {
@@ -298,9 +298,9 @@
             },
             "require-dev": {
                 "cakephp/cakephp-codesniffer": "^5.0",
-                "phpunit/phpunit": "^10.5.58 || ^11.1.3"
+                "phpunit/phpunit": "^10.5.58 || ^11.5.3 || ^12.1.3"
             },
-            "time": "2025-10-30T13:08:23+00:00",
+            "time": "2026-09-06T02:30:12+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -477,17 +477,17 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.5.10",
-            "version_normalized": "1.5.10.0",
+            "version": "1.5.14",
+            "version_normalized": "1.5.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "961a5e4056dd2e4a2eedcac7576075947c28bf63"
+                "reference": "0c8abba0634f637bd78c4e451981da368d403463"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/961a5e4056dd2e4a2eedcac7576075947c28bf63",
-                "reference": "961a5e4056dd2e4a2eedcac7576075947c28bf63",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/0c8abba0634f637bd78c4e451981da368d403463",
+                "reference": "0c8abba0634f637bd78c4e451981da368d403463",
                 "shasum": ""
             },
             "require": {
@@ -501,7 +501,7 @@
                 "psr/log": "^1.0 || ^2.0 || ^3.0",
                 "symfony/process": "^4.0 || ^5.0 || ^6.0 || ^7.0"
             },
-            "time": "2025-12-08T15:06:51+00:00",
+            "time": "2026-08-21T14:57:29+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -536,7 +536,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/ca-bundle/issues",
-                "source": "https://github.com/composer/ca-bundle/tree/1.5.10"
+                "source": "https://github.com/composer/ca-bundle/tree/1.5.14"
             },
             "funding": [
                 {
@@ -2371,17 +2371,17 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.9.2",
-            "version_normalized": "2.9.2.0",
+            "version": "2.10.1",
+            "version_normalized": "2.10.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "72e9a87efcf41a8e83be3ed0866b69d77565cb12"
+                "reference": "9d489ab67a02960fd8ffe624d93f751daf95439e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/72e9a87efcf41a8e83be3ed0866b69d77565cb12",
-                "reference": "72e9a87efcf41a8e83be3ed0866b69d77565cb12",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/9d489ab67a02960fd8ffe624d93f751daf95439e",
+                "reference": "9d489ab67a02960fd8ffe624d93f751daf95439e",
                 "shasum": ""
             },
             "require": {
@@ -2415,11 +2415,11 @@
             "suggest": {
                 "symfony/yaml": "v2.3+ required if using the Front Matter extension"
             },
-            "time": "2026-08-11T00:58:45+00:00",
+            "time": "2026-09-07T13:44:26+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.10-dev"
+                    "dev-main": "2.11-dev"
                 }
             },
             "installation-source": "dist",
@@ -2566,22 +2566,23 @@
         },
         {
             "name": "league/container",
-            "version": "5.1.0",
-            "version_normalized": "5.1.0.0",
+            "version": "5.2.0",
+            "version_normalized": "5.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/container.git",
-                "reference": "041c52d266763887fff2256fb5dc9392d808f8f3"
+                "reference": "58accbc032f0090a9bd08326f93062c5a658b2c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/container/zipball/041c52d266763887fff2256fb5dc9392d808f8f3",
-                "reference": "041c52d266763887fff2256fb5dc9392d808f8f3",
+                "url": "https://api.github.com/repos/thephpleague/container/zipball/58accbc032f0090a9bd08326f93062c5a658b2c5",
+                "reference": "58accbc032f0090a9bd08326f93062c5a658b2c5",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.1",
-                "psr/container": "^2.0.2"
+                "psr/container": "^2.0.2",
+                "psr/event-dispatcher": "^1.0"
             },
             "provide": {
                 "psr/container-implementation": "^1.0"
@@ -2598,7 +2599,7 @@
                 "scrutinizer/ocular": "^1.9",
                 "squizlabs/php_codesniffer": "^3.9"
             },
-            "time": "2025-05-28T07:37:56+00:00",
+            "time": "2026-03-19T18:52:39+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2640,7 +2641,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/container/issues",
-                "source": "https://github.com/thephpleague/container/tree/5.1.0"
+                "source": "https://github.com/thephpleague/container/tree/5.2.0"
             },
             "funding": [
                 {
@@ -3037,25 +3038,25 @@
         },
         {
             "name": "mongodb/mongodb",
-            "version": "2.1.2",
-            "version_normalized": "2.1.2.0",
+            "version": "2.4.1",
+            "version_normalized": "2.4.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mongodb/mongo-php-library.git",
-                "reference": "0a2472ba9cbb932f7e43a8770aedb2fc30612a67"
+                "url": "https://github.com/mongodb/mongo-php-library",
+                "reference": "b72cc2ecf4a11d3871f78a119a8f3cc7ab6d6c29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mongodb/mongo-php-library/zipball/0a2472ba9cbb932f7e43a8770aedb2fc30612a67",
-                "reference": "0a2472ba9cbb932f7e43a8770aedb2fc30612a67",
+                "url": "https://api.github.com/repos/mongodb/mongo-php-library/zipball/b72cc2ecf4a11d3871f78a119a8f3cc7ab6d6c29",
+                "reference": "b72cc2ecf4a11d3871f78a119a8f3cc7ab6d6c29",
                 "shasum": ""
             },
             "require": {
                 "composer-runtime-api": "^2.0",
-                "ext-mongodb": "^2.1",
+                "ext-mongodb": "^2.4",
                 "php": "^8.1",
                 "psr/log": "^1.1.4|^2|^3",
-                "symfony/polyfill-php85": "^1.32"
+                "symfony/polyfill-php85": "^1.33"
             },
             "replace": {
                 "mongodb/builder": "*"
@@ -3063,11 +3064,11 @@
             "require-dev": {
                 "doctrine/coding-standard": "^12.0",
                 "phpunit/phpunit": "^10.5.35",
-                "rector/rector": "^2.1.4",
+                "rector/rector": "^2.3.4",
                 "squizlabs/php_codesniffer": "^3.7",
-                "vimeo/psalm": "6.5.*"
+                "vimeo/psalm": "~6.14.2"
             },
-            "time": "2025-10-06T12:12:40+00:00",
+            "time": "2026-08-27T14:43:15+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3109,10 +3110,6 @@
                 "mongodb",
                 "persistence"
             ],
-            "support": {
-                "issues": "https://github.com/mongodb/mongo-php-library/issues",
-                "source": "https://github.com/mongodb/mongo-php-library/tree/2.1.2"
-            },
             "install-path": "../mongodb/mongodb"
         },
         {
@@ -3331,17 +3328,17 @@
         },
         {
             "name": "nette/schema",
-            "version": "v1.3.5",
-            "version_normalized": "1.3.5.0",
+            "version": "v1.3.6",
+            "version_normalized": "1.3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/schema.git",
-                "reference": "f0ab1a3cda782dbc5da270d28545236aa80c4002"
+                "reference": "c54350438cd6914616f790a49cb424605f421562"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/schema/zipball/f0ab1a3cda782dbc5da270d28545236aa80c4002",
-                "reference": "f0ab1a3cda782dbc5da270d28545236aa80c4002",
+                "url": "https://api.github.com/repos/nette/schema/zipball/c54350438cd6914616f790a49cb424605f421562",
+                "reference": "c54350438cd6914616f790a49cb424605f421562",
                 "shasum": ""
             },
             "require": {
@@ -3355,7 +3352,7 @@
                 "phpstan/phpstan": "^2.1.39@stable",
                 "tracy/tracy": "^2.8"
             },
-            "time": "2026-02-23T03:47:12+00:00",
+            "time": "2026-08-16T21:58:41+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3395,7 +3392,7 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/schema/issues",
-                "source": "https://github.com/nette/schema/tree/v1.3.5"
+                "source": "https://github.com/nette/schema/tree/v1.3.6"
             },
             "install-path": "../nette/schema"
         },
@@ -8940,23 +8937,23 @@
         },
         {
             "name": "symfony/polyfill-php85",
-            "version": "v1.38.1",
-            "version_normalized": "1.38.1.0",
+            "version": "v1.41.0",
+            "version_normalized": "1.41.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php85.git",
-                "reference": "ba2ba04f3352cfa2dcbbcb90aee13ed967f505b1"
+                "reference": "255fab485aaa1006ed411040c42aecd7b5302d7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php85/zipball/ba2ba04f3352cfa2dcbbcb90aee13ed967f505b1",
-                "reference": "ba2ba04f3352cfa2dcbbcb90aee13ed967f505b1",
+                "url": "https://api.github.com/repos/symfony/polyfill-php85/zipball/255fab485aaa1006ed411040c42aecd7b5302d7a",
+                "reference": "255fab485aaa1006ed411040c42aecd7b5302d7a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2"
             },
-            "time": "2026-05-26T02:25:22+00:00",
+            "time": "2026-07-01T12:47:55+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -8999,7 +8996,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php85/tree/v1.38.1"
+                "source": "https://github.com/symfony/polyfill-php85/tree/v1.41.0"
             },
             "funding": [
                 {

@@ -18,6 +18,8 @@ use function str_starts_with;
 /**
  * Returns the result of an expression for the first document in an array.
  *
+ * New in MongoDB 4.4
+ *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/first/
  * @internal
  */
@@ -28,9 +30,7 @@ final class FirstOperator implements ResolvesToAny, OperatorInterface
     public const PROPERTIES = ['expression' => 'expression'];
     /** @var BSONArray|PackedArray|ResolvesToArray|array|string $expression */
     public readonly PackedArray|ResolvesToArray|BSONArray|array|string $expression;
-    /**
-     * @param BSONArray|PackedArray|ResolvesToArray|array|string $expression
-     */
+    /** @param BSONArray|PackedArray|ResolvesToArray|array|string $expression */
     public function __construct(PackedArray|ResolvesToArray|BSONArray|array|string $expression)
     {
         if (is_string($expression) && !str_starts_with($expression, '$')) {

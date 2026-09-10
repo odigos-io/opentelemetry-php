@@ -121,8 +121,7 @@ class Connection implements ConnectionInterface
      * Creates read and write drivers.
      *
      * @param array<string, mixed> $config Connection config
-     * @return array<string, \Cake\Database\Driver>
-     * @phpstan-return array{read: \Cake\Database\Driver, write: \Cake\Database\Driver}
+     * @return array{read: \Cake\Database\Driver, write: \Cake\Database\Driver}
      */
     protected function createDrivers(array $config): array
     {
@@ -140,7 +139,7 @@ class Connection implements ConnectionInterface
         if ($driverClass === null) {
             throw new MissingDriverException(['driver' => $driver, 'connection' => $this->configName()]);
         }
-        $sharedConfig = array_diff_key($config, array_flip(['name', 'className', 'driver', 'cacheMetaData', 'cacheKeyPrefix', 'read', 'write']));
+        $sharedConfig = array_diff_key($config, array_flip(['className', 'driver', 'cacheMetaData', 'cacheKeyPrefix', 'read', 'write']));
         $writeConfig = ($config['write'] ?? []) + $sharedConfig;
         $readConfig = ($config['read'] ?? []) + $sharedConfig;
         if (array_key_exists('write', $config) || array_key_exists('read', $config)) {

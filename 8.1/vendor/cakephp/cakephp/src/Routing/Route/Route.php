@@ -20,6 +20,7 @@ use Odigos\Cake\Core\Exception\CakeException;
 use Odigos\Cake\Http\Exception\BadRequestException;
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
+use function Odigos\Cake\Routing\urldecodeSegments;
 /**
  * A single Route used by the Router to connect requests to
  * parameter maps.
@@ -405,8 +406,8 @@ class Route
         $compiledRoute = $this->compile();
         [$url, $ext] = $this->_parseExtension($url);
         $urldecode = $this->options['_urldecode'] ?? \true;
-        if ($urldecode) {
-            $url = urldecode($url);
+        if ($urldecode && str_contains($url, '%')) {
+            $url = urldecodeSegments($url);
         }
         if (!preg_match($compiledRoute, $url, $route)) {
             return null;

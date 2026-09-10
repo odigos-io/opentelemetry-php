@@ -187,7 +187,6 @@ class HasMany extends Association
                 $entity = clone $entity;
             }
             if ($foreignKeyReference !== $entity->extract($foreignKey)) {
-                // @phpstan-ignore function.alreadyNarrowedType (patch method available on EntityInterface)
                 if (method_exists($entity, 'patch')) {
                     $entity->patch($foreignKeyReference, ['guard' => \false]);
                 } else {
@@ -309,9 +308,9 @@ class HasMany extends Association
      *   If boolean it will be used a value for "cleanProperty" option.
      * @throws \InvalidArgumentException if non persisted entities are passed or if
      * any of them is lacking a primary key value
-     * @return void
+     * @return bool
      */
-    public function unlink(EntityInterface $sourceEntity, array $targetEntities, array|bool $options = []): void
+    public function unlink(EntityInterface $sourceEntity, array $targetEntities, array|bool $options = []): bool
     {
         if (is_bool($options)) {
             $options = ['cleanProperty' => $options];
@@ -319,7 +318,7 @@ class HasMany extends Association
             $options += ['cleanProperty' => \true];
         }
         if ($targetEntities === []) {
-            return;
+            return \true;
         }
         $foreignKey = (array) $this->getForeignKey();
         $target = $this->getTarget();
@@ -329,7 +328,10 @@ class HasMany extends Association
             /** @var array<string> $targetPrimaryKey */
             return $entity->extract($targetPrimaryKey);
         })->toList()];
-        $this->_unlink($foreignKey, $target, $conditions, $options);
+        $return = $this->_unlink($foreignKey, $target, $conditions, $options);
+        if (!$return) {
+            return \false;
+        }
         $result = $sourceEntity->get($property);
         if ($options['cleanProperty'] && $result !== null) {
             $sourceEntity->set($property, (new Collection($sourceEntity->get($property)))->reject(function ($assoc) use ($targetEntities) {
@@ -337,6 +339,7 @@ class HasMany extends Association
             })->toList());
         }
         $sourceEntity->setDirty($property, \false);
+        return \true;
     }
     /**
      * Replaces existing association links between the source entity and the target
@@ -449,12 +452,13 @@ class HasMany extends Association
                         }
                     }
                 });
+                /** @var \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface> $query */
                 $query = $this->find()->where($conditions);
-                $ok = \true;
-                foreach ($query->all() as $assoc) {
-                    $ok = $ok && $target->delete($assoc, $options);
+                $return = $target->deleteMany($query->all(), $options);
+                if ($return === \false) {
+                    return \false;
                 }
-                return $ok;
+                return \true;
             }
             $this->deleteAll($conditions);
             return \true;

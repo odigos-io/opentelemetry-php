@@ -27,6 +27,8 @@ use Odigos\Cake\Routing\Router;
  *
  * Redirection is signaled by an exception that halts route matching and
  * defines the redirect URL and status code.
+ *
+ * @require-extends \Cake\Routing\Route\Route
  */
 trait RedirectTrait
 {

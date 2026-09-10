@@ -18,6 +18,7 @@
 namespace Odigos\MongoDB\Model;
 
 use MongoDB\BSON\Serializable;
+use Odigos\MongoDB\Collection;
 use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function is_string;
@@ -29,13 +30,14 @@ use function Odigos\MongoDB\is_document;
  *
  * @internal
  * @see \MongoDB\Collection::createSearchIndexes()
- * @see https://github.com/mongodb/specifications/blob/master/source/index-management/index-management.rst#search-indexes
+ * @see https://github.com/mongodb/specifications/blob/master/source/index-management/index-management.md#search-indexes
  * @see https://mongodb.com/docs/manual/reference/method/db.collection.createSearchIndex/
+ * @psalm-import-type SearchIndexSpecShape from Collection
  */
 final class SearchIndexInput implements Serializable
 {
     /**
-     * @param array{definition: array|object, name?: string, type?: string} $index Search index specification
+     * @param SearchIndexSpecShape $index Search index specification
      * @throws InvalidArgumentException
      */
     public function __construct(private array $index)

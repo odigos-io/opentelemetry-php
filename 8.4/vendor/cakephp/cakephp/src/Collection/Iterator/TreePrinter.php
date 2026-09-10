@@ -24,10 +24,14 @@ use RecursiveIteratorIterator;
  * Iterator for flattening elements in a tree structure while adding some
  * visual markers for their relative position in the tree
  *
- * @template-extends \RecursiveIteratorIterator<\RecursiveIterator>
+ * @template TKey
+ * @template TValue
+ * @template-extends \RecursiveIteratorIterator<\RecursiveIterator<TKey, TValue>>
+ * @implements \Cake\Collection\CollectionInterface<TKey, string>
  */
 class TreePrinter extends RecursiveIteratorIterator implements CollectionInterface
 {
+    /** @use \Cake\Collection\CollectionTrait<TKey, string> */
     use CollectionTrait;
     /**
      * A callable to generate the iteration key
@@ -63,8 +67,7 @@ class TreePrinter extends RecursiveIteratorIterator implements CollectionInterfa
      * callable returning the key value.
      * @param string $spacer The string to use for prefixing the values according to
      * their depth in the tree.
-     * @param int $mode Iterator mode.
-     * @phpstan-param \RecursiveIteratorIterator::LEAVES_ONLY|\RecursiveIteratorIterator::SELF_FIRST|\RecursiveIteratorIterator::CHILD_FIRST $mode
+     * @param \RecursiveIteratorIterator::LEAVES_ONLY|\RecursiveIteratorIterator::SELF_FIRST|\RecursiveIteratorIterator::CHILD_FIRST $mode Iterator mode.
      */
     public function __construct(RecursiveIterator $items, callable|string $valuePath, callable|string $keyPath, string $spacer, int $mode = RecursiveIteratorIterator::SELF_FIRST)
     {

@@ -109,7 +109,7 @@ class TableSchema implements TableSchemaInterface, SqlGeneratorInterface
      *
      * @var array<string, array<string, mixed>>
      */
-    protected static array $_columnExtras = ['string' => ['collate' => null], 'char' => ['collate' => null], 'text' => ['collate' => null], 'tinyinteger' => ['unsigned' => null, 'autoIncrement' => null], 'smallinteger' => ['unsigned' => null, 'autoIncrement' => null], 'integer' => ['unsigned' => null, 'autoIncrement' => null, 'generated' => null], 'biginteger' => ['unsigned' => null, 'autoIncrement' => null, 'generated' => null], 'decimal' => ['unsigned' => null], 'float' => ['unsigned' => null], 'geometry' => ['srid' => null], 'point' => ['srid' => null], 'linestring' => ['srid' => null], 'polygon' => ['srid' => null], 'datetime' => ['onUpdate' => null], 'datetimefractional' => ['onUpdate' => null], 'timestamp' => ['onUpdate' => null], 'timestampfractional' => ['onUpdate' => null], 'timestamptimezone' => ['onUpdate' => null]];
+    protected static array $_columnExtras = ['string' => ['collate' => null], 'char' => ['collate' => null], 'text' => ['collate' => null], 'uuid' => ['collate' => null], 'tinyinteger' => ['unsigned' => null, 'autoIncrement' => null], 'smallinteger' => ['unsigned' => null, 'autoIncrement' => null], 'integer' => ['unsigned' => null, 'autoIncrement' => null, 'generated' => null], 'biginteger' => ['unsigned' => null, 'autoIncrement' => null, 'generated' => null], 'decimal' => ['unsigned' => null], 'float' => ['unsigned' => null], 'geometry' => ['srid' => null], 'point' => ['srid' => null], 'linestring' => ['srid' => null], 'polygon' => ['srid' => null], 'datetime' => ['onUpdate' => null], 'datetimefractional' => ['onUpdate' => null], 'timestamp' => ['onUpdate' => null], 'timestampfractional' => ['onUpdate' => null], 'timestamptimezone' => ['onUpdate' => null], 'binary' => ['fixed' => null]];
     /**
      * The valid keys that can be used in an index
      * definition.
@@ -248,6 +248,14 @@ class TableSchema implements TableSchemaInterface, SqlGeneratorInterface
             }
             $attrs[$key] = $value;
         }
+        // Cast numeric values that may come as floats from database drivers.
+        // PHP 8.4 is stricter about implicit float-to-int conversions.
+        // Known to affect SQLite on Windows x86.
+        foreach (['length', 'precision', 'srid'] as $key) {
+            if (isset($attrs[$key])) {
+                $attrs[$key] = (int) $attrs[$key];
+            }
+        }
         $column = new Column(...$attrs);
         $this->_columns[$name] = $column;
         $this->_typeMap[$name] = $column->getType();
@@ -282,16 +290,12 @@ class TableSchema implements TableSchemaInterface, SqlGeneratorInterface
         if (isset(static::$_columnExtras[$attrs['type']])) {
             $expected += static::$_columnExtras[$attrs['type']];
         }
-        // Remove any attributes that weren't in the allow list.
-        // This is to provide backwards compatible keys
-        $remove = array_diff(array_keys($attrs), array_keys($expected));
-        foreach ($remove as $key) {
-            unset($attrs[$key]);
-        }
         if (isset($attrs['baseType']) && $attrs['baseType'] === $attrs['type']) {
             unset($attrs['baseType']);
         }
-        return $attrs;
+        // Remove any attributes that weren't in the allow list.
+        // This is to provide backwards compatible keys
+        return array_intersect_key($attrs, $expected);
     }
     /**
      * Get a column object for a given column name.

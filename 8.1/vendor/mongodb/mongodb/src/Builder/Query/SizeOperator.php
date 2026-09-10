@@ -22,9 +22,7 @@ final class SizeOperator implements FieldQueryInterface, OperatorInterface
     public const PROPERTIES = ['value' => 'value'];
     /** @var int $value */
     public readonly int $value;
-    /**
-     * @param int $value
-     */
+    /** @param int $value */
     public function __construct(int $value)
     {
         $this->value = $value;

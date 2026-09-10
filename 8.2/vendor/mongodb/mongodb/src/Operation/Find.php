@@ -33,6 +33,7 @@ use function is_array;
 use function is_bool;
 use function is_integer;
 use function is_string;
+use function Odigos\MongoDB\create_namespace;
 use function Odigos\MongoDB\is_document;
 /**
  * Operation for the find command.
@@ -46,6 +47,7 @@ final class Find implements Explainable
     public const NON_TAILABLE = 1;
     public const TAILABLE = 2;
     public const TAILABLE_AWAIT = 3;
+    private string $namespace;
     /**
      * Constructs a find command.
      *
@@ -127,8 +129,9 @@ final class Find implements Explainable
      * @param array        $options        Command options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function __construct(private string $databaseName, private string $collectionName, private array|object $filter, private array $options = [])
+    public function __construct(string $databaseName, private string $collectionName, private array|object $filter, private array $options = [])
     {
+        $this->namespace = create_namespace($databaseName, $collectionName);
         if (!is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
@@ -225,7 +228,7 @@ final class Find implements Explainable
         if ($inTransaction && isset($this->options['readConcern'])) {
             throw UnsupportedException::readConcernNotSupportedInTransaction();
         }
-        $cursor = $server->executeQuery($this->databaseName . '.' . $this->collectionName, new Query($this->filter, $this->createQueryOptions()), $this->createExecuteOptions());
+        $cursor = $server->executeQuery($this->namespace, new Query($this->filter, $this->createQueryOptions()), $this->createExecuteOptions());
         if (isset($this->options['codec'])) {
             return CodecCursor::fromCursor($cursor, $this->options['codec']);
         }

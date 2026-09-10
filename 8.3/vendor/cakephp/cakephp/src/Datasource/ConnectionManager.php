@@ -48,8 +48,7 @@ class ConnectionManager
     /**
      * An array mapping url schemes to fully qualified driver class names
      *
-     * @var array<string, string>
-     * @phpstan-var array<string, class-string>
+     * @var array<string, class-string>
      */
     protected static array $_dsnClassMap = ['mysql' => Mysql::class, 'postgres' => Postgres::class, 'sqlite' => Sqlite::class, 'sqlserver' => Sqlserver::class];
     /**
@@ -67,7 +66,7 @@ class ConnectionManager
      * @param \Cake\Datasource\ConnectionInterface|\Closure|array<string, mixed>|null $config An array of name => config data for adapter.
      * @return void
      * @throws \Cake\Core\Exception\CakeException When trying to modify an existing config.
-     * @see \Cake\Core\StaticConfigTrait::config()
+     * @see \Cake\Core\StaticConfigTrait::setConfig()
      */
     public static function setConfig(array|string $key, ConnectionInterface|Closure|array|null $config = null): void
     {

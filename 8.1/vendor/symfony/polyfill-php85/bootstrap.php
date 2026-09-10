@@ -48,6 +48,12 @@ if (\PHP_VERSION_ID >= 80000) {
     require __DIR__ . '/bootstrap80.php';
     return;
 }
+if (!\class_exists('ValueError', \false)) {
+    class ValueError extends \Error
+    {
+    }
+    \class_alias('Odigos\ValueError', 'ValueError', \false);
+}
 if (\extension_loaded('intl') && (!\function_exists('grapheme_levenshtein') && !\function_exists('Odigos\grapheme_levenshtein'))) {
     function grapheme_levenshtein(string $string1, string $string2, int $insertion_cost = 1, int $replacement_cost = 1, int $deletion_cost = 1, string $locale = '')
     {

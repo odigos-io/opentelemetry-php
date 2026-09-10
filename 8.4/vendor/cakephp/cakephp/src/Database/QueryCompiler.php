@@ -33,7 +33,7 @@ class QueryCompiler
      *
      * @var array<string, string>
      */
-    protected array $_templates = ['delete' => 'DELETE', 'where' => ' WHERE %s', 'group' => ' GROUP BY %s ', 'having' => ' HAVING %s ', 'order' => ' %s', 'limit' => ' LIMIT %s', 'offset' => ' OFFSET %s', 'epilog' => ' %s', 'comment' => '/* %s */ '];
+    protected array $_templates = ['delete' => 'DELETE', 'where' => ' WHERE %s', 'group' => ' GROUP BY %s', 'having' => ' HAVING %s', 'order' => ' %s', 'limit' => ' LIMIT %s', 'offset' => ' OFFSET %s', 'epilog' => ' %s', 'comment' => '/* %s */ '];
     /**
      * The list of query clauses to traverse for generating a SELECT statement
      *

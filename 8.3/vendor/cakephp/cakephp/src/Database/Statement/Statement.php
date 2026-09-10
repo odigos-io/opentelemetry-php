@@ -80,13 +80,12 @@ class Statement implements StatementInterface
         $this->performBind($column, $value, $type);
     }
     /**
-     * Converts a give value to a suitable database value based on type and
+     * Converts a given value to a suitable database value based on type and
      * return relevant internal statement type.
      *
      * @param mixed $value The value to cast.
      * @param \Cake\Database\TypeInterface|string|int $type The type name or type instance to use.
-     * @return array List containing converted value and internal type.
-     * @phpstan-return array{0:mixed, 1:int}
+     * @return array{0:mixed, 1:int} List containing converted value and internal type.
      */
     protected function cast(mixed $value, TypeInterface|string|int $type = 'string'): array
     {

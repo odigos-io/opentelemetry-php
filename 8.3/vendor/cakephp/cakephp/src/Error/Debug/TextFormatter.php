@@ -40,7 +40,7 @@ class TextFormatter implements FormatterInterface
 
 TEXT;
         $lineInfo = '';
-        if (isset($location['file'], $location['file'])) {
+        if (isset($location['file'], $location['line'])) {
             $lineInfo = sprintf('%s (line %s)', $location['file'], $location['line']);
         }
         return sprintf($template, $lineInfo, $contents);

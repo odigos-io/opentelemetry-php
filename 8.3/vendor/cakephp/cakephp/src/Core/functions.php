@@ -132,9 +132,8 @@ if (!function_exists('Odigos\Cake\Core\pluginSplit')) {
      * @param string $name The name you want to plugin split.
      * @param bool $dotAppend Set to true if you want the plugin to have a '.' appended to it.
      * @param string|null $plugin Optional default plugin to use if no plugin is found. Defaults to null.
-     * @return array Array with 2 indexes. 0 => plugin name, 1 => class name.
-     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#pluginSplit
-     * @phpstan-return array{string|null, string}
+     * @return array{0: string|null, 1: string} Array with 2 indexes. 0 => plugin name, 1 => class name.
+     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#pluginsplit
      */
     function pluginSplit(string $name, bool $dotAppend = \false, ?string $plugin = null): array
     {
@@ -143,7 +142,7 @@ if (!function_exists('Odigos\Cake\Core\pluginSplit')) {
             if ($dotAppend) {
                 $parts[0] .= '.';
             }
-            /** @phpstan-var array{string, string} */
+            /** @var array{string, string} */
             return $parts;
         }
         return [$plugin, $name];
@@ -224,7 +223,7 @@ if (!function_exists('Odigos\Cake\Core\env')) {
      * environment information.
      *
      * @param string $key Environment variable name.
-     * @param string|bool|null $default Specify a default value in case the environment variable is not defined.
+     * @param string|float|int|bool|null $default Specify a default value in case the environment variable is not defined.
      * @return string|float|int|bool|null Environment variable setting.
      * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#env
      */

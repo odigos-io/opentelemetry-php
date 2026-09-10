@@ -28,6 +28,7 @@ use function Odigos\Cake\Core\h;
  *
  * @property \Cake\View\Helper\UrlHelper $Url
  * @link https://book.cakephp.org/5/en/views/helpers/html.html
+ * @extends \Cake\View\Helper<\Cake\View\View>
  */
 class HtmlHelper extends Helper
 {
@@ -155,7 +156,7 @@ class HtmlHelper extends Helper
         if (!$charset) {
             $charset = strtolower((string) Configure::read('App.encoding'));
         }
-        return $this->formatTemplate('charset', ['charset' => !empty($charset) ? $charset : 'utf-8']);
+        return $this->formatTemplate('charset', ['charset' => $charset ?: 'utf-8']);
     }
     /**
      * Creates an HTML link.
@@ -234,7 +235,7 @@ class HtmlHelper extends Helper
      * @param array<string, mixed> $options Array of options and HTML attributes.
      * @return string An `<a>` element.
      * @see \Cake\Routing\Router::pathUrl()
-     * @link https://book.cakephp.org/5/en/views/helpers/html.html#creating-links
+     * @link https://book.cakephp.org/5/en/views/helpers/html.html#creating-links-from-route-paths
      */
     public function linkFromPath(string $title, string $path, array $params = [], array $options = []): string
     {
@@ -404,11 +405,10 @@ class HtmlHelper extends Helper
     /**
      * Generate the "importmap" script tag.
      *
-     * @param array $map Map array.
+     * @param array{imports?: array<string, string>, scopes?: array<string, array<string, array<string, string>>>, integrity?: array<string, string>} $map Map array.
      * @param array<string, mixed> $options Same options as `UrlHelper::script()`.
      * @return string
      * @since 5.2.0
-     * @phpstan-param array{imports?: array<string, string>, scopes?: array<string, array<string, array<string, string>>>, integrity?: array<string, string>} $map
      */
     public function importmap(array $map, array $options = []): string
     {
@@ -856,6 +856,7 @@ class HtmlHelper extends Helper
      *  Or an array where each item itself can be a path string or an associate array containing keys `src` and `type`
      * @param array<string, mixed> $options Array of HTML attributes, and special options above.
      * @return string Generated media element
+     * @link https://book.cakephp.org/5/en/views/helpers/html.html#linking-to-videos-and-audio-files
      */
     public function media(array|string|null $path, array $options = []): string
     {

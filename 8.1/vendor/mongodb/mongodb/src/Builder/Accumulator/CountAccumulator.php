@@ -13,7 +13,8 @@ use Odigos\MongoDB\Builder\Type\WindowInterface;
 /**
  * Returns the number of documents in the group or window.
  * Distinct from the $count pipeline stage.
- * New in MongoDB 5.0.
+ *
+ * New in MongoDB 5.0
  *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/count-accumulator/
  * @internal

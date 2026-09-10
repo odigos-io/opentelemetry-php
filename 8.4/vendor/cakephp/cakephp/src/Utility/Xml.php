@@ -235,7 +235,6 @@ class Xml
      */
     public static function fromArray(object|array $input, array $options = []): SimpleXMLElement|DOMDocument
     {
-        // @phpstan-ignore function.alreadyNarrowedType (is_callable check for visibility)
         if (is_object($input) && method_exists($input, 'toArray') && is_callable([$input, 'toArray'])) {
             $input = $input->toArray();
         }
@@ -288,7 +287,6 @@ class Xml
         }
         foreach ($data as $key => $value) {
             if (is_string($key)) {
-                // @phpstan-ignore function.alreadyNarrowedType (is_callable check for visibility)
                 if (is_object($value) && method_exists($value, 'toArray') && is_callable([$value, 'toArray'])) {
                     $value = $value->toArray();
                 }
@@ -353,9 +351,8 @@ class Xml
     /**
      * Helper to _fromArray(). It will create children of arrays
      *
-     * @param array<string, mixed> $data Array with information to create children
+     * @param array{dom: \DOMDocument, node: \DOMNode, key: string, format: string, value?: mixed} $data Array with information to create children
      * @return void
-     * @phpstan-param array{dom: \DOMDocument, node: \DOMNode, key: string, format: string, value?: mixed} $data
      */
     protected static function _createChild(array $data): void
     {
@@ -367,7 +364,6 @@ class Xml
         $node = $data['node'];
         $childNS = null;
         $childValue = null;
-        // @phpstan-ignore function.alreadyNarrowedType (is_callable check for visibility)
         if (is_object($value) && method_exists($value, 'toArray') && is_callable([$value, 'toArray'])) {
             $value = $value->toArray();
         }

@@ -58,22 +58,22 @@
         'cakephp/cache' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.3.1',
+                0 => '5.3.7',
             ),
         ),
         'cakephp/cakephp' => array(
-            'pretty_version' => '5.3.1',
-            'version' => '5.3.1.0',
-            'reference' => 'ae91c0950fd1a4ee9b97b31a8db744721cdb9bd0',
+            'pretty_version' => '5.3.7',
+            'version' => '5.3.7.0',
+            'reference' => 'c0d21e0da4216d51268691af3ad803f0eecb3a11',
             'type' => 'library',
             'install_path' => __DIR__ . '/../cakephp/cakephp',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
         'cakephp/chronos' => array(
-            'pretty_version' => '3.3.1',
-            'version' => '3.3.1.0',
-            'reference' => '1e417fdd4a3c6602b6c4634cf54aa9b065127fa2',
+            'pretty_version' => '3.5.1',
+            'version' => '3.5.1.0',
+            'reference' => '00c16f165a762226d58f9cf88f43e54e41093f84',
             'type' => 'library',
             'install_path' => __DIR__ . '/../cakephp/chronos',
             'aliases' => array(),
@@ -82,79 +82,79 @@
         'cakephp/collection' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.3.1',
+                0 => '5.3.7',
             ),
         ),
         'cakephp/console' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.3.1',
+                0 => '5.3.7',
             ),
         ),
         'cakephp/core' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.3.1',
+                0 => '5.3.7',
             ),
         ),
         'cakephp/database' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.3.1',
+                0 => '5.3.7',
             ),
         ),
         'cakephp/datasource' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.3.1',
+                0 => '5.3.7',
             ),
         ),
         'cakephp/event' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.3.1',
+                0 => '5.3.7',
             ),
         ),
         'cakephp/form' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.3.1',
+                0 => '5.3.7',
             ),
         ),
         'cakephp/http' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.3.1',
+                0 => '5.3.7',
             ),
         ),
         'cakephp/i18n' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.3.1',
+                0 => '5.3.7',
             ),
         ),
         'cakephp/log' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.3.1',
+                0 => '5.3.7',
             ),
         ),
         'cakephp/orm' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.3.1',
+                0 => '5.3.7',
             ),
         ),
         'cakephp/utility' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.3.1',
+                0 => '5.3.7',
             ),
         ),
         'cakephp/validation' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.3.1',
+                0 => '5.3.7',
             ),
         ),
         'carbonphp/carbon-doctrine-types' => array(
@@ -176,9 +176,9 @@
             'dev_requirement' => false,
         ),
         'composer/ca-bundle' => array(
-            'pretty_version' => '1.5.10',
-            'version' => '1.5.10.0',
-            'reference' => '961a5e4056dd2e4a2eedcac7576075947c28bf63',
+            'pretty_version' => '1.5.14',
+            'version' => '1.5.14.0',
+            'reference' => '0c8abba0634f637bd78c4e451981da368d403463',
             'type' => 'library',
             'install_path' => __DIR__ . '/./ca-bundle',
             'aliases' => array(),
@@ -590,9 +590,9 @@
             'dev_requirement' => false,
         ),
         'league/commonmark' => array(
-            'pretty_version' => '2.9.2',
-            'version' => '2.9.2.0',
-            'reference' => '72e9a87efcf41a8e83be3ed0866b69d77565cb12',
+            'pretty_version' => '2.10.1',
+            'version' => '2.10.1.0',
+            'reference' => '9d489ab67a02960fd8ffe624d93f751daf95439e',
             'type' => 'library',
             'install_path' => __DIR__ . '/../league/commonmark',
             'aliases' => array(),
@@ -608,9 +608,9 @@
             'dev_requirement' => false,
         ),
         'league/container' => array(
-            'pretty_version' => '5.1.0',
-            'version' => '5.1.0.0',
-            'reference' => '041c52d266763887fff2256fb5dc9392d808f8f3',
+            'pretty_version' => '5.2.0',
+            'version' => '5.2.0.0',
+            'reference' => '58accbc032f0090a9bd08326f93062c5a658b2c5',
             'type' => 'library',
             'install_path' => __DIR__ . '/../league/container',
             'aliases' => array(),
@@ -668,9 +668,9 @@
             ),
         ),
         'mongodb/mongodb' => array(
-            'pretty_version' => '2.1.2',
-            'version' => '2.1.2.0',
-            'reference' => '0a2472ba9cbb932f7e43a8770aedb2fc30612a67',
+            'pretty_version' => '2.4.1',
+            'version' => '2.4.1.0',
+            'reference' => 'b72cc2ecf4a11d3871f78a119a8f3cc7ab6d6c29',
             'type' => 'library',
             'install_path' => __DIR__ . '/../mongodb/mongodb',
             'aliases' => array(),
@@ -701,9 +701,9 @@
             'dev_requirement' => false,
         ),
         'nette/schema' => array(
-            'pretty_version' => 'v1.3.5',
-            'version' => '1.3.5.0',
-            'reference' => 'f0ab1a3cda782dbc5da270d28545236aa80c4002',
+            'pretty_version' => 'v1.3.6',
+            'version' => '1.3.6.0',
+            'reference' => 'c54350438cd6914616f790a49cb424605f421562',
             'type' => 'library',
             'install_path' => __DIR__ . '/../nette/schema',
             'aliases' => array(),
@@ -1516,9 +1516,9 @@
             'dev_requirement' => false,
         ),
         'symfony/polyfill-php85' => array(
-            'pretty_version' => 'v1.38.1',
-            'version' => '1.38.1.0',
-            'reference' => 'ba2ba04f3352cfa2dcbbcb90aee13ed967f505b1',
+            'pretty_version' => 'v1.41.0',
+            'version' => '1.41.0.0',
+            'reference' => '255fab485aaa1006ed411040c42aecd7b5302d7a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-php85',
             'aliases' => array(),

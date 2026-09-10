@@ -19,8 +19,10 @@ namespace Odigos\MongoDB\Operation;
 
 use MongoDB\Driver\Command;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
+use MongoDB\Driver\Exception\ServerException;
 use MongoDB\Driver\Server;
 use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\SearchNotSupportedException;
 use Odigos\MongoDB\Exception\UnsupportedException;
 use function Odigos\MongoDB\is_document;
 /**
@@ -64,6 +66,13 @@ final class UpdateSearchIndex
         if (isset($this->options['comment'])) {
             $cmd['comment'] = $this->options['comment'];
         }
-        $server->executeCommand($this->databaseName, new Command($cmd));
+        try {
+            $server->executeCommand($this->databaseName, new Command($cmd));
+        } catch (ServerException $e) {
+            if (SearchNotSupportedException::isSearchNotSupportedError($e)) {
+                throw SearchNotSupportedException::create($e);
+            }
+            throw $e;
+        }
     }
 }

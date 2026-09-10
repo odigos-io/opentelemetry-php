@@ -120,10 +120,7 @@ class RouteCollection
         $uri = $request->getUri();
         $urlPath = $uri->getPath();
         if (str_contains($urlPath, '%')) {
-            // decode urlencoded segments, but don't decode %2f aka /
-            $parts = explode('/', $urlPath);
-            $parts = array_map(fn(string $part) => str_replace('/', '%2f', urldecode($part)), $parts);
-            $urlPath = implode('/', $parts);
+            $urlPath = urldecodeSegments($urlPath);
         }
         if ($urlPath !== '/') {
             $urlPath = rtrim($urlPath, '/');
@@ -221,7 +218,13 @@ class RouteCollection
                 if ($out) {
                     return $out;
                 }
-                throw new MissingRouteException(['url' => $name, 'context' => $context, 'message' => "A named route was found for `{$name}`, but matching failed."]);
+                $message = sprintf('A named route was found for `%s`, but matching failed. Passed parameters: `%s`.', $name, (string) json_encode($url));
+                throw new MissingRouteException([
+                    'url' => $name,
+                    'context' => $context,
+                    // Escape `%` so the message survives CakeException's vsprintf() pass unchanged.
+                    'message' => str_replace('%', '%%', $message),
+                ]);
             }
             throw new MissingRouteException(['url' => $name, 'context' => $context]);
         }

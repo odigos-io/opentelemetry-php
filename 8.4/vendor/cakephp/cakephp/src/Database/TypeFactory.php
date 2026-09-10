@@ -26,8 +26,7 @@ class TypeFactory
      * identifier is used as key and a complete namespaced class name as value
      * representing the class that will do actual type conversions.
      *
-     * @var array<string, string>
-     * @phpstan-var array<string, class-string<\Cake\Database\TypeInterface>>
+     * @var array<string, class-string<\Cake\Database\TypeInterface>>
      */
     protected static array $_types = ['biginteger' => Type\IntegerType::class, 'binary' => Type\BinaryType::class, 'binaryuuid' => Type\BinaryUuidType::class, 'boolean' => Type\BoolType::class, 'char' => Type\StringType::class, 'cidr' => Type\StringType::class, 'citext' => Type\StringType::class, 'date' => Type\DateType::class, 'datetime' => Type\DateTimeType::class, 'datetimefractional' => Type\DateTimeFractionalType::class, 'decimal' => Type\DecimalType::class, 'float' => Type\FloatType::class, 'geometry' => Type\StringType::class, 'integer' => Type\IntegerType::class, 'inet' => Type\StringType::class, 'json' => Type\JsonType::class, 'linestring' => Type\StringType::class, 'macaddr' => Type\StringType::class, 'nativeuuid' => Type\UuidType::class, 'point' => Type\StringType::class, 'polygon' => Type\StringType::class, 'smallinteger' => Type\IntegerType::class, 'string' => Type\StringType::class, 'text' => Type\StringType::class, 'time' => Type\TimeType::class, 'timestamp' => Type\DateTimeType::class, 'timestampfractional' => Type\DateTimeFractionalType::class, 'timestamptimezone' => Type\DateTimeTimezoneType::class, 'tinyinteger' => Type\IntegerType::class, 'uuid' => Type\UuidType::class, 'year' => Type\IntegerType::class];
     /**
@@ -79,9 +78,8 @@ class TypeFactory
      * Registers a new type identifier and maps it to a fully namespaced classname.
      *
      * @param string $type Name of type to map.
-     * @param string $className The classname to register.
+     * @param class-string<\Cake\Database\TypeInterface> $className The classname to register.
      * @return void
-     * @phpstan-param class-string<\Cake\Database\TypeInterface> $className
      */
     public static function map(string $type, string $className): void
     {
@@ -91,9 +89,8 @@ class TypeFactory
     /**
      * Set type to classname mapping.
      *
-     * @param array<string, string> $map List of types to be mapped.
+     * @param array<string, class-string<\Cake\Database\TypeInterface>> $map List of types to be mapped.
      * @return void
-     * @phpstan-param array<string, class-string<\Cake\Database\TypeInterface>> $map
      */
     public static function setMap(array $map): void
     {
@@ -121,8 +118,7 @@ class TypeFactory
      * Get mapped class name for a specific type.
      *
      * @param string $type Type name to get mapped class for.
-     * @return string|null Configured class name for given $type or null if not found.
-     * @phpstan-return class-string<\Cake\Database\TypeInterface>|null
+     * @return class-string<\Cake\Database\TypeInterface>|null Configured class name for given $type or null if not found.
      */
     public static function getMapped(string $type): ?string
     {

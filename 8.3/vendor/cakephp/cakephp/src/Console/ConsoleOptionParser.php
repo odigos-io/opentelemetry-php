@@ -40,7 +40,7 @@ use LogicException;
  * only be one letter long. Using more than one letter for a short option will raise an exception.
  *
  * Calling options can be done using syntax similar to most *nix command line tools. Long options
- * cane either include an `=` or leave it out.
+ * can either include an `=` or leave it out.
  *
  * `cake my_command --connection default --name=something`
  *
@@ -77,14 +77,14 @@ class ConsoleOptionParser
     /**
      * Description text - displays before options when help is generated
      *
-     * @see \Cake\Console\ConsoleOptionParser::description()
+     * @see \Cake\Console\ConsoleOptionParser::setDescription()
      * @var string
      */
     protected string $_description = '';
     /**
      * Epilog text - displays after options when help is generated
      *
-     * @see \Cake\Console\ConsoleOptionParser::epilog()
+     * @see \Cake\Console\ConsoleOptionParser::setEpilog()
      * @var string
      */
     protected string $_epilog = '';
@@ -646,7 +646,7 @@ class ConsoleOptionParser
         $option = $this->_options[$name];
         $isBoolean = $option->isBoolean();
         $nextValue = $this->_nextToken();
-        $emptyNextValue = empty($nextValue) && $nextValue !== '0';
+        $emptyNextValue = !$nextValue && $nextValue !== '0';
         if (!$isBoolean && !$emptyNextValue && !$this->_optionExists($nextValue)) {
             array_shift($this->_tokens);
             $value = $nextValue;
@@ -701,7 +701,7 @@ class ConsoleOptionParser
         $next = count($args);
         if (!isset($this->_args[$next])) {
             $expected = count($this->_args);
-            throw new ConsoleException(sprintf('Received too many arguments. Got `%s` but only `%s` arguments are defined.', $next, $expected));
+            throw new ConsoleException(sprintf('Received too many arguments. Got `%s` (or more) but only `%s` arguments are defined.', $next + 1, $expected));
         }
         $arg = $this->_args[$next];
         $arg->validChoice($argument);

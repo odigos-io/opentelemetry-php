@@ -12,7 +12,6 @@ use Odigos\MongoDB\Builder\Type\OperatorInterface;
 use Odigos\MongoDB\Builder\Type\Optional;
 /**
  * Applies a regular expression (regex) to a string and returns information on the first matched substring.
- * New in MongoDB 4.2.
  *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/regexFind/
  * @internal

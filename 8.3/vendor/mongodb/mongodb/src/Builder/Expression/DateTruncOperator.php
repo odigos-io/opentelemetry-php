@@ -22,6 +22,8 @@ use function str_starts_with;
 /**
  * Truncates a date.
  *
+ * New in MongoDB 5.1
+ *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/dateTrunc/
  * @internal
  */

@@ -28,9 +28,7 @@ final class BitsAnyClearOperator implements FieldQueryInterface, OperatorInterfa
     public const PROPERTIES = ['bitmask' => 'bitmask'];
     /** @var BSONArray|Binary|PackedArray|array|int|string $bitmask */
     public readonly Binary|PackedArray|BSONArray|array|int|string $bitmask;
-    /**
-     * @param BSONArray|Binary|PackedArray|array|int|string $bitmask
-     */
+    /** @param BSONArray|Binary|PackedArray|array|int|string $bitmask */
     public function __construct(Binary|PackedArray|BSONArray|array|int|string $bitmask)
     {
         if (is_array($bitmask) && !array_is_list($bitmask)) {

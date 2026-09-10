@@ -36,6 +36,8 @@ use Odigos\PHPUnit\Framework\Attributes\After;
  *
  * Enables you to call commands/shells with a
  * full application context.
+ *
+ * @require-extends \Cake\TestSuite\TestCase
  */
 trait ConsoleIntegrationTestTrait
 {

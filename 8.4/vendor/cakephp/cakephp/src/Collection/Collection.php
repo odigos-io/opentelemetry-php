@@ -30,6 +30,7 @@ use SplFixedArray;
  */
 class Collection extends IteratorIterator implements CollectionInterface
 {
+    /** @use \Cake\Collection\CollectionTrait<TKey, TValue> */
     use CollectionTrait;
     /**
      * Whether or not the items in this collection are an array.
@@ -52,7 +53,7 @@ class Collection extends IteratorIterator implements CollectionInterface
         parent::__construct($items);
     }
     /**
-     * Returns an array for serializing this of this object.
+     * Returns an array for serializing this object.
      *
      * @return array
      */

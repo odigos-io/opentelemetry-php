@@ -10,9 +10,9 @@ use MongoDB\BSON\Document;
 use MongoDB\BSON\Serializable;
 use MongoDB\BSON\Timestamp;
 use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\InputStageInterface;
 use Odigos\MongoDB\Builder\Type\OperatorInterface;
 use Odigos\MongoDB\Builder\Type\Optional;
-use Odigos\MongoDB\Builder\Type\StageInterface;
 use stdClass;
 /**
  * Returns a Change Stream cursor for the collection or database. This stage can only occur once in an aggregation pipeline and it must occur as the first stage.
@@ -20,7 +20,7 @@ use stdClass;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/changeStream/
  * @internal
  */
-final class ChangeStreamStage implements StageInterface, OperatorInterface
+final class ChangeStreamStage implements InputStageInterface, OperatorInterface
 {
     public const ENCODE = Encode::Object;
     public const NAME = '$changeStream';
@@ -35,7 +35,8 @@ final class ChangeStreamStage implements StageInterface, OperatorInterface
     public readonly Optional|int $resumeAfter;
     /**
      * @var Optional|bool $showExpandedEvents Specifies whether to include additional change events, such as such as DDL and index operations.
-     * New in MongoDB 6.0.
+     *
+     * New in MongoDB 6.0
      */
     public readonly Optional|bool $showExpandedEvents;
     /** @var Optional|Document|Serializable|array|stdClass $startAfter Specifies a resume token as the logical starting point for the change stream. Cannot be used with resumeAfter or startAtOperationTime fields. */
@@ -48,7 +49,8 @@ final class ChangeStreamStage implements StageInterface, OperatorInterface
      * @param Optional|string $fullDocumentBeforeChange Valid values are "off", "whenAvailable", or "required". If set to "off", the "fullDocumentBeforeChange" field of the output document is always omitted. If set to "whenAvailable", the "fullDocumentBeforeChange" field will be populated with the pre-image of the document modified by the current change event if such a pre-image is available, and will be omitted otherwise. If set to "required", then the "fullDocumentBeforeChange" field is always populated and an exception is thrown if the pre-image is not              available.
      * @param Optional|int $resumeAfter Specifies a resume token as the logical starting point for the change stream. Cannot be used with startAfter or startAtOperationTime fields.
      * @param Optional|bool $showExpandedEvents Specifies whether to include additional change events, such as such as DDL and index operations.
-     * New in MongoDB 6.0.
+     *
+     * New in MongoDB 6.0
      * @param Optional|Document|Serializable|array|stdClass $startAfter Specifies a resume token as the logical starting point for the change stream. Cannot be used with resumeAfter or startAtOperationTime fields.
      * @param Optional|Timestamp|int $startAtOperationTime Specifies a time as the logical starting point for the change stream. Cannot be used with resumeAfter or startAfter fields.
      */

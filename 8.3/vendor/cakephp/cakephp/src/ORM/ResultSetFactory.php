@@ -23,7 +23,7 @@ use Odigos\Cake\ORM\Query\SelectQuery;
 use InvalidArgumentException;
 use SplFixedArray;
 /**
- * Factory class for generating ResulSet instances.
+ * Factory class for generating ResultSet instances.
  *
  * It is responsible for correctly nesting result keys reported from the query
  * and hydrating entities.
@@ -33,15 +33,15 @@ use SplFixedArray;
 class ResultSetFactory
 {
     /**
-     * @var class-string<\Cake\Datasource\ResultSetInterface>
+     * @var class-string<\Cake\Datasource\ResultSetInterface<array-key, mixed>>
      */
     protected string $resultSetClass = ResultSet::class;
     /**
      * Create a result set instance.
      *
      * @param iterable $results Results.
-     * @param \Cake\ORM\Query\SelectQuery<T>|null $query Query from where results came.
-     * @return \Cake\Datasource\ResultSetInterface
+     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array>|null $query Query from where results came.
+     * @return \Cake\Datasource\ResultSetInterface<array-key, mixed>
      */
     public function createResultSet(iterable $results, ?SelectQuery $query = null): ResultSetInterface
     {
@@ -61,10 +61,10 @@ class ResultSetFactory
         return new $this->resultSetClass($results);
     }
     /**
-     * Get repository and it's associations data for nesting results key and
+     * Get repository and its associations data for nesting results key and
      * entity hydration.
      *
-     * @param \Cake\ORM\Query\SelectQuery $query The query from where to derive the data.
+     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array> $query The query from where to derive the data.
      * @return array{primaryAlias: string, registryAlias: string, entityClass: class-string<\Cake\Datasource\EntityInterface>, hydrate: bool, autoFields: bool|null, matchingColumns: array, dtoClass: class-string|null, matchingAssoc: array, containAssoc: array, fields: array}
      */
     protected function collectData(SelectQuery $query): array
@@ -196,6 +196,13 @@ class ResultSetFactory
      */
     protected ?DtoMapper $dtoMapper = null;
     /**
+     * Cached DTO hydrator callables by class name.
+     * Avoids method_exists() check on every row.
+     *
+     * @var array<class-string, callable(array): object>
+     */
+    protected static array $dtoHydrators = [];
+    /**
      * Hydrate a row into a DTO.
      *
      * Supports two patterns:
@@ -208,12 +215,45 @@ class ResultSetFactory
      */
     public function hydrateDto(array $row, string $dtoClass): object
     {
-        // Check for array style static factory method
-        if (method_exists($dtoClass, 'createFromArray')) {
-            return $dtoClass::createFromArray($row, \true);
+        return $this->getDtoHydrator($dtoClass)($row);
+    }
+    /**
+     * Get a cached hydrator callable for a DTO class.
+     *
+     * The hydrator is determined once per class and cached to avoid
+     * method_exists() checks on every row.
+     *
+     * @param class-string $dtoClass DTO class name
+     * @return callable(array): object
+     */
+    public function getDtoHydrator(string $dtoClass): callable
+    {
+        if (!isset(static::$dtoHydrators[$dtoClass])) {
+            // Check for array style static factory method (cakephp-dto style)
+            if (method_exists($dtoClass, 'createFromArray')) {
+                static::$dtoHydrators[$dtoClass] = static function (array $row) use ($dtoClass): object {
+                    return $dtoClass::createFromArray($row, \true);
+                };
+            } else {
+                // Use DtoMapper for plain readonly DTOs with named constructor params
+                $mapper = $this->getDtoMapper();
+                static::$dtoHydrators[$dtoClass] = static function (array $row) use ($mapper, $dtoClass): object {
+                    return $mapper->map($row, $dtoClass);
+                };
+            }
         }
-        // Use DtoMapper for plain readonly DTOs with named constructor params
-        return $this->getDtoMapper()->map($row, $dtoClass);
+        return static::$dtoHydrators[$dtoClass];
+    }
+    /**
+     * Clear the DTO hydrator cache.
+     *
+     * Useful for testing or when classes are reloaded.
+     *
+     * @return void
+     */
+    public static function clearDtoHydratorCache(): void
+    {
+        static::$dtoHydrators = [];
     }
     /**
      * Get or create the DtoMapper instance.
@@ -222,20 +262,17 @@ class ResultSetFactory
      */
     public function getDtoMapper(): DtoMapper
     {
-        if ($this->dtoMapper === null) {
-            $this->dtoMapper = new DtoMapper();
-        }
-        return $this->dtoMapper;
+        return $this->dtoMapper ??= new DtoMapper();
     }
     /**
      * Set the ResultSet class to use.
      *
-     * @param class-string<\Cake\Datasource\ResultSetInterface> $resultSetClass Class name.
+     * @param class-string<\Cake\Datasource\ResultSetInterface<array-key, mixed>> $resultSetClass Class name.
      * @return $this
      */
     public function setResultSetClass(string $resultSetClass)
     {
-        if (!is_a($resultSetClass, ResultSetInterface::class, \true)) {
+        if (!is_subclass_of($resultSetClass, ResultSetInterface::class)) {
             throw new InvalidArgumentException(sprintf('Invalid ResultSet class `%s`. It must implement `%s`', $resultSetClass, ResultSetInterface::class));
         }
         $this->resultSetClass = $resultSetClass;
@@ -244,7 +281,7 @@ class ResultSetFactory
     /**
      * Get the ResultSet class to use.
      *
-     * @return class-string<\Cake\Datasource\ResultSetInterface>
+     * @return class-string<\Cake\Datasource\ResultSetInterface<array-key, mixed>>
      */
     public function getResultSetClass(): string
     {

@@ -378,7 +378,7 @@ class BelongsToMany extends Association
      * - fields: a list of fields in the target table to include in the result
      * - type: The type of join to be used (e.g. INNER)
      *
-     * @param \Cake\ORM\Query\SelectQuery $query the query to be altered to include the target table data
+     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array> $query the query to be altered to include the target table data
      * @param array<string, mixed> $options Any extra options or overrides to be taken in account
      * @return void
      */
@@ -407,7 +407,9 @@ class BelongsToMany extends Association
         $conditions->add($assoc->_joinCondition(['foreignKey' => $foreignKey]));
     }
     /**
-     * @inheritDoc
+     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array> $query The query to append to.
+     * @param array<string, mixed> $options The options for not matching.
+     * @return void
      */
     protected function _appendNotMatching(SelectQuery $query, array $options): void
     {
@@ -421,7 +423,7 @@ class BelongsToMany extends Association
         $subquery = $this->find()->select(array_values($conds))->where($options['conditions']);
         if (!empty($options['queryBuilder'])) {
             assert(is_callable($options['queryBuilder']));
-            /** @var \Cake\ORM\Query\SelectQuery $subquery */
+            /** @var \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array> $subquery */
             $subquery = $options['queryBuilder']($subquery);
         }
         $subquery = $this->_appendJunctionJoin($subquery);
@@ -487,7 +489,8 @@ class BelongsToMany extends Association
         $table = $this->junction();
         $hasMany = $this->getSource()->getAssociation($table->getAlias());
         if ($this->_cascadeCallbacks) {
-            foreach ($hasMany->find('all')->where($conditions)->all()->toList() as $related) {
+            /** @var \Cake\Datasource\EntityInterface $related */
+            foreach ($hasMany->find('all')->where($conditions)->toArray() as $related) {
                 $success = $table->delete($related, $options);
                 if (!$success) {
                     return \false;
@@ -779,12 +782,11 @@ class BelongsToMany extends Association
         }
         $this->_checkPersistenceStatus($sourceEntity, $targetEntities);
         $property = $this->getProperty();
-        $this->junction()->getConnection()->transactional(function () use ($sourceEntity, $targetEntities, $options): void {
-            $links = $this->_collectJointEntities($sourceEntity, $targetEntities);
-            foreach ($links as $entity) {
-                $this->_junctionTable->delete($entity, $options);
-            }
-        });
+        $links = $this->_collectJointEntities($sourceEntity, $targetEntities);
+        $return = $this->_junctionTable->deleteMany($links, $options);
+        if ($return === \false) {
+            return \false;
+        }
         /** @var array<\Cake\Datasource\EntityInterface> $existing */
         $existing = $sourceEntity->get($property) ?: [];
         if (!$options['cleanProperty'] || empty($existing)) {
@@ -907,7 +909,7 @@ class BelongsToMany extends Association
      *   it will be interpreted as the `$options` parameter
      * @param mixed ...$args Arguments that match up to finder-specific parameters
      * @see \Cake\ORM\Table::find()
-     * @return \Cake\ORM\Query\SelectQuery
+     * @return \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array>
      */
     public function find(array|string|null $type = null, mixed ...$args): SelectQuery
     {
@@ -923,9 +925,9 @@ class BelongsToMany extends Association
     /**
      * Append a join to the junction table.
      *
-     * @param \Cake\ORM\Query\SelectQuery $query The query to append.
+     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array> $query The query to append.
      * @param array|null $conditions The query conditions to use.
-     * @return \Cake\ORM\Query\SelectQuery The modified query.
+     * @return \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array> The modified query.
      */
     protected function _appendJunctionJoin(SelectQuery $query, ?array $conditions = null): SelectQuery
     {
@@ -1021,6 +1023,7 @@ class BelongsToMany extends Association
             $matches = $this->_appendJunctionJoin($this->find())->select($keys)->where(array_combine($prefixedForeignKey, $primaryValue));
             // Create a subquery join to ensure we get
             // the correct entity passed to callbacks.
+            /** @var \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array> $existing */
             $existing = $junction->selectQuery()->from([$junctionQueryAlias => $matches])->innerJoin([$junction->getAlias() => $junction->getTable()], $matchesConditions);
             $jointEntities = $this->_collectJointEntities($sourceEntity, $targetEntities);
             $inserts = $this->_diffLinks($existing, $jointEntities, $targetEntities, $options);
@@ -1046,7 +1049,7 @@ class BelongsToMany extends Association
      * `$existing` and `$jointEntities`. This method will return the values from
      * `$targetEntities` that were not deleted from calculating the difference.
      *
-     * @param \Cake\ORM\Query\SelectQuery $existing a query for getting existing links
+     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array> $existing a query for getting existing links
      * @param array<\Cake\Datasource\EntityInterface> $jointEntities link entities that should be persisted
      * @param array $targetEntities entities in target table that are related to
      * the `$jointEntities`
@@ -1196,7 +1199,9 @@ class BelongsToMany extends Association
         $sourceKey = $sourceEntity->extract((array) $source->getPrimaryKey());
         $unions = [];
         foreach ($missing as $key) {
-            $unions[] = $hasMany->find()->where(array_combine($foreignKey, $sourceKey))->where(array_combine($assocForeignKey, $key));
+            /** @var \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface> $unionQuery */
+            $unionQuery = $hasMany->find()->where(array_combine($foreignKey, $sourceKey))->where(array_combine($assocForeignKey, $key));
+            $unions[] = $unionQuery;
         }
         $query = array_shift($unions);
         foreach ($unions as $q) {

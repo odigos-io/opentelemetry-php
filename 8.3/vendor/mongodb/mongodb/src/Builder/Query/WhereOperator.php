@@ -24,9 +24,7 @@ final class WhereOperator implements QueryInterface, OperatorInterface
     public const PROPERTIES = ['function' => 'function'];
     /** @var Javascript|string $function */
     public readonly Javascript|string $function;
-    /**
-     * @param Javascript|string $function
-     */
+    /** @param Javascript|string $function */
     public function __construct(Javascript|string $function)
     {
         if (is_string($function)) {

@@ -60,7 +60,7 @@ class HtmlFormatter implements FormatterInterface
     public function formatWrapper(string $contents, array $location): string
     {
         $lineInfo = '';
-        if (isset($location['file'], $location['file'])) {
+        if (isset($location['file'], $location['line'])) {
             $lineInfo = sprintf('<span><strong>%s</strong> (line <strong>%s</strong>)</span>', $location['file'], $location['line']);
         }
         $parts = ['<div class="cake-debug-output cake-debug" style="direction:ltr">', $lineInfo, $contents, '</div>'];

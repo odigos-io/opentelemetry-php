@@ -189,7 +189,7 @@ class NumericPaginator implements PaginatorInterface
      *   to paginate.
      * @param array $params Request params
      * @param array $settings The settings/configuration used for pagination.
-     * @return \Cake\Datasource\Paging\PaginatedInterface
+     * @return \Cake\Datasource\Paging\PaginatedInterface<int, mixed>
      * @throws \Cake\Datasource\Paging\Exception\PageOutOfBoundsException
      */
     public function paginate(mixed $target, array $params = [], array $settings = []): PaginatedInterface
@@ -218,9 +218,9 @@ class NumericPaginator implements PaginatorInterface
     /**
      * Build paginated result set.
      *
-     * @param \Cake\Datasource\ResultSetInterface $items
+     * @param \Cake\Datasource\ResultSetInterface<int, mixed> $items
      * @param array $pagingParams
-     * @return \Cake\Datasource\Paging\PaginatedInterface
+     * @return \Cake\Datasource\Paging\PaginatedInterface<int, mixed>
      */
     protected function buildPaginated(ResultSetInterface $items, array $pagingParams): PaginatedInterface
     {
@@ -257,7 +257,7 @@ class NumericPaginator implements PaginatorInterface
      *
      * @param \Cake\Datasource\QueryInterface $query Query to fetch items.
      * @param array $data Paging data.
-     * @return \Cake\Datasource\ResultSetInterface
+     * @return \Cake\Datasource\ResultSetInterface<int, mixed>
      */
     protected function getItems(QueryInterface $query, array $data): ResultSetInterface
     {
@@ -312,7 +312,7 @@ class NumericPaginator implements PaginatorInterface
         $this->addStartEndParams($data);
         $this->addPrevNextParams($data);
         $this->addSortingParams($data);
-        $this->pagingParams['limit'] = $data['defaults']['limit'] != $data['options']['limit'] ? $data['options']['limit'] : null;
+        $this->pagingParams['limit'] = (int) $data['defaults']['limit'] !== (int) $data['options']['limit'] ? $data['options']['limit'] : null;
         // Add sortableFields configuration for view helpers
         if (isset($data['options']['sortableFields'])) {
             $sortableFields = $data['options']['sortableFields'];
@@ -416,7 +416,7 @@ class NumericPaginator implements PaginatorInterface
     {
         if (!empty($settings['scope'])) {
             $scope = $settings['scope'];
-            $params = !empty($params[$scope]) ? (array) $params[$scope] : [];
+            $params = (array) ($params[$scope] ?? []);
         }
         $params = array_intersect_key($params, array_flip($this->getConfig('allowedParameters')));
         return array_merge($settings, $params);
@@ -499,9 +499,19 @@ class NumericPaginator implements PaginatorInterface
                 }
                 // Merge with existing order - existing order comes AFTER our resolved order
                 $existingOrder = isset($options['order']) && is_array($options['order']) ? $options['order'] : [];
+                $modelAlias = $object->getAlias();
                 // Only keep fields from existing order that aren't already in our resolved order
+                // Account for prefixed vs unprefixed field names (e.g., 'modified' vs 'Alerts.modified')
                 foreach ($existingOrder as $field => $dir) {
-                    if (!isset($order[$field])) {
+                    // Check if this field (or its unprefixed version) is already in $order
+                    $alreadyInOrder = isset($order[$field]);
+                    if (!$alreadyInOrder && str_contains($field, '.')) {
+                        [$alias, $fieldName] = explode('.', $field, 2);
+                        if ($alias === $modelAlias && isset($order[$fieldName])) {
+                            $alreadyInOrder = \true;
+                        }
+                    }
+                    if (!$alreadyInOrder) {
                         $order[$field] = $dir;
                     }
                 }

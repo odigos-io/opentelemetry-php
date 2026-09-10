@@ -33,7 +33,7 @@ use function Odigos\Cake\Core\deprecationWarning;
 /**
  * This class is used to generate SELECT queries for the relational database.
  *
- * @template T of mixed
+ * @template-covariant T of mixed
  * @implements \IteratorAggregate<T>
  */
 class SelectQuery extends Query implements IteratorAggregate
@@ -125,9 +125,9 @@ class SelectQuery extends Query implements IteratorAggregate
      * })
      * ```
      *
-     * By default no fields are selected, if you have an instance of `Cake\ORM\Query` and try to append
-     * fields you should also call `Cake\ORM\Query::enableAutoFields()` to select the default fields
-     * from the table.
+     * By default no fields are selected, if you have an instance of `Cake\ORM\Query\SelectQuery` and try to
+     * append fields you should also call `Cake\ORM\Query\SelectQuery::enableAutoFields()` to select the
+     * default fields from the table.
      *
      * @param \Cake\Database\ExpressionInterface|\Closure|array|string|float|int $fields fields to be added to the list.
      * @param bool $overwrite whether to reset fields with passed list or not

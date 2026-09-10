@@ -178,7 +178,7 @@ class PostgresSchemaDialect extends SchemaDialect
         if (str_contains($col, 'json')) {
             return ['type' => TableSchemaInterface::TYPE_JSON, 'length' => null];
         }
-        if (in_array($col, ['geometry', 'geography'])) {
+        if (in_array($col, ['geometry', 'geography'], \true)) {
             return ['type' => $col, 'length' => null];
         }
         $length = is_numeric($length) ? $length : null;
@@ -696,8 +696,9 @@ class PostgresSchemaDialect extends SchemaDialect
         $index = $schema->index($name);
         $columns = array_map($this->_driver->quoteIdentifier(...), (array) $index->getColumns());
         $include = '';
-        if ($index->getInclude()) {
-            $included = array_map($this->_driver->quoteIdentifier(...), $index->getInclude());
+        $includes = $index->getInclude();
+        if ($includes) {
+            $included = array_map($this->_driver->quoteIdentifier(...), $includes);
             $include = sprintf(' INCLUDE (%s)', implode(', ', $included));
         }
         return sprintf('CREATE INDEX %s ON %s (%s)%s', $this->_driver->quoteIdentifier($name), $this->_driver->quoteIdentifier($schema->name()), implode(', ', $columns), $include);

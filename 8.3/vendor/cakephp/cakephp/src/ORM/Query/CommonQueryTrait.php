@@ -20,6 +20,8 @@ use Odigos\Cake\Datasource\RepositoryInterface;
 use Odigos\Cake\ORM\Table;
 /**
  * Trait with common methods used by all ORM query classes.
+ *
+ * @require-extends \Cake\Database\Query
  */
 trait CommonQueryTrait
 {

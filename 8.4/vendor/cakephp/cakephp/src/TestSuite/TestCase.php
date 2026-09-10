@@ -160,7 +160,7 @@ abstract class TestCase extends BaseTestCase
         /** @var bool $deprecation Expand type for psalm */
         $deprecation = \false;
         $previousHandler = set_error_handler(function ($code, $message, $file, $line, $context = null) use (&$previousHandler, &$deprecation, $type): bool {
-            if ($code == $type) {
+            if ($code === $type) {
                 $deprecation = \true;
                 return \true;
             }
@@ -190,7 +190,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::assertPostConditions();
         if (class_exists(Mockery::class)) {
-            // @phpstan-ignore method.internal
+            // @phpstan-ignore method.internal, argument.type
             $this->addToAssertionCount(Mockery::getContainer()->mockery_getExpectationCount());
         }
     }
@@ -306,7 +306,7 @@ abstract class TestCase extends BaseTestCase
      * elements in CakePHP or applications.
      *
      * @param array $plugins List of Plugins to load.
-     * @return \Cake\Http\BaseApplication
+     * @return \Cake\Http\BaseApplication<\Cake\Http\BaseApplication>
      */
     public function loadPlugins(array $plugins = []): BaseApplication
     {
@@ -492,11 +492,10 @@ abstract class TestCase extends BaseTestCase
      * Asserts that a string starts with a given prefix, ignoring differences in newlines.
      * Helpful for doing cross platform tests of blocks of text.
      *
-     * @param string $prefix The prefix to check for.
+     * @param non-empty-string $prefix The prefix to check for.
      * @param string $string The string to search in.
      * @param string $message The message to use for failure.
      * @return void
-     * @phpstan-param non-empty-string $prefix
      */
     public function assertTextStartsWith(string $prefix, string $string, string $message = ''): void
     {
@@ -509,11 +508,10 @@ abstract class TestCase extends BaseTestCase
      * Asserts that a string starts not with a given prefix, ignoring differences in newlines.
      * Helpful for doing cross platform tests of blocks of text.
      *
-     * @param string $prefix The prefix to not find.
+     * @param non-empty-string $prefix The prefix to not find.
      * @param string $string The string to search.
      * @param string $message The message to use for failure.
      * @return void
-     * @phpstan-param non-empty-string $prefix
      */
     public function assertTextStartsNotWith(string $prefix, string $string, string $message = ''): void
     {
@@ -526,11 +524,10 @@ abstract class TestCase extends BaseTestCase
      * Asserts that a string ends with a given prefix, ignoring differences in newlines.
      * Helpful for doing cross platform tests of blocks of text.
      *
-     * @param string $suffix The suffix to find.
+     * @param non-empty-string $suffix The suffix to find.
      * @param string $string The string to search.
      * @param string $message The message to use for failure.
      * @return void
-     * @phpstan-param non-empty-string $suffix
      */
     public function assertTextEndsWith(string $suffix, string $string, string $message = ''): void
     {
@@ -543,11 +540,10 @@ abstract class TestCase extends BaseTestCase
      * Asserts that a string ends not with a given prefix, ignoring differences in newlines.
      * Helpful for doing cross platform tests of blocks of text.
      *
-     * @param string $suffix The suffix to not find.
+     * @param non-empty-string $suffix The suffix to not find.
      * @param string $string The string to search.
      * @param string $message The message to use for failure.
      * @return void
-     * @phpstan-param non-empty-string $suffix
      */
     public function assertTextEndsNotWith(string $suffix, string $string, string $message = ''): void
     {

@@ -176,7 +176,7 @@ class WebExceptionRenderer implements ExceptionRendererInterface
      */
     protected function clearOutput(): void
     {
-        if (in_array(\PHP_SAPI, ['cli', 'phpdbg'])) {
+        if (in_array(\PHP_SAPI, ['cli', 'phpdbg'], \true)) {
             return;
         }
         while (ob_get_level()) {

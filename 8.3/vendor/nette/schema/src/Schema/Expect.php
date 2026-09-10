@@ -37,20 +37,32 @@ final class Expect
         }
         return $type;
     }
+    /**
+     * Creates a schema for a custom type expression (e.g., 'int|string', 'null|float').
+     */
     public static function type(string $type): Type
     {
         return new Type($type);
     }
+    /**
+     * Creates a union schema that accepts any of the given values or sub-schemas.
+     */
     public static function anyOf(mixed ...$set): AnyOf
     {
         return new AnyOf(...$set);
     }
-    /** @param Schema[]  $shape */
+    /**
+     * Creates a structure schema with defined properties; output is stdClass.
+     * @param  Schema[]  $shape
+     */
     public static function structure(array $shape): Structure
     {
         return new Structure($shape);
     }
-    /** @param  array<string, Schema>  $items */
+    /**
+     * Generates a structure schema from a class instance by reflecting its properties or constructor parameters.
+     * @param  array<string, Schema>  $items  Optional overrides for specific properties.
+     */
     public static function from(object $object, array $items = []): Structure
     {
         $ro = new \ReflectionObject($object);
@@ -78,6 +90,8 @@ final class Expect
         return (new Structure($items))->castTo($ro->getName());
     }
     /**
+     * Creates an array schema. When passed Schema elements, behaves like structure() but outputs an array.
+     * Without Schema elements, creates a plain array type with the given default value.
      * @param  mixed[]  $shape
      */
     public static function array(?array $shape = []): Structure|Type
@@ -85,10 +99,16 @@ final class Expect
         $shape ??= [];
         return Nette\Utils\Arrays::first($shape) instanceof Schema ? (new Structure($shape))->castTo('array') : (new Type('array'))->default($shape);
     }
+    /**
+     * Creates an associative or indexed array schema where every value matches the given type.
+     */
     public static function arrayOf(string|Schema $valueType, string|Schema|null $keyType = null): Type
     {
         return (new Type('array'))->items($valueType, $keyType);
     }
+    /**
+     * Creates a list schema (sequentially indexed from 0) where every element matches the given type.
+     */
     public static function listOf(string|Schema $type): Type
     {
         return (new Type('list'))->items($type);

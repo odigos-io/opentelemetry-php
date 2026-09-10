@@ -306,7 +306,7 @@ final class Watch implements CommandSubscriber
     /**
      * Return the initial resume token for creating the ChangeStreamIterator.
      *
-     * @see https://github.com/mongodb/specifications/blob/master/source/change-streams/change-streams.rst#updating-the-cached-resume-token
+     * @see https://github.com/mongodb/specifications/blob/master/source/change-streams/change-streams.md#updating-the-cached-resume-token
      */
     private function getInitialResumeToken(): array|object|null
     {
@@ -324,7 +324,7 @@ final class Watch implements CommandSubscriber
     /**
      * Resumes a change stream.
      *
-     * @see https://github.com/mongodb/specifications/blob/master/source/change-streams/change-streams.rst#resume-process
+     * @see https://github.com/mongodb/specifications/blob/master/source/change-streams/change-streams.md#resume-process
      * @throws InvalidArgumentException
      */
     private function resume(array|object|null $resumeToken = null, bool $hasAdvanced = \false): ChangeStreamIterator
@@ -352,7 +352,7 @@ final class Watch implements CommandSubscriber
     /**
      * Determine whether to capture operation time from an aggregate response.
      *
-     * @see https://github.com/mongodb/specifications/blob/master/source/change-streams/change-streams.rst#startatoperationtime
+     * @see https://github.com/mongodb/specifications/blob/master/source/change-streams/change-streams.md#startatoperationtime
      */
     private function shouldCaptureOperationTime(): bool
     {

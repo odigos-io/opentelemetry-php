@@ -70,8 +70,7 @@ use function Odigos\Cake\Core\pluginSplit;
  * @property \Cake\View\Helper\TimeHelper $Time
  * @property \Cake\View\Helper\UrlHelper $Url
  * @property \Cake\View\ViewBlock $Blocks
- * @template TSubject of \Cake\View\View
- * @implements \Cake\Event\EventDispatcherInterface<TSubject>
+ * @implements \Cake\Event\EventDispatcherInterface<static>
  */
 class View implements EventDispatcherInterface
 {
@@ -79,7 +78,7 @@ class View implements EventDispatcherInterface
         cell as public;
     }
     /**
-     * @use \Cake\Event\EventDispatcherTrait<TSubject>
+     * @use \Cake\Event\EventDispatcherTrait<static>
      */
     use EventDispatcherTrait;
     use InstanceConfigTrait;
@@ -255,8 +254,7 @@ class View implements EventDispatcherInterface
     /**
      * ViewBlock class.
      *
-     * @var string
-     * @phpstan-var class-string<\Cake\View\ViewBlock>
+     * @var class-string<\Cake\View\ViewBlock>
      */
     protected string $_viewBlockClass = ViewBlock::class;
     /**
@@ -572,7 +570,7 @@ class View implements EventDispatcherInterface
      *   or `MyPlugin.template` to use the template element from MyPlugin. If the element
      *   is not found in the plugin, the normal view path cascade will be searched.
      * @param array $data Array of data to be made available to the rendered view (i.e. the Element)
-     * @param array<string, mixed> $options Array of options. Possible keys are:
+     * @param array{cache?:array|true, callbacks?:bool, plugin?:string|false, ignoreMissing?:bool} $options Array of options. Possible keys are:
      *
      * - `cache` - Can either be `true`, to enable caching using the config in View::$elementCache. Or an array
      *   If an array, the following keys can be used:
@@ -588,7 +586,6 @@ class View implements EventDispatcherInterface
      * @return string Rendered Element
      * @throws \Cake\View\Exception\MissingElementException When an element is missing and `ignoreMissing`
      *   is false.
-     * @phpstan-param array{cache?:array|true, callbacks?:bool, plugin?:string|false, ignoreMissing?:bool} $options
      */
     public function element(string $name, array $data = [], array $options = []): string
     {
@@ -975,7 +972,7 @@ class View implements EventDispatcherInterface
      * Magic accessor for helpers.
      *
      * @param string $name Name of the attribute to get.
-     * @return \Cake\View\Helper|null
+     * @return \Cake\View\Helper<\Cake\View\View>|null
      */
     public function __get(string $name): ?Helper
     {
@@ -1084,12 +1081,12 @@ class View implements EventDispatcherInterface
      *
      * @param string $name Name of the helper to load.
      * @param array<string, mixed> $config Settings for the helper
-     * @return \Cake\View\Helper a constructed helper object.
+     * @return \Cake\View\Helper<\Cake\View\View> a constructed helper object.
      * @see \Cake\View\HelperRegistry::load()
      */
     public function loadHelper(string $name, array $config = []): Helper
     {
-        /** @var \Cake\View\Helper */
+        /** @var \Cake\View\Helper<\Cake\View\View> */
         return $this->helpers()->load($name, $config);
     }
     /**
@@ -1207,8 +1204,9 @@ class View implements EventDispatcherInterface
         $name .= $this->_ext;
         $paths = $this->_paths($plugin);
         foreach ($paths as $path) {
-            if (is_file($path . $name)) {
-                return $this->_checkFilePath($path . $name, $path);
+            $filepath = $path . $name;
+            if (is_file($filepath)) {
+                return $this->_checkFilePath($filepath, $plugin);
             }
         }
         throw new MissingTemplateException($name, $paths);
@@ -1227,20 +1225,33 @@ class View implements EventDispatcherInterface
      * Check that a view file path does not go outside of the defined template paths.
      *
      * Only paths that contain `..` will be checked, as they are the ones most likely to
-     * have the ability to resolve to files outside of the template paths.
+     * have the ability to resolve to files outside of the template paths. A candidate
+     * that does not exist on the current root (realpath returning false) is passed
+     * through so the path cascade can try the next root.
      *
      * @param string $file The path to the template file.
-     * @param string $path Base path that $file should be inside of.
+     * @param ?string $plugin The plugin name or null. Used to generate template paths.
      * @return string The file path
      * @throws \InvalidArgumentException
      */
-    protected function _checkFilePath(string $file, string $path): string
+    protected function _checkFilePath(string $file, ?string $plugin): string
     {
         if (!str_contains($file, '..')) {
             return $file;
         }
         $absolute = realpath($file);
-        if ($absolute === \false || !str_starts_with($absolute, $path)) {
+        if ($absolute === \false) {
+            // Candidate does not exist on this root; let the path cascade continue.
+            return $file;
+        }
+        $found = \false;
+        foreach ($this->_paths($plugin) as $path) {
+            if (str_starts_with($absolute, $path)) {
+                $found = \true;
+                break;
+            }
+        }
+        if (!$found) {
             throw new InvalidArgumentException(sprintf('Cannot use `%s` as a template, it is not within any view template path.', $file));
         }
         return $absolute;
@@ -1252,8 +1263,7 @@ class View implements EventDispatcherInterface
      *
      * @param string $name The name you want to plugin split.
      * @param bool $fallback If true uses the plugin set in the current Request when parsed plugin is not loaded
-     * @return array Array with 2 indexes. 0 => plugin name, 1 => filename.
-     * @phpstan-return array{string|null, string}
+     * @return array{0:string|null, 1:string} Array with 2 indexes. 0 => plugin name, 1 => filename.
      */
     public function pluginSplit(string $name, bool $fallback = \true): array
     {
@@ -1287,8 +1297,9 @@ class View implements EventDispatcherInterface
         [$plugin, $name] = $this->pluginSplit($name);
         $name .= $this->_ext;
         foreach ($this->getLayoutPaths($plugin) as $path) {
-            if (is_file($path . $name)) {
-                return $this->_checkFilePath($path . $name, $path);
+            $filepath = $path . $name;
+            if (is_file($filepath)) {
+                return $this->_checkFilePath($filepath, $plugin);
             }
         }
         $paths = iterator_to_array($this->getLayoutPaths($plugin));
@@ -1324,9 +1335,11 @@ class View implements EventDispatcherInterface
     {
         [$plugin, $name] = $this->pluginSplit($name, $pluginCheck);
         $name .= $this->_ext;
-        foreach ($this->getElementPaths($plugin) as $path) {
-            if (is_file($path . $name)) {
-                return $path . $name;
+        $paths = iterator_to_array($this->getElementPaths($plugin));
+        foreach ($paths as $path) {
+            $filepath = $path . $name;
+            if (is_file($filepath)) {
+                return $this->_checkFilePath($filepath, $plugin);
             }
         }
         return \false;
@@ -1415,13 +1428,12 @@ class View implements EventDispatcherInterface
      * @param string $name Element name
      * @param array $data Data
      * @param array<string, mixed> $options Element options
-     * @return array<string, mixed> Element Cache configuration.
-     * @phpstan-return array{key:string, config:string}
+     * @return array{key:string, config:string} Element Cache configuration.
      */
     protected function _elementCache(string $name, array $data, array $options): array
     {
         if (isset($options['cache']['key'], $options['cache']['config'])) {
-            /** @phpstan-var array{key:string, config:string} $cache */
+            /** @var array{key:string, config:string} $cache */
             $cache = $options['cache'];
             $cache['key'] = 'element_' . $cache['key'];
             return $cache;

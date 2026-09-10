@@ -54,8 +54,7 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     /**
      * Default strategy class name.
      *
-     * @var string
-     * @phpstan-var class-string<\Cake\ORM\Behavior\Translate\TranslateStrategyInterface>
+     * @var class-string<\Cake\ORM\Behavior\Translate\TranslateStrategyInterface>
      */
     protected static string $defaultStrategyClass = ShadowTableStrategy::class;
     /**
@@ -108,10 +107,9 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     /**
      * Set default strategy class name.
      *
-     * @param string $class Class name.
+     * @param class-string<\Cake\ORM\Behavior\Translate\TranslateStrategyInterface> $class Class name.
      * @return void
      * @since 4.0.0
-     * @phpstan-param class-string<\Cake\ORM\Behavior\Translate\TranslateStrategyInterface> $class
      */
     public static function setDefaultStrategyClass(string $class): void
     {
@@ -120,9 +118,8 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     /**
      * Get default strategy class name.
      *
-     * @return string
+     * @return class-string<\Cake\ORM\Behavior\Translate\TranslateStrategyInterface>
      * @since 4.0.0
-     * @phpstan-return class-string<\Cake\ORM\Behavior\Translate\TranslateStrategyInterface>
      */
     public static function getDefaultStrategyClass(): string
     {
@@ -179,9 +176,9 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
      * This allows `_translations.{locale}.field_name` type naming even for the
      * default locale in forms.
      *
-     * @param \Cake\Event\EventInterface $event
-     * @param \ArrayObject $data
-     * @param \ArrayObject $options
+     * @param \Cake\Event\EventInterface<\Cake\ORM\Table> $event The event that was fired.
+     * @param \ArrayObject<string, mixed> $data The data being marshalled.
+     * @param \ArrayObject<string, mixed> $options The options for marshalling.
      * @return void
      */
     public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options): void
@@ -205,7 +202,7 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
      * of translations by setting `'translations' => false` in the options
      * provided to `Table::newEntity()` or `Table::patchEntity()`.
      *
-     * @param \Cake\ORM\Marshaller $marshaller The marshaler of the table the behavior is attached to.
+     * @param \Cake\ORM\Marshaller<\Cake\Datasource\EntityInterface> $marshaller The marshaler of the table the behavior is attached to.
      * @param array<string, callable> $map The property map being built.
      * @param array<string, mixed> $options The options array used in the marshaling call.
      * @return array<string, callable> A map of `[property => callable]` of additional properties to marshal.
@@ -231,7 +228,7 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
      * globally configured locale.
      * @return $this
      * @see \Cake\ORM\Behavior\TranslateBehavior::getLocale()
-     * @link https://book.cakephp.org/5/en/orm/behaviors/translate.html#retrieving-one-language-without-using-i18n-locale
+     * @link https://book.cakephp.org/5/en/orm/behaviors/translate.html#retrieving-one-language-without-using-i18n-setlocale
      * @link https://book.cakephp.org/5/en/orm/behaviors/translate.html#saving-in-another-language
      */
     public function setLocale(?string $locale)
@@ -285,9 +282,9 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
      * If the `locales` array is not passed, it will bring all translations found
      * for each record.
      *
-     * @param \Cake\ORM\Query\SelectQuery $query The original query to modify
+     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array> $query The original query to modify
      * @param array<string> $locales A list of locales or options with the `locales` key defined
-     * @return \Cake\ORM\Query\SelectQuery
+     * @return \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array>
      */
     public function findTranslations(SelectQuery $query, array $locales = []): SelectQuery
     {

@@ -36,7 +36,7 @@ if (!\function_exists('Odigos\__')) {
      * @param string $singular Text to translate.
      * @param mixed ...$args Array with arguments or multiple arguments in function.
      * @return string The translated text.
-     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#__
+     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#global-functions
      */
     function __(string $singular, mixed ...$args): string
     {
@@ -53,7 +53,7 @@ if (!\function_exists('Odigos\__n')) {
      * @param int $count Count.
      * @param mixed ...$args Array with arguments or multiple arguments in function.
      * @return string Plural form of translated string.
-     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#__n
+     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#n
      */
     function __n(string $singular, string $plural, int $count, mixed ...$args): string
     {
@@ -68,7 +68,7 @@ if (!\function_exists('Odigos\__d')) {
      * @param string $msg String to translate.
      * @param mixed ...$args Array with arguments or multiple arguments in function.
      * @return string Translated string.
-     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#__d
+     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#d
      */
     function __d(string $domain, string $msg, mixed ...$args): string
     {
@@ -87,7 +87,7 @@ if (!\function_exists('Odigos\__dn')) {
      * @param int $count Count.
      * @param mixed ...$args Array with arguments or multiple arguments in function.
      * @return string Plural form of translated string.
-     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#__dn
+     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#dn
      */
     function __dn(string $domain, string $singular, string $plural, int $count, mixed ...$args): string
     {
@@ -104,7 +104,7 @@ if (!\function_exists('Odigos\__x')) {
      * @param string $singular Text to translate.
      * @param mixed ...$args Array with arguments or multiple arguments in function.
      * @return string Translated string.
-     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#__x
+     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#x
      */
     function __x(string $context, string $singular, mixed ...$args): string
     {
@@ -124,7 +124,7 @@ if (!\function_exists('Odigos\__xn')) {
      * @param int $count Count.
      * @param mixed ...$args Array with arguments or multiple arguments in function.
      * @return string Plural form of translated string.
-     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#__xn
+     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#xn
      */
     function __xn(string $context, string $singular, string $plural, int $count, mixed ...$args): string
     {
@@ -142,7 +142,7 @@ if (!\function_exists('Odigos\__dx')) {
      * @param string $msg String to translate.
      * @param mixed ...$args Array with arguments or multiple arguments in function.
      * @return string Translated string.
-     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#__dx
+     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#dx
      */
     function __dx(string $domain, string $context, string $msg, mixed ...$args): string
     {
@@ -163,7 +163,7 @@ if (!\function_exists('Odigos\__dxn')) {
      * @param int $count Count.
      * @param mixed ...$args Array with arguments or multiple arguments in function.
      * @return string Plural form of translated string.
-     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#__dxn
+     * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#dxn
      */
     function __dxn(string $domain, string $context, string $singular, string $plural, int $count, mixed ...$args): string
     {

@@ -20,6 +20,8 @@ use Odigos\Cake\Datasource\EntityInterface;
 /**
  * Contains a translation method aimed to help managing multiple translations
  * for an entity.
+ *
+ * @require-implements \Cake\Datasource\EntityInterface
  */
 trait TranslateTrait
 {

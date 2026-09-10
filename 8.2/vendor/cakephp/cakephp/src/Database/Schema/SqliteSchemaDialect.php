@@ -86,7 +86,7 @@ class SqliteSchemaDialect extends SchemaDialect
         if (str_contains($col, 'decimal')) {
             return ['type' => TableSchemaInterface::TYPE_DECIMAL, 'length' => $length, 'precision' => $precision, 'unsigned' => $unsigned];
         }
-        if (in_array($col, ['float', 'real', 'double'])) {
+        if (in_array($col, ['float', 'real', 'double'], \true)) {
             return ['type' => TableSchemaInterface::TYPE_FLOAT, 'length' => $length, 'precision' => $precision, 'unsigned' => $unsigned];
         }
         if (str_contains($col, 'boolean')) {
@@ -104,17 +104,17 @@ class SqliteSchemaDialect extends SchemaDialect
         if (str_contains($col, 'char')) {
             return ['type' => TableSchemaInterface::TYPE_STRING, 'length' => $length];
         }
-        if (in_array($col, ['blob', 'clob', 'binary', 'varbinary'])) {
+        if (in_array($col, ['blob', 'clob', 'binary', 'varbinary'], \true)) {
             return ['type' => TableSchemaInterface::TYPE_BINARY, 'length' => $length];
         }
         $datetimeTypes = ['date', 'time', 'timestamp', 'timestampfractional', 'timestamptimezone', 'datetime', 'datetimefractional'];
-        if (in_array($col, $datetimeTypes)) {
+        if (in_array($col, $datetimeTypes, \true)) {
             return ['type' => $col, 'length' => null];
         }
         if (Configure::read('ORM.mapJsonTypeForSqlite') === \true && (str_contains($col, TableSchemaInterface::TYPE_JSON) && !str_contains($col, 'jsonb'))) {
             return ['type' => TableSchemaInterface::TYPE_JSON, 'length' => null];
         }
-        if (in_array($col, TableSchemaInterface::GEOSPATIAL_TYPES)) {
+        if (in_array($col, TableSchemaInterface::GEOSPATIAL_TYPES, \true)) {
             // TODO how can srid be preserved? It doesn't come back
             // in the output of show full columns from ...
             return ['type' => $col, 'length' => null];
@@ -307,7 +307,7 @@ class SqliteSchemaDialect extends SchemaDialect
     public function convertIndexDescription(TableSchema $schema, array $row): void
     {
         // Skip auto-indexes created for non-ROWID primary keys.
-        if ($row['origin'] === 'pk') {
+        if (($row['origin'] ?? null) === 'pk') {
             return;
         }
         $sql = sprintf('PRAGMA index_info(%s)', $this->_driver->quoteIdentifier($row['name']));
@@ -317,7 +317,7 @@ class SqliteSchemaDialect extends SchemaDialect
             $columns[] = $column['name'];
         }
         if ($row['unique']) {
-            if ($row['origin'] === 'u') {
+            if (($row['origin'] ?? null) === 'u') {
                 $createTableSql = $this->getCreateTableSql($schema->name());
                 $name = $this->extractIndexName($createTableSql, 'UNIQUE', $columns);
                 if ($name !== null) {
@@ -415,7 +415,7 @@ class SqliteSchemaDialect extends SchemaDialect
             if ($row['unique']) {
                 $indexType = TableSchema::CONSTRAINT_UNIQUE;
             }
-            if ($row['origin'] === 'pk') {
+            if (($row['origin'] ?? null) === 'pk') {
                 $indexType = TableSchema::CONSTRAINT_PRIMARY;
                 $foundPrimary = \true;
             }

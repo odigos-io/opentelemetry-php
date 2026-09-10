@@ -60,7 +60,7 @@ class EnumType extends BaseType
             throw new DatabaseException(sprintf('Unable to use `%s` for type `%s`. %s.', $enumClassName, $name, $e->getMessage()));
         }
         $namedType = $reflectionEnum->getBackingType();
-        if ($namedType == null) {
+        if ($namedType === null) {
             throw new DatabaseException(sprintf('Unable to use enum `%s` for type `%s`, must be a backed enum.', $enumClassName, $name));
         }
         $this->backingType = (string) $namedType;

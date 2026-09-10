@@ -89,7 +89,7 @@ class ControllerFactory implements ControllerFactoryInterface, RequestHandlerInt
             foreach ($constructor->getParameters() as $parameter) {
                 $paramType = $parameter->getType();
                 // TODO: In a future minor release it would be good to start requiring the components parameter
-                if ($parameter->getName() === 'components' && $paramType instanceof ReflectionNamedType && $paramType->getName() == ComponentRegistry::class) {
+                if ($parameter->getName() === 'components' && $paramType instanceof ReflectionNamedType && $paramType->getName() === ComponentRegistry::class) {
                     $hasComponents = \true;
                     break;
                 }

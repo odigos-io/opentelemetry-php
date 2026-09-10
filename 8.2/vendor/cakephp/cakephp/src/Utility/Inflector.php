@@ -197,7 +197,7 @@ class Inflector
             static::$_cache['uninflected'] = '/^(' . implode('|', static::$_uninflected) . ')$/i';
         }
         if (preg_match(static::$_cache['uninflected'], $word, $regs)) {
-            static::$_cache['pluralize'][$word] = $word;
+            static::$_cache['singularize'][$word] = $word;
             return $word;
         }
         foreach (static::$_singular as $rule => $replacement) {

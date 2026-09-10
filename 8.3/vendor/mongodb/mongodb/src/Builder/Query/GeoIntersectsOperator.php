@@ -26,9 +26,7 @@ final class GeoIntersectsOperator implements FieldQueryInterface, OperatorInterf
     public const PROPERTIES = ['geometry' => null];
     /** @var Document|GeometryInterface|Serializable|array|stdClass $geometry */
     public readonly Document|Serializable|GeometryInterface|stdClass|array $geometry;
-    /**
-     * @param Document|GeometryInterface|Serializable|array|stdClass $geometry
-     */
+    /** @param Document|GeometryInterface|Serializable|array|stdClass $geometry */
     public function __construct(Document|Serializable|GeometryInterface|stdClass|array $geometry)
     {
         $this->geometry = $geometry;

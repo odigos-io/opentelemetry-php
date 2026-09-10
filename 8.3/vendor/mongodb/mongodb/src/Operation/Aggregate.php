@@ -21,12 +21,14 @@ use Odigos\MongoDB\Codec\DocumentCodec;
 use MongoDB\Driver\Command;
 use MongoDB\Driver\CursorInterface;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
+use MongoDB\Driver\Exception\ServerException;
 use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
 use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\SearchNotSupportedException;
 use Odigos\MongoDB\Exception\UnexpectedValueException;
 use Odigos\MongoDB\Exception\UnsupportedException;
 use Odigos\MongoDB\Model\CodecCursor;
@@ -202,7 +204,14 @@ final class Aggregate implements Explainable
             }
         }
         $command = new Command($this->createCommandDocument(), $this->createCommandOptions());
-        $cursor = $this->executeCommand($server, $command);
+        try {
+            $cursor = $this->executeCommand($server, $command);
+        } catch (ServerException $exception) {
+            if (SearchNotSupportedException::isSearchNotSupportedError($exception)) {
+                throw SearchNotSupportedException::create($exception);
+            }
+            throw $exception;
+        }
         if (isset($this->options['codec'])) {
             return CodecCursor::fromCursor($cursor, $this->options['codec']);
         }

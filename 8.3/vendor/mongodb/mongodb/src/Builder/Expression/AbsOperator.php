@@ -26,9 +26,7 @@ final class AbsOperator implements ResolvesToNumber, OperatorInterface
     public const PROPERTIES = ['value' => 'value'];
     /** @var Decimal128|Int64|ResolvesToNumber|float|int|string $value */
     public readonly Decimal128|Int64|ResolvesToNumber|float|int|string $value;
-    /**
-     * @param Decimal128|Int64|ResolvesToNumber|float|int|string $value
-     */
+    /** @param Decimal128|Int64|ResolvesToNumber|float|int|string $value */
     public function __construct(Decimal128|Int64|ResolvesToNumber|float|int|string $value)
     {
         if (is_string($value) && !str_starts_with($value, '$')) {

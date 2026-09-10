@@ -159,7 +159,7 @@ class Router
         return static::$_namedExpressions;
     }
     /**
-     * Get the routing parameters for the request is possible.
+     * Get the routing parameters for the request if possible.
      *
      * @param \Cake\Http\ServerRequest $request The request to parse request data from.
      * @return array Parsed elements from URL.
@@ -300,7 +300,7 @@ class Router
      * ### Usage
      *
      * - `Router::url('/posts/edit/1');` Returns the string with the base dir prepended.
-     *   This usage does not use reverser routing.
+     *   This usage does not use reverse routing.
      * - `Router::url(['controller' => 'Posts', 'action' => 'edit']);` Returns a URL
      *   generated through reverse routing.
      * - `Router::url(['_name' => 'custom-name', ...]);` Returns a URL generated
@@ -322,7 +322,7 @@ class Router
      *
      * @param \Psr\Http\Message\UriInterface|array|string|null $url An array specifying any of the following:
      *   'controller', 'action', 'plugin' additionally, you can provide routed
-     *   elements or query string parameters. If string it can be name any valid url
+     *   elements or query string parameters. If string it can be any valid url
      *   string or it can be an UriInterface instance.
      * @param bool $full If true, the full base URL will be prepended to the result.
      *   Default is false.
@@ -426,7 +426,7 @@ class Router
      * @see Router::url()
      * @param array|string|null $url An array specifying any of the following:
      *   'controller', 'action', 'plugin' additionally, you can provide routed
-     *   elements or query string parameters. If string it can be name any valid url
+     *   elements or query string parameters. If string it can be any valid url
      *   string.
      * @param bool $full If true, the full base URL will be prepended to the result.
      *   Default is false.

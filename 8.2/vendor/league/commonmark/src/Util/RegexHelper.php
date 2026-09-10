@@ -57,11 +57,11 @@ final class RegexHelper
     public const PARTIAL_HTMLTAG = '(?:' . self::PARTIAL_OPENTAG . '|' . self::PARTIAL_CLOSETAG . '|' . self::PARTIAL_HTMLCOMMENT . '|' . self::PARTIAL_PROCESSINGINSTRUCTION . '|' . self::PARTIAL_DECLARATION . '|' . self::PARTIAL_CDATA . ')';
     public const PARTIAL_HTMLBLOCKOPEN = '<(?:' . self::PARTIAL_BLOCKTAGNAME . '(?:[\s\/>]|$)' . '|' . '\/' . self::PARTIAL_BLOCKTAGNAME . '(?:[\s>]|$)' . '|' . '[?!])';
     /**
-     * @internal Unanchored so each call site can supply its own anchor ("^" against a detached
-     *           string, "\G" at a cursor position). PARTIAL_LINK_TITLE is composed from this
-     *           and must keep its value, so only this fragment should be used in new code.
+     * Unanchored so each call site can supply its own anchor: "^" against a detached string,
+     * or "\G" at a cursor position (see Cursor::matchInPlace()).
      */
     public const PARTIAL_LINK_TITLE_UNANCHORED = '(?:"(' . self::PARTIAL_ESCAPED_CHAR . '|[^"\x00])*+"' . '|' . '\'(' . self::PARTIAL_ESCAPED_CHAR . '|[^\'\x00])*+\'' . '|' . '\((' . self::PARTIAL_ESCAPED_CHAR . '|[^()\x00])*+\))';
+    /** @deprecated since 2.10; use {@link RegexHelper::PARTIAL_LINK_TITLE_UNANCHORED} with an explicit anchor instead */
     public const PARTIAL_LINK_TITLE = '^' . self::PARTIAL_LINK_TITLE_UNANCHORED;
     public const REGEX_PUNCTUATION = '/^[\p{P}\p{S}]/u';
     public const REGEX_UNSAFE_PROTOCOL = '/^(?:javascript|vbscript|file|data):/i';
@@ -71,12 +71,11 @@ final class RegexHelper
     public const REGEX_UNICODE_WHITESPACE_CHAR = '/^\pZ|\s/u';
     public const REGEX_THEMATIC_BREAK = '/^(?:(?:\*[ \t]*){3,}|(?:_[ \t]*){3,}|(?:-[ \t]*){3,})$/';
     /**
-     * @internal Unanchored so each call site can supply its own anchor ("^" against a detached
-     *           string, "\G" at a cursor position). REGEX_LINK_DESTINATION_BRACES is composed
-     *           from this and must keep its value, so only this fragment should be used in new
-     *           code.
+     * Unanchored so each call site can supply its own anchor: "^" against a detached string,
+     * or "\G" at a cursor position (see Cursor::matchInPlace()).
      */
     public const PARTIAL_LINK_DESTINATION_BRACES = '(?:<(?:[^<>\n\\\\\\x00]|\\\\.)*>)';
+    /** @deprecated since 2.10; use {@link RegexHelper::PARTIAL_LINK_DESTINATION_BRACES} with an explicit anchor instead */
     public const REGEX_LINK_DESTINATION_BRACES = '/^' . self::PARTIAL_LINK_DESTINATION_BRACES . '/';
     /**
      * @psalm-pure

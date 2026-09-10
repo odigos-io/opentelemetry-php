@@ -55,6 +55,7 @@ use function Odigos\Cake\I18n\__d;
  * @property \Cake\View\Helper\HtmlHelper $Html
  * @property \Cake\View\Helper\UrlHelper $Url
  * @link https://book.cakephp.org/5/en/views/helpers/form.html
+ * @extends \Cake\View\Helper<\Cake\View\View>
  */
 class FormHelper extends Helper
 {
@@ -73,7 +74,7 @@ class FormHelper extends Helper
      */
     protected array $_defaultConfig = [
         'idPrefix' => null,
-        // Deprecated option, use templates.errorClass intead.
+        // Deprecated option, use templates.errorClass instead.
         'errorClass' => null,
         'defaultPostLinkBlock' => null,
         'typeMap' => ['string' => 'text', 'text' => 'textarea', 'uuid' => 'string', 'datetime' => 'datetime', 'datetimefractional' => 'datetime', 'timestamp' => 'datetime', 'timestampfractional' => 'datetime', 'timestamptimezone' => 'datetime', 'date' => 'date', 'time' => 'time', 'year' => 'year', 'boolean' => 'checkbox', 'float' => 'number', 'integer' => 'number', 'tinyinteger' => 'number', 'smallinteger' => 'number', 'decimal' => 'number', 'binary' => 'file'],
@@ -327,7 +328,7 @@ class FormHelper extends Helper
      *   array of meta data. You can use `null` to make a context-less form.
      * @param array<string, mixed> $options An array of html attributes and options.
      * @return string An formatted opening FORM tag.
-     * @link https://book.cakephp.org/5/en/views/helpers/form.html#Cake\View\Helper\FormHelper::create
+     * @link https://book.cakephp.org/5/en/views/helpers/form.html#starting-a-form
      */
     public function create(mixed $context = null, array $options = []): string
     {
@@ -1010,7 +1011,7 @@ class FormHelper extends Helper
             case 'radio':
             case 'multicheckbox':
                 $opts = $options['options'];
-                if ($opts == null) {
+                if ($opts === null) {
                     $opts = [];
                 }
                 unset($options['options']);
@@ -1129,7 +1130,7 @@ class FormHelper extends Helper
             $hasLabel = \true;
         } elseif (method_exists($enumClass, 'label')) {
             $hasLabel = \true;
-            deprecationWarning('5.2.0', 'Enums with the `label()` method must implement the `EnumLabelInterface`.');
+            deprecationWarning('5.2.0', sprintf('Enum class `%s` with a `label()` method must implement the `EnumLabelInterface`.', $enumClass));
         } else {
             $hasLabel = \false;
         }
@@ -1840,7 +1841,7 @@ class FormHelper extends Helper
      * @param string $fieldName The field name.
      * @param array<string, mixed> $options Options & attributes for the select elements.
      * @return string Completed year select input
-     * @link https://book.cakephp.org/5/en/views/helpers/form.html#creating-year-inputs
+     * @link https://book.cakephp.org/5/en/views/helpers/form.html#creating-year-controls
      */
     public function year(string $fieldName, array $options = []): string
     {

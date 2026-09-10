@@ -197,12 +197,12 @@ class CounterCacheBehavior extends Behavior
             $config = [$assocName => $config[$assocName]];
         }
         foreach ($config as $assoc => $settings) {
-            /** @var \Cake\ORM\Association\BelongsTo $belongsTo */
+            /** @var \Cake\ORM\Association\BelongsTo<\Cake\ORM\Table> $belongsTo */
             $belongsTo = $this->_table->getAssociation($assoc);
             foreach ($settings as $field => $config) {
                 if ($config instanceof Closure) {
-                    // Cannot update counter cache which use a closure
-                    return;
+                    // Skip counter cache fields that use a closure
+                    continue;
                 }
                 if (is_int($field)) {
                     $field = $config;
@@ -215,7 +215,7 @@ class CounterCacheBehavior extends Behavior
     /**
      * Update counter cache for the given association.
      *
-     * @param \Cake\ORM\Association\BelongsTo $assoc The association object.
+     * @param \Cake\ORM\Association\BelongsTo<\Cake\ORM\Table> $assoc The association object.
      * @param string $field Counter cache field.
      * @param array $config Config array.
      * @param int $limit Limit.
@@ -297,7 +297,7 @@ class CounterCacheBehavior extends Behavior
                 $field = $config;
                 $config = [];
             }
-            if (isset($this->_ignoreDirty[$assoc->getTarget()->getRegistryAlias()][$field]) && $this->_ignoreDirty[$assoc->getTarget()->getRegistryAlias()][$field] === \true) {
+            if (isset($this->_ignoreDirty[$assoc->getTarget()->getRegistryAlias()][$field]) && $this->_ignoreDirty[$assoc->getTarget()->getRegistryAlias()][$field]) {
                 continue;
             }
             if ($this->_shouldUpdateCount($updateConditions)) {
@@ -339,7 +339,7 @@ class CounterCacheBehavior extends Behavior
      *
      * @param array<string, mixed> $config The counter cache configuration for a single field
      * @param array $conditions Additional conditions given to the query
-     * @return \Cake\ORM\Query\SelectQuery|int The query to fetch the number of
+     * @return \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array>|int The query to fetch the number of
      *   relations matching the given config and conditions or the number itself.
      */
     protected function _getCount(array $config, array $conditions): SelectQuery|int

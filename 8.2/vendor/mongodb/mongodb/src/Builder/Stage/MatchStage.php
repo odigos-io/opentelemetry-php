@@ -25,9 +25,7 @@ final class MatchStage implements StageInterface, OperatorInterface
     public const PROPERTIES = ['query' => 'query'];
     /** @var QueryInterface|array $query */
     public readonly QueryInterface|array $query;
-    /**
-     * @param QueryInterface|array $query
-     */
+    /** @param QueryInterface|array $query */
     public function __construct(QueryInterface|array $query)
     {
         if (is_array($query)) {

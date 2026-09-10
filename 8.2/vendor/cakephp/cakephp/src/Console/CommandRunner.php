@@ -148,7 +148,7 @@ class CommandRunner implements EventDispatcherInterface
         // Check if this is a command prefix (e.g., "cache" has subcommands like "cache clear")
         // Show help for that prefix instead of running the base command
         if ($name !== null && !$commands->has($name) && $this->hasCommandsWithPrefix($commands, $name)) {
-            $argv = array_merge([$name], $argv);
+            $argv = [$name];
             $name = 'help';
         }
         try {
@@ -246,7 +246,7 @@ class CommandRunner implements EventDispatcherInterface
                 return [$name, array_slice($argv, $i)];
             }
             $firstChar = $name[0] ?? '';
-            if ($firstChar == strtoupper($firstChar) && str_contains($name, '.')) {
+            if ($firstChar === strtoupper($firstChar) && str_contains($name, '.')) {
                 $underName = Inflector::underscore($name);
                 if ($commands->has($underName)) {
                     return [$underName, array_slice($argv, $i)];
@@ -323,7 +323,7 @@ class CommandRunner implements EventDispatcherInterface
     /**
      * The wrapper for creating command instances.
      *
-     * @param string $className Command class name.
+     * @param class-string<\Cake\Console\CommandInterface> $className Command class name.
      * @return \Cake\Console\CommandInterface
      */
     protected function createCommand(string $className): CommandInterface

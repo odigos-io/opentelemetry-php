@@ -12,6 +12,7 @@ use Odigos\MongoDB\Builder\Type\Encode;
 use Odigos\MongoDB\Builder\Type\ExpressionInterface;
 use Odigos\MongoDB\Builder\Type\OperatorInterface;
 use Odigos\MongoDB\Builder\Type\StageInterface;
+use Odigos\MongoDB\Builder\Type\UpdateStageInterface;
 use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function is_string;
@@ -21,16 +22,14 @@ use function is_string;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/project/
  * @internal
  */
-final class ProjectStage implements StageInterface, OperatorInterface
+final class ProjectStage implements StageInterface, UpdateStageInterface, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$project';
     public const PROPERTIES = ['specification' => 'specification'];
     /** @var stdClass<DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string> $specification */
     public readonly stdClass $specification;
-    /**
-     * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string ...$specification
-     */
+    /** @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string ...$specification */
     public function __construct(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string ...$specification)
     {
         if (\count($specification) < 1) {

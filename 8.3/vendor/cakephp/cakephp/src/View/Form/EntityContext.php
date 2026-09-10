@@ -208,7 +208,7 @@ class EntityContext implements ContextInterface
     public function val(string $field, array $options = []): mixed
     {
         $options += ['default' => null, 'schemaDefault' => \true];
-        if (empty($this->_context['entity'])) {
+        if (!$this->_context['entity']) {
             return $options['default'];
         }
         $parts = explode('.', $field);
@@ -416,6 +416,12 @@ class EntityContext implements ContextInterface
         $validator = $this->_getValidator($parts);
         $fieldName = array_pop($parts);
         if (!$validator->hasField($fieldName)) {
+            return null;
+        }
+        // If allowEmpty was given a callable (e.g. allowEmptyString('field', function(...) {})),
+        // we cannot evaluate it here because we don't have the submitted form data yet.
+        // Return null so FormHelper skips adding required="required" to the input.
+        if (is_callable($validator->field($fieldName)->isEmptyAllowed())) {
             return null;
         }
         if ($this->type($field) !== 'boolean') {
