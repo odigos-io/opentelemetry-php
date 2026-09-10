@@ -25,9 +25,7 @@ final class JsonSchemaOperator implements QueryInterface, OperatorInterface
     public const PROPERTIES = ['schema' => 'schema'];
     /** @var Document|Serializable|array|stdClass $schema */
     public readonly Document|Serializable|stdClass|array $schema;
-    /**
-     * @param Document|Serializable|array|stdClass $schema
-     */
+    /** @param Document|Serializable|array|stdClass $schema */
     public function __construct(Document|Serializable|stdClass|array $schema)
     {
         $this->schema = $schema;

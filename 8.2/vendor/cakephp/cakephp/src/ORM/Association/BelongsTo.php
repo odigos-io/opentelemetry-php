@@ -129,7 +129,6 @@ class BelongsTo extends Association
         /** @var array<string> $foreignKeys */
         $foreignKeys = (array) $this->getForeignKey();
         $properties = array_combine($foreignKeys, $targetEntity->extract((array) $this->getBindingKey()));
-        // @phpstan-ignore function.alreadyNarrowedType (patch method available on EntityInterface)
         if (method_exists($entity, 'patch')) {
             $entity = $entity->patch($properties, ['guard' => \false]);
         } else {

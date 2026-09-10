@@ -177,6 +177,7 @@ class TreeBehavior extends Behavior
         $diff = (int) ($right - $left + 1);
         if ($diff > 2) {
             if ($this->getConfig('cascadeCallbacks')) {
+                /** @var \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface> $query */
                 $query = $this->_scope($this->_table->query())->where(fn(QueryExpression $exp) => $exp->gte($config['leftField'], $left + 1)->lte($config['leftField'], $right - 1));
                 $entities = $query->toArray();
                 foreach ($entities as $entityToDelete) {
@@ -289,9 +290,9 @@ class TreeBehavior extends Behavior
      * to a specific node in the tree. This custom finder requires that the key 'for'
      * is passed in the options containing the id of the node to get its path for.
      *
-     * @param \Cake\ORM\Query\SelectQuery $query The constructed query to modify
+     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array> $query The constructed query to modify
      * @param string|int $for The path to find or an array of options with `for`.
-     * @return \Cake\ORM\Query\SelectQuery
+     * @return \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array>
      * @throws \InvalidArgumentException If the 'for' key is missing in options
      */
     public function findPath(SelectQuery $query, string|int $for): SelectQuery
@@ -325,10 +326,10 @@ class TreeBehavior extends Behavior
      * If the direct option is set to true, only the direct children are returned
      * (based upon the parent_id field).
      *
-     * @param \Cake\ORM\Query\SelectQuery $query Query.
+     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array> $query Query.
      * @param string|int $for The id of the record to read. Can also be an array of options.
      * @param bool $direct Whether to return only the direct (true) or all children (false).
-     * @return \Cake\ORM\Query\SelectQuery
+     * @return \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array>
      * @throws \InvalidArgumentException When the 'for' key is not passed in $options
      */
     public function findChildren(SelectQuery $query, int|string $for, bool $direct = \false): SelectQuery
@@ -349,13 +350,13 @@ class TreeBehavior extends Behavior
      * the primary key for the table and the values are the display field for the table.
      * Values are prefixed to visually indicate relative depth in the tree.
      *
-     * @param \Cake\ORM\Query\SelectQuery $query Query.
+     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array> $query Query.
      * @param \Closure|string|null $keyPath A dot separated path to fetch the field to use for the array key, or a closure to
      *   return the key out of the provided row.
      * @param \Closure|string|null $valuePath A dot separated path to fetch the field to use for the array value, or a closure to
      *   return the value out of the provided row.
      * @param string|null $spacer A string to be used as prefix for denoting the depth in the tree for each item.
-     * @return \Cake\ORM\Query\SelectQuery
+     * @return \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array>
      */
     public function findTreeList(SelectQuery $query, Closure|string|null $keyPath = null, Closure|string|null $valuePath = null, ?string $spacer = null): SelectQuery
     {
@@ -368,13 +369,13 @@ class TreeBehavior extends Behavior
      * and the values are the display field for the table. Values are prefixed to visually
      * indicate relative depth in the tree.
      *
-     * @param \Cake\ORM\Query\SelectQuery $query The query object to format.
+     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array> $query The query object to format.
      * @param \Closure|string|null $keyPath A dot separated path to the field that will be the result array key, or a closure to
      *   return the key from the provided row.
      * @param \Closure|string|null $valuePath A dot separated path to the field that is the array's value, or a closure to
      *   return the value from the provided row.
      * @param string|null $spacer A string to be used as prefix for denoting the depth in the tree for each item.
-     * @return \Cake\ORM\Query\SelectQuery Augmented query.
+     * @return \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface|array> Augmented query.
      */
     public function formatTreeList(SelectQuery $query, Closure|string|null $keyPath = null, Closure|string|null $valuePath = null, ?string $spacer = null): SelectQuery
     {
@@ -581,7 +582,7 @@ class TreeBehavior extends Behavior
             $fields[] = $config['level'];
         }
         $node = $this->_scope($this->_table->find())->select($fields)->where([$this->_table->aliasField($primaryKey) => $id])->first();
-        if (!$node) {
+        if (!$node instanceof EntityInterface) {
             throw new RecordNotFoundException(sprintf('Node `%s` was not found in the tree.', $id));
         }
         return $node;
@@ -699,7 +700,6 @@ class TreeBehavior extends Behavior
             return;
         }
         $fresh = $this->_table->get($entity->get($this->_getPrimaryKey()));
-        // @phpstan-ignore function.alreadyNarrowedType (patch method available on EntityInterface)
         if (method_exists($entity, 'patch')) {
             $entity->patch($fresh->extract($fields), ['guard' => \false]);
         } else {

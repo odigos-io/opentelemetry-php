@@ -46,8 +46,8 @@ final class BacktickParser implements InlineParserInterface
         $previousState = $cursor->saveState();
         if ($this->findMatchingTicks(\strlen($ticks), $cursor)) {
             $code = $cursor->getSubstring($currentPosition, $cursor->getPosition() - $currentPosition - \strlen($ticks));
-            $c = \preg_replace('/\n/', ' ', $code) ?? '';
-            if ($c !== '' && $c[0] === ' ' && \substr($c, -1, 1) === ' ' && \preg_match('/[^ ]/', $c)) {
+            $c = \str_replace("\n", ' ', $code);
+            if ($c !== '' && $c[0] === ' ' && \substr($c, -1, 1) === ' ' && \strspn($c, ' ') !== \strlen($c)) {
                 $c = \substr($c, 1, -1);
             }
             $inlineContext->getContainer()->appendChild(new Code($c));

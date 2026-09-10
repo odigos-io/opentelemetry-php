@@ -86,7 +86,7 @@ class ConsoleOutput
     /**
      * The current output type.
      *
-     * @see setOutputAs() For manipulation.
+     * @see \Cake\Console\ConsoleOutput::setOutputAs() For manipulation.
      * @var int
      */
     protected int $_outputAs = self::COLOR;
@@ -209,8 +209,8 @@ class ConsoleOutput
      */
     protected function _write(string $message): int
     {
-        // @phpstan-ignore isset.property (property may not be set if constructor throws)
-        if (!isset($this->_output)) {
+        // @phpstan-ignore isset.property (property may not be set: ConsoleOutput::__destruct() unsets _output)
+        if (!isset($this->_output) || !is_resource($this->_output)) {
             return 0;
         }
         return (int) fwrite($this->_output, $message);
@@ -241,7 +241,7 @@ class ConsoleOutput
      * ```
      *
      * @param string $style The style to set.
-     * @param array $definition The array definition of the style to change or create..
+     * @param array $definition The array definition of the style to change or create.
      * @return void
      */
     public function setStyle(string $style, array $definition): void

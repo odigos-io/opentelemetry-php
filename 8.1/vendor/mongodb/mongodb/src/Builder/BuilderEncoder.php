@@ -13,6 +13,7 @@ use Odigos\MongoDB\Builder\Encoder\OperatorEncoder;
 use Odigos\MongoDB\Builder\Encoder\OutputWindowEncoder;
 use Odigos\MongoDB\Builder\Encoder\PipelineEncoder;
 use Odigos\MongoDB\Builder\Encoder\QueryEncoder;
+use Odigos\MongoDB\Builder\Encoder\UpdateEncoder;
 use Odigos\MongoDB\Builder\Encoder\VariableEncoder;
 use Odigos\MongoDB\Builder\Expression\Variable;
 use Odigos\MongoDB\Builder\Type\CombinedFieldQuery;
@@ -30,7 +31,9 @@ use Odigos\MongoDB\Exception\UnsupportedValueException;
 use stdClass;
 use WeakReference;
 use function array_key_exists;
+use function is_array;
 use function is_object;
+use function iterator_to_array;
 /** @template-implements Encoder<Type|stdClass|array|string|int, Pipeline|StageInterface|ExpressionInterface|QueryInterface> */
 final class BuilderEncoder implements Encoder
 {
@@ -40,11 +43,14 @@ final class BuilderEncoder implements Encoder
     private array $encoders;
     /** @var array<class-string, Encoder|null> */
     private array $cachedEncoders = [];
-    /** @param array<class-string, Encoder> $encoders */
-    public function __construct(array $encoders = [])
+    /** @param iterable<class-string, Encoder> $encoders */
+    public function __construct(iterable $encoders = [])
     {
         $self = WeakReference::create($this);
-        $this->encoders = $encoders + [Pipeline::class => new PipelineEncoder($self), Variable::class => new VariableEncoder(), DictionaryInterface::class => new DictionaryEncoder(), FieldPathInterface::class => new FieldPathEncoder(), CombinedFieldQuery::class => new CombinedFieldQueryEncoder($self), QueryObject::class => new QueryEncoder($self), OutputWindow::class => new OutputWindowEncoder($self), OperatorInterface::class => new OperatorEncoder($self), DateTimeInterface::class => new DateTimeEncoder()];
+        if (!is_array($encoders)) {
+            $encoders = iterator_to_array($encoders);
+        }
+        $this->encoders = $encoders + [Pipeline::class => new PipelineEncoder($self), UpdatePipeline::class => new PipelineEncoder($self), Update::class => new UpdateEncoder($self), Variable::class => new VariableEncoder(), DictionaryInterface::class => new DictionaryEncoder(), FieldPathInterface::class => new FieldPathEncoder(), CombinedFieldQuery::class => new CombinedFieldQueryEncoder($self), QueryObject::class => new QueryEncoder($self), OutputWindow::class => new OutputWindowEncoder($self), OperatorInterface::class => new OperatorEncoder($self), DateTimeInterface::class => new DateTimeEncoder()];
     }
     /** @psalm-assert-if-true object $value */
     public function canEncode(mixed $value): bool

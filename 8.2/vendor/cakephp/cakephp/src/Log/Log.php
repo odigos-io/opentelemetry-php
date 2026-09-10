@@ -23,7 +23,7 @@ use Psr\Log\LoggerInterface;
 use Stringable;
 /**
  * Logs messages to configured Log adapters. One or more adapters
- * can be configured using Cake Logs's methods. If you don't
+ * can be configured using Cake Log's methods. If you don't
  * configure any adapters, and write to Log, the messages will be
  * ignored.
  *
@@ -113,8 +113,7 @@ class Log
     /**
      * An array mapping url schemes to fully qualified Log engine class names
      *
-     * @var array<string, string>
-     * @phpstan-var array<string, class-string>
+     * @var array<string, class-string>
      */
     protected static array $_dsnClassMap = ['console' => Engine\ConsoleLog::class, 'file' => Engine\FileLog::class, 'syslog' => Engine\SyslogLog::class];
     /**

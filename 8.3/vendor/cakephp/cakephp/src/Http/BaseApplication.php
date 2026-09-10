@@ -73,7 +73,7 @@ abstract class BaseApplication implements ConsoleApplicationInterface, Container
     /**
      * Controller factory
      *
-     * @var \Cake\Http\ControllerFactoryInterface|null
+     * @var \Cake\Http\ControllerFactoryInterface<\Cake\Controller\Controller>|null
      */
     protected ?ControllerFactoryInterface $controllerFactory = null;
     /**
@@ -87,7 +87,7 @@ abstract class BaseApplication implements ConsoleApplicationInterface, Container
      *
      * @param string $configDir The directory the bootstrap configuration is held in.
      * @param \Cake\Event\EventManagerInterface|null $eventManager Application event manager instance.
-     * @param \Cake\Http\ControllerFactoryInterface|null $controllerFactory Controller factory.
+     * @param \Cake\Http\ControllerFactoryInterface<\Cake\Controller\Controller>|null $controllerFactory Controller factory.
      */
     public function __construct(string $configDir, ?EventManagerInterface $eventManager = null, ?ControllerFactoryInterface $controllerFactory = null)
     {

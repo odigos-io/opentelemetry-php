@@ -28,9 +28,7 @@ final class SizeOperator implements ResolvesToInt, OperatorInterface
     public const PROPERTIES = ['expression' => 'expression'];
     /** @var BSONArray|PackedArray|ResolvesToArray|array|string $expression The argument for $size can be any expression as long as it resolves to an array. */
     public readonly PackedArray|ResolvesToArray|BSONArray|array|string $expression;
-    /**
-     * @param BSONArray|PackedArray|ResolvesToArray|array|string $expression The argument for $size can be any expression as long as it resolves to an array.
-     */
+    /** @param BSONArray|PackedArray|ResolvesToArray|array|string $expression The argument for $size can be any expression as long as it resolves to an array. */
     public function __construct(PackedArray|ResolvesToArray|BSONArray|array|string $expression)
     {
         if (is_string($expression) && !str_starts_with($expression, '$')) {

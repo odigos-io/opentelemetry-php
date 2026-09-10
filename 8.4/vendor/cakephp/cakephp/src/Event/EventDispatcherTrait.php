@@ -77,7 +77,9 @@ trait EventDispatcherTrait
     public function dispatchEvent(string $name, array $data = [], ?object $subject = null): EventInterface
     {
         $subject ??= $this;
-        /** @var \Cake\Event\EventInterface<TSubject> $event Coerce for psalm/phpstan */
+        /**
+         * @var \Cake\Event\EventInterface<TSubject> $event Coerce for psalm/phpstan
+         */
         $event = new $this->_eventClass($name, $subject, $data);
         $this->getEventManager()->dispatch($event);
         return $event;

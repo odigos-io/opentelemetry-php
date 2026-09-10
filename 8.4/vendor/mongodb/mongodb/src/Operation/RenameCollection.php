@@ -25,6 +25,7 @@ use MongoDB\Driver\WriteConcern;
 use Odigos\MongoDB\Exception\InvalidArgumentException;
 use Odigos\MongoDB\Exception\UnsupportedException;
 use function is_bool;
+use function Odigos\MongoDB\create_namespace;
 /**
  * Operation for the renameCollection command.
  *
@@ -73,8 +74,8 @@ final class RenameCollection
         if (isset($this->options['dropTarget']) && !is_bool($this->options['dropTarget'])) {
             throw InvalidArgumentException::invalidType('"dropTarget" option', $this->options['dropTarget'], 'boolean');
         }
-        $this->fromNamespace = $fromDatabaseName . '.' . $fromCollectionName;
-        $this->toNamespace = $toDatabaseName . '.' . $toCollectionName;
+        $this->fromNamespace = create_namespace($fromDatabaseName, $fromCollectionName);
+        $this->toNamespace = create_namespace($toDatabaseName, $toCollectionName);
     }
     /**
      * Execute the operation.

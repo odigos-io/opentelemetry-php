@@ -78,6 +78,8 @@ use Throwable;
  * It favours full integration tests over mock objects as you can test
  * more of your code easily and avoid some of the maintenance pitfalls
  * that mock objects create.
+ *
+ * @require-extends \Cake\TestSuite\TestCase
  */
 trait IntegrationTestTrait
 {
@@ -677,7 +679,7 @@ trait IntegrationTestTrait
             // the inverse.
             $this->_session[$this->_csrfKeyName] = $token;
             $this->_cookie[$this->_csrfKeyName] = $token;
-            if (!isset($data['_csrfToken']) && !in_array($method, ['GET', 'OPTIONS'])) {
+            if (!isset($data['_csrfToken']) && !in_array($method, ['GET', 'OPTIONS'], \true)) {
                 $data['_csrfToken'] = $token;
             }
         }
@@ -1406,13 +1408,13 @@ trait IntegrationTestTrait
     {
         $exceptions = [$exception];
         $previous = $exception->getPrevious();
-        while ($previous != null) {
+        while ($previous !== null) {
             $exceptions[] = $previous;
             $previous = $previous->getPrevious();
         }
         $message = \PHP_EOL;
         foreach ($exceptions as $i => $error) {
-            if ($i == 0) {
+            if ($i === 0) {
                 $message .= sprintf('Possibly related to `%s`: "%s"', $error::class, $error->getMessage());
                 $message .= \PHP_EOL;
             } else {

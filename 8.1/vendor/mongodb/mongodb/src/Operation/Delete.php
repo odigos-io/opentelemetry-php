@@ -26,6 +26,7 @@ use MongoDB\Driver\WriteConcern;
 use Odigos\MongoDB\Exception\InvalidArgumentException;
 use Odigos\MongoDB\Exception\UnsupportedException;
 use function is_string;
+use function Odigos\MongoDB\create_namespace;
 use function Odigos\MongoDB\is_document;
 use function Odigos\MongoDB\is_write_concern_acknowledged;
 use function Odigos\MongoDB\server_supports_feature;
@@ -41,6 +42,7 @@ use function Odigos\MongoDB\server_supports_feature;
 final class Delete implements Explainable
 {
     private const WIRE_VERSION_FOR_HINT = 9;
+    private string $namespace;
     /**
      * Constructs a delete command.
      *
@@ -77,8 +79,9 @@ final class Delete implements Explainable
      * @param array        $options        Command options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function __construct(private string $databaseName, private string $collectionName, private array|object $filter, private int $limit, private array $options = [])
+    public function __construct(string $databaseName, private string $collectionName, private array|object $filter, private int $limit, private array $options = [])
     {
+        $this->namespace = create_namespace($databaseName, $collectionName);
         if (!is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
@@ -123,7 +126,7 @@ final class Delete implements Explainable
         }
         $bulk = new Bulk($this->createBulkWriteOptions());
         $bulk->delete($this->filter, $this->createDeleteOptions());
-        $writeResult = $server->executeBulkWrite($this->databaseName . '.' . $this->collectionName, $bulk, $this->createExecuteOptions());
+        $writeResult = $server->executeBulkWrite($this->namespace, $bulk, $this->createExecuteOptions());
         return new DeleteResult($writeResult);
     }
     /**

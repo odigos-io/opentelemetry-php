@@ -145,7 +145,7 @@ class ConsoleInputOption
         return $this->_short;
     }
     /**
-     * Generate the help for this this option.
+     * Generate the help for this option.
      *
      * @param int $width The width to make the name of the option.
      * @return string

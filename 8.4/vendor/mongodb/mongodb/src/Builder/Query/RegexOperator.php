@@ -23,9 +23,7 @@ final class RegexOperator implements FieldQueryInterface, OperatorInterface
     public const PROPERTIES = ['regex' => 'regex'];
     /** @var Regex $regex */
     public readonly Regex $regex;
-    /**
-     * @param Regex $regex
-     */
+    /** @param Regex $regex */
     public function __construct(Regex $regex)
     {
         $this->regex = $regex;

@@ -147,7 +147,7 @@ class Validation
         return self::_check($check, '/^[\p{Ll}\p{Lm}\p{Lo}\p{Lt}\p{Lu}\p{Nd}]+$/Du');
     }
     /**
-     * Checks that a doesn't contain any alpha numeric characters
+     * Checks that a value doesn't contain any alpha numeric characters
      *
      * This method's definition of letters and integers includes unicode characters.
      * Use `notAsciiAlphaNumeric()` if you want to exclude ascii only.
@@ -173,7 +173,7 @@ class Validation
         return self::_check($check, '/^[[:alnum:]]+$/');
     }
     /**
-     * Checks that a doesn't contain any non-ascii alpha numeric characters
+     * Checks that a value doesn't contain any non-ascii alpha numeric characters
      *
      * @param mixed $check Value to check
      * @return bool Success
@@ -296,7 +296,7 @@ class Validation
      */
     public static function comparison(mixed $check1, string $operator, mixed $check2): bool
     {
-        if ((!is_numeric($check1) || !is_numeric($check2)) && !in_array($operator, static::COMPARE_STRING)) {
+        if ((!is_numeric($check1) || !is_numeric($check2)) && !in_array($operator, static::COMPARE_STRING, \true)) {
             return \false;
         }
         try {
@@ -508,7 +508,7 @@ class Validation
      *
      * @param mixed $check Value to check
      * @return bool True if the value is valid, false otherwise
-     * @see Regex credits: https://www.myintervals.com/blog/2009/05/20/iso-8601-date-validation-that-doesnt-suck/
+     * @see https://www.myintervals.com/blog/2009/05/20/iso-8601-date-validation-that-doesnt-suck/ for regex credits
      */
     public static function iso8601(mixed $check): bool
     {
@@ -556,9 +556,9 @@ class Validation
      * @param string|int|null $format any format accepted by IntlDateFormatter
      * @return bool Success
      * @throws \InvalidArgumentException when unsupported $type given
-     * @see \Cake\I18n\Time::parseDate()
+     * @see \Cake\I18n\Date::parseDate()
      * @see \Cake\I18n\Time::parseTime()
-     * @see \Cake\I18n\Time::parseDateTime()
+     * @see \Cake\I18n\DateTime::parseDateTime()
      */
     public static function localizedTime(mixed $check, string $type = 'datetime', string|int|null $format = null): bool
     {
@@ -842,7 +842,7 @@ class Validation
     /**
      * Checks that value has a valid file extension.
      *
-     * Supports checking `\Psr\Http\Message\UploadedFileInterface` instances and
+     * Supports checking `\Psr\Http\Message\UploadedFileInterface` instances
      * and arrays with a `name` key.
      *
      * @param mixed $check Value to check
@@ -1273,8 +1273,8 @@ class Validation
     /**
      * Checking for upload errors
      *
-     * Supports checking `\Psr\Http\Message\UploadedFileInterface` instances and
-     * and arrays with a `error` key.
+     * Supports checking `\Psr\Http\Message\UploadedFileInterface` instances
+     * and arrays with an `error` key.
      *
      * @param mixed $check Value to check.
      * @param bool $allowNoFile Set to true to allow UPLOAD_ERR_NO_FILE as a pass.
@@ -1459,7 +1459,7 @@ class Validation
     /**
      * Convenience method for longitude validation.
      *
-     * @param mixed $value Latitude as string
+     * @param mixed $value Longitude as string
      * @param array<string, mixed> $options Options for the validation logic.
      * @return bool
      * @link https://en.wikipedia.org/wiki/Longitude

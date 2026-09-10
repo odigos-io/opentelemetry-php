@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace Odigos\League\Container\Argument;
 
 use Odigos\League\Container\Attribute\AttributeInterface;
-use Odigos\League\Container\Exception\NotFoundException;
-use Odigos\League\Container\ReflectionContainer;
 use Odigos\League\Container\ContainerAwareInterface;
 use Odigos\League\Container\DefinitionContainerInterface;
+use Odigos\League\Container\Exception\NotFoundException;
+use Odigos\League\Container\ReflectionContainer;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use ReflectionAttribute;

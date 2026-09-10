@@ -44,6 +44,7 @@ use function get_object_vars;
 use function is_array;
 use function is_object;
 use function is_string;
+use function str_contains;
 use function str_ends_with;
 use function substr;
 /**
@@ -159,7 +160,7 @@ function document_to_array(array|object $document): array
  * autoEncryption driver option (if available).
  *
  * @internal
- * @see https://github.com/mongodb/specifications/blob/master/source/client-side-encryption/client-side-encryption.rst#collection-encryptedfields-lookup-getencryptedfields
+ * @see https://github.com/mongodb/specifications/blob/master/source/client-side-encryption/client-side-encryption.md#collection-encryptedfields-lookup-getencryptedfields
  * @see Collection::drop()
  * @see Database::createCollection()
  * @see Database::dropCollection()
@@ -173,7 +174,7 @@ function get_encrypted_fields_from_driver(string $databaseName, string $collecti
  * Return a collection's encryptedFields option from the server (if any).
  *
  * @internal
- * @see https://github.com/mongodb/specifications/blob/master/source/client-side-encryption/client-side-encryption.rst#collection-encryptedfields-lookup-getencryptedfields
+ * @see https://github.com/mongodb/specifications/blob/master/source/client-side-encryption/client-side-encryption.md#collection-encryptedfields-lookup-getencryptedfields
  * @see Collection::drop()
  * @see Database::dropCollection()
  */
@@ -379,6 +380,27 @@ function is_string_array(mixed $input): bool
     return \true;
 }
 /**
+ * Validates a database and collection name and returns the namespace formed
+ * by concatenating them.
+ *
+ * A "." or NUL byte in the database name, or a NUL byte in the collection
+ * name, would shift the namespace split performed by the server and cause
+ * the operation to silently target a different database or collection.
+ *
+ * @internal
+ * @throws InvalidArgumentException if either name is invalid
+ */
+function create_namespace(string $databaseName, string $collectionName): string
+{
+    if ($databaseName === '' || str_contains($databaseName, '.') || str_contains($databaseName, "\x00")) {
+        throw new InvalidArgumentException('$databaseName is invalid: ' . $databaseName);
+    }
+    if ($collectionName === '' || str_contains($collectionName, "\x00")) {
+        throw new InvalidArgumentException('$collectionName is invalid: ' . $collectionName);
+    }
+    return $databaseName . '.' . $collectionName;
+}
+/**
  * Performs a deep copy of a value.
  *
  * This function will clone objects and recursively copy values within arrays.
@@ -528,7 +550,7 @@ function select_server(Manager $manager, array $options): Server
  * must be forced due to the existence of pre-5.0 servers in the topology.
  *
  * @internal
- * @see https://github.com/mongodb/specifications/blob/master/source/crud/crud.rst#aggregation-pipelines-with-write-stages
+ * @see https://github.com/mongodb/specifications/blob/master/source/crud/crud.md#aggregation-pipelines-with-write-stages
  */
 function select_server_for_aggregate_write_stage(Manager $manager, array &$options): Server
 {

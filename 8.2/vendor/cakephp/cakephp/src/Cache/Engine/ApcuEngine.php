@@ -36,6 +36,8 @@ use Odigos\Cake\Core\Exception\CakeException;
 use DateInterval;
 /**
  * APCu storage engine for cache
+ *
+ * @extends \Cake\Cache\CacheEngine<\Cake\Cache\Engine\ApcuEngine>
  */
 class ApcuEngine extends CacheEngine
 {
@@ -159,9 +161,9 @@ class ApcuEngine extends CacheEngine
         return $result;
     }
     /**
-     * Delete all keys from the cache. This will clear every cache config using APC.
+     * Delete all keys from the cache. This will clear every cache config using APCu.
      *
-     * @return bool True Returns true.
+     * @return bool True on success.
      * @link https://secure.php.net/manual/en/function.apcu-cache-info.php
      * @link https://secure.php.net/manual/en/function.apcu-delete.php
      */

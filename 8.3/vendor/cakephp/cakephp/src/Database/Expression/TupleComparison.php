@@ -190,6 +190,6 @@ class TupleComparison extends ComparisonExpression
      */
     public function isMulti(): bool
     {
-        return in_array(strtolower($this->_operator), ['in', 'not in']);
+        return in_array(strtolower($this->_operator), ['in', 'not in'], \true);
     }
 }

@@ -7,15 +7,15 @@ declare (strict_types=1);
 namespace Odigos\MongoDB\Builder\Stage;
 
 use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\InputStageInterface;
 use Odigos\MongoDB\Builder\Type\OperatorInterface;
-use Odigos\MongoDB\Builder\Type\StageInterface;
 /**
  * Returns statistics regarding the use of each index for the collection.
  *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/indexStats/
  * @internal
  */
-final class IndexStatsStage implements StageInterface, OperatorInterface
+final class IndexStatsStage implements InputStageInterface, OperatorInterface
 {
     public const ENCODE = Encode::Object;
     public const NAME = '$indexStats';

@@ -88,12 +88,12 @@ class RelativeTimeFormatter implements DifferenceFormatterInterface
         return $isFuture ? __d('cake', '{0} after', $message) : __d('cake', '{0} before', $message);
     }
     /**
-     * Format a into a relative timestring.
+     * Format a time into a relative timestring.
      *
      * @param \Cake\I18n\DateTime|\Cake\I18n\Date $time The time instance to format.
      * @param array<string, mixed> $options Array of options.
      * @return string Relative time string.
-     * @see \Cake\I18n\Time::timeAgoInWords()
+     * @see \Cake\I18n\DateTime::timeAgoInWords()
      */
     public function timeAgoInWords(DateTime|Date $time, array $options = []): string
     {
@@ -246,7 +246,7 @@ class RelativeTimeFormatter implements DifferenceFormatterInterface
         return [$fNum, $fWord, (int) $years, (int) $months, (int) $weeks, (int) $days, (int) $hours, (int) $minutes, (int) $seconds];
     }
     /**
-     * Format a into a relative date string.
+     * Format a date into a relative date string.
      *
      * @param \Cake\I18n\DateTime|\Cake\I18n\Date $date The date to format.
      * @param array<string, mixed> $options Array of options.
@@ -309,9 +309,8 @@ class RelativeTimeFormatter implements DifferenceFormatterInterface
      * Build the options for relative date formatting.
      *
      * @param array<string, mixed> $options The options provided by the user.
-     * @param string $class The class name to use for defaults.
+     * @param class-string<\Cake\I18n\Date>|class-string<\Cake\I18n\DateTime> $class The class name to use for defaults.
      * @return array<string, mixed> Options with defaults applied.
-     * @phpstan-param class-string<\Cake\I18n\Date>|class-string<\Cake\I18n\DateTime> $class
      */
     protected function _options(array $options, string $class): array
     {

@@ -22,6 +22,8 @@ use function Odigos\Cake\Core\env;
  *
  * Implementing objects are expected to modify the `$_compareBasePath` property
  * before use.
+ *
+ * @require-extends \Cake\TestSuite\TestCase
  */
 trait StringCompareTrait
 {

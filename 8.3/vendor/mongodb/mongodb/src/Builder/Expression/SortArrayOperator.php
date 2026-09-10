@@ -22,6 +22,8 @@ use function str_starts_with;
 /**
  * Sorts the elements of an array.
  *
+ * New in MongoDB 5.2
+ *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/sortArray/
  * @internal
  */

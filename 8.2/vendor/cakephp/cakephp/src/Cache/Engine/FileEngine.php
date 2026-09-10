@@ -40,6 +40,8 @@ use SplFileObject;
  * engine available, or have content which is not performance sensitive.
  *
  * You can configure a FileEngine cache, using Cache::config()
+ *
+ * @extends \Cake\Cache\CacheEngine<\Cake\Cache\Engine\FileEngine>
  */
 class FileEngine extends CacheEngine
 {
@@ -224,9 +226,9 @@ class FileEngine extends CacheEngine
         unset($this->_File);
         $this->_clearDirectory($this->_config['path']);
         $directory = new RecursiveDirectoryIterator($this->_config['path'], FilesystemIterator::SKIP_DOTS);
+        /** @var iterable<\SplFileInfo> $iterator */
         $iterator = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::SELF_FIRST);
         $cleared = [];
-        /** @var \SplFileInfo $fileInfo */
         foreach ($iterator as $fileInfo) {
             if ($fileInfo->isFile()) {
                 unset($fileInfo);
@@ -280,9 +282,11 @@ class FileEngine extends CacheEngine
             if ($file->isFile()) {
                 $filePath = $file->getRealPath();
                 unset($file);
-                // phpcs:disable
-                @unlink($filePath);
-                // phpcs:enable
+                if ($filePath !== \false) {
+                    // phpcs:disable
+                    @unlink($filePath);
+                    // phpcs:enable
+                }
             }
         }
         $dir->close();
@@ -343,7 +347,7 @@ class FileEngine extends CacheEngine
             }
             unset($path);
             if (!$exists && !chmod($this->_File->getPathname(), (int) $this->_config['mask'])) {
-                trigger_error(sprintf('Could not apply permission mask `%s` on cache file `%s`', $this->_File->getPathname(), $this->_config['mask']), \E_USER_WARNING);
+                trigger_error(sprintf('Could not apply permission mask `%s` on cache file `%s`', $this->_config['mask'], $this->_File->getPathname()), \E_USER_WARNING);
             }
         }
         return \true;
@@ -390,6 +394,7 @@ class FileEngine extends CacheEngine
         $prefix = (string) $this->_config['prefix'];
         $directoryIterator = new RecursiveDirectoryIterator($this->_config['path']);
         $contents = new RecursiveIteratorIterator($directoryIterator, RecursiveIteratorIterator::CHILD_FIRST);
+        /** @var iterable<\SplFileInfo> $filtered */
         $filtered = new CallbackFilterIterator($contents, function (SplFileInfo $current) use ($group, $prefix) {
             if (!$current->isFile()) {
                 return \false;
@@ -400,7 +405,6 @@ class FileEngine extends CacheEngine
             }
             return str_contains($current->getPathname(), \DIRECTORY_SEPARATOR . $group . \DIRECTORY_SEPARATOR);
         });
-        /** @var \SplFileInfo $object */
         foreach ($filtered as $object) {
             $path = $object->getPathname();
             unset($object);

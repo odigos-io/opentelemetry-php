@@ -8,9 +8,9 @@ namespace Odigos\MongoDB\Builder\Stage;
 
 use MongoDB\BSON\PackedArray;
 use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\InputStageInterface;
 use Odigos\MongoDB\Builder\Type\OperatorInterface;
 use Odigos\MongoDB\Builder\Type\Optional;
-use Odigos\MongoDB\Builder\Type\StageInterface;
 use Odigos\MongoDB\Exception\InvalidArgumentException;
 use Odigos\MongoDB\Model\BSONArray;
 use function array_is_list;
@@ -21,7 +21,7 @@ use function is_array;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/listLocalSessions/
  * @internal
  */
-final class ListLocalSessionsStage implements StageInterface, OperatorInterface
+final class ListLocalSessionsStage implements InputStageInterface, OperatorInterface
 {
     public const ENCODE = Encode::Object;
     public const NAME = '$listLocalSessions';

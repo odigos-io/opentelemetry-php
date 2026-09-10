@@ -26,9 +26,7 @@ final class ExpOperator implements ResolvesToDouble, OperatorInterface
     public const PROPERTIES = ['exponent' => 'exponent'];
     /** @var Decimal128|Int64|ResolvesToNumber|float|int|string $exponent */
     public readonly Decimal128|Int64|ResolvesToNumber|float|int|string $exponent;
-    /**
-     * @param Decimal128|Int64|ResolvesToNumber|float|int|string $exponent
-     */
+    /** @param Decimal128|Int64|ResolvesToNumber|float|int|string $exponent */
     public function __construct(Decimal128|Int64|ResolvesToNumber|float|int|string $exponent)
     {
         if (is_string($exponent) && !str_starts_with($exponent, '$')) {

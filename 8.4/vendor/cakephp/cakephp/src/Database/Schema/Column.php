@@ -46,8 +46,9 @@ class Column
      * @param string|null $collate Collation for the column
      * @param int|null $srid SRID for geometry fields
      * @param string|null $baseType The basic schema type if the column type is a complex/custom type.
+     * @param bool|null $fixed Whether the column is fixed-length (BINARY vs VARBINARY)
      */
-    public function __construct(protected string $name, protected string $type, protected ?bool $null = null, protected mixed $default = null, protected ?int $length = null, protected bool $identity = \false, protected ?string $generated = null, protected ?int $precision = null, protected ?int $increment = null, protected ?string $after = null, protected ?string $onUpdate = null, protected ?string $comment = null, protected ?bool $unsigned = null, protected ?string $collate = null, protected ?int $srid = null, protected ?string $baseType = null)
+    public function __construct(protected string $name, protected string $type, protected ?bool $null = null, protected mixed $default = null, protected ?int $length = null, protected bool $identity = \false, protected ?string $generated = null, protected ?int $precision = null, protected ?int $increment = null, protected ?string $after = null, protected ?string $onUpdate = null, protected ?string $comment = null, protected ?bool $unsigned = null, protected ?string $collate = null, protected ?int $srid = null, protected ?string $baseType = null, protected ?bool $fixed = null)
     {
     }
     /**
@@ -348,7 +349,7 @@ class Column
     /**
      * Gets the column comment.
      *
-     * @return string
+     * @return string|null
      */
     public function getComment(): ?string
     {
@@ -433,13 +434,44 @@ class Column
         return $this->srid;
     }
     /**
+     * Sets whether the column is fixed-length.
+     *
+     * Used for binary columns to distinguish between BINARY and VARBINARY.
+     *
+     * @param bool $fixed Fixed
+     * @return $this
+     */
+    public function setFixed(bool $fixed)
+    {
+        $this->fixed = $fixed;
+        return $this;
+    }
+    /**
+     * Gets whether the column is fixed-length.
+     *
+     * @return bool|null
+     */
+    public function getFixed(): ?bool
+    {
+        return $this->fixed;
+    }
+    /**
+     * Is the column fixed-length?
+     *
+     * @return bool
+     */
+    public function isFixed(): bool
+    {
+        return $this->getFixed() === \true;
+    }
+    /**
      * Gets all allowed options. Each option must have a corresponding `setFoo` method.
      *
      * @return array
      */
     protected function getValidOptions(): array
     {
-        return ['name', 'length', 'precision', 'default', 'null', 'identity', 'after', 'onUpdate', 'comment', 'unsigned', 'type', 'properties', 'collate', 'srid', 'increment', 'generated'];
+        return ['name', 'length', 'precision', 'default', 'null', 'identity', 'after', 'onUpdate', 'comment', 'unsigned', 'type', 'properties', 'collate', 'srid', 'increment', 'generated', 'fixed'];
     }
     /**
      * Utility method that maps an array of column attributes to this object's methods.
@@ -466,7 +498,7 @@ class Column
     /**
      * Convert an index into an array that is compatible with the Column constructor.
      *
-     * @return array
+     * @return array{name: ?string, baseType: ?string, type: string, length: ?int, null: ?bool, default: mixed, generated: ?string, unsigned: ?bool, onUpdate: ?string, collate: ?string, precision: ?int, srid: ?int, comment: ?string, autoIncrement: bool, identity: bool, fixed: ?bool, geometryType?: ?string}
      */
     public function toArray(): array
     {
@@ -480,6 +512,6 @@ class Column
                 $type = 'datetimefractional';
             }
         }
-        return ['name' => $this->getName(), 'baseType' => $this->getBaseType(), 'type' => $type, 'length' => $length, 'null' => $this->getNull(), 'default' => $this->getDefault(), 'generated' => $this->getGenerated(), 'unsigned' => $this->getUnsigned(), 'onUpdate' => $this->getOnUpdate(), 'collate' => $this->getCollate(), 'precision' => $precision, 'srid' => $this->getSrid(), 'comment' => $this->getComment(), 'autoIncrement' => $this->getIdentity(), 'identity' => $this->getIdentity()];
+        return ['name' => $this->getName(), 'baseType' => $this->getBaseType(), 'type' => $type, 'length' => $length, 'null' => $this->getNull(), 'default' => $this->getDefault(), 'generated' => $this->getGenerated(), 'unsigned' => $this->getUnsigned(), 'onUpdate' => $this->getOnUpdate(), 'collate' => $this->getCollate(), 'precision' => $precision, 'srid' => $this->getSrid(), 'comment' => $this->getComment(), 'autoIncrement' => $this->getIdentity(), 'identity' => $this->getIdentity(), 'fixed' => $this->getFixed()];
     }
 }

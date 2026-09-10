@@ -22,6 +22,7 @@ use MongoDB\Driver\Exception\CommandException;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\SearchNotSupportedException;
 use Odigos\MongoDB\Exception\UnsupportedException;
 /**
  * Operation for the dropSearchIndexes command.
@@ -64,6 +65,9 @@ final class DropSearchIndex
         } catch (CommandException $e) {
             // Drop operations are idempotent. The server may return an error if the collection does not exist.
             if ($e->getCode() !== self::ERROR_CODE_NAMESPACE_NOT_FOUND) {
+                if (SearchNotSupportedException::isSearchNotSupportedError($e)) {
+                    throw SearchNotSupportedException::create($e);
+                }
                 throw $e;
             }
         }

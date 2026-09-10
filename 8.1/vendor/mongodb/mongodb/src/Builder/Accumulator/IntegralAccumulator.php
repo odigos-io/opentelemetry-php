@@ -23,7 +23,8 @@ use function is_string;
 use function str_starts_with;
 /**
  * Returns the approximation of the area under a curve.
- * New in MongoDB 5.0.
+ *
+ * New in MongoDB 5.0
  *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/integral/
  * @internal

@@ -22,9 +22,7 @@ final class CommentOperator implements QueryInterface, OperatorInterface
     public const PROPERTIES = ['comment' => 'comment'];
     /** @var string $comment */
     public readonly string $comment;
-    /**
-     * @param string $comment
-     */
+    /** @param string $comment */
     public function __construct(string $comment)
     {
         $this->comment = $comment;

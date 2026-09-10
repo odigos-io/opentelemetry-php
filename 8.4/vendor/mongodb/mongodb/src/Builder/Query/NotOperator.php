@@ -25,9 +25,7 @@ final class NotOperator implements FieldQueryInterface, OperatorInterface
     public const PROPERTIES = ['expression' => 'expression'];
     /** @var DateTimeInterface|FieldQueryInterface|Type|array|bool|float|int|null|stdClass|string $expression */
     public readonly DateTimeInterface|Type|FieldQueryInterface|stdClass|array|bool|float|int|null|string $expression;
-    /**
-     * @param DateTimeInterface|FieldQueryInterface|Type|array|bool|float|int|null|stdClass|string $expression
-     */
+    /** @param DateTimeInterface|FieldQueryInterface|Type|array|bool|float|int|null|stdClass|string $expression */
     public function __construct(DateTimeInterface|Type|FieldQueryInterface|stdClass|array|bool|float|int|null|string $expression)
     {
         $this->expression = $expression;

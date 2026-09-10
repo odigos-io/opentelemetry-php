@@ -12,6 +12,7 @@ use Odigos\MongoDB\Builder\Expression\ResolvesToObject;
 use Odigos\MongoDB\Builder\Type\Encode;
 use Odigos\MongoDB\Builder\Type\OperatorInterface;
 use Odigos\MongoDB\Builder\Type\StageInterface;
+use Odigos\MongoDB\Builder\Type\UpdateStageInterface;
 use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function is_string;
@@ -23,16 +24,14 @@ use function str_starts_with;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/replaceWith/
  * @internal
  */
-final class ReplaceWithStage implements StageInterface, OperatorInterface
+final class ReplaceWithStage implements StageInterface, UpdateStageInterface, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$replaceWith';
     public const PROPERTIES = ['expression' => 'expression'];
     /** @var Document|ResolvesToObject|Serializable|array|stdClass|string $expression */
     public readonly Document|Serializable|ResolvesToObject|stdClass|array|string $expression;
-    /**
-     * @param Document|ResolvesToObject|Serializable|array|stdClass|string $expression
-     */
+    /** @param Document|ResolvesToObject|Serializable|array|stdClass|string $expression */
     public function __construct(Document|Serializable|ResolvesToObject|stdClass|array|string $expression)
     {
         if (is_string($expression) && !str_starts_with($expression, '$')) {

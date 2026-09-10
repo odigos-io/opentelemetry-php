@@ -7,16 +7,16 @@ declare (strict_types=1);
 namespace Odigos\MongoDB\Builder\Stage;
 
 use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\InputStageInterface;
 use Odigos\MongoDB\Builder\Type\OperatorInterface;
 use Odigos\MongoDB\Builder\Type\Optional;
-use Odigos\MongoDB\Builder\Type\StageInterface;
 /**
  * Returns information on active and/or dormant operations for the MongoDB deployment. To run, use the db.aggregate() method.
  *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/currentOp/
  * @internal
  */
-final class CurrentOpStage implements StageInterface, OperatorInterface
+final class CurrentOpStage implements InputStageInterface, OperatorInterface
 {
     public const ENCODE = Encode::Object;
     public const NAME = '$currentOp';

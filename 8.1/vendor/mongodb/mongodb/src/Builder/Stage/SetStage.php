@@ -12,6 +12,7 @@ use Odigos\MongoDB\Builder\Type\Encode;
 use Odigos\MongoDB\Builder\Type\ExpressionInterface;
 use Odigos\MongoDB\Builder\Type\OperatorInterface;
 use Odigos\MongoDB\Builder\Type\StageInterface;
+use Odigos\MongoDB\Builder\Type\UpdateStageInterface;
 use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function is_string;
@@ -22,16 +23,14 @@ use function is_string;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/set/
  * @internal
  */
-final class SetStage implements StageInterface, OperatorInterface
+final class SetStage implements StageInterface, UpdateStageInterface, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$set';
     public const PROPERTIES = ['field' => 'field'];
     /** @var stdClass<DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string> $field */
     public readonly stdClass $field;
-    /**
-     * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string ...$field
-     */
+    /** @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string ...$field */
     public function __construct(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string ...$field)
     {
         if (\count($field) < 1) {

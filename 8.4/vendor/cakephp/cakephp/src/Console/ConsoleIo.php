@@ -172,6 +172,7 @@ class ConsoleIo
      * @param int $level The message's output level, see above.
      * @return int|null The number of bytes returned from writing to stdout
      *   or null if provided $level is greater than current level.
+     * @link https://book.cakephp.org/5/en/console-commands/input-output.html#creating-output
      */
     public function out(array|string $message = '', int $newlines = 1, int $level = self::NORMAL): ?int
     {
@@ -189,7 +190,7 @@ class ConsoleIo
      * @param int $level The message's output level, see above.
      * @return int|null The number of bytes returned from writing to stdout
      *   or null if provided $level is greater than current level.
-     * @link https://book.cakephp.org/5/en/console-and-shells.html#ConsoleIo::out
+     * @link https://book.cakephp.org/5/en/console-commands/input-output.html#creating-output
      */
     public function info(array|string $message, int $newlines = 1, int $level = self::NORMAL): ?int
     {
@@ -205,7 +206,7 @@ class ConsoleIo
      * @param int $level The message's output level, see above.
      * @return int|null The number of bytes returned from writing to stdout
      *   or null if provided $level is greater than current level.
-     * @link https://book.cakephp.org/5/en/console-and-shells.html#ConsoleIo::out
+     * @link https://book.cakephp.org/5/en/console-commands/input-output.html#creating-output
      */
     public function comment(array|string $message, int $newlines = 1, int $level = self::NORMAL): ?int
     {
@@ -219,7 +220,7 @@ class ConsoleIo
      * @param array<string>|string $message A string or an array of strings to output
      * @param int $newlines Number of newlines to append
      * @return int The number of bytes returned from writing to stderr.
-     * @link https://book.cakephp.org/5/en/console-and-shells.html#ConsoleIo::err
+     * @link https://book.cakephp.org/5/en/console-commands/input-output.html#creating-output
      */
     public function warning(array|string $message, int $newlines = 1): int
     {
@@ -233,7 +234,7 @@ class ConsoleIo
      * @param array<string>|string $message A string or an array of strings to output
      * @param int $newlines Number of newlines to append
      * @return int The number of bytes returned from writing to stderr.
-     * @link https://book.cakephp.org/5/en/console-and-shells.html#ConsoleIo::err
+     * @link https://book.cakephp.org/5/en/console-commands/input-output.html#creating-output
      */
     public function error(array|string $message, int $newlines = 1): int
     {
@@ -249,7 +250,7 @@ class ConsoleIo
      * @param int $level The message's output level, see above.
      * @return int|null The number of bytes returned from writing to stdout
      *   or null if provided $level is greater than current level.
-     * @link https://book.cakephp.org/5/en/console-and-shells.html#ConsoleIo::out
+     * @link https://book.cakephp.org/5/en/console-commands/input-output.html#creating-output
      */
     public function success(array|string $message, int $newlines = 1, int $level = self::NORMAL): ?int
     {
@@ -258,7 +259,7 @@ class ConsoleIo
         return $this->out($message, $newlines, $level);
     }
     /**
-     * Halts the the current process with a StopException.
+     * Halts the current process with a StopException.
      *
      * @param string $message Error message.
      * @param int $code Error code.
@@ -330,6 +331,7 @@ class ConsoleIo
      * @param array<string>|string $message A string or an array of strings to output
      * @param int $newlines Number of newlines to append
      * @return int The number of bytes returned from writing to stderr.
+     * @link https://book.cakephp.org/5/en/console-commands/input-output.html#creating-output
      */
     public function err(array|string $message = '', int $newlines = 1): int
     {

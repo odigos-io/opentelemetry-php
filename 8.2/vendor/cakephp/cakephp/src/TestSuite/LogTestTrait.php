@@ -21,6 +21,8 @@ use Odigos\Cake\Log\Log;
 use Odigos\PHPUnit\Framework\Attributes\After;
 /**
  * Make assertions on logs
+ *
+ * @require-extends \Cake\TestSuite\TestCase
  */
 trait LogTestTrait
 {
@@ -118,7 +120,7 @@ trait LogTestTrait
                 continue;
             }
             $messages = $engineObj->read();
-            $engineScopes = $engineObj->scopes();
+            $engineScopes = (array) $engineObj->scopes();
             // No overlapping scopes
             if ($scope !== null && !in_array($scope, $engineScopes, \true)) {
                 continue;

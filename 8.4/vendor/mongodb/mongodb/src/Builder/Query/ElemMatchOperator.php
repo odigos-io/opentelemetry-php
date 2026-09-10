@@ -28,9 +28,7 @@ final class ElemMatchOperator implements FieldQueryInterface, OperatorInterface
     public const PROPERTIES = ['query' => 'query'];
     /** @var DateTimeInterface|FieldQueryInterface|QueryInterface|Type|array|bool|float|int|null|stdClass|string $query */
     public readonly DateTimeInterface|Type|FieldQueryInterface|QueryInterface|stdClass|array|bool|float|int|null|string $query;
-    /**
-     * @param DateTimeInterface|FieldQueryInterface|QueryInterface|Type|array|bool|float|int|null|stdClass|string $query
-     */
+    /** @param DateTimeInterface|FieldQueryInterface|QueryInterface|Type|array|bool|float|int|null|stdClass|string $query */
     public function __construct(DateTimeInterface|Type|FieldQueryInterface|QueryInterface|stdClass|array|bool|float|int|null|string $query)
     {
         if (is_array($query)) {

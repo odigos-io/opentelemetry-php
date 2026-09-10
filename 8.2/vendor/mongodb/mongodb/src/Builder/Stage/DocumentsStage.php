@@ -9,8 +9,8 @@ namespace Odigos\MongoDB\Builder\Stage;
 use MongoDB\BSON\PackedArray;
 use Odigos\MongoDB\Builder\Expression\ResolvesToArray;
 use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\InputStageInterface;
 use Odigos\MongoDB\Builder\Type\OperatorInterface;
-use Odigos\MongoDB\Builder\Type\StageInterface;
 use Odigos\MongoDB\Exception\InvalidArgumentException;
 use Odigos\MongoDB\Model\BSONArray;
 use function array_is_list;
@@ -20,10 +20,12 @@ use function str_starts_with;
 /**
  * Returns literal documents from input values.
  *
+ * New in MongoDB 5.1
+ *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/documents/
  * @internal
  */
-final class DocumentsStage implements StageInterface, OperatorInterface
+final class DocumentsStage implements InputStageInterface, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$documents';

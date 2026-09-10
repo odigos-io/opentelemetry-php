@@ -33,8 +33,7 @@ class TransportFactory
     /**
      * An array mapping url schemes to fully qualified Transport class names
      *
-     * @var array<string, string>
-     * @phpstan-var array<string, class-string>
+     * @var array<string, class-string>
      */
     protected static array $_dsnClassMap = ['debug' => Transport\DebugTransport::class, 'mail' => Transport\MailTransport::class, 'smtp' => Transport\SmtpTransport::class];
     /**
@@ -63,7 +62,7 @@ class TransportFactory
      *
      * @param string $name Name of the config array that needs a transport instance built
      * @return void
-     * @throws \InvalidArgumentException When a tranport cannot be created.
+     * @throws \InvalidArgumentException When a transport cannot be created.
      */
     protected static function _buildTransport(string $name): void
     {

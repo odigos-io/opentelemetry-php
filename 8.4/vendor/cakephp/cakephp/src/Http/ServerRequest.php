@@ -342,8 +342,10 @@ class ServerRequest implements ServerRequestInterface
     /**
      * Returns the referer that referred this request.
      *
-     * @param bool $local Attempt to return a local address.
-     *   Local addresses do not contain hostnames.
+     * @param bool $local When true, return the referer as a host-stripped local path,
+     *   or null if the referer is not on the same origin as this application.
+     *   When false, return the raw referer URL as-is. In both cases null is returned
+     *   when no referer is available.
      * @return string|null The referring address for this request or null.
      */
     public function referer(bool $local = \true): ?string
@@ -510,7 +512,7 @@ class ServerRequest implements ServerRequestInterface
         $key = $detect['param'];
         if (isset($detect['value'])) {
             $value = $detect['value'];
-            return isset($this->params[$key]) && $this->params[$key] == $value;
+            return isset($this->params[$key]) && $this->params[$key] === $value;
         }
         if (isset($detect['options'])) {
             return isset($this->params[$key]) && in_array($this->params[$key], $detect['options']);
@@ -527,7 +529,7 @@ class ServerRequest implements ServerRequestInterface
     {
         if (isset($detect['env'])) {
             if (isset($detect['value'])) {
-                return $this->getEnv($detect['env']) == $detect['value'];
+                return $this->getEnv($detect['env']) === $detect['value'];
             }
             if (isset($detect['pattern'])) {
                 return (bool) preg_match($detect['pattern'], (string) $this->getEnv($detect['env']));

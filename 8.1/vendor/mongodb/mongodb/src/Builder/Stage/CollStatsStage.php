@@ -9,9 +9,9 @@ namespace Odigos\MongoDB\Builder\Stage;
 use MongoDB\BSON\Document;
 use MongoDB\BSON\Serializable;
 use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\InputStageInterface;
 use Odigos\MongoDB\Builder\Type\OperatorInterface;
 use Odigos\MongoDB\Builder\Type\Optional;
-use Odigos\MongoDB\Builder\Type\StageInterface;
 use stdClass;
 /**
  * Returns statistics regarding a collection or view.
@@ -19,7 +19,7 @@ use stdClass;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/collStats/
  * @internal
  */
-final class CollStatsStage implements StageInterface, OperatorInterface
+final class CollStatsStage implements InputStageInterface, OperatorInterface
 {
     public const ENCODE = Encode::Object;
     public const NAME = '$collStats';

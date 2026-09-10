@@ -9,7 +9,7 @@ namespace Odigos\Nette\Schema;
 
 use Odigos\Nette;
 use Odigos\Nette\Utils\Reflection;
-use function count, explode, get_debug_type, implode, in_array, is_array, is_float, is_int, is_object, is_scalar, is_string, method_exists, preg_match, preg_quote, preg_replace, preg_replace_callback, settype, str_replace, strlen, trim, var_export;
+use function array_map, count, explode, get_debug_type, implode, in_array, is_array, is_float, is_int, is_object, is_scalar, is_string, is_subclass_of, method_exists, preg_match, preg_quote, preg_replace, preg_replace_callback, settype, str_replace, strlen, trim, var_export;
 /**
  * @internal
  */
@@ -43,6 +43,9 @@ final class Helpers
             return $value;
         }
     }
+    /**
+     * Returns the type of a property or parameter as a string, or null if not determinable.
+     */
     public static function getPropertyType(\ReflectionProperty|\ReflectionParameter $prop): ?string
     {
         if ($type = Nette\Utils\Type::fromReflection($prop)) {
@@ -68,6 +71,9 @@ final class Helpers
         }
         return null;
     }
+    /**
+     * Formats a value for use in error messages (e.g., 'hello', true, object stdClass).
+     */
     public static function formatValue(mixed $value): string
     {
         if ($value instanceof DynamicParameter) {
@@ -82,6 +88,9 @@ final class Helpers
             return get_debug_type($value);
         }
     }
+    /**
+     * Adds a TypeMismatch error to the context if the value does not match the expected type.
+     */
     public static function validateType(mixed $value, string $expected, Context $context): void
     {
         if (!Nette\Utils\Validators::is($value, $expected)) {
@@ -90,7 +99,10 @@ final class Helpers
             $context->addError('The %label% %path% expects to be %expected%, %value% given.', Message::TypeMismatch, ['value' => $value, 'expected' => $expected]);
         }
     }
-    /** @param  array{?float, ?float}  $range */
+    /**
+     * Adds a range error to the context if the value (or its length for strings/arrays) is outside the given range.
+     * @param  array{?float, ?float}  $range
+     */
     public static function validateRange(mixed $value, array $range, Context $context, string $types = ''): void
     {
         if (is_array($value) || is_string($value)) {
@@ -102,18 +114,27 @@ final class Helpers
             $context->addError('The %label% %path% expects to be in range %expected%, %value% given.', Message::ValueOutOfRange, ['value' => $value, 'expected' => implode('..', $range)]);
         }
     }
-    /** @param  array{?float, ?float}  $range */
+    /**
+     * Checks whether a value falls within the given [min, max] range (null means no bound).
+     * @param  array{?float, ?float}  $range
+     */
     public static function isInRange(mixed $value, array $range): bool
     {
         return ($range[0] === null || $value >= $range[0]) && ($range[1] === null || $value <= $range[1]);
     }
+    /**
+     * Adds a PatternMismatch error to the context if the value does not match the pattern.
+     */
     public static function validatePattern(string $value, string $pattern, Context $context): void
     {
         if (!preg_match("\x01^(?:{$pattern})\$\x01Du", $value)) {
             $context->addError("The %label% %path% expects to match pattern '%pattern%', %value% given.", Message::PatternMismatch, ['value' => $value, 'pattern' => $pattern]);
         }
     }
-    /** @return \Closure(mixed): mixed */
+    /**
+     * Returns a closure that casts a value to the given type (built-in, backed enum, class with constructor, or plain class).
+     * @return \Closure(mixed, Context): mixed
+     */
     public static function getCastStrategy(string $type): \Closure
     {
         if (Nette\Utils\Validators::isBuiltinType($type)) {
@@ -121,10 +142,25 @@ final class Helpers
                 settype($value, $type);
                 return $value;
             };
-        } elseif (method_exists($type, '__construct')) {
-            return static fn($value) => is_array($value) || $value instanceof \stdClass ? new $type(...(array) $value) : new $type($value);
-        } else {
-            return static fn($value) => Nette\Utils\Arrays::toObject((array) $value, new $type());
+        } elseif (is_subclass_of($type, \BackedEnum::class)) {
+            return static function ($value, Context $context) use ($type) {
+                try {
+                    return $type::from($value);
+                } catch (\TypeError|\ValueError) {
+                    $context->addError('The %label% %path% expects to be %expected%, %value% given.', Message::TypeMismatch, ['value' => $value, 'expected' => implode('|', array_map(fn(\BackedEnum $case) => self::formatValue($case->value), $type::cases()))]);
+                    return null;
+                }
+            };
+        } elseif (is_subclass_of($type, \UnitEnum::class)) {
+            throw new Nette\InvalidStateException("Cannot cast value to pure enum {$type}.");
         }
+        $factory = method_exists($type, '__construct') ? static fn($value) => is_array($value) || $value instanceof \stdClass ? new $type(...(array) $value) : new $type($value) : static fn($value) => Nette\Utils\Arrays::toObject((array) $value, new $type());
+        return static function ($value) use ($factory, $type) {
+            try {
+                return $factory($value);
+            } catch (\Error $e) {
+                throw new Nette\InvalidStateException("Unable to cast value to {$type}: " . $e->getMessage(), 0, $e);
+            }
+        };
     }
 }

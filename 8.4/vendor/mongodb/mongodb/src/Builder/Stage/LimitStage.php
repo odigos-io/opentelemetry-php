@@ -22,9 +22,7 @@ final class LimitStage implements StageInterface, OperatorInterface
     public const PROPERTIES = ['limit' => 'limit'];
     /** @var int $limit */
     public readonly int $limit;
-    /**
-     * @param int $limit
-     */
+    /** @param int $limit */
     public function __construct(int $limit)
     {
         $this->limit = $limit;

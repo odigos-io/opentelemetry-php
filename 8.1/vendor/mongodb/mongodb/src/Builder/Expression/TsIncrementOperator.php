@@ -14,7 +14,8 @@ use function is_string;
 use function str_starts_with;
 /**
  * Returns the incrementing ordinal from a timestamp as a long.
- * New in MongoDB 5.1.
+ *
+ * New in MongoDB 5.1
  *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/tsIncrement/
  * @internal
@@ -26,9 +27,7 @@ final class TsIncrementOperator implements ResolvesToLong, OperatorInterface
     public const PROPERTIES = ['expression' => 'expression'];
     /** @var ResolvesToTimestamp|Timestamp|int|string $expression */
     public readonly Timestamp|ResolvesToTimestamp|int|string $expression;
-    /**
-     * @param ResolvesToTimestamp|Timestamp|int|string $expression
-     */
+    /** @param ResolvesToTimestamp|Timestamp|int|string $expression */
     public function __construct(Timestamp|ResolvesToTimestamp|int|string $expression)
     {
         if (is_string($expression) && !str_starts_with($expression, '$')) {

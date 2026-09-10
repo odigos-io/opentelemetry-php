@@ -22,8 +22,6 @@ class Translator
 {
     /**
      * Translation strings.
-     *
-     * @var array
      */
     public static array $strings = ['year' => '1 year', 'year_plural' => '{count} years', 'month' => '1 month', 'month_plural' => '{count} months', 'week' => '1 week', 'week_plural' => '{count} weeks', 'day' => '1 day', 'day_plural' => '{count} days', 'hour' => '1 hour', 'hour_plural' => '{count} hours', 'minute' => '1 minute', 'minute_plural' => '{count} minutes', 'second' => '1 second', 'second_plural' => '{count} seconds', 'ago' => '{time} ago', 'from_now' => '{time} from now', 'after' => '{time} after', 'before' => '{time} before'];
     /**

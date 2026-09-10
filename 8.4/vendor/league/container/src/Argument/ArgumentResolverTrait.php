@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Odigos\League\Container\Argument;
 
+use Odigos\League\Container\DefinitionContainerInterface;
 use Odigos\League\Container\Exception\ContainerException;
 use Odigos\League\Container\Exception\NotFoundException;
-use Odigos\League\Container\DefinitionContainerInterface;
 use Odigos\League\Container\ReflectionContainer;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;

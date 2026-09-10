@@ -151,7 +151,7 @@ class Filesystem
         umask($old);
     }
     /**
-     * Delete directory along with all it's contents.
+     * Delete directory along with all its contents.
      *
      * @param string $path Directory path.
      * @return bool
@@ -188,7 +188,7 @@ class Filesystem
         return $result && @rmdir($path);
     }
     /**
-     * Copies directory with all it's contents.
+     * Copies directory with all its contents.
      *
      * @param string $source Source path.
      * @param string $destination Destination path.

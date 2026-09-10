@@ -45,6 +45,10 @@ use const SORT_DESC;
 use const SORT_NUMERIC;
 /**
  * Offers a handful of methods to manipulate iterators
+ *
+ * @template TKey
+ * @template TValue
+ * @require-implements \Cake\Collection\CollectionInterface
  */
 trait CollectionTrait
 {
@@ -56,7 +60,7 @@ trait CollectionTrait
      * type of returned collection interface
      *
      * @param mixed ...$args Constructor arguments.
-     * @return \Cake\Collection\CollectionInterface
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     protected function newCollection(mixed ...$args): CollectionInterface
     {
@@ -73,7 +77,9 @@ trait CollectionTrait
         return $this;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function filter(?callable $callback = null): CollectionInterface
     {
@@ -81,7 +87,9 @@ trait CollectionTrait
         return new FilterIterator($this->unwrap(), $callback);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function reject(?callable $callback = null): CollectionInterface
     {
@@ -89,7 +97,9 @@ trait CollectionTrait
         return new FilterIterator($this->unwrap(), fn($value, $key, $items) => !$callback($value, $key, $items));
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function unique(?callable $callback = null): CollectionInterface
     {
@@ -109,7 +119,7 @@ trait CollectionTrait
         return \true;
     }
     /**
-     * Returns true if any the callback returns true for any element in the collection.
+     * Returns true if the callback returns true for any element in the collection.
      *
      * The callback accepts the value and key of the element being tested.
      *
@@ -153,7 +163,9 @@ trait CollectionTrait
         return \false;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function map(callable $callback): CollectionInterface
     {
@@ -177,7 +189,9 @@ trait CollectionTrait
         return $result;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, mixed>
      */
     public function extract(callable|string $path): CollectionInterface
     {
@@ -213,8 +227,8 @@ trait CollectionTrait
             $result = $result->extract($path);
         }
         $result = $result->reduce(function (array $acc, $current) {
-            [$count, $sum] = $acc;
-            return [$count + 1, $sum + $current];
+            // index 0 is the count, index 1 is the sum
+            return [$acc[0] + 1, $acc[1] + $current];
         }, [0, 0]);
         if ($result[0] === 0) {
             return null;
@@ -243,7 +257,9 @@ trait CollectionTrait
         return ($values[$middle - 1] + $values[$middle]) / 2;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function sortBy(callable|string $path, int $order = SORT_DESC, int $sort = SORT_NUMERIC): CollectionInterface
     {
@@ -290,7 +306,7 @@ trait CollectionTrait
      *   or a function returning the grouping key out of the provided element
      * @param bool $preserveKeys Whether to preserve the keys of the existing
      *   collection when the values are grouped. Defaults to false.
-     * @return \Cake\Collection\CollectionInterface
+     * @return \Cake\Collection\CollectionInterface<mixed, mixed>
      */
     public function groupBy(callable|string $path, bool $preserveKeys = \false): CollectionInterface
     {
@@ -315,7 +331,9 @@ trait CollectionTrait
         return $this->newCollection($group);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<mixed, TValue>
      */
     public function indexBy(callable|string $path): CollectionInterface
     {
@@ -336,7 +354,9 @@ trait CollectionTrait
         return $this->newCollection($group);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<mixed, int>
      */
     public function countBy(callable|string $path): CollectionInterface
     {
@@ -344,6 +364,7 @@ trait CollectionTrait
         $mapper = fn($value, $key, MapReduce $mr) => $mr->emitIntermediate($value, $callback($value));
         $reducer = fn($values, $key, MapReduce $mr) => $mr->emit(count($values), $key);
         return $this->newCollection(new MapReduce($this->unwrap(), $mapper, $reducer));
+        // @phpstan-ignore return.type
     }
     /**
      * @inheritDoc
@@ -361,37 +382,49 @@ trait CollectionTrait
         return $sum;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<int, TValue>
      */
     public function shuffle(): CollectionInterface
     {
         $items = $this->toList();
         shuffle($items);
         return $this->newCollection($items);
+        // @phpstan-ignore return.type
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<int, TValue>
      */
     public function sample(int $length = 10): CollectionInterface
     {
         return $this->newCollection(new LimitIterator($this->shuffle(), 0, $length));
+        // @phpstan-ignore return.type
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function take(int $length = 1, int $offset = 0): CollectionInterface
     {
         return $this->newCollection(new LimitIterator($this, $offset, $length));
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function skip(int $length): CollectionInterface
     {
         return $this->newCollection(new LimitIterator($this, $length));
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function match(array $conditions): CollectionInterface
     {
@@ -438,7 +471,9 @@ trait CollectionTrait
         return $result;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function takeLast(int $length): CollectionInterface
     {
@@ -524,7 +559,9 @@ trait CollectionTrait
         return $this->newCollection($generator($iterator, $length));
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function append(iterable $items): CollectionInterface
     {
@@ -534,7 +571,9 @@ trait CollectionTrait
         return $this->newCollection($list);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function appendItem(mixed $item, mixed $key = null): CollectionInterface
     {
@@ -546,14 +585,18 @@ trait CollectionTrait
         return $this->append($data);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function prepend(mixed $items): CollectionInterface
     {
         return $this->newCollection($items)->append($this);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function prependItem(mixed $item, mixed $key = null): CollectionInterface
     {
@@ -565,7 +608,9 @@ trait CollectionTrait
         return $this->prepend($data);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<mixed, mixed>
      */
     public function combine(callable|string $keyPath, callable|string $valuePath, callable|string|null $groupPath = null): CollectionInterface
     {
@@ -606,7 +651,9 @@ trait CollectionTrait
         return $this->newCollection(new MapReduce($this->unwrap(), $mapper, $reducer));
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function nest(callable|string $idPath, callable|string $parentPath, string $nestingKey = 'children'): CollectionInterface
     {
@@ -641,12 +688,14 @@ trait CollectionTrait
             $parents[$key][$nestingKey] = $children;
         };
         return $this->newCollection(new MapReduce($this->unwrap(), $mapper, $reducer))->map(function ($value) use ($isObject) {
-            /** @var \ArrayIterator|\ArrayObject $value */
+            /** @var \ArrayIterator<int|string, mixed>|\ArrayObject<int|string, mixed> $value */
             return $isObject ? $value : $value->getArrayCopy();
         });
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function insert(string $path, mixed $values): CollectionInterface
     {
@@ -684,14 +733,18 @@ trait CollectionTrait
         return $this->toArray();
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function compile(bool $keepKeys = \true): CollectionInterface
     {
         return $this->newCollection($this->toArray($keepKeys));
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function lazy(): CollectionInterface
     {
@@ -703,14 +756,18 @@ trait CollectionTrait
         return $this->newCollection($generator());
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function buffered(): CollectionInterface
     {
         return new BufferedIterator($this->unwrap());
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<mixed, mixed>
      */
     public function listNested(string|int $order = 'desc', callable|string $nestingKey = 'children'): CollectionInterface
     {
@@ -726,7 +783,9 @@ trait CollectionTrait
         return new TreeIterator(new NestIterator($this, $nestingKey), $order);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function stopWhen(callable|array $condition): CollectionInterface
     {
@@ -736,7 +795,9 @@ trait CollectionTrait
         return new StoppableIterator($this->unwrap(), $condition);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<mixed, mixed>
      */
     public function unfold(?callable $callback = null): CollectionInterface
     {
@@ -744,7 +805,9 @@ trait CollectionTrait
         return $this->newCollection(new RecursiveIteratorIterator(new UnfoldIterator($this->unwrap(), $callback), RecursiveIteratorIterator::LEAVES_ONLY));
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, TValue>
      */
     public function through(callable $callback): CollectionInterface
     {
@@ -752,16 +815,22 @@ trait CollectionTrait
         return $result instanceof CollectionInterface ? $result : $this->newCollection($result);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<mixed, mixed>
      */
     public function zip(iterable ...$items): CollectionInterface
     {
         return new ZipIterator(array_merge([$this->unwrap()], $items));
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @param iterable $items Items to zip.
+     * @param callable $callback The callback to apply.
+     * @return \Cake\Collection\CollectionInterface<mixed, mixed>
      */
-    public function zipWith(iterable $items, $callback): CollectionInterface
+    public function zipWith(iterable $items, mixed $callback): CollectionInterface
     {
         if (func_num_args() > 2) {
             $items = func_get_args();
@@ -773,10 +842,13 @@ trait CollectionTrait
         return new ZipIterator(array_merge([$this->unwrap()], $items), $callback);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, array<TValue>>
      */
     public function chunk(int $chunkSize): CollectionInterface
     {
+        // @phpstan-ignore return.type
         return $this->map(function ($v, $k, Iterator $iterator) use ($chunkSize) {
             $values = [$v];
             for ($i = 1; $i < $chunkSize; $i++) {
@@ -790,10 +862,13 @@ trait CollectionTrait
         });
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @return \Cake\Collection\CollectionInterface<TKey, array<TKey, TValue>>
      */
     public function chunkWithKeys(int $chunkSize, bool $keepKeys = \true): CollectionInterface
     {
+        // @phpstan-ignore return.type
         return $this->map(function ($v, $k, Iterator $iterator) use ($chunkSize, $keepKeys) {
             $key = 0;
             if ($keepKeys) {
@@ -850,13 +925,14 @@ trait CollectionTrait
      * @param callable|null $operation A callable that allows you to customize the product result.
      * @param callable|null $filter A filtering callback that must return true for a result to be part
      *   of the final results.
-     * @return \Cake\Collection\CollectionInterface
+     * @return \Cake\Collection\CollectionInterface<int, array<mixed>>
      * @throws \LogicException
      */
     public function cartesianProduct(?callable $operation = null, ?callable $filter = null): CollectionInterface
     {
         if ($this->isEmpty()) {
             return $this->newCollection([]);
+            // @phpstan-ignore return.type
         }
         $collectionArrays = [];
         $collectionArraysKeys = [];
@@ -868,6 +944,7 @@ trait CollectionTrait
             if ($valueCount !== count($value, \COUNT_RECURSIVE)) {
                 throw new LogicException('Cannot find the cartesian product of a multidimensional array');
             }
+            /** @phpstan-ignore argument.type (cartesianProduct requires array values) */
             $collectionArraysKeys[] = array_keys($value);
             $collectionArraysCounts[] = $valueCount;
             $collectionArrays[] = $value;
@@ -891,11 +968,12 @@ trait CollectionTrait
             }
         }
         return $this->newCollection($result);
+        // @phpstan-ignore return.type
     }
     /**
      * {@inheritDoc}
      *
-     * @return \Cake\Collection\CollectionInterface
+     * @return \Cake\Collection\CollectionInterface<int, array<mixed>>
      * @throws \LogicException
      */
     public function transpose(): CollectionInterface
@@ -905,6 +983,7 @@ trait CollectionTrait
         $length = count(current($arrayValue));
         $result = [];
         foreach ($arrayValue as $row) {
+            /** @phpstan-ignore argument.type (transpose requires array values) */
             if (count($row) !== $length) {
                 throw new LogicException('Child arrays do not have even length');
             }
@@ -913,6 +992,7 @@ trait CollectionTrait
             $result[] = array_column($arrayValue, $column);
         }
         return $this->newCollection($result);
+        // @phpstan-ignore return.type
     }
     /**
      * @inheritDoc

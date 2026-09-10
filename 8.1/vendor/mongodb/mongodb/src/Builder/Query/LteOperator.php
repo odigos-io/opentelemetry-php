@@ -25,9 +25,7 @@ final class LteOperator implements FieldQueryInterface, OperatorInterface
     public const PROPERTIES = ['value' => 'value'];
     /** @var DateTimeInterface|Type|array|bool|float|int|null|stdClass|string $value */
     public readonly DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value;
-    /**
-     * @param DateTimeInterface|Type|array|bool|float|int|null|stdClass|string $value
-     */
+    /** @param DateTimeInterface|Type|array|bool|float|int|null|stdClass|string $value */
     public function __construct(DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value)
     {
         $this->value = $value;

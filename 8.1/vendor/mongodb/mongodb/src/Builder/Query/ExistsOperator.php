@@ -22,9 +22,7 @@ final class ExistsOperator implements FieldQueryInterface, OperatorInterface
     public const PROPERTIES = ['exists' => 'exists'];
     /** @var bool $exists */
     public readonly bool $exists;
-    /**
-     * @param bool $exists
-     */
+    /** @param bool $exists */
     public function __construct(bool $exists = \true)
     {
         $this->exists = $exists;

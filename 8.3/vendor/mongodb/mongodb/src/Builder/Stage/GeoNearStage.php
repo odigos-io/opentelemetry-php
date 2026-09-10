@@ -12,11 +12,11 @@ use MongoDB\BSON\Int64;
 use MongoDB\BSON\Serializable;
 use Odigos\MongoDB\Builder\Expression\ResolvesToObject;
 use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\InputStageInterface;
 use Odigos\MongoDB\Builder\Type\OperatorInterface;
 use Odigos\MongoDB\Builder\Type\Optional;
 use Odigos\MongoDB\Builder\Type\QueryInterface;
 use Odigos\MongoDB\Builder\Type\QueryObject;
-use Odigos\MongoDB\Builder\Type\StageInterface;
 use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function is_array;
@@ -28,7 +28,7 @@ use function str_starts_with;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/geoNear/
  * @internal
  */
-final class GeoNearStage implements StageInterface, OperatorInterface
+final class GeoNearStage implements InputStageInterface, OperatorInterface
 {
     public const ENCODE = Encode::Object;
     public const NAME = '$geoNear';

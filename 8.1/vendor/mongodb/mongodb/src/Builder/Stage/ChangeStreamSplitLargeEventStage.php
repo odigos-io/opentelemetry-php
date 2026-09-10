@@ -8,15 +8,17 @@ namespace Odigos\MongoDB\Builder\Stage;
 
 use Odigos\MongoDB\Builder\Type\Encode;
 use Odigos\MongoDB\Builder\Type\OperatorInterface;
-use Odigos\MongoDB\Builder\Type\StageInterface;
+use Odigos\MongoDB\Builder\Type\OutputStageInterface;
 /**
  * Splits large change stream events that exceed 16 MB into smaller fragments returned in a change stream cursor.
  * You can only use $changeStreamSplitLargeEvent in a $changeStream pipeline and it must be the final stage in the pipeline.
  *
+ * New in MongoDB 6.1
+ *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/changeStreamSplitLargeEvent/
  * @internal
  */
-final class ChangeStreamSplitLargeEventStage implements StageInterface, OperatorInterface
+final class ChangeStreamSplitLargeEventStage implements OutputStageInterface, OperatorInterface
 {
     public const ENCODE = Encode::Object;
     public const NAME = '$changeStreamSplitLargeEvent';
