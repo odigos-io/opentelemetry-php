@@ -443,7 +443,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
      */
     public function setLocale($locale)
     {
-        if (Str::contains($locale, ['/', '\\'])) {
+        if (Str::contains($locale, ['/', '\\', '..', "\x00"])) {
             throw new InvalidArgumentException('Invalid characters present in locale.');
         }
         $this->locale = $locale;

@@ -5,6 +5,7 @@ namespace Odigos\Illuminate\Foundation\Cloud;
 use Odigos\Aws\CommandInterface;
 use Odigos\Aws\Exception\AwsException;
 use Odigos\Aws\Sqs\SqsClient;
+use Odigos\Illuminate\Contracts\Database\LostConnectionDetector;
 use Odigos\Illuminate\Foundation\Application;
 use Odigos\Illuminate\Queue\Connectors\ConnectorInterface;
 use Odigos\Illuminate\Queue\Events\JobQueued;
@@ -32,7 +33,7 @@ class QueueConnector implements ConnectorInterface
     public function connect(array $config): Queue
     {
         $underlying = $this->connector->connect($config['connection']);
-        $queue = new Queue($underlying, $this->app[Events::class], $config);
+        $queue = new Queue($this->app, $underlying, $this->app[Events::class], $config);
         if ($underlying instanceof SqsQueue) {
             $this->registerErrorHandling($underlying->getSqs(), $queue);
         }
@@ -75,6 +76,15 @@ class QueueConnector implements ConnectorInterface
     {
         Worker::$restartable = \false;
         Worker::$pausable = \false;
+        Worker::$memoryExceededExitCode = null;
+        Worker::$timedOutExitCode = 124;
+        Worker::killUsing(function (int $status): void {
+            if (function_exists('pcntl_exec')) {
+                @pcntl_exec('/bin/sh', ['-c', 'exit ' . $status]);
+            }
+        });
+        // Exit the worker (and restart the pod) when the agent socket is unreachable...
+        $this->app->extend(LostConnectionDetector::class, fn($detector) => new AgentAwareLostConnectionDetector($detector));
         $this->app['events']->listen(fn(WorkerStopping $event) => match ($event->reason) {
             WorkerStopReason::TimedOut => $queue->finishProcessingJob(default: 'released'),
             default => $queue->finishProcessingJob(),

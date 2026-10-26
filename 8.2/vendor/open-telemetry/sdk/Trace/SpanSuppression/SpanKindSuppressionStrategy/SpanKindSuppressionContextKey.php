@@ -9,7 +9,7 @@ use OpenTelemetry\Context\ContextKeyInterface;
  *
  * @internal
  */
-enum SpanKindSuppressionContextKey implements \OpenTelemetry\Context\ContextKeyInterface
+enum SpanKindSuppressionContextKey implements ContextKeyInterface
 {
     case Client;
     case Server;

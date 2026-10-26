@@ -6,11 +6,25 @@ use InvalidArgumentException;
 class Deserializer
 {
     /**
+     * The maximum number of schema fragments that may be expanded.
+     */
+    protected const MAX_NODES = 20000;
+    /**
      * The root schema being deserialized (used to resolve local $refs).
      *
      * @var array<string, mixed>
      */
     protected array $root;
+    /**
+     * The number of schema fragments expanded so far.
+     */
+    protected int $nodes = 0;
+    /**
+     * The cache of resolved local "$ref" targets, keyed by reference.
+     *
+     * @var array<string, array<string, mixed>>
+     */
+    protected array $refCache = [];
     /**
      * Create a new deserializer instance.
      *
@@ -41,6 +55,9 @@ class Deserializer
      */
     protected function build(array $schema, array $refs = []): Types\Type
     {
+        if (++$this->nodes > static::MAX_NODES) {
+            throw new InvalidArgumentException('The JSON Schema is too large to deserialize; it expands beyond [' . static::MAX_NODES . '] fragments.');
+        }
         [$schema, $refs] = $this->resolveRef($schema, $refs);
         [$schema, $nullableFromUnion, $refs] = $this->normalizeUnions($schema, $refs);
         [$name, $nullableFromType] = $this->resolveType($schema);
@@ -76,13 +93,13 @@ class Deserializer
     {
         $properties = [];
         if (isset($schema['properties']) && is_array($schema['properties'])) {
-            $required = is_array($schema['required'] ?? null) ? array_map('strval', $schema['required']) : [];
+            $required = is_array($schema['required'] ?? null) ? array_flip(array_map('strval', $schema['required'])) : [];
             foreach ($schema['properties'] as $key => $definition) {
                 if (!is_array($definition)) {
                     throw new InvalidArgumentException("Unable to represent the schema for property [{$key}]; boolean schemas are not supported.");
                 }
                 $property = $this->build($definition, $refs);
-                if (in_array((string) $key, $required, \true)) {
+                if (isset($required[(string) $key])) {
                     $property->required();
                 }
                 $properties[$key] = $property;
@@ -389,8 +406,11 @@ class Deserializer
      */
     protected function lookupRef(string $ref): array
     {
+        if (isset($this->refCache[$ref])) {
+            return $this->refCache[$ref];
+        }
         if ($ref === '#') {
-            return $this->root;
+            return $this->refCache[$ref] = $this->root;
         }
         if (!str_starts_with($ref, '#/')) {
             throw new InvalidArgumentException("Unable to resolve non-local JSON Schema \$ref [{$ref}].");
@@ -406,7 +426,7 @@ class Deserializer
         if (!is_array($target)) {
             throw new InvalidArgumentException("The JSON Schema \$ref [{$ref}] does not point to a schema.");
         }
-        return $target;
+        return $this->refCache[$ref] = $target;
     }
     /**
      * Normalize the given value to an integer or float, or null when not numeric.
