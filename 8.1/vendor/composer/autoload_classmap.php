@@ -2907,7 +2907,7 @@ return array(
     'Odigos\\Symfony\\Polyfill\\Php83\\Php83' => $vendorDir . '/symfony/polyfill-php83/Php83.php',
     'Odigos\\Symfony\\Polyfill\\Php85\\Php85' => $vendorDir . '/symfony/polyfill-php85/Php85.php',
     'Odigos\\UnhandledMatchError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
-    'Odigos\\ValueError' => $vendorDir . '/symfony/polyfill-php85/bootstrap.php',
+    'Odigos\\ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     'Odigos\\Yii' => $vendorDir . '/yiisoft/yii2/Yii.php',
     'Odigos\\YiiRequirementChecker' => $vendorDir . '/yiisoft/yii2/requirements/YiiRequirementChecker.php',
     'Odigos\\cebe\\markdown\\GithubMarkdown' => $vendorDir . '/cebe/markdown/GithubMarkdown.php',

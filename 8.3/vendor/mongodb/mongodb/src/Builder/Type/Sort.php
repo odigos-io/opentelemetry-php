@@ -8,7 +8,7 @@ namespace Odigos\MongoDB\Builder\Type;
  *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/sort/
  */
-enum Sort implements \MongoDB\Builder\Type\DictionaryInterface
+enum Sort implements DictionaryInterface
 {
     case Asc;
     case Desc;

@@ -7,6 +7,7 @@ use Odigos\Illuminate\Contracts\Cache\LockTimeoutException;
 use Odigos\Illuminate\Support\InteractsWithTime;
 use Odigos\Illuminate\Support\Sleep;
 use Odigos\Illuminate\Support\Str;
+use RuntimeException;
 abstract class Lock implements LockContract
 {
     use InteractsWithTime;
@@ -114,6 +115,16 @@ abstract class Lock implements LockContract
             }
         }
         return \true;
+    }
+    /**
+     * Attempt to refresh the lock for the given number of seconds.
+     *
+     * @param  int|null  $seconds
+     * @return bool
+     */
+    public function refresh($seconds = null)
+    {
+        throw new RuntimeException('This lock driver does not support refreshing locks.');
     }
     /**
      * Returns the current owner of the lock.

@@ -189,7 +189,12 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
         // the application. Once we have a user we can return it to the caller.
         $this->recallAttempted = \true;
         $this->viaRemember = !is_null($user = $this->provider->retrieveByToken($recaller->id(), $recaller->token()));
-        return $user;
+        if (!$this->viaRemember) {
+            return;
+        }
+        $userPassword = $user->getAuthPassword();
+        $recallerHash = $recaller->hash();
+        return hash_equals($this->hashPasswordForCookie($userPassword), $recallerHash) || hash_equals($userPassword, $recallerHash) ? $user : null;
     }
     /**
      * Get the decrypted recaller cookie for the request.
@@ -467,6 +472,9 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
     public function login(AuthenticatableContract $user, $remember = \false)
     {
         $this->updateSession($user->getAuthIdentifier());
+        if ($passwordHash = $user->getAuthPassword()) {
+            $this->session->put('password_hash_' . $this->name, $this->hashPasswordForCookie($passwordHash));
+        }
         // If the user should be permanently "remembered" by the application we will
         // queue a permanent cookie that contains the encrypted copy of the user
         // identifier. We will then decrypt this later to retrieve the users.

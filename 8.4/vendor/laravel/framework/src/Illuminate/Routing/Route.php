@@ -1101,7 +1101,11 @@ class Route
      */
     public function toSymfonyRoute()
     {
-        return new SymfonyRoute(preg_replace('/\{(\w+?)\?\}/', '{$1}', $this->uri()), $this->getOptionalParameterNames(), $this->wheres, ['utf8' => \true], $this->getDomain() ?: '', [], $this->methods);
+        return new SymfonyRoute(preg_replace('/\{(\w+?)\?\}/', '{$1}', $this->uri()), $this->getOptionalParameterNames(), $this->wheres, ['utf8' => \true], $this->getDomain() ?: '', match (\true) {
+            $this->httpOnly() => ['http'],
+            $this->secure() => ['https'],
+            default => [],
+        }, $this->methods);
     }
     /**
      * Get the optional parameter names for the route.

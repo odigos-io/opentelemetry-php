@@ -33,6 +33,6 @@ class ReceiveFile
      */
     protected function hasValidSignature(Request $request): bool
     {
-        return $request->boolean('upload') && $request->hasValidRelativeSignature();
+        return filter_var($request->query('upload', \false), \FILTER_VALIDATE_BOOLEAN) && $request->hasValidRelativeSignature();
     }
 }

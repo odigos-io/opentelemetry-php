@@ -9,7 +9,7 @@ use OpenTelemetry\Context\ContextKeyInterface;
  *
  * @internal
  */
-enum SemanticConventionSuppressionContextKey implements \OpenTelemetry\Context\ContextKeyInterface
+enum SemanticConventionSuppressionContextKey implements ContextKeyInterface
 {
     case Internal;
     case Client;

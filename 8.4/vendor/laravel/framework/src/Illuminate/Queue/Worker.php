@@ -93,11 +93,23 @@ class Worker
      */
     protected static $popCallbacks = [];
     /**
+     * The callback used to kill the worker process.
+     *
+     * @var (callable(int): mixed)|null
+     */
+    protected static $killCallback;
+    /**
      * The custom exit code to be used when memory is exceeded.
      *
      * @var int|null
      */
     public static $memoryExceededExitCode;
+    /**
+     * The custom exit code to be used when a job times out.
+     *
+     * @var int|null
+     */
+    public static $timedOutExitCode;
     /**
      * Indicates if the worker should check for the restart signal in the cache.
      *
@@ -209,7 +221,7 @@ class Worker
                 $this->markJobAsFailedIfItShouldFailOnTimeout($job->getConnectionName(), $job, $e);
                 $this->events->dispatch(new JobTimedOut($job->getConnectionName(), $job));
             }
-            $this->kill(static::EXIT_ERROR, $options, WorkerStopReason::TimedOut);
+            $this->kill(static::$timedOutExitCode ?? static::EXIT_ERROR, $options, WorkerStopReason::TimedOut);
         }, \true);
         pcntl_alarm(max($this->timeoutForJob($job, $options), 0));
     }
@@ -703,6 +715,9 @@ class Worker
     public function kill($status = 0, $options = null, $reason = null)
     {
         $this->events->dispatch(new WorkerStopping($status, $options, $reason));
+        if (static::$killCallback) {
+            call_user_func(static::$killCallback, $status);
+        }
         if (extension_loaded('posix')) {
             posix_kill(getmypid(), \SIGKILL);
         }
@@ -778,6 +793,16 @@ class Worker
         } else {
             static::$popCallbacks[$workerName] = $callback;
         }
+    }
+    /**
+     * Register a callback to be used to kill the worker process.
+     *
+     * @param  (callable(int): mixed)|null  $callback
+     * @return void
+     */
+    public static function killUsing($callback)
+    {
+        static::$killCallback = $callback;
     }
     /**
      * Get the queue manager instance.
