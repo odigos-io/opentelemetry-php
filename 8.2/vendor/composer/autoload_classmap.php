@@ -6779,7 +6779,7 @@ return array(
     'Odigos\\UnhandledMatchError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
     'Odigos\\User' => $vendorDir . '/league/container/examples/event-system.php',
     'Odigos\\UserInterface' => $vendorDir . '/league/container/examples/event-system.php',
-    'Odigos\\ValueError' => $vendorDir . '/symfony/polyfill-php85/bootstrap.php',
+    'Odigos\\ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     'Odigos\\Yii' => $vendorDir . '/yiisoft/yii2/Yii.php',
     'Odigos\\YiiRequirementChecker' => $vendorDir . '/yiisoft/yii2/requirements/YiiRequirementChecker.php',
     'Odigos\\cebe\\markdown\\GithubMarkdown' => $vendorDir . '/cebe/markdown/GithubMarkdown.php',
