@@ -54,7 +54,7 @@ class Cloud
         }
         $disks = json_decode($_SERVER['LARAVEL_CLOUD_DISK_CONFIG'], \true);
         foreach ($disks as $disk) {
-            $app['config']->set('filesystems.disks.' . $disk['disk'], ['driver' => 's3', 'key' => $disk['access_key_id'], 'secret' => $disk['access_key_secret'], 'bucket' => $disk['bucket'], 'url' => $disk['url'], 'endpoint' => $disk['endpoint'], 'region' => 'auto', 'use_path_style_endpoint' => \false, 'throw' => \false, 'report' => \false]);
+            $app['config']->set('filesystems.disks.' . $disk['disk'], ['driver' => 's3', 'key' => $disk['access_key_id'], 'secret' => $disk['access_key_secret'], 'bucket' => $disk['bucket'], 'url' => $disk['url'], 'endpoint' => $disk['endpoint'], 'region' => $disk['region'] ?? 'auto', 'credentials' => $disk['credentials'] ?? null, 'use_path_style_endpoint' => \false, 'throw' => \false, 'report' => \false]);
             if ($disk['is_default'] ?? \false) {
                 $app['config']->set('filesystems.default', $disk['disk']);
             }
@@ -118,7 +118,7 @@ class Cloud
     public static function configureCloudLogging(Application $app): void
     {
         $app['config']->set('logging.channels.stderr.formatter_with', ['includeStacktraces' => \true]);
-        $app['config']->set('logging.channels.laravel-cloud-socket', ['driver' => 'monolog', 'level' => $_ENV['LOG_LEVEL'] ?? $_SERVER['LOG_LEVEL'] ?? 'debug', 'handler' => SocketHandler::class, 'formatter' => LaravelCloudJsonFormatter::class, 'formatter_with' => ['includeStacktraces' => \true], 'with' => ['connectionString' => Cloud::socket(), 'persistent' => \true]]);
+        $app['config']->set('logging.channels.laravel-cloud-socket', ['driver' => 'monolog', 'level' => $_ENV['LOG_LEVEL'] ?? $_SERVER['LOG_LEVEL'] ?? 'debug', 'handler' => SocketHandler::class, 'formatter' => LaravelCloudJsonFormatter::class, 'formatter_with' => ['includeStacktraces' => \true], 'with' => ['connectionString' => Cloud::socket(), 'persistent' => \true, 'timeout' => 2.0]]);
     }
     /**
      * The cloud socket address.

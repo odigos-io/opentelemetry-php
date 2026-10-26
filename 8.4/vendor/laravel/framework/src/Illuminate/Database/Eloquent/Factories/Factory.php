@@ -407,6 +407,9 @@ abstract class Factory
     {
         $made = $this->make($attributes, $parent);
         $madeCollection = $made instanceof Collection ? $made : $this->newModel()->newCollection([$made]);
+        if ($madeCollection->isEmpty()) {
+            return;
+        }
         $model = $madeCollection->first();
         if (isset($this->connection)) {
             $model->setConnection($this->connection);

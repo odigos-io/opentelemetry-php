@@ -77,7 +77,7 @@ class DatabaseMigrationRepository implements MigrationRepositoryInterface
     /**
      * Get the completed migrations with their batch numbers.
      *
-     * @return array<int, string>[]
+     * @return array<string, int>
      */
     public function getMigrationBatches()
     {

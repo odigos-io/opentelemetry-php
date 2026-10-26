@@ -61,7 +61,7 @@ class LocalFilesystemAdapter extends FilesystemAdapter
             throw new RuntimeException('This driver does not support creating temporary URLs.');
         }
         $url = call_user_func($this->urlGeneratorResolver);
-        return $url->to($url->temporarySignedRoute('storage.' . $this->disk, $expiration, ['path' => strtr(rawurlencode($path), ['%2F' => '/'])], absolute: \false));
+        return $url->to($url->temporarySignedRoute('storage.' . $this->disk, $expiration, ['path' => $path], absolute: \false));
     }
     /**
      * Get a temporary upload URL for the file at the given path.
@@ -80,7 +80,7 @@ class LocalFilesystemAdapter extends FilesystemAdapter
             throw new RuntimeException('This driver does not support creating temporary upload URLs.');
         }
         $url = call_user_func($this->urlGeneratorResolver);
-        return ['url' => $url->to($url->temporarySignedRoute('storage.' . $this->disk . '.upload', $expiration, ['path' => strtr(rawurlencode($path), ['%2F' => '/']), 'upload' => \true], absolute: \false)), 'headers' => []];
+        return ['url' => $url->to($url->temporarySignedRoute('storage.' . $this->disk . '.upload', $expiration, ['path' => $path, 'upload' => \true], absolute: \false)), 'headers' => []];
     }
     /**
      * Specify the name of the disk the adapter is managing.

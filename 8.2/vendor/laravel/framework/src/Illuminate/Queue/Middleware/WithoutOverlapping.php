@@ -5,6 +5,7 @@ namespace Odigos\Illuminate\Queue\Middleware;
 use Odigos\Illuminate\Container\Container;
 use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
 use Odigos\Illuminate\Support\InteractsWithTime;
+use function Odigos\Illuminate\Support\enum_value;
 class WithoutOverlapping
 {
     use InteractsWithTime;
@@ -41,13 +42,13 @@ class WithoutOverlapping
     /**
      * Create a new middleware instance.
      *
-     * @param  string  $key
+     * @param  \UnitEnum|string  $key
      * @param  \DateTimeInterface|int|null  $releaseAfter
      * @param  \DateTimeInterface|int  $expiresAfter
      */
     public function __construct($key = '', $releaseAfter = 0, $expiresAfter = 0)
     {
-        $this->key = $key;
+        $this->key = enum_value($key);
         $this->releaseAfter = $releaseAfter;
         $this->expiresAfter = $this->secondsUntil($expiresAfter);
     }
