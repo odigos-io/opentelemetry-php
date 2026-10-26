@@ -10,17 +10,37 @@ $baseDir = $argv[1] ?? getcwd();
 $vendorDir = $baseDir . '/vendor';
 $classMap = [];
 
+// Some classes are declared in more than one file (polyfill stubs vs. their PHP-version-specific twins, Carbon's StrongType/WeakType lazy variants). The winner must not depend on filesystem order, so: prefer files under a package's own `classmap` autoload paths (what Composer itself would map), otherwise the first file in byte-sorted path order.
+$composerClassmapPaths = [];
+$installed = json_decode((string) @file_get_contents($vendorDir . '/composer/installed.json'), true);
+foreach ($installed['packages'] ?? $installed ?? [] as $package) {
+    $installPath = substr((string) ($package['install-path'] ?? ''), strlen('../'));
+    foreach ($package['autoload']['classmap'] ?? [] as $classmapPath) {
+        $composerClassmapPaths[] = rtrim($installPath . '/' . preg_replace('#^\./#', '', $classmapPath), '/');
+    }
+}
+$isComposerClassmapFile = static function (string $relPath) use ($composerClassmapPaths): bool {
+    foreach ($composerClassmapPaths as $classmapPath) {
+        if ($relPath === $classmapPath || str_starts_with($relPath, $classmapPath . '/')) {
+            return true;
+        }
+    }
+    return false;
+};
+
+$relPaths = [];
 $iterator = new RecursiveIteratorIterator(
     new RecursiveDirectoryIterator($vendorDir, FilesystemIterator::SKIP_DOTS)
 );
-
 foreach ($iterator as $file) {
-    if ($file->getExtension() !== 'php') {
-        continue;
+    if ($file->getExtension() === 'php') {
+        $relPaths[] = substr($file->getPathname(), strlen($vendorDir) + 1);
     }
+}
+sort($relPaths, SORT_STRING);
 
-    $path = $file->getPathname();
-    $relPath = substr($path, strlen($vendorDir) + 1);
+foreach ($relPaths as $relPath) {
+    $path = $vendorDir . '/' . $relPath;
 
     if (str_contains($relPath, '/Tests/') ||
         str_contains($relPath, '/tests/') ||
@@ -46,7 +66,9 @@ foreach ($iterator as $file) {
     if (preg_match_all('/^\s*(?:abstract\s+|final\s+|readonly\s+)*(?:class|interface|trait|enum)\s+(\w+)/m', $content, $matches)) {
         foreach ($matches[1] as $className) {
             $fqcn = $namespace . $className;
-            $classMap[$fqcn] = $relPath;
+            if (!isset($classMap[$fqcn]) || (!$isComposerClassmapFile($classMap[$fqcn]) && $isComposerClassmapFile($relPath))) {
+                $classMap[$fqcn] = $relPath;
+            }
         }
     }
 }
