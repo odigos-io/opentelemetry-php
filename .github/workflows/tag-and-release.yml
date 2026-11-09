@@ -218,7 +218,6 @@ jobs:
           version: ${{ needs.calculate.outputs.new_version }}
           consumers: |
             odigos
-            odigos-enterprise
             vm-agent
 
   # Records the release in Linear with the issues that shipped in it. Its own job, not a
