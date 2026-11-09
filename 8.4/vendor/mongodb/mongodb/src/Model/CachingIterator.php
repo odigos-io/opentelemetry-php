@@ -28,7 +28,7 @@ use function reset;
 /**
  * Iterator for wrapping a Traversable and caching its results.
  *
- * By caching results, this iterators allows a Traversable to be counted and
+ * By caching results, this iterator allows a Traversable to be counted and
  * rewound multiple times, even if the wrapped object does not natively support
  * those operations (e.g. MongoDB\Driver\Cursor).
  *
@@ -86,9 +86,7 @@ final class CachingIterator implements Countable, Iterator
     public function next(): void
     {
         if (!$this->iteratorExhausted) {
-            $this->iteratorAdvanced = \true;
-            $this->iterator->next();
-            $this->storeCurrentItem();
+            $this->advanceIterator();
         }
         next($this->items);
     }
@@ -109,12 +107,22 @@ final class CachingIterator implements Countable, Iterator
         return $this->key() !== null;
     }
     /**
-     * Ensures that the inner iterator is fully consumed and cached.
+     * Advances the inner iterator and stores its current item in the cache.
+     */
+    private function advanceIterator(): void
+    {
+        $this->iteratorAdvanced = \true;
+        $this->iterator->next();
+        $this->storeCurrentItem();
+    }
+    /**
+     * Ensures that the inner iterator is fully consumed and cached. This does
+     * not move the position in the cache, so it can be called while iterating.
      */
     private function exhaustIterator(): void
     {
         while (!$this->iteratorExhausted) {
-            $this->next();
+            $this->advanceIterator();
         }
     }
     /**

@@ -280,9 +280,7 @@ final class BulkWrite
                 case self::DELETE_MANY:
                 case self::DELETE_ONE:
                     $operation[$type][0] = $builderEncoder->encodeIfSupported($args[0]);
-                    if (!isset($args[1])) {
-                        $args[1] = [];
-                    }
+                    $args[1] ??= [];
                     if (!is_array($args[1])) {
                         throw InvalidArgumentException::invalidType(sprintf('$operations[%d]["%s"][1]', $i, $type), $args[1], 'array');
                     }
@@ -313,9 +311,7 @@ final class BulkWrite
                     if (is_pipeline($args[1], \true)) {
                         throw new InvalidArgumentException(sprintf('$operations[%d]["%s"][1] is an update pipeline', $i, $type));
                     }
-                    if (!isset($args[2])) {
-                        $args[2] = [];
-                    }
+                    $args[2] ??= [];
                     if (!is_array($args[2])) {
                         throw InvalidArgumentException::invalidType(sprintf('$operations[%d]["%s"][2]', $i, $type), $args[2], 'array');
                     }
@@ -342,9 +338,7 @@ final class BulkWrite
                     if ((!is_document($args[1]) || !is_first_key_operator($args[1])) && !is_pipeline($args[1])) {
                         throw new InvalidArgumentException(sprintf('Expected update operator(s) or non-empty pipeline for $operations[%d]["%s"][1]', $i, $type));
                     }
-                    if (!isset($args[2])) {
-                        $args[2] = [];
-                    }
+                    $args[2] ??= [];
                     if (!is_array($args[2])) {
                         throw InvalidArgumentException::invalidType(sprintf('$operations[%d]["%s"][2]', $i, $type), $args[2], 'array');
                     }

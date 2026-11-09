@@ -46,6 +46,8 @@ final class OutputWindowEncoder implements Encoder
             throw new LogicException(sprintf('Expected OutputWindow::$operator to be an stdClass, array or WindowInterface. Got "%s"', get_debug_type($result)));
         }
         if ($value->window !== Optional::Undefined) {
+            // Do not modify an stdClass operator provided by the user, as it may be shared with other windows
+            $result = clone $result;
             $result->window = $this->recursiveEncode($value->window);
         }
         return $result;

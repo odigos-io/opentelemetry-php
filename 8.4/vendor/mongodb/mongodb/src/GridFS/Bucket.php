@@ -38,6 +38,7 @@ use function array_intersect_key;
 use function array_key_exists;
 use function assert;
 use function explode;
+use function fclose;
 use function fopen;
 use function get_resource_type;
 use function in_array;
@@ -551,11 +552,16 @@ class Bucket
             throw InvalidArgumentException::invalidType('$source', $source, 'resource');
         }
         $destination = $this->openUploadStream($filename, $options);
-        if (@stream_copy_to_stream($source, $destination) === \false) {
-            $destinationUri = $this->createPathForFile($this->getRawFileDocumentForStream($destination));
-            throw StreamException::uploadFailed($filename, $source, $destinationUri);
+        try {
+            if (@stream_copy_to_stream($source, $destination) === \false) {
+                $destinationUri = $this->createPathForFile($this->getRawFileDocumentForStream($destination));
+                throw StreamException::uploadFailed($filename, $source, $destinationUri);
+            }
+            return $this->getFileIdForStream($destination);
+        } finally {
+            // Closing flushes the last chunk and writes the file document, so do not rely on garbage collection.
+            fclose($destination);
         }
-        return $this->getFileIdForStream($destination);
     }
     /**
      * Creates a path for an existing GridFS file.

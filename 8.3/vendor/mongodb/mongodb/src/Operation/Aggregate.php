@@ -37,6 +37,7 @@ use function is_array;
 use function is_bool;
 use function is_integer;
 use function is_string;
+use function Odigos\MongoDB\extract_read_preference_from_options;
 use function Odigos\MongoDB\is_document;
 use function Odigos\MongoDB\is_last_pipeline_operator_write;
 use function Odigos\MongoDB\is_pipeline;
@@ -282,11 +283,13 @@ final class Aggregate implements Explainable
         if (!$this->isWrite) {
             return $server->executeReadCommand($this->databaseName, $command, $options);
         }
-        /* Server::executeReadWriteCommand() does not support a "readPreference"
-         * option, so fall back to executeCommand(). This means that libmongoc
-         * will not apply any client-level options (e.g. writeConcern), but that
-         * should not be an issue as PHPLIB handles inheritance on its own. */
-        if (isset($options['readPreference'])) {
+        /* Server::executeReadWriteCommand() is the only method that reports a
+         * writeConcernError, and it ignores the "readPreference" option. Keep
+         * the generic command path when the read preference must be forwarded
+         * or when the server is a secondary: on a direct connection, libmongoc
+         * rewrites a primary read preference to primaryPreferred there. */
+        $readPreference = extract_read_preference_from_options($options);
+        if ($server->isSecondary() || $readPreference !== null && $readPreference->getModeString() !== ReadPreference::PRIMARY) {
             return $server->executeCommand($this->databaseName, $command, $options);
         }
         return $server->executeReadWriteCommand($this->databaseName, $command, $options);

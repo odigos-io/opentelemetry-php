@@ -36,6 +36,7 @@ use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use ReflectionException;
 use stdClass;
+use function array_any;
 use function array_is_list;
 use function array_key_first;
 use function assert;
@@ -291,12 +292,7 @@ function is_builder_pipeline(array $pipeline): bool
     if (!$pipeline || !array_is_list($pipeline)) {
         return \false;
     }
-    foreach ($pipeline as $stage) {
-        if (is_object($stage) && $stage instanceof StageInterface) {
-            return \true;
-        }
-    }
-    return \false;
+    return array_any($pipeline, static fn($stage): bool => $stage instanceof StageInterface);
 }
 /**
  * Returns whether we are currently in a transaction.
@@ -361,23 +357,6 @@ function server_supports_feature(Server $server, int $feature): bool
     $maxWireVersion = isset($info['maxWireVersion']) ? (int) $info['maxWireVersion'] : 0;
     $minWireVersion = isset($info['minWireVersion']) ? (int) $info['minWireVersion'] : 0;
     return $minWireVersion <= $feature && $maxWireVersion >= $feature;
-}
-/**
- * Return whether the input is an array of strings.
- *
- * @internal
- */
-function is_string_array(mixed $input): bool
-{
-    if (!is_array($input)) {
-        return \false;
-    }
-    foreach ($input as $item) {
-        if (!is_string($item)) {
-            return \false;
-        }
-    }
-    return \true;
 }
 /**
  * Validates a database and collection name and returns the namespace formed
