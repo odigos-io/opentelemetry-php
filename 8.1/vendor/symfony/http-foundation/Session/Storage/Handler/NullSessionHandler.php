@@ -35,14 +35,6 @@ class NullSessionHandler extends AbstractSessionHandler
     {
         return '';
     }
-    public function updateTimestamp(
-        #[\SensitiveParameter]
-        string $sessionId,
-        string $data
-    ): bool
-    {
-        return \true;
-    }
     protected function doWrite(
         #[\SensitiveParameter]
         string $sessionId,

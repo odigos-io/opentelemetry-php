@@ -41,7 +41,7 @@ class StrictSessionHandler extends AbstractSessionHandler
     protected function doRead(
         #[\SensitiveParameter]
         string $sessionId
-    ): string
+    ): string|false
     {
         return $this->handler->read($sessionId);
     }

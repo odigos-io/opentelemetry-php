@@ -184,6 +184,14 @@ class Request
     private bool $isSafeContentPreferred;
     private array $trustedValuesCache = [];
     private static int $trustedHeaderSet = -1;
+    /**
+     * @var array<string, true>
+     */
+    private static array $trustedHostsLiterals = [];
+    /**
+     * @var string[]
+     */
+    private static array $trustedHostsRegexps = [];
     private const FORWARDED_PARAMS = [self::HEADER_X_FORWARDED_FOR => 'for', self::HEADER_X_FORWARDED_HOST => 'host', self::HEADER_X_FORWARDED_PROTO => 'proto', self::HEADER_X_FORWARDED_PORT => 'host'];
     /**
      * Names for headers that can be trusted when
@@ -253,7 +261,7 @@ class Request
     {
         $request = self::createRequestFromFactory($_GET, $_POST, [], $_COOKIE, $_FILES, $_SERVER);
         if (str_starts_with($request->headers->get('CONTENT_TYPE', ''), 'application/x-www-form-urlencoded') && \in_array(strtoupper($request->server->get('REQUEST_METHOD', 'GET')), ['PUT', 'DELETE', 'PATCH'])) {
-            parse_str($request->getContent(), $data);
+            @parse_str($request->getContent(), $data);
             $request->request = new InputBag($data);
         }
         return $request;
@@ -353,7 +361,7 @@ class Request
         }
         $queryString = '';
         if (isset($components['query'])) {
-            parse_str(html_entity_decode($components['query']), $qs);
+            @parse_str(html_entity_decode($components['query']), $qs);
             if ($query) {
                 $query = array_replace($qs, $query);
                 $queryString = http_build_query($query, '', '&');
@@ -544,8 +552,17 @@ class Request
     public static function setTrustedHosts(array $hostPatterns)
     {
         self::$trustedHostPatterns = array_map(static fn($hostPattern) => \sprintf('{%s}i', $hostPattern), $hostPatterns);
-        // we need to reset trusted hosts on trusted host patterns change
-        self::$trustedHosts = [];
+        self::$trustedHostsLiterals = [];
+        $regexpPatterns = [];
+        foreach ($hostPatterns as $hostPattern) {
+            // constant patterns are matched by a hash lookup in getHost(), where the host is lowercase and free of newlines
+            if (preg_match('{^\^((?:[a-z0-9_:-]|\\\\[^a-z0-9])++)\$$}Di', $hostPattern, $m)) {
+                self::$trustedHostsLiterals[strtolower(preg_replace('{\\\\(.)}s', '$1', $m[1]))] = \true;
+            } else {
+                $regexpPatterns[] = $hostPattern;
+            }
+        }
+        self::$trustedHostsRegexps = self::compileHostPatterns($regexpPatterns);
     }
     /**
      * Gets the list of trusted host patterns.
@@ -997,14 +1014,13 @@ class Request
             $this->isHostValid = \false;
             throw new SuspiciousOperationException(\sprintf('Invalid Host "%s".', $host));
         }
-        if (\count(self::$trustedHostPatterns) > 0) {
+        if (self::$trustedHostsLiterals || self::$trustedHostsRegexps) {
             // to avoid host header injection attacks, you should provide a list of trusted host patterns
-            if (\in_array($host, self::$trustedHosts)) {
+            if (isset(self::$trustedHostsLiterals[$host])) {
                 return $host;
             }
-            foreach (self::$trustedHostPatterns as $pattern) {
-                if (preg_match($pattern, $host)) {
-                    self::$trustedHosts[] = $host;
+            foreach (self::$trustedHostsRegexps as $regexp) {
+                if (preg_match($regexp, $host)) {
                     return $host;
                 }
             }
@@ -1580,8 +1596,12 @@ class Request
         if ('' !== $requestUri && '/' !== $requestUri[0]) {
             $requestUri = '/' . $requestUri;
         }
-        if ($baseUrl && null !== $prefix = $this->getUrlencodedPrefix($requestUri, $baseUrl)) {
-            // full $baseUrl matches
+        if (str_starts_with($requestUri, '//') || str_starts_with($requestUri, '/\\')) {
+            // the URI starts with a host that the client chose: URLs built on it would point there
+            return '';
+        }
+        if ($baseUrl && null !== ($prefix = $this->getUrlencodedPrefix($requestUri, $baseUrl)) && \in_array($requestUri[\strlen($prefix)] ?? '', ['', '/', '?'], \true)) {
+            // full $baseUrl matches, and is not only the start of a longer path segment
             return $prefix;
         }
         if ($baseUrl && null !== $prefix = $this->getUrlencodedPrefix($requestUri, rtrim(\dirname($baseUrl), '/' . \DIRECTORY_SEPARATOR) . '/')) {
@@ -1592,16 +1612,17 @@ class Request
         if (\false !== $pos = strpos($requestUri, '?')) {
             $truncatedRequestUri = substr($requestUri, 0, $pos);
         }
-        $basename = basename($baseUrl ?? '');
-        if (empty($basename) || !strpos(rawurldecode($truncatedRequestUri), $basename)) {
-            // no match whatsoever; set it blank
+        // With mod_rewrite or ISAPI_Rewrite, the script filename can come after
+        // a prefix in the path: the base URL then ends with the script filename
+        $decodedRequestUri = rawurldecode($truncatedRequestUri);
+        if (!$baseUrl || !$pos = $this->isIisRewrite() ? stripos($decodedRequestUri, $baseUrl) : strpos($decodedRequestUri, $baseUrl)) {
+            // the script filename isn't in the path, or only at its start, which is handled above
             return '';
         }
-        // If using mod_rewrite or ISAPI_Rewrite strip the script filename
-        // out of baseUrl. $pos !== 0 makes sure it is not matching a value
-        // from PATH_INFO or QUERY_STRING
-        if (\strlen($requestUri) >= \strlen($baseUrl) && \false !== ($pos = strpos($requestUri, $baseUrl)) && 0 !== $pos) {
-            $baseUrl = substr($requestUri, 0, $pos + \strlen($baseUrl));
+        $baseUrl = $this->getUrlencodedPrefix($truncatedRequestUri, substr($decodedRequestUri, 0, $pos + \strlen($baseUrl))) ?? '';
+        if (!\in_array($requestUri[\strlen($baseUrl)] ?? '', ['', '/', '?'], \true)) {
+            // the script filename is only the start of a longer path segment
+            return '';
         }
         return rtrim($baseUrl, '/' . \DIRECTORY_SEPARATOR);
     }
@@ -1685,11 +1706,11 @@ class Request
         } elseif (!str_starts_with(rawurldecode($string), $prefix)) {
             return null;
         }
+        // Each byte of the prefix takes 1 or 3 characters in the string.
+        // A {n} quantifier would make PCRE fail to compile for a long prefix.
         $len = \strlen($prefix);
-        if (preg_match(\sprintf('#^(%%[[:xdigit:]]{2}|.){%d}#', $len), $string, $match)) {
-            return $match[0];
-        }
-        return null;
+        preg_match_all('#%[[:xdigit:]]{2}|.#s', substr($string, 0, 3 * $len), $match);
+        return implode('', \array_slice($match[0], 0, $len));
     }
     private static function createRequestFromFactory(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null): static
     {
@@ -1773,17 +1794,15 @@ class Request
         // Complete the IP chain with the IP the request actually came from
         $firstTrustedIp = null;
         foreach ($clientIps as $key => $clientIp) {
-            if (strpos($clientIp, '.')) {
-                // Strip :port from IPv4 addresses. This is allowed in Forwarded
-                // and may occur in X-Forwarded-For.
-                $i = strpos($clientIp, ':');
-                if ($i) {
-                    $clientIps[$key] = $clientIp = substr($clientIp, 0, $i);
-                }
-            } elseif (str_starts_with($clientIp, '[')) {
+            if (str_starts_with($clientIp, '[')) {
                 // Strip brackets and :port from IPv6 addresses.
                 $i = strpos($clientIp, ']', 1);
                 $clientIps[$key] = $clientIp = substr($clientIp, 1, $i - 1);
+            } elseif (strpos($clientIp, '.') && 1 === substr_count($clientIp, ':')) {
+                // Strip :port from IPv4 addresses. This is allowed in Forwarded
+                // and may occur in X-Forwarded-For. An IPv6 address with an
+                // embedded IPv4 address has at least two colons and is kept.
+                $clientIps[$key] = $clientIp = strstr($clientIp, ':', \true);
             }
             if (!filter_var($clientIp, \FILTER_VALIDATE_IP)) {
                 unset($clientIps[$key]);
@@ -1825,5 +1844,24 @@ class Request
         }
         // use preg_replace() instead of preg_match() to prevent DoS attacks with long host names
         return '' === preg_replace('/[-a-zA-Z0-9_]++\.?/', '', $host);
+    }
+    /**
+     * Combines host patterns into as few regexps as PCRE can compile.
+     *
+     * @return string[]
+     */
+    private static function compileHostPatterns(array $hostPatterns): array
+    {
+        if (!$hostPatterns) {
+            return [];
+        }
+        // the branch reset group keeps capturing groups, back references and inline modifiers local to each pattern
+        $regexp = \sprintf('{(?|(?:%s))}i', implode(')|(?:', $hostPatterns));
+        if (1 === \count($hostPatterns) || \false !== @preg_match($regexp, '')) {
+            return [$regexp];
+        }
+        // the combined pattern exceeds the maximum size PCRE accepts, split it in half
+        $half = intdiv(\count($hostPatterns), 2);
+        return array_merge(self::compileHostPatterns(\array_slice($hostPatterns, 0, $half)), self::compileHostPatterns(\array_slice($hostPatterns, $half)));
     }
 }

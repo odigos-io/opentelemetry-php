@@ -36,6 +36,6 @@ class QueryParameterRequestMatcher implements RequestMatcherInterface
         if (!$this->parameters) {
             return \true;
         }
-        return 0 === \count(array_diff_assoc($this->parameters, $request->query->keys()));
+        return !array_diff_assoc($this->parameters, $request->query->keys());
     }
 }

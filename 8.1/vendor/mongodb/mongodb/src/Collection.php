@@ -830,9 +830,7 @@ class Collection implements Stringable
      */
     public function rename(string $toCollectionName, ?string $toDatabaseName = null, array $options = []): void
     {
-        if (!isset($toDatabaseName)) {
-            $toDatabaseName = $this->databaseName;
-        }
+        $toDatabaseName ??= $this->databaseName;
         $options = $this->inheritWriteOptions($options);
         $operation = new RenameCollection($this->databaseName, $this->collectionName, $toDatabaseName, $toCollectionName, $options);
         $operation->execute(select_server_for_write($this->manager, $options));
@@ -1008,10 +1006,8 @@ class Collection implements Stringable
     private function inheritWriteOptions(array $options): array
     {
         // WriteConcern may not change within a transaction
-        if (!is_in_transaction($options)) {
-            if (!isset($options['writeConcern'])) {
-                $options['writeConcern'] = $this->writeConcern;
-            }
+        if (!isset($options['writeConcern']) && !is_in_transaction($options)) {
+            $options['writeConcern'] = $this->writeConcern;
         }
         return $options;
     }

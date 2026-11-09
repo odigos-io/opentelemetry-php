@@ -18,7 +18,8 @@ class WhitespacePathNormalizer implements PathNormalizer
     public function normalizePath(string $path): string
     {
         $unixPath = str_replace('\\', '/', $path);
-        if (preg_match('#\p{C}+#u', $unixPath)) {
+        $match = preg_match('#\p{C}+#u', $unixPath);
+        if ($match !== 0) {
             throw CorruptedPathDetected::forPath($path);
         }
         $parts = [];

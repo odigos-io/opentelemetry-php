@@ -48,8 +48,6 @@ class CollectionInfo implements ArrayAccess
     }
     /**
      * Return the maximum number of documents to keep in the capped collection.
-     *
-     * @deprecated 1.0 Deprecated in favor of using getOptions
      */
     public function getCappedMax(): ?int
     {
@@ -58,8 +56,6 @@ class CollectionInfo implements ArrayAccess
     }
     /**
      * Return the maximum size (in bytes) of the capped collection.
-     *
-     * @deprecated 1.0 Deprecated in favor of using getOptions
      */
     public function getCappedSize(): ?int
     {
@@ -111,8 +107,6 @@ class CollectionInfo implements ArrayAccess
     }
     /**
      * Return whether the collection is a capped collection.
-     *
-     * @deprecated 1.0 Deprecated in favor of using getOptions
      */
     public function isCapped(): bool
     {

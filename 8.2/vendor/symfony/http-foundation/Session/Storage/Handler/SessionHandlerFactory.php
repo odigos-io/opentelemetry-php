@@ -21,7 +21,12 @@ use Odigos\Symfony\Component\Cache\Adapter\AbstractAdapter;
  */
 class SessionHandlerFactory
 {
-    public static function createHandler(object|string $connection, array $options = []): AbstractSessionHandler
+    public static function createHandler(
+        #[\SensitiveParameter]
+        object|string $connection,
+        #[\SensitiveParameter]
+        array $options = []
+    ): AbstractSessionHandler
     {
         if ($query = \is_string($connection) ? parse_url($connection) : \false) {
             parse_str($query['query'] ?? '', $query);
@@ -79,6 +84,6 @@ class SessionHandlerFactory
             case str_starts_with($connection, 'sqlite3://'):
                 return new PdoSessionHandler($connection, $options);
         }
-        throw new \InvalidArgumentException(\sprintf('Unsupported Connection: "%s".', $connection));
+        throw new \InvalidArgumentException('No session handler supports the given DSN.');
     }
 }

@@ -57,12 +57,11 @@ class UriSigner
         $url = parse_url($uri);
         $params = [];
         if (isset($url['query'])) {
-            parse_str($url['query'], $params);
+            @parse_str($url['query'], $params);
         }
-        if (empty($params[$this->parameter])) {
+        if (!\is_string($hash = $params[$this->parameter] ?? null) || '' === $hash) {
             return \false;
         }
-        $hash = $params[$this->parameter];
         unset($params[$this->parameter]);
         return hash_equals($this->computeHash($this->buildUrl($url, $params)), $hash);
     }
