@@ -33,7 +33,7 @@ class Psr15Instrumentation
          */
         /** @psalm-suppress UnusedFunctionCall */
         hook(MiddlewareInterface::class, 'process', pre: static function (MiddlewareInterface $middleware, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation) {
-            $span = $instrumentation->tracer()->spanBuilder(sprintf('%s::%s', $class, $function))->setAttribute(TraceAttributes::CODE_FUNCTION_NAME, sprintf('%s::%s', $class, $function))->setAttribute(TraceAttributes::CODE_FILE_PATH, $filename)->setAttribute(TraceAttributes::CODE_LINE_NUMBER, $lineno)->startSpan();
+            $span = $instrumentation->tracer()->spanBuilder(sprintf('%s::%s', \explode("\0", $class, 2)[0], $function))->setAttribute(TraceAttributes::CODE_FUNCTION_NAME, sprintf('%s::%s', \explode("\0", $class, 2)[0], $function))->setAttribute(TraceAttributes::CODE_FILE_PATH, $filename)->setAttribute(TraceAttributes::CODE_LINE_NUMBER, $lineno)->startSpan();
             Context::storage()->attach($span->storeInContext(Context::getCurrent()));
         }, post: static function (MiddlewareInterface $middleware, array $params, ?ResponseInterface $response, ?Throwable $exception) {
             $scope = Context::storage()->scope();
@@ -56,7 +56,7 @@ class Psr15Instrumentation
         hook(RequestHandlerInterface::class, 'handle', pre: static function (RequestHandlerInterface $handler, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation) {
             $request = $params[0] instanceof ServerRequestInterface ? $params[0] : null;
             $root = $request ? $request->getAttribute(SpanInterface::class) : Span::getCurrent();
-            $builder = $instrumentation->tracer()->spanBuilder($root ? sprintf('%s::%s', $class, $function) : sprintf('%s', $request?->getMethod() ?? 'unknown'))->setSpanKind(SpanKind::KIND_SERVER)->setAttribute(TraceAttributes::CODE_FUNCTION_NAME, sprintf('%s::%s', $class, $function))->setAttribute(TraceAttributes::CODE_FILE_PATH, $filename)->setAttribute(TraceAttributes::CODE_LINE_NUMBER, $lineno);
+            $builder = $instrumentation->tracer()->spanBuilder($root ? sprintf('%s::%s', \explode("\0", $class, 2)[0], $function) : sprintf('%s', $request?->getMethod() ?? 'unknown'))->setSpanKind(SpanKind::KIND_SERVER)->setAttribute(TraceAttributes::CODE_FUNCTION_NAME, sprintf('%s::%s', \explode("\0", $class, 2)[0], $function))->setAttribute(TraceAttributes::CODE_FILE_PATH, $filename)->setAttribute(TraceAttributes::CODE_LINE_NUMBER, $lineno);
             $parent = Context::getCurrent();
             if (!$root && $request) {
                 //create http root span
