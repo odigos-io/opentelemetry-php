@@ -60,6 +60,27 @@ return [
         // Convert hook(::class) + relax typehints/instanceof for scoped hook-target libraries.
         $hookTargetPatcher,
 
+        // PSR-15 names spans (and code.function.name) `sprintf('%s::%s', $class, $function)`. For an anonymous class, PHP's
+        // class name is `<parent>@anonymous` + NUL + `<file>:<line>$<hex>`, and the hex counter changes every time the
+        // declaring file is compiled, so Slim's per-request anonymous handlers produce unbounded span names with a NUL byte
+        // in them. Keep only the part before the NUL (`...RequestHandlerInterface@anonymous::handle`); code.file.path and
+        // code.line.number still point at the declaration. Upstream has the same code; drop this patcher once it is fixed there.
+        static function (string $filePath, string $prefix, string $content): string {
+            if (!str_ends_with(str_replace('\\', '/', $filePath), 'opentelemetry-auto-psr15/src/Psr15Instrumentation.php')) {
+                return $content;
+            }
+            $content = str_replace(
+                "sprintf('%s::%s', \$class, \$function)",
+                "sprintf('%s::%s', \\explode(\"\\0\", \$class, 2)[0], \$function)",
+                $content,
+                $count
+            );
+            if ($count === 0) {
+                throw new \RuntimeException("PSR-15 anonymous-class span name patch no longer applies to {$filePath}; check whether upstream fixed it and update or remove the patcher.");
+            }
+            return $content;
+        },
+
         // PHP-Scoper generates self-referencing class_alias() calls when a global-scope class has the same name as an excluded namespace (e.g. class OpenAI in global ns vs excluded OpenAI\ namespace).
         // A self-alias is always an error at runtime, so strip them.
         static function (string $filePath, string $prefix, string $content): string {
